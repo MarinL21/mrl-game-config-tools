@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>掉落配置工具</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-content {
+            flex: 1;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .back-btn {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+            border-radius: 8px;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: white;
+            color: #667eea;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            padding: 30px;
+        }
+
+        .section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            color: #555;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-group select,
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+
+        .form-group select:focus,
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr auto;
+            gap: 10px;
+            align-items: end;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+            padding: 6px 12px;
+            font-size: 13px;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .items-list {
+            margin-top: 20px;
+        }
+
+        .item-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+            cursor: move;
+        }
+
+        .item-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .item-card.dragging {
+            opacity: 0.5;
+            border-color: #667eea;
+            transform: scale(1.02);
+        }
+
+        .item-card.drag-over {
+            border-color: #10b981;
+            border-style: dashed;
+            background: #f0fdf4;
+        }
+
+        .drag-handle {
+            cursor: grab;
+            color: #999;
+            margin-right: 10px;
+            font-size: 20px;
+            font-weight: bold;
+            user-select: none;
+            transition: color 0.2s;
+        }
+
+        .drag-handle:hover {
+            color: #667eea;
+        }
+
+        .drag-handle:active {
+            cursor: grabbing;
+        }
+
+        .item-card:hover .drag-handle {
+            color: #667eea;
+        }
+
+        .item-info {
+            flex: 1;
+            margin-left: 5px;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 15px;
+        }
+
+        .item-detail {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .item-label {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 4px;
+        }
+
+        .item-value {
+            font-weight: 600;
+            color: #667eea;
+            font-size: 15px;
+        }
+
+        .item-order {
+            background: #667eea;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin-right: 15px;
+        }
+
+        .json-output {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            max-height: 600px;
+            overflow-y: scroll;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            word-break: break-all;
+        }
+
+        .json-output::-webkit-scrollbar {
+            width: 12px;
+            height: 12px;
+        }
+
+        .json-output::-webkit-scrollbar-track {
+            background: #2d2d2d;
+            border-radius: 8px;
+        }
+
+        .json-output::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 8px;
+        }
+
+        .json-output::-webkit-scrollbar-thumb:hover {
+            background: #764ba2;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .json-status {
+            display: inline-block;
+            padding: 6px 12px;
+            background: #667eea;
+            color: white;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+
+        .info-box {
+            background: #e0e7ff;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .info-box-title {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .info-box-content {
+            font-size: 13px;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .fixed-label {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 968px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+
+            .input-row {
+                grid-template-columns: 1fr;
+            }
+
+            .item-info {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-content">
+                <h1>🎲 掉落配置工具</h1>
+                <p>配置随机掉落奖励JSON</p>
+            </div>
+            <a href="index.html" class="back-btn">← 返回主页</a>
+        </div>
+
+        <div class="content">
+            <!-- 左侧：配置区 -->
+            <div>
+                <div class="section">
+                    <h2 class="section-title">掉落配置</h2>
+                    
+                    <div class="info-box">
+                        <div class="info-box-title">📊 权重说明</div>
+                        <div class="info-box-content">
+                            权重决定掉落概率。例如：权重200的概率 = 200 / 总权重
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>每次抽取数量</label>
+                        <input type="number" id="drawNum" placeholder="每次从掉落池抽取几个" min="1" value="1" onchange="updateDisplay()">
+                    </div>
+
+                    <div class="form-group">
+                        <label>添加掉落项</label>
+                        <div class="input-row">
+                            <input type="text" id="itemId" placeholder="物品ID (例如: 11112900)">
+                            <input type="number" id="itemNum" placeholder="数量" min="1" value="1">
+                            <input type="number" id="itemWgt" placeholder="权重" min="1" value="100">
+                            <button class="btn btn-primary" onclick="addItem()">添加</button>
+                        </div>
+                    </div>
+
+                    <div class="items-list">
+                        <div class="fixed-label">🎯 掉落池（可拖动排序）</div>
+                        <div id="itemsList"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右侧：JSON输出区 -->
+            <div>
+                <div class="section">
+                    <h2 class="section-title">JSON输出</h2>
+                    <div class="json-status" id="jsonStatus">格式化显示</div>
+                    <div class="json-output" id="jsonOutput">等待生成...</div>
+                    <div class="actions">
+                        <button class="btn btn-primary" id="compactBtn" onclick="toggleCompact()">📦 压缩格式</button>
+                        <button class="btn btn-success" onclick="copyJSON()">📋 复制到剪贴板</button>
+                        <button class="btn btn-danger" onclick="clearAll()">🗑️ 清空</button>
+                    </div>
+                    <div style="margin-top: 15px;">
+                        <button class="btn btn-success" style="width: 100%;" onclick="copyCompactJSON()">📋 快捷复制压缩格式</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let items = [];
+        let isCompact = false;
+        let currentJSON = {};
+        let draggedIndex = null;
+
+        // 添加物品
+        function addItem() {
+            const itemId = document.getElementById('itemId').value.trim();
+            const itemNum = parseInt(document.getElementById('itemNum').value);
+            const itemWgt = parseInt(document.getElementById('itemWgt').value);
+
+            if (!itemId || !itemNum || itemNum < 1 || !itemWgt || itemWgt < 1) {
+                alert('请输入有效的物品ID、数量和权重！');
+                return;
+            }
+
+            items.push({
+                id: itemId,
+                num: itemNum,
+                wgt: itemWgt
+            });
+
+            document.getElementById('itemId').value = '';
+            document.getElementById('itemNum').value = '1';
+            document.getElementById('itemWgt').value = '100';
+
+            updateDisplay();
+        }
+
+        // 删除物品
+        function removeItem(index) {
+            items.splice(index, 1);
+            updateDisplay();
+        }
+
+        // 更新显示
+        function updateDisplay() {
+            // 显示掉落项列表
+            const itemsList = document.getElementById('itemsList');
+            if (items.length === 0) {
+                itemsList.innerHTML = '<div class="empty-state">暂无掉落项，请添加...</div>';
+            } else {
+                const totalWeight = items.reduce((sum, item) => sum + item.wgt, 0);
+                
+                itemsList.innerHTML = items.map((item, index) => {
+                    const probability = ((item.wgt / totalWeight) * 100).toFixed(2);
+                    return `
+                        <div class="item-card" draggable="true" data-index="${index}">
+                            <div class="drag-handle">⋮⋮</div>
+                            <div class="item-order">${index + 1}</div>
+                            <div class="item-info">
+                                <div class="item-detail">
+                                    <div class="item-label">物品ID</div>
+                                    <div class="item-value">${item.id}</div>
+                                </div>
+                                <div class="item-detail">
+                                    <div class="item-label">数量</div>
+                                    <div class="item-value">${item.num}</div>
+                                </div>
+                                <div class="item-detail">
+                                    <div class="item-label">权重 (${probability}%)</div>
+                                    <div class="item-value">${item.wgt}</div>
+                                </div>
+                            </div>
+                            <button class="btn btn-danger" onclick="removeItem(${index})">删除</button>
+                        </div>
+                    `;
+                }).join('');
+                
+                // 添加拖拽事件监听
+                attachDragListeners();
+            }
+
+            // 自动生成JSON
+            generateJSON();
+        }
+
+        // 生成JSON
+        function generateJSON() {
+            const drawNum = parseInt(document.getElementById('drawNum').value) || 1;
+
+            const result = {
+                typ: "single_random",
+                num: drawNum,
+                args: items.map(item => ({
+                    typ: "item",
+                    id: parseInt(item.id),
+                    num: item.num,
+                    wgt: item.wgt
+                }))
+            };
+
+            currentJSON = result;
+            displayJSON();
+        }
+
+        // 显示JSON（根据压缩状态）
+        function displayJSON() {
+            const jsonOutput = document.getElementById('jsonOutput');
+            if (items.length === 0) {
+                jsonOutput.textContent = '等待生成...';
+                return;
+            }
+            if (isCompact) {
+                jsonOutput.textContent = JSON.stringify(currentJSON);
+            } else {
+                jsonOutput.textContent = JSON.stringify(currentJSON, null, 2);
+            }
+        }
+
+        // 切换压缩/展开
+        function toggleCompact() {
+            isCompact = !isCompact;
+            const btn = document.getElementById('compactBtn');
+            const status = document.getElementById('jsonStatus');
+            if (isCompact) {
+                btn.textContent = '📄 展开格式';
+                status.textContent = '压缩显示';
+            } else {
+                btn.textContent = '📦 压缩格式';
+                status.textContent = '格式化显示';
+            }
+            displayJSON();
+        }
+
+        // 复制JSON
+        function copyJSON() {
+            const jsonOutput = document.getElementById('jsonOutput').textContent;
+            if (jsonOutput === '等待生成...') {
+                alert('请先添加掉落项！');
+                return;
+            }
+            
+            navigator.clipboard.writeText(jsonOutput).then(() => {
+                const format = isCompact ? '压缩格式' : '格式化';
+                alert(`✅ JSON已复制到剪贴板！(${format})`);
+            }).catch(err => {
+                alert('复制失败，请手动复制');
+            });
+        }
+
+        // 直接复制压缩格式
+        function copyCompactJSON() {
+            if (items.length === 0) {
+                alert('请先添加掉落项！');
+                return;
+            }
+            
+            const compactJSON = JSON.stringify(currentJSON);
+            navigator.clipboard.writeText(compactJSON).then(() => {
+                alert('✅ 压缩格式JSON已复制到剪贴板！');
+            }).catch(err => {
+                alert('复制失败，请手动复制');
+            });
+        }
+
+        // 清空所有
+        function clearAll() {
+            if (confirm('确定要清空所有配置吗？')) {
+                items = [];
+                currentJSON = {};
+                isCompact = false;
+                document.getElementById('compactBtn').textContent = '📦 压缩格式';
+                document.getElementById('jsonStatus').textContent = '格式化显示';
+                document.getElementById('drawNum').value = '1';
+                updateDisplay();
+            }
+        }
+
+        // 回车键添加物品
+        document.getElementById('itemId').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('itemNum').focus();
+            }
+        });
+        document.getElementById('itemNum').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('itemWgt').focus();
+            }
+        });
+        document.getElementById('itemWgt').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') addItem();
+        });
+
+        // 拖拽功能（交换位置版本）
+        function attachDragListeners() {
+            const itemCards = document.querySelectorAll('.item-card');
+            
+            itemCards.forEach(card => {
+                card.addEventListener('dragstart', handleDragStart);
+                card.addEventListener('dragover', handleDragOver);
+                card.addEventListener('drop', handleDrop);
+                card.addEventListener('dragenter', handleDragEnter);
+                card.addEventListener('dragleave', handleDragLeave);
+                card.addEventListener('dragend', handleDragEnd);
+            });
+        }
+
+        function handleDragStart(e) {
+            draggedIndex = parseInt(e.currentTarget.dataset.index);
+            e.currentTarget.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+        }
+
+        function handleDragOver(e) {
+            if (e.preventDefault) {
+                e.preventDefault();
+            }
+            e.dataTransfer.dropEffect = 'move';
+            return false;
+        }
+
+        function handleDragEnter(e) {
+            e.currentTarget.classList.add('drag-over');
+        }
+
+        function handleDragLeave(e) {
+            e.currentTarget.classList.remove('drag-over');
+        }
+
+        function handleDrop(e) {
+            if (e.stopPropagation) {
+                e.stopPropagation();
+            }
+            
+            const dropIndex = parseInt(e.currentTarget.dataset.index);
+            
+            if (draggedIndex !== dropIndex) {
+                // 交换数组中的元素
+                const temp = items[draggedIndex];
+                items[draggedIndex] = items[dropIndex];
+                items[dropIndex] = temp;
+                
+                updateDisplay();
+            }
+            
+            return false;
+        }
+
+        function handleDragEnd(e) {
+            e.currentTarget.classList.remove('dragging');
+            
+            // 清除所有 drag-over 类
+            document.querySelectorAll('.item-card').forEach(card => {
+                card.classList.remove('drag-over');
+            });
+            
+            draggedIndex = null;
+        }
+
+        // 初始化显示
+        updateDisplay();
+    </script>
+</body>
+</html>
