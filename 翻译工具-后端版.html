@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>多语言翻译工具 - 后端 API 版</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-content {
+            flex: 1;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .back-btn {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+            border-radius: 8px;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: white;
+            color: #667eea;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .api-config-section {
+            background: #e3f2fd;
+            border: 2px solid #2196f3;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .api-config-title {
+            font-weight: 600;
+            color: #1976d2;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .api-url-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #2196f3;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: monospace;
+            margin-top: 10px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .info-box {
+            background: #f0f7ff;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        .info-box-title {
+            font-weight: 600;
+            color: #1976d2;
+            margin-bottom: 8px;
+        }
+
+        .info-box-content {
+            color: #424242;
+            line-height: 1.6;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .result-section {
+            margin-top: 30px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #e0e0e0;
+        }
+
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+
+        tr:nth-child(even) {
+            background: #f9fafb;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #667eea;
+            font-size: 16px;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .copy-hint {
+            color: #666;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .back-btn {
+                margin-top: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 头部 -->
+        <div class="header">
+            <div class="header-content">
+                <h1>多语言翻译工具</h1>
+                <p>后端 API 版 - 安全的翻译服务</p>
+            </div>
+            <a href="index.html" class="back-btn">← 返回主页</a>
+        </div>
+
+        <!-- 内容区 -->
+        <div class="content">
+            <!-- API 配置区 -->
+            <div class="api-config-section">
+                <div class="api-config-title">
+                    🔗 后端 API 配置
+                </div>
+                <div style="color: #1976d2; font-size: 13px; margin-bottom: 10px;">
+                    <strong>说明：</strong>请输入您部署的后端服务地址
+                </div>
+                <input 
+                    type="text" 
+                    id="apiUrlInput" 
+                    class="api-url-input" 
+                    placeholder="例如：http://localhost:8000 或 https://your-backend.vercel.app"
+                    value="http://localhost:8000"
+                >
+                <div style="margin-top: 10px; font-size: 12px; color: #666;">
+                    💡 本地开发：http://localhost:8000<br>
+                    💡 Vercel 部署：https://your-project.vercel.app
+                </div>
+            </div>
+
+            <!-- 输入区 -->
+            <div class="section">
+                <h2 class="section-title">输入文本</h2>
+                
+                <div class="info-box">
+                    <div class="info-box-title">✨ 使用说明（安全的后端模式）</div>
+                    <div class="info-box-content">
+                        <strong>步骤1：</strong>配置后端 API 地址（仅需一次）<br>
+                        <strong>步骤2：</strong>输入中文文本（每行一条）<br>
+                        <strong>步骤3：</strong>点击"🤖 开始翻译"，自动完成翻译<br>
+                        <strong>步骤4：</strong>复制表格到 Excel<br>
+                        <br>
+                        💡 <strong>优势</strong>：API Key 存储在服务器端，更加安全！
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>输入中文文本（每行一条）</label>
+                    <textarea id="inputText" placeholder="例如：&#10;规则&#10;如何取得点数&#10;注意事项&#10;进行中"></textarea>
+                </div>
+
+                <div class="actions">
+                    <button class="btn btn-primary" onclick="startTranslation()" id="translateBtn">
+                        🤖 开始翻译
+                    </button>
+                    <button class="btn btn-danger" onclick="clearAll()">
+                        🗑️ 清空
+                    </button>
+                </div>
+            </div>
+
+            <!-- 结果区 -->
+            <div class="section result-section" id="resultSection" style="display: none;">
+                <h2 class="section-title">翻译结果表格</h2>
+                <div class="table-container" id="tableContainer"></div>
+                <div class="copy-hint">💡 提示：点击"复制表格"按钮或直接选中表格内容复制到Excel/Google Sheets</div>
+                <div class="actions" style="margin-top: 15px;">
+                    <button class="btn btn-success" onclick="copyTable()" style="width: 100%;">
+                        📋 复制表格到剪贴板
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const languages = {
+            'en': 'English (英语)',
+            'fr': 'Français (法语)',
+            'de': 'Deutsch (德语)',
+            'po': 'Português (葡萄牙语)',
+            'zh': '中文 (简体中文)',
+            'id': 'Indonesia (印尼语)',
+            'th': 'ไทย (泰语)',
+            'sp': 'Español (西班牙语)',
+            'ru': 'Русский (俄语)',
+            'tr': 'Türkçe (土耳其语)',
+            'vi': 'Tiếng Việt (越南语)',
+            'it': 'Italiano (意大利语)',
+            'pl': 'Polski (波兰语)',
+            'ar': 'العربية (阿拉伯语)',
+            'jp': '日本語 (日语)',
+            'kr': '한국어 (韩语)',
+            'cns': '中文 (繁体中文)'
+        };
+
+        const displayCodes = ['en', 'fr', 'de', 'po', 'zh', 'id', 'th', 'sp', 'ru', 'tr', 'vi', 'it', 'pl', 'ar', 'jp', 'kr', 'cns'];
+        let translationResults = [];
+
+        // 保存 API 地址到 localStorage
+        const apiUrlInput = document.getElementById('apiUrlInput');
+        const savedApiUrl = localStorage.getItem('backend_api_url');
+        if (savedApiUrl) {
+            apiUrlInput.value = savedApiUrl;
+        }
+
+        apiUrlInput.addEventListener('change', function() {
+            localStorage.setItem('backend_api_url', this.value.trim());
+        });
+
+        // 开始翻译（调用后端 API）
+        async function startTranslation() {
+            const inputText = document.getElementById('inputText').value.trim();
+            const apiUrl = apiUrlInput.value.trim();
+            
+            if (!inputText) {
+                alert('请先输入要翻译的中文文本！');
+                return;
+            }
+
+            if (!apiUrl) {
+                alert('请先配置后端 API 地址！');
+                apiUrlInput.focus();
+                return;
+            }
+
+            const lines = inputText.split('\n').filter(line => line.trim());
+            if (lines.length === 0) {
+                alert('请输入有效的文本！');
+                return;
+            }
+
+            // 显示加载状态
+            const translateBtn = document.getElementById('translateBtn');
+            const originalText = translateBtn.innerHTML;
+            translateBtn.disabled = true;
+            translateBtn.innerHTML = '<span class="loading-spinner"></span>正在翻译...';
+
+            const resultSection = document.getElementById('resultSection');
+            resultSection.style.display = 'block';
+            document.getElementById('tableContainer').innerHTML = `<div class="loading"><span class="loading-spinner"></span>正在连接后端服务...</div>`;
+
+            try {
+                // 调用后端 API
+                const response = await fetch(`${apiUrl}/api/translate`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        texts: lines,
+                        model: 'models/gemini-2.5-flash'
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || `HTTP ${response.status}`);
+                }
+
+                const result = await response.json();
+
+                if (result.success) {
+                    translationResults = result.data;
+                    displayResults();
+                    alert('✅ 翻译完成！');
+                } else {
+                    throw new Error(result.message || '翻译失败');
+                }
+
+            } catch (error) {
+                console.error('翻译失败:', error);
+                document.getElementById('tableContainer').innerHTML = 
+                    `<div style="color: #ef4444; text-align: center; padding: 40px;">
+                        ❌ 翻译失败：${error.message}<br><br>
+                        可能的原因：<br>
+                        1. 后端服务未启动或地址错误<br>
+                        2. 网络连接问题<br>
+                        3. 后端 API Key 配置错误<br><br>
+                        请检查：<br>
+                        • 后端服务是否正在运行<br>
+                        • API 地址是否正确<br>
+                        • 查看浏览器控制台了解详细错误<br><br>
+                        访问 ${apiUrl}/docs 查看 API 文档
+                    </div>`;
+                alert('❌ 翻译失败：' + error.message);
+            } finally {
+                translateBtn.disabled = false;
+                translateBtn.innerHTML = originalText;
+            }
+        }
+
+        // 显示翻译结果表格
+        function displayResults() {
+            const tableContainer = document.getElementById('tableContainer');
+            
+            let html = '<table id="resultTable">';
+            
+            // 表头
+            html += '<thead><tr>';
+            displayCodes.forEach(code => {
+                html += `<th>${code}</th>`;
+            });
+            html += '</tr></thead>';
+            
+            // 数据行
+            html += '<tbody>';
+            translationResults.forEach(row => {
+                html += '<tr>';
+                displayCodes.forEach(code => {
+                    html += `<td>${row[code] || ''}</td>`;
+                });
+                html += '</tr>';
+            });
+            html += '</tbody></table>';
+            
+            tableContainer.innerHTML = html;
+        }
+
+        // 复制表格
+        function copyTable() {
+            if (translationResults.length === 0) {
+                alert('⚠️ 还没有生成表格！');
+                return;
+            }
+
+            // 构建制表符分隔的文本
+            let text = displayCodes.join('\t') + '\n';
+            
+            translationResults.forEach(row => {
+                const rowData = displayCodes.map(code => row[code] || '').join('\t');
+                text += rowData + '\n';
+            });
+
+            // 复制到剪贴板
+            navigator.clipboard.writeText(text).then(() => {
+                alert('✅ 表格已复制到剪贴板！\n可以直接粘贴到 Excel 或 Google Sheets');
+            }).catch(err => {
+                console.error('复制失败:', err);
+                // 备用方案
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('✅ 表格已复制！');
+            });
+        }
+
+        // 清空所有
+        function clearAll() {
+            if (confirm('确定要清空所有内容吗？')) {
+                document.getElementById('inputText').value = '';
+                document.getElementById('resultSection').style.display = 'none';
+                translationResults = [];
+            }
+        }
+    </script>
+</body>
+</html>
