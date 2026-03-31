@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P2 黑五省省卡 数据回顾 & 优化方案</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0f1117;
+    --card: #1a1d27;
+    --border: #2a2d3a;
+    --accent: #6366f1;
+    --accent2: #22d3ee;
+    --green: #22c55e;
+    --red: #ef4444;
+    --orange: #f59e0b;
+    --text: #e2e8f0;
+    --text2: #94a3b8;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+  .container { max-width: 1400px; margin: 0 auto; padding: 24px; }
+  h1 { font-size: 28px; margin-bottom: 8px; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .subtitle { color: var(--text2); font-size: 14px; margin-bottom: 32px; }
+  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 32px; }
+  .kpi { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; text-align: center; }
+  .kpi-value { font-size: 28px; font-weight: 700; color: var(--accent2); }
+  .kpi-label { font-size: 12px; color: var(--text2); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .kpi-sub { font-size: 11px; color: var(--text2); margin-top: 2px; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+  .row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+  @media (max-width: 900px) { .row, .row-3 { grid-template-columns: 1fr; } }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; }
+  .card h3 { font-size: 16px; margin-bottom: 16px; color: var(--text); }
+  .chart-wrap { position: relative; height: 300px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { padding: 10px 12px; text-align: right; border-bottom: 1px solid var(--border); }
+  th { color: var(--text2); font-weight: 500; font-size: 11px; text-transform: uppercase; }
+  td:first-child, th:first-child { text-align: left; }
+  tr:hover td { background: rgba(99,102,241,0.05); }
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+  .tag-red { background: rgba(239,68,68,0.15); color: var(--red); }
+  .tag-green { background: rgba(34,197,94,0.15); color: var(--green); }
+  .tag-orange { background: rgba(245,158,11,0.15); color: var(--orange); }
+  .section-title { font-size: 22px; font-weight: 700; margin: 40px 0 20px; padding-left: 12px; border-left: 3px solid var(--accent); }
+  .insight { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+  .insight h4 { font-size: 15px; margin-bottom: 8px; }
+  .insight p { color: var(--text2); font-size: 13px; }
+  .insight .num { color: var(--accent2); font-weight: 700; }
+  .funnel { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .funnel-step { display: flex; align-items: center; justify-content: center; text-align: center; border-radius: 8px; padding: 14px 20px; font-weight: 600; font-size: 14px; color: #fff; width: 100%; transition: transform 0.2s; }
+  .funnel-step:hover { transform: scale(1.02); }
+  .funnel-arrow { color: var(--text2); font-size: 20px; }
+  .opt-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 16px; }
+  .opt-card h4 { font-size: 16px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .opt-card .badge { background: var(--accent); color: #fff; font-size: 11px; padding: 2px 10px; border-radius: 12px; }
+  .opt-card ul { padding-left: 20px; color: var(--text2); font-size: 13px; }
+  .opt-card li { margin-bottom: 8px; }
+  .opt-card li strong { color: var(--text); }
+  .highlight-box { margin-top:20px;padding:16px;border-radius:8px;border:1px solid; }
+  .highlight-box.red { background:rgba(239,68,68,0.08);border-color:rgba(239,68,68,0.2); }
+  .highlight-box.orange { background:rgba(245,158,11,0.08);border-color:rgba(245,158,11,0.2); }
+  .highlight-box p.title { font-size:13px;font-weight:600;margin-bottom:4px; }
+  .highlight-box p.body { font-size:12px;color:var(--text2); }
+  .highlight-box p.body strong { color:var(--text); }
+  .tabs { display: flex; gap: 4px; margin-bottom: 20px; flex-wrap: wrap; }
+  .tab { padding: 8px 20px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 500; color: var(--text2); background: transparent; border: 1px solid var(--border); transition: all 0.2s; }
+  .tab.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .tab:hover:not(.active) { background: rgba(99,102,241,0.1); }
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>P2 黑五省省卡 · 数据回顾</h1>
+  <p class="subtitle">活动周期：2025/11/12 — 2025/12/04（23天）| Game: Age of Apes | 覆盖 129/238 服 | 活动服日均 DAU ~19,133 | 数据来源：Datain 数仓</p>
+
+  <div class="kpi-grid">
+    <div class="kpi"><div class="kpi-value">$40,174</div><div class="kpi-label">活动总收入</div><div class="kpi-sub">5,775 笔订单</div></div>
+    <div class="kpi"><div class="kpi-value">1,815</div><div class="kpi-label">参与付费人数</div><div class="kpi-sub">占活动服 DAU 9.5%</div></div>
+    <div class="kpi"><div class="kpi-value">1,399</div><div class="kpi-label">省省卡购买人数</div><div class="kpi-sub">占活动服 DAU 7.3%</div></div>
+    <div class="kpi"><div class="kpi-value">$22.13</div><div class="kpi-label">ARPPU</div><div class="kpi-sub">人均消费额</div></div>
+    <div class="kpi"><div class="kpi-value">3.18</div><div class="kpi-label">人均购买次数</div><div class="kpi-sub">含卡本体</div></div>
+    <div class="kpi"><div class="kpi-value">97.9%</div><div class="kpi-label">卡→礼包转化率</div><div class="kpi-sub">1,370 / 1,399</div></div>
+  </div>
+
+  <div class="section-title">一、每日趋势</div>
+  <div class="row">
+    <div class="card">
+      <h3>每日购买人数 & 订单数</h3>
+      <div class="chart-wrap"><canvas id="chartDaily"></canvas></div>
+    </div>
+    <div class="card">
+      <h3>每日收入（$）</h3>
+      <div class="chart-wrap"><canvas id="chartRevenue"></canvas></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:24px">
+    <h3>首周 vs 后续对比</h3>
+    <div class="row" style="margin-bottom:0">
+      <div>
+        <table>
+          <tr><th></th><th>首周 (11/12-11/19)</th><th>后续 (11/20-12/04)</th><th>变化</th></tr>
+          <tr><td>收入</td><td>$28,455</td><td>$11,719</td><td><span class="tag tag-red">-59%</span></td></tr>
+          <tr><td>日均收入</td><td>$3,557</td><td>$781</td><td><span class="tag tag-red">-78%</span></td></tr>
+          <tr><td>日均买家</td><td>213人</td><td>57人</td><td><span class="tag tag-red">-73%</span></td></tr>
+          <tr><td>日均订单</td><td>520</td><td>109</td><td><span class="tag tag-red">-79%</span></td></tr>
+        </table>
+      </div>
+      <div class="chart-wrap" style="height:200px"><canvas id="chartWeekVs"></canvas></div>
+    </div>
+    <div class="highlight-box orange" style="margin-top:16px">
+      <p class="title" style="color:var(--orange)">📊 关键洞察：严重的头重脚轻</p>
+      <p class="body">首 2 天（11/13-14）贡献 <strong>$14,817</strong>（占总收入 36.9%），首周占 <strong>70.8%</strong>。后续 15 天仅贡献 29.2%，日均收入断崖式下跌 78%。活动后半段几乎失去吸引力。</p>
+    </div>
+  </div>
+
+  <div class="section-title">二、各档位分析</div>
+  <div class="row">
+    <div class="card">
+      <h3>各档位收入占比</h3>
+      <div class="chart-wrap"><canvas id="chartTier"></canvas></div>
+    </div>
+    <div class="card">
+      <h3>各档位明细</h3>
+      <table>
+        <tr><th>档位</th><th>价格</th><th>买家</th><th>收入</th><th>占比</th><th>状态</th></tr>
+        <tr><td>高档礼包A (31)</td><td>$19.99</td><td>669</td><td>$13,032</td><td>32.4%</td><td><span class="tag tag-green">收入主力</span></td></tr>
+        <tr><td>中档礼包 (33)</td><td>$9.99</td><td>1,050</td><td>$10,244</td><td>25.5%</td><td><span class="tag tag-green">人数主力</span></td></tr>
+        <tr><td>省省卡本体 (29)</td><td>$4.99</td><td>1,399</td><td>$6,813</td><td>17.0%</td><td><span class="tag tag-green">入口</span></td></tr>
+        <tr><td>低档A (37)</td><td>$2.99</td><td>1,018</td><td>$2,964</td><td>7.4%</td><td></td></tr>
+        <tr><td>低档B (35)</td><td>$2.99</td><td>1,017</td><td>$2,960</td><td>7.4%</td><td></td></tr>
+        <tr><td>低中档A (34)</td><td>$4.99</td><td>296</td><td>$1,439</td><td>3.6%</td><td></td></tr>
+        <tr><td>低中档B (36)</td><td>$4.99</td><td>258</td><td>$1,266</td><td>3.1%</td><td></td></tr>
+        <tr><td>高档礼包B (32)</td><td>$19.99</td><td>64</td><td>$1,261</td><td>3.1%</td><td><span class="tag tag-orange">低迷</span></td></tr>
+        <tr><td>最高档 (30)</td><td>$49.99</td><td>4</td><td>$195</td><td>0.5%</td><td><span class="tag tag-red">仅4笔</span></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="section-title">三、转化漏斗</div>
+  <div class="row">
+    <div class="card">
+      <h3>购买转化路径</h3>
+      <div class="funnel">
+        <div class="funnel-step" style="background:linear-gradient(135deg,#3b82f6,#6366f1);width:100%">活动服日均在线 ~19,133（129 服 / 共 238 服）</div>
+        <div class="funnel-arrow">↓ 9.5%</div>
+        <div class="funnel-step" style="background:linear-gradient(135deg,#6366f1,#8b5cf6);width:55%">活动参与付费 1,815人</div>
+        <div class="funnel-arrow">↓ 77%</div>
+        <div class="funnel-step" style="background:linear-gradient(135deg,#8b5cf6,#a855f7);width:42%">省省卡买家 1,399人</div>
+        <div class="funnel-arrow">↓ 97.9%</div>
+        <div class="funnel-step" style="background:linear-gradient(135deg,#a855f7,#d946ef);width:40%">卡+礼包 1,370人</div>
+      </div>
+      <div class="highlight-box red">
+        <p class="title" style="color:var(--red)">⚠ 流失点：416人买礼包没买卡</p>
+        <p class="body"><strong>416人</strong> 购买了折扣礼包却没有先买省省卡（不知道或不觉得值）。如果这批人也买了卡，至少多增 <strong style="color:var(--accent2)">$2,076</strong> 卡本体收入，加上更深的折扣可能刺激更多礼包消费。</p>
+      </div>
+      <div class="highlight-box orange" style="margin-top:12px">
+        <p class="title" style="color:var(--orange)">📌 人均仅买 2.18 个礼包</p>
+        <p class="body">人均 3.18 次购买含卡本体，实际每人只额外买了约 <strong>2 个礼包</strong>。8 个可选礼包仅使用了 25%，折扣优惠远未被充分利用。</p>
+      </div>
+    </div>
+    <div class="card">
+      <h3>活动服 DAU 趋势（129 服）</h3>
+      <div class="chart-wrap"><canvas id="chartOverall"></canvas></div>
+    </div>
+  </div>
+
+  <div class="section-title">四、核心问题诊断</div>
+  <div class="row">
+    <div class="insight">
+      <h4>🔴 问题1：活动衰减极快（首周占 71%）</h4>
+      <p>首日即高峰（<span class="num">$7,083</span>），第 2 天 <span class="num">$7,734</span>，之后每日断崖下跌。到第 8 天日收入已不足首日的 <span class="num">1/7</span>。活动缺少中后期的刺激手段，玩家"买完就走"。</p>
+    </div>
+    <div class="insight">
+      <h4>🔴 问题2：$49.99 档位几乎无效</h4>
+      <p>$49.99 最高档全程仅 <span class="num">4 笔订单</span>，收入仅 <span class="num">$195</span>（占比 0.5%）。定价远超 P2 用户消费习惯，这个档位等于浪费了一个坑位。</p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="insight">
+      <h4>🟡 问题3：渗透率仍有提升空间（7.3%）</h4>
+      <p>活动服日均在线 <span class="num">~19,133</span>（129 服），<span class="num">1,399 人</span> 购买了省省卡（7.3%），且 <span class="num">416 人</span> 买了礼包却没买卡。<strong>渗透率高于类似活动平均水平，但仍有提升空间</strong>——超 90% 的在线玩家未被转化。</p>
+    </div>
+    <div class="insight">
+      <h4>🟡 问题4：折扣利用率低</h4>
+      <p>提供了 8 个折扣礼包，但人均仅买 <span class="num">2.18 个</span>（利用率 27%）。大部分用户买完省省卡后，只选了 1-2 个最划算的礼包，<strong>缺少持续消费动力</strong>。</p>
+    </div>
+  </div>
+
+  <div class="section-title">五、下期优化方案</div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="showTab('pricing')">定价优化</div>
+    <div class="tab" onclick="showTab('mechanics')">机制改造</div>
+    <div class="tab" onclick="showTab('promotion')">曝光提升</div>
+    <div class="tab" onclick="showTab('retention')">持续消费</div>
+  </div>
+
+  <div id="tab-pricing">
+    <div class="opt-card">
+      <h4><span class="badge">P0</span> 重新设计价格档位</h4>
+      <ul>
+        <li><strong>砍掉 $49.99 档位</strong>：仅 4 笔订单，证明此档无效。用 $29.99 替代，设计为"尊享套装"（含省省卡+独家皮肤+额外奖励），提供非折扣的独占价值</li>
+        <li><strong>增加 $14.99 中高档</strong>：$9.99 和 $19.99 之间缺少过渡档，$9.99 有 1,050 人购买而 $19.99 只有 669 人，说明有部分用户愿意多付但不愿跳到 $19.99</li>
+        <li><strong>高档B (32) 需优化内容</strong>：同为 $19.99，(31)有 669 买家而 (32) 仅 64 买家 — 差 10 倍。检查 (32) 的礼包内容是否吸引力不足</li>
+      </ul>
+    </div>
+    <div class="opt-card">
+      <h4><span class="badge">P1</span> 省省卡分档设计</h4>
+      <ul>
+        <li><strong>基础卡 $0.99</strong>：全场 9 折（低门槛引流，提升渗透率）</li>
+        <li><strong>白银卡 $4.99</strong>：全场 7 折 + 每日签到奖励</li>
+        <li><strong>黄金卡 $9.99</strong>：全场 5 折 + 每日签到 + 独家英雄碎片</li>
+        <li>三档互斥，买高档自动覆盖低档。低价入口提升渗透，高价卡服务大R</li>
+      </ul>
+    </div>
+  </div>
+
+  <div id="tab-mechanics" class="hidden">
+    <div class="opt-card">
+      <h4><span class="badge">P0</span> 解决"头重脚轻"：从一次性打折改为每日限时</h4>
+      <ul>
+        <li>上期核心问题是首 2 天占 37% 收入，后续疲软。根因是<strong>所有礼包一次性全开放</strong>，玩家集中购买后没有回头动力</li>
+        <li><strong>改为每日刷新限时折扣</strong>：每天开放 2-3 个限时折扣礼包（6 小时窗口），错过即止</li>
+        <li>配合<strong>倒计时 + Push 推送提醒</strong>，制造每日登录消费动力</li>
+        <li><strong>随机性</strong>：每日折扣的礼包内容随机组合，增加惊喜感和不确定性</li>
+      </ul>
+    </div>
+    <div class="opt-card">
+      <h4><span class="badge">P0</span> 累计消费返利（拉长消费周期）</h4>
+      <ul>
+        <li>累计消费达 $10 / $20 / $50 / $100 解锁额外大奖</li>
+        <li>大奖包含<strong>独家头像框/皮肤/限定英雄碎片</strong>等不可购买的稀缺内容</li>
+        <li>进度条常驻活动界面，<strong>可视化</strong>消费进度，营造"差一点就到了"的感觉</li>
+      </ul>
+    </div>
+    <div class="opt-card">
+      <h4><span class="badge">P1</span> 增加"自选"机制</h4>
+      <ul>
+        <li>上期礼包内容固定，玩家可能不需要。加入<strong>自选礼包</strong>：玩家可从英雄碎片、研究加速、资源包中自由选择组合</li>
+        <li>自选提升感知价值和购买意愿，解决"我不需要这个礼包"的问题</li>
+      </ul>
+    </div>
+    <div class="opt-card">
+      <h4><span class="badge">P2</span> 社交裂变机制</h4>
+      <ul>
+        <li><strong>联盟团购</strong>：联盟内 N 人购买省省卡后，全联盟成员额外获得折扣加成或免费奖励</li>
+        <li><strong>分享返利</strong>：分享活动给好友，好友购买后双方各得一次半价机会</li>
+      </ul>
+    </div>
+  </div>
+
+  <div id="tab-promotion" class="hidden">
+    <div class="opt-card">
+      <h4><span class="badge">P0</span> 解决 416 人"买礼包不买卡"的问题</h4>
+      <ul>
+        <li><strong>礼包页强制曝光</strong>：在每个礼包购买页显示"如果你有省省卡，这个礼包仅需 $X.XX（省 $Y.YY）"</li>
+        <li><strong>首次购买礼包时弹窗推荐</strong>：玩家首次点击礼包购买时，弹窗推荐先买省省卡</li>
+        <li><strong>购买后回溯优惠</strong>：如果玩家先买了礼包再买省省卡，退回差价（解决上期"不退差价"的顾虑）</li>
+      </ul>
+    </div>
+    <div class="opt-card">
+      <h4><span class="badge">P1</span> 多渠道曝光</h4>
+      <ul>
+        <li><strong>开服红点</strong>：活动期间每日登录，主界面显示省省卡红点提醒</li>
+        <li><strong>邮件推送</strong>：对活跃但未购买的玩家，第 3 天发送限时优惠邮件</li>
+        <li><strong>联盟公告</strong>：在联盟频道推送"你的联盟已有 X 人购买省省卡"</li>
+        <li><strong>商店入口</strong>：在常规商店页增加省省卡浮窗入口</li>
+      </ul>
+    </div>
+  </div>
+
+  <div id="tab-retention" class="hidden">
+    <div class="opt-card">
+      <h4><span class="badge">P0</span> 从"一次性打折"改为"每日权益卡"</h4>
+      <ul>
+        <li><strong>核心改动</strong>：省省卡不再是一次性打折，而是活动期内的<strong>权益卡</strong></li>
+        <li>持卡期间：每日登录可<strong>领取一张折扣券</strong>（5折/7折/9折随机）</li>
+        <li>折扣券<strong>仅当日有效</strong>，鼓励每日登录 + 每日消费</li>
+        <li>每 3 日签到解锁一个<strong>独家限定礼包</strong>（仅持卡用户可购买），创造专属感</li>
+      </ul>
+    </div>
+    <div class="opt-card">
+      <h4><span class="badge">P1</span> 后半程激活策略</h4>
+      <ul>
+        <li>活动进入第 2 周后自动触发<strong>"折上折"</strong>：省省卡用户在后半段享受额外 10% 折扣</li>
+        <li>最后 3 天推出<strong>"终极清仓"</strong>：所有档位降至历史最低折扣，营造紧迫感</li>
+        <li>活动结束前推送"续费优惠"：以<strong>7 折价格</strong>续购新卡（可用于下一个消费活动）</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-title">六、预期效果</div>
+  <div class="row-3">
+    <div class="kpi" style="border-color:var(--green)">
+      <div class="kpi-value" style="color:var(--green)">2-3x</div>
+      <div class="kpi-label">渗透率提升</div>
+      <div class="kpi-sub">分档设计+强曝光+低价入口</div>
+    </div>
+    <div class="kpi" style="border-color:var(--green)">
+      <div class="kpi-value" style="color:var(--green)">5-6次</div>
+      <div class="kpi-label">人均消费次数</div>
+      <div class="kpi-sub">每日限时+累计返利+权益卡</div>
+    </div>
+    <div class="kpi" style="border-color:var(--green)">
+      <div class="kpi-value" style="color:var(--green)">$70K+</div>
+      <div class="kpi-label">目标总收入</div>
+      <div class="kpi-sub">vs 上期 $40K (+75%)</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const dates = ['11/12','11/13','11/14','11/15','11/16','11/17','11/18','11/19','11/20','11/21','11/22','11/23','11/24','11/25','11/26','11/27','11/28','11/29','11/30','12/01','12/02','12/03','12/04'];
+const buyers = [20,382,441,288,202,161,103,106,71,83,68,64,48,53,42,49,42,61,69,72,73,51,34];
+const orders = [48,1060,1129,695,431,348,224,228,132,175,113,110,86,103,75,88,79,97,138,142,125,85,64];
+const revenue = [287,7083,7734,4791,3014,2349,1679,1517,975,1190,892,762,550,843,544,595,609,808,959,1010,937,577,467];
+
+const chartOpts = {
+  responsive: true, maintainAspectRatio: false,
+  plugins: { legend: { labels: { color: '#94a3b8', font: { size: 11 } } } },
+  scales: {
+    x: { ticks: { color: '#64748b', font: { size: 9 }, maxRotation: 45 }, grid: { color: 'rgba(255,255,255,0.04)' } },
+    y: { ticks: { color: '#64748b', font: { size: 10 } }, grid: { color: 'rgba(255,255,255,0.06)' } }
+  }
+};
+
+new Chart(document.getElementById('chartDaily'), {
+  type: 'bar',
+  data: {
+    labels: dates,
+    datasets: [
+      { label: '购买人数', data: buyers, backgroundColor: 'rgba(99,102,241,0.7)', borderRadius: 4 },
+      { label: '订单数', data: orders, backgroundColor: 'rgba(34,211,238,0.4)', borderRadius: 4 }
+    ]
+  },
+  options: chartOpts
+});
+
+new Chart(document.getElementById('chartRevenue'), {
+  type: 'line',
+  data: {
+    labels: dates,
+    datasets: [
+      { label: '收入($)', data: revenue, borderColor: '#22c55e', backgroundColor: 'rgba(34,197,94,0.1)', fill: true, tension: 0.3, pointRadius: 3, borderWidth: 2 }
+    ]
+  },
+  options: {
+    ...chartOpts,
+    plugins: {
+      ...chartOpts.plugins,
+      annotation: {
+        annotations: {
+          line1: { type: 'line', yMin: 1746, yMax: 1746, borderColor: 'rgba(245,158,11,0.5)', borderDash: [5, 5], label: { content: '日均 $1,747', display: true } }
+        }
+      }
+    }
+  }
+});
+
+new Chart(document.getElementById('chartTier'), {
+  type: 'doughnut',
+  data: {
+    labels: ['高档A $19.99 (31)','中档 $9.99 (33)','省省卡 $4.99 (29)','低档A $2.99 (37)','低档B $2.99 (35)','低中A $4.99 (34)','低中B $4.99 (36)','高档B $19.99 (32)','最高档 $49.99 (30)'],
+    datasets: [{ data: [13032,10244,6813,2964,2960,1439,1266,1261,195], backgroundColor: ['#6366f1','#8b5cf6','#22d3ee','#38bdf8','#0ea5e9','#06b6d4','#67e8f9','#a855f7','#ef4444'] }]
+  },
+  options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { color: '#94a3b8', font: { size: 10 }, padding: 8 } } } }
+});
+
+new Chart(document.getElementById('chartWeekVs'), {
+  type: 'bar',
+  data: {
+    labels: ['总收入','日均收入','日均买家','日均订单'],
+    datasets: [
+      { label: '首周 (11/12-19)', data: [100,100,100,100], backgroundColor: 'rgba(99,102,241,0.7)', borderRadius: 4 },
+      { label: '后续 (11/20-12/04)', data: [41,22,27,21], backgroundColor: 'rgba(239,68,68,0.5)', borderRadius: 4 }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false, indexAxis: 'y',
+    scales: {
+      x: { min: 0, max: 120, ticks: { color: '#64748b', font: { size: 10 }, callback: function(v){ return v + '%'; } }, grid: { color: 'rgba(255,255,255,0.06)' } },
+      y: { ticks: { color: '#64748b', font: { size: 11 } }, grid: { color: 'rgba(255,255,255,0.04)' } }
+    },
+    plugins: {
+      legend: { labels: { color: '#94a3b8', font: { size: 11 } } },
+      tooltip: { callbacks: { label: function(ctx) {
+        var raw = [['$28,455','$3,557','213人','520次'],['$11,719','$781','57人','109次']];
+        return ctx.dataset.label + ': ' + raw[ctx.datasetIndex][ctx.dataIndex] + ' (' + ctx.parsed.x + '%)';
+      }}}
+    }
+  }
+});
+
+const dauDates = ['11/12','11/13','11/14','11/15','11/16','11/17','11/18','11/19','11/20','11/21','11/22','11/23','11/24','11/25','11/26','11/27','11/28','11/29','11/30','12/01','12/02','12/03','12/04'];
+const dauData = [20410,20127,20492,20002,19918,19744,19600,19097,19059,19563,19067,18942,19003,18683,18380,18395,18560,18355,18273,19502,18106,18146,18640];
+const avgDau = Math.round(dauData.reduce((a,b)=>a+b,0)/dauData.length);
+
+new Chart(document.getElementById('chartOverall'), {
+  type: 'line',
+  data: {
+    labels: dauDates,
+    datasets: [
+      { label: '活动服 DAU（129服）', data: dauData, borderColor: '#6366f1', backgroundColor: 'rgba(99,102,241,0.1)', fill: true, tension: 0.3, pointRadius: 3, borderWidth: 2 },
+      { label: '日均 ' + avgDau.toLocaleString(), data: dauDates.map(()=>avgDau), borderColor: 'rgba(245,158,11,0.6)', borderDash: [6,4], borderWidth: 1.5, pointRadius: 0, fill: false }
+    ]
+  },
+  options: { ...chartOpts, scales: { ...chartOpts.scales, x: { ...chartOpts.scales.x, ticks: { ...chartOpts.scales.x.ticks, maxRotation: 60 } }, y: { ...chartOpts.scales.y, min: 16000, max: 22000 } } }
+});
+
+function showTab(id) {
+  document.querySelectorAll('[id^="tab-"]').forEach(e => e.classList.add('hidden'));
+  document.getElementById('tab-' + id).classList.remove('hidden');
+  document.querySelectorAll('.tab').forEach(e => e.classList.remove('active'));
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>
