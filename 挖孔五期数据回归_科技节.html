@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>挖孔五期数据回归 — 科技节</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script src="chart.min.js"></script>
+<script>if(!window.Chart)document.write('<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"><\/script>')</script>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -1079,7 +1080,6 @@ new Chart(document.getElementById('chartRewardContrib'), {
   const tech = [13915,13075,12896,12730,12381,8928,8298,8000,7831,7678,7503,7385,7291,7191,7116,7015,6946,6891,6846,6780,6659,6584,6509,6458,6412,6329,6255,6228,6189,5952,5587,5258,4911,4596,4261,4023,3725,3475,3228,2915,2760,2586,2358,2045,1819,1774,1605,1445,1211,1028,1014,943,823,772,694,690,680,652,621,616,578,518,482,438,374,364,320,299,286,241,230,230,227,225,225,225,225,215,209,209,209,209,200,185,178,170,169,158,150,145,138,134,127,127,122,120,118,117,112,110];
   new Chart(document.getElementById('chartHistoryLevels'), {
     type: 'line',
-    options: { maintainAspectRatio: false },
     data: {
       labels: labels,
       datasets: [
