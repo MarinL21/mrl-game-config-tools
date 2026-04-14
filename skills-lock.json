@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "skills": {
+    "ai-to-sql": {
+      "source": "git@git.tap4fun.com:skills/bi/datain-ai-to-sql.git",
+      "sourceType": "git",
+      "computedHash": "b4586498d65affd32a0108d299346de35dff32c9d91fc878e35d089516d73320"
+    },
+    "bi-rmd-report": {
+      "source": "git@git.tap4fun.com:skills/bi/bi_rmd_report.git",
+      "sourceType": "git",
+      "computedHash": "57b852a286291043f626bd60a5fb5d2e2c4a13b20cb96a6d8a502fa5d6c994b8"
+    },
+    "dashboard-skill": {
+      "source": "git@git.tap4fun.com:skills/bi/datain-dashboard-skill.git",
+      "sourceType": "git",
+      "computedHash": "ebd1b390cf9f3274fe31860359fab07da668a66bf282f0813835b9c8e150c3d1"
+    },
+    "datain-skill": {
+      "source": "git@git.tap4fun.com:skills/bi/datain-skill.git",
+      "sourceType": "git",
+      "computedHash": "71bf43c8013b10f2835ac7a86988ee077c490d02613003b0d711e77393910298"
+    },
+    "git-jira-commit-assist": {
+      "source": "git@git.tap4fun.com:skills/bi-web/git-jira-commit-assist.git",
+      "sourceType": "git",
+      "computedHash": "2143ebf322d8785d0c91e1887e5b63eb4922fafb4616235003d87e677607f7f5"
+    },
+    "gws-workspace": {
+      "source": "git@git.tap4fun.com:skills/bi/gws-workspace.git",
+      "sourceType": "git",
+      "computedHash": "0d8c788275b577de71a144f0275d55d0f16ec825825ee7f75ca9b075684118f1"
+    },
+    "igame-skill": {
+      "source": "git@git.tap4fun.com:skills/igame-skill.git",
+      "sourceType": "git",
+      "computedHash": "7836404cf48027c2050c723c3cfe617d233fd6441b784d4e8f7a41d92781f115"
+    },
+    "login-oauth2": {
+      "source": "git@git.tap4fun.com:skills/bi-web/login-oauth2.git",
+      "sourceType": "git",
+      "computedHash": "dd7216e0b8f4a2cf7bc686c3129e6bf607f357bfb1e3e785f77d426fdb43aab7"
+    },
+    "p2-translation-automatic": {
+      "source": "git@git.tap4fun.com:skills/p2/p2-translation-automatic.git",
+      "sourceType": "git",
+      "computedHash": "6150125b7d6514886b53ebb89819e624ab654fe6a8dc7aed1fb0982f512a4aa8"
+    },
+    "publish-skill": {
+      "source": "git@git.tap4fun.com:skills/publish-skill.git",
+      "sourceType": "git",
+      "computedHash": "e543a0ba236723ea3ef2b01f648b568d08757976795604f885d255327a99dd17"
+    }
+  }
+}

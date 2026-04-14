@@ -97,25 +97,42 @@ python main.py
 ## 📂 项目文件
 
 ```
-├── 前端文件
-│   ├── index.html                    # 主页
-│   ├── 礼包配置工具.html
-│   ├── 掉落配置工具.html
-│   ├── 翻译工具.html                # 前端版
-│   └── 翻译工具-后端版.html          # 后端版
+├── index.html                        # 主页入口
+├── 礼包配置工具.html                  # 礼包奖励配置
+├── 掉落配置工具.html                  # 掉落概率配置
+├── 翻译工具-后端版.html               # 多语言翻译（后端AI版）
+├── 挖孔关卡配置工具.html              # 挖孔关卡可视化配置
+├── main.py                           # FastAPI 后端服务
+├── requirements.txt                  # Python 依赖
+├── start.sh / start.bat              # 启动脚本
 │
-├── 后端文件
-│   ├── main.py                       # FastAPI 服务
-│   ├── requirements.txt              # Python 依赖
-│   ├── .env.example                  # 配置模板
-│   ├── test_api.py                   # 测试脚本
-│   └── start.sh / start.bat          # 启动脚本
+├── localization/                     # 翻译/本地化脚本与数据
+│   ├── write_translations.py         # 批量写入翻译
+│   ├── translation_memory.json       # 翻译记忆库
+│   ├── glossary.json                 # 术语表
+│   └── ...
 │
-└── 文档
-    ├── README.md                     # 本文件
-    ├── 项目说明.md                   # 完整说明
-    ├── 后端使用说明.md               # 快速入门
-    └── 后端部署指南.md               # 部署文档
+├── dighole/                          # 挖孔活动相关脚本与数据
+│   ├── mecha_*.py                    # 机甲挖孔写入/同步脚本
+│   ├── score_rule_sync.py
+│   ├── 挖孔活动补发数据.tsv
+│   └── ...
+│
+├── reports/                          # 数据分析报告
+│   ├── 挖孔五期数据回归_科技节.html
+│   ├── 挖孔五期数据回归_拓荒节.html
+│   └── 黑五省省卡数据回顾.html
+│
+├── docs/                             # 文档
+│   ├── 项目说明.md
+│   ├── 后端使用说明.md
+│   ├── 后端部署指南.md
+│   └── ...
+│
+└── scripts/                          # 调试与测试脚本
+    ├── test_api.py / test_gemini_key.py
+    ├── diagnose_api.py
+    └── temp_*.py
 ```
 
 ## 📄 License

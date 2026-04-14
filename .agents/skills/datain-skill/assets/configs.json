@@ -1,0 +1,6 @@
+{
+	"cache_dir": "./cache/",
+	"datain_api_url": "https://datain-api.tap4fun.com/public_api",
+	"rag_url": "https://datain-nas.tap4fun.com/ragservice/api/v1/search",
+	"games": {"1001":["301"],"1038":["b2"]}
+}

@@ -194,14 +194,35 @@ description: >-
 
 ### 2.6 用户审核与迭代
 
-- 用浏览器打开 HTML 报告供用户审核
-- 根据反馈修正数据/结论/排版
+- 用浏览器打开 HTML 报告供用户审核（`Start-Process "报告文件.html"`）
+- **必须等用户确认"没问题"或"可以了"后才能执行 2.7 推送 Git**
+- 根据反馈修正数据/结论/排版，修正后再次打开浏览器供用户确认
 - 常见修正：IAP 分类、收入归因解释、排版细节
 
-### 2.7 上传 Git
+### 2.7 上传 Git（需用户确认后执行）
 
-- `git add` + `git commit` + `git push`
+- **再次询问用户**："报告确认无误，是否推送到 Git？"
+- 用户确认后执行：`git add` + `git commit` + `git push`
 - commit message 格式：`feat: 挖孔{N}期{节日}数据回归报告，含与第{N-1}期{上期节日}对比分析`
+- 推送后 GitHub Pages 会自动部署（约1分钟）
+
+### 2.8 发布到 Wiki
+
+Git 推送成功后，提供以下信息供用户手动操作（API 因公司安全策略无法自动写入 iframe）：
+
+1. 告知用户 GitHub Pages 访问地址：
+   ```
+   https://marinl21.github.io/mrl-game-config-tools/{HTML文件名URL编码}
+   ```
+
+2. 提供 wiki 操作步骤：
+   > 请在 wiki 对应节日的数据回归父页面下创建子页面，然后：
+   > 1. 编辑页面 → 输入 `/iframe` → 插入 iframe 宏
+   > 2. URL 填入上面的 GitHub Pages 地址
+   > 3. 宽度填 `100%`，高度填 `6000`
+   > 4. 保存即可
+
+3. 如果用户不清楚父页面位置，用 Confluence MCP 搜索帮助定位
 
 ## 3. 关键数据表与字段
 

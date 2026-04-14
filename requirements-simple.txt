@@ -1,6 +1,0 @@
-# 最简化版本 - 只安装必需的核心包
-fastapi
-uvicorn
-google-generativeai
-python-dotenv
-requests

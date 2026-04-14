@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>科技节2026 主城特效累充·个人bingo返利 数据回归</title>
+<script src="../reports/chart.min.js"></script>
+<script>if(!window.Chart){document.write('<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"><\/script>')}</script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f1117; --surface: #1a1d2e; --surface2: #252840;
+    --accent: #6c63ff; --accent2: #ff6584; --accent3: #43e97b;
+    --accent4: #f7971e; --accent5: #4facfe;
+    --text: #e2e8f0; --text-muted: #8892a4; --border: #2d3250;
+    --green: #43e97b; --red: #ff6584; --yellow: #f7971e; --blue: #4facfe;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Noto Sans SC', sans-serif; font-size: 14px; line-height: 1.6; }
+  .page { max-width: 1280px; margin: 0 auto; padding: 32px 24px; }
+  h1 { font-size: 26px; font-weight: 700; background: linear-gradient(135deg, var(--accent), var(--accent5)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 4px; }
+  .subtitle { color: var(--text-muted); font-size: 13px; margin-bottom: 32px; }
+  h2 { font-size: 17px; font-weight: 600; color: var(--accent5); border-left: 3px solid var(--accent5); padding-left: 10px; margin: 32px 0 16px; }
+  h3 { font-size: 14px; font-weight: 600; color: var(--text-muted); margin: 16px 0 8px; text-transform: uppercase; letter-spacing: .05em; }
+
+  /* KPI Cards */
+  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 14px; margin-bottom: 8px; }
+  .kpi { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px 16px; }
+  .kpi .label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; }
+  .kpi .value { font-size: 24px; font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+  .kpi .sub { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+  .kpi .delta { font-size: 12px; font-weight: 600; margin-top: 4px; }
+  .delta.up { color: var(--green); } .delta.down { color: var(--red); }
+  .kpi.accent1 { border-color: var(--accent); } .kpi.accent1 .value { color: var(--accent); }
+  .kpi.accent2 { border-color: var(--accent2); } .kpi.accent2 .value { color: var(--accent2); }
+  .kpi.accent3 { border-color: var(--accent3); } .kpi.accent3 .value { color: var(--accent3); }
+  .kpi.accent4 { border-color: var(--accent4); } .kpi.accent4 .value { color: var(--accent4); }
+  .kpi.accent5 { border-color: var(--accent5); } .kpi.accent5 .value { color: var(--accent5); }
+
+  /* Table */
+  .tbl-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead th { background: var(--surface2); color: var(--text-muted); font-weight: 600; text-transform: uppercase; font-size: 11px; letter-spacing: .05em; padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+  tbody td { padding: 9px 12px; border-bottom: 1px solid var(--border); }
+  tbody tr:hover { background: var(--surface); }
+  tbody tr:last-child td { border-bottom: none; }
+  td.num { font-family: 'JetBrains Mono', monospace; text-align: right; }
+  td.good { color: var(--green); font-weight: 600; }
+  td.bad { color: var(--red); }
+  td.warn { color: var(--yellow); }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+  .badge.new { background: rgba(108,99,255,.25); color: var(--accent); }
+  .badge.base { background: rgba(79,172,254,.25); color: var(--blue); }
+
+  /* Chart containers */
+  .chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 8px; }
+  .chart-grid.single { grid-template-columns: 1fr; }
+  .chart-grid.three { grid-template-columns: 1fr 1fr 1fr; }
+  .chart-box { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+  .chart-box h3 { margin-top: 0; }
+  canvas { max-height: 280px; }
+
+  /* Section card */
+  .section-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 8px; }
+
+  /* Tag */
+  .tag { display: inline-block; padding: 2px 10px; border-radius: 4px; font-size: 11px; font-weight: 600; margin-right: 6px; }
+  .tag.tech { background: rgba(108,99,255,.2); color: var(--accent); }
+  .tag.vd { background: rgba(255,101,132,.2); color: var(--accent2); }
+
+  /* Conclusion */
+  .conclusion-list { list-style: none; }
+  .conclusion-list li { padding: 8px 0; border-bottom: 1px solid var(--border); display: flex; gap: 10px; }
+  .conclusion-list li:last-child { border-bottom: none; }
+  .conclusion-list .icon { width: 20px; flex-shrink: 0; text-align: center; }
+  .p0 { color: var(--red); font-weight: 700; }
+  .p1 { color: var(--yellow); font-weight: 700; }
+  .p2 { color: var(--green); font-weight: 600; }
+
+  /* Mechanism box */
+  .mech-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .mech-box { background: var(--surface2); border-radius: 8px; padding: 14px 16px; }
+  .mech-box .mech-title { font-size: 12px; font-weight: 700; color: var(--accent5); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 8px; }
+  .mech-steps { list-style: none; counter-reset: step; }
+  .mech-steps li { counter-increment: step; padding: 4px 0 4px 28px; position: relative; font-size: 13px; border-bottom: 1px solid var(--border); }
+  .mech-steps li:last-child { border-bottom: none; }
+  .mech-steps li::before { content: counter(step); position: absolute; left: 0; width: 20px; height: 20px; background: var(--accent); color: white; border-radius: 50%; text-align: center; line-height: 20px; font-size: 11px; font-weight: 700; }
+  .mech-free { display: inline-block; background: rgba(67,233,123,.2); color: var(--green); border-radius: 4px; font-size: 11px; font-weight: 700; padding: 1px 7px; margin-left: 4px; }
+
+  @media (max-width: 768px) { .chart-grid { grid-template-columns: 1fr; } .chart-grid.three { grid-template-columns: 1fr; } .mech-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <h1>科技节2026 · 主城特效累充个人Bingo返利</h1>
+  <div class="subtitle">数据回归报告 · P2 (game_cd=1041) · 活动期：2026-03-13 ~ 04-14（33天）· 对比：情人节2026累充个人（21127713）</div>
+
+  <!-- ① 活动概览 -->
+  <h2>① 活动概览</h2>
+
+  <!-- 机制说明 -->
+  <div class="mech-grid" style="margin-bottom:20px">
+    <div class="mech-box">
+      <div class="mech-title">科技节 Bingo 活动机制（21127577）</div>
+      <ol class="mech-steps">
+        <li>玩家进入活动，<b>第一次抽格免费</b><span class="mech-free">FREE</span></li>
+        <li>通过累充获得更多抽格机会（抽银色棋盘：212452200；抽金色棋盘：212452201）</li>
+        <li>每次抽格随机点亮一个格子；连成一行/列/斜线即为「连线」，触发奖励</li>
+        <li>银色棋盘（12条连线）全部连通后自动切换至金色棋盘（12条连线）</li>
+        <li>阶段奖励：以连线数为里程碑，2/4/8/12条线各领一次，可随棋盘重置反复触发</li>
+      </ol>
+    </div>
+    <div class="mech-box">
+      <div class="mech-title">任务 ID 结构（2115表配置）</div>
+      <table style="font-size:12px;margin-top:4px">
+        <thead><tr><th style="padding:4px 8px">任务ID范围</th><th style="padding:4px 8px">类型</th><th style="padding:4px 8px">完成条件</th></tr></thead>
+        <tbody>
+          <tr><td style="padding:4px 8px">211586837–211586844</td><td style="padding:4px 8px">阶段奖励（×8）</td><td style="padding:4px 8px">银/金各2/4/8/12连线</td></tr>
+          <tr><td style="padding:4px 8px">211586845–211586856</td><td style="padding:4px 8px">银色棋盘连线（×12）</td><td style="padding:4px 8px">每条线单独记录，可重复</td></tr>
+          <tr><td style="padding:4px 8px">211586857–211586868</td><td style="padding:4px 8px">金色棋盘连线（×12）</td><td style="padding:4px 8px">进入金色棋盘后触发</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi accent1">
+      <div class="label">活动服总流水</div>
+      <div class="value">$2.07M</div>
+      <div class="sub">$2,069,626（92个活动服）</div>
+      <div class="delta down">▼ $285,693 vs 情人节（-12.1%）</div>
+    </div>
+    <div class="kpi accent5">
+      <div class="label">付费人数 / ARPPU</div>
+      <div class="value">6,397</div>
+      <div class="sub">ARPPU $323（情人节 $327）</div>
+      <div class="delta down">▼ 794人 vs 情人节（-11.0%）</div>
+    </div>
+    <div class="kpi accent3">
+      <div class="label">银色连线参与者</div>
+      <div class="value">14,282</div>
+      <div class="sub">完成≥1条银色连线 / 活动服活跃46,131人</div>
+      <div class="delta up">▲ 转化率30.9%（情人节9.1%）</div>
+    </div>
+    <div class="kpi accent4">
+      <div class="label">参与者ARPU</div>
+      <div class="value">$151</div>
+      <div class="sub">14,282参与者全服实际收入</div>
+      <div class="delta down">▼ vs 情人节参与者 $526</div>
+    </div>
+    <div class="kpi">
+      <div class="label">完成银色棋盘（12连线）</div>
+      <div class="value">393人</div>
+      <div class="sub">ARPU $2,856 / 参与者2.8%</div>
+    </div>
+    <div class="kpi">
+      <div class="label">完成金色棋盘（12连线）</div>
+      <div class="value">72人</div>
+      <div class="sub">ARPU $7,138 / 银色完成者18.3%</div>
+    </div>
+    <div class="kpi">
+      <div class="label">活动服数量</div>
+      <div class="value">92</div>
+      <div class="sub">vs 情人节 135个（-31.9%）</div>
+    </div>
+    <div class="kpi">
+      <div class="label">银色棋盘最高完成次数</div>
+      <div class="value">12轮+</div>
+      <div class="sub">约212名超R完成≥12次循环</div>
+    </div>
+  </div>
+
+  <!-- ② 与情人节对比 -->
+  <h2>② 与情人节2026对比</h2>
+  <div class="section-card">
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>指标</th>
+            <th><span class="tag tech">科技节（bingo）</span>21127577</th>
+            <th><span class="tag vd">情人节（累充档位）</span>21127713</th>
+            <th>环比变化</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>活动机制</td><td>累充抽格→连线获奖；首抽免费；银→金两阶段棋盘</td><td>累充解锁档位，可抽幸运奖励</td><td>—</td></tr>
+          <tr><td>活动周期</td><td>2026-03-13 ~ 04-14（33天）</td><td>2026-02-01 ~ 03-05（33天）</td><td>同等长度</td></tr>
+          <tr><td>活动服数</td><td class="num">92</td><td class="num">135</td><td class="num bad">-31.9%</td></tr>
+          <tr><td>活动服活跃人数</td><td class="num">46,131</td><td class="num">46,662</td><td class="num bad">-1.1%</td></tr>
+          <tr><td>连线/档位参与人数</td><td class="num good">14,282（≥1银色连线）</td><td class="num">4,266（≥1档）</td><td class="num good">+234.8%</td></tr>
+          <tr><td>参与转化率（/活跃）</td><td class="num good">30.9%</td><td class="num">9.1%</td><td class="num good">+21.8pp</td></tr>
+          <tr><td>完成银色棋盘（全12线）</td><td class="num">393人</td><td class="num">—</td><td>—</td></tr>
+          <tr><td>最高段完成人数</td><td class="num">72人（金色棋盘）</td><td class="num">90人（第10档）</td><td class="num bad">-20.0%</td></tr>
+          <tr><td>活动服总流水</td><td class="num">$2,069,626</td><td class="num">$2,355,319</td><td class="num bad">-12.1%</td></tr>
+          <tr><td>付费人数</td><td class="num">6,397</td><td class="num">7,191</td><td class="num bad">-11.0%</td></tr>
+          <tr><td>ARPPU（全付费）</td><td class="num good">$323</td><td class="num">$327</td><td class="num">-1.2%</td></tr>
+          <tr><td>参与者ARPU（全服收入）</td><td class="num warn">$151（14,282人）</td><td class="num good">$526（4,266人）</td><td class="num bad">-71.3%</td></tr>
+          <tr><td>完成银色棋盘ARPU</td><td class="num good">$2,856（393人）</td><td class="num">—</td><td>—</td></tr>
+          <tr><td>完成金色棋盘ARPU</td><td class="num good">$7,138（72人）</td><td class="num">—</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:11px;color:var(--text-muted);margin-top:10px">* 参与者ARPU = 参与者在活动期间全服（非仅活动服）实际付费/参与人数。两期活动参与定义不同（科技节=连过线，情人节=达成≥1累充档位）。</p>
+  </div>
+
+  <!-- ③ 收入趋势对比 -->
+  <h2>③ 每日收入趋势对比</h2>
+  <div class="chart-box">
+    <canvas id="dailyChart"></canvas>
+  </div>
+
+  <!-- ④ 银色/金色连线漏斗 -->
+  <h2>④ Bingo连线完成分布</h2>
+  <div class="chart-grid">
+    <div class="chart-box">
+      <h3>银色棋盘 — 连线完成分布（14,282人）</h3>
+      <canvas id="silverLineChart"></canvas>
+    </div>
+    <div class="chart-box">
+      <h3>金色棋盘 — 连线完成分布（206人进入金色棋盘）</h3>
+      <canvas id="goldLineChart"></canvas>
+    </div>
+  </div>
+  <div class="chart-grid">
+    <div class="chart-box">
+      <h3>情人节 — 累充档位完成漏斗</h3>
+      <canvas id="vdFunnelChart"></canvas>
+    </div>
+    <div class="chart-box">
+      <h3>银色棋盘完成次数分布（393人，可重复完成）</h3>
+      <canvas id="silverRepeatChart"></canvas>
+    </div>
+  </div>
+
+  <!-- ⑤ 参与层级 ARPU 分析 -->
+  <h2>⑤ 参与层级 ARPU 分析</h2>
+  <div class="chart-grid">
+    <div class="chart-box">
+      <h3>各参与层级人均付费（ARPU）</h3>
+      <canvas id="tierArpuChart"></canvas>
+    </div>
+    <div class="chart-box">
+      <h3>各参与层级人数</h3>
+      <canvas id="tierUsersChart"></canvas>
+    </div>
+  </div>
+  <div class="section-card" style="margin-top:16px">
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>参与层级</th><th>人数</th><th>付费人数</th><th>全服收入</th><th>ARPU</th><th>ARPPU</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>银色连线参与者（≥1条线）</td>
+            <td class="num">14,282</td>
+            <td class="num">5,869</td>
+            <td class="num">$2,162,470</td>
+            <td class="num warn">$151</td>
+            <td class="num">$369</td>
+          </tr>
+          <tr>
+            <td>完成银色棋盘（全12条线）</td>
+            <td class="num">393</td>
+            <td class="num">390</td>
+            <td class="num">$1,122,098</td>
+            <td class="num good">$2,856</td>
+            <td class="num good">$2,877</td>
+          </tr>
+          <tr style="background:var(--surface2)">
+            <td><b>完成金色棋盘（全12条线）</b></td>
+            <td class="num"><b>72</b></td>
+            <td class="num"><b>72</b></td>
+            <td class="num good"><b>$513,943</b></td>
+            <td class="num good"><b>$7,138</b></td>
+            <td class="num good"><b>$7,138</b></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:11px;color:var(--text-muted);margin-top:8px">* 全服收入 = 参与者在活动期间（2026-03-13~04-14）全部服务器的实际付费金额，非仅活动服收入。</p>
+  </div>
+
+  <!-- ⑥ 参与 vs 非参与 ARPU -->
+  <h2>⑥ 每日收入趋势 & 对比情人节</h2>
+  <div class="chart-grid">
+    <div class="chart-box">
+      <h3>科技节 — 各层级ARPU对比</h3>
+      <canvas id="arpuTiersChart"></canvas>
+    </div>
+    <div class="chart-box">
+      <h3>情人节档位 vs 科技节层级 ARPU对比</h3>
+      <canvas id="arpuCompareChart"></canvas>
+    </div>
+  </div>
+
+  <!-- ⑦ 结论 -->
+  <h2>⑦ 结论与建议</h2>
+  <div class="section-card">
+    <h3>核心发现</h3>
+    <ul class="conclusion-list">
+      <li><span class="icon">🎯</span><span>「首抽免费」机制效果显著：银色连线参与者达 <b>14,282人（30.9%转化率）</b>，远超情人节同类活动的9.1%，说明免费进入门槛有效激活了大量玩家。</span></li>
+      <li><span class="icon">💰</span><span>ARPU严重分层：广义参与者ARPU $151（低于情人节$526），而完成银色棋盘者ARPU <b>$2,856</b>，完成金色棋盘者 <b>$7,138</b>，层级间相差约47倍——活动高度依赖超R拉升。</span></li>
+      <li><span class="icon">📉</span><span>银色棋盘完成率仅 <b>2.8%</b>（14,282人连线→393人完成银色棋盘）：绝大多数参与者无法触达完整的棋盘里程碑，中R群体的体验闭环严重不完整。</span></li>
+      <li><span class="icon">🔄</span><span>超R玩家高度重复消费：393名完成银色棋盘的玩家中，约212名循环完成<b>11次以上</b>，最高档玩家在33天内持续刷新棋盘，显示极强付费粘性。</span></li>
+      <li><span class="icon">📊</span><span>整体流水 $2.07M 较情人节下降12.1%，主因活动服数量减少31.9%（92 vs 135服）；单服ARPPU水平相近（$323 vs $327）。</span></li>
+    </ul>
+
+    <h3 style="margin-top:20px">问题与风险</h3>
+    <ul class="conclusion-list">
+      <li><span class="icon p0">P0</span><span>银色棋盘完成率极低（2.8%），中R玩家连线后无法积累足够抽格获得完整体验，活动的核心奖励闭环对中R几乎无效，大量中R仅完成2-3条线后自然流失。</span></li>
+      <li><span class="icon p1">P1</span><span>参与者ARPU（$151）低于情人节（$526），说明在"参与人数增多"的同时，单人货币化效率下降，整体ROI不及情人节。</span></li>
+      <li><span class="icon p1">P1</span><span>银→金转化率仅18.3%（393→72人），完成银色棋盘的玩家中有近82%未继续完成金色棋盘；金色棋盘门槛或缺乏足够驱动力。</span></li>
+    </ul>
+
+    <h3 style="margin-top:20px">优化建议</h3>
+    <ul class="conclusion-list">
+      <li><span class="icon p2">P2</span><span>降低单次抽格所需累充金额（或增设低额累充触发档位），让中R玩家能在一个活动周期内完成至少一整张银色棋盘，体验完整里程碑奖励。目标：银色棋盘完成率从2.8%提升至10%+。</span></li>
+      <li><span class="icon p2">P2</span><span>在2条线/4条线等早期里程碑增加可见度高的奖励（如临时主城特效预览或小额硬通货），增强中R在银色棋盘前半段的留存动力。</span></li>
+      <li><span class="icon p2">P2</span><span>银→金棋盘切换时增加视觉仪式感（特效动画、全服公告等），并适当降低金色棋盘首条线的门槛，提升完成银色棋盘后的继续参与率（当前18.3%偏低）。</span></li>
+    </ul>
+  </div>
+
+</div><!-- /page -->
+
+<script>
+const TECH_COLOR = 'rgba(108,99,255,0.85)';
+const VD_COLOR   = 'rgba(255,101,132,0.85)';
+const TECH_BG    = 'rgba(108,99,255,0.15)';
+const VD_BG      = 'rgba(255,101,132,0.15)';
+const SILVER_COLOR = 'rgba(79,172,254,0.75)';
+const GOLD_COLOR   = 'rgba(247,151,30,0.75)';
+
+const chartDefaults = {
+  responsive: true,
+  maintainAspectRatio: true,
+  plugins: {
+    legend: { labels: { color: '#8892a4', font: { size: 12 } } },
+    tooltip: { backgroundColor: '#1a1d2e', borderColor: '#2d3250', borderWidth: 1, titleColor: '#e2e8f0', bodyColor: '#8892a4' }
+  },
+  scales: {
+    x: { grid: { color: 'rgba(45,50,80,0.6)' }, ticks: { color: '#8892a4', font: { size: 11 } } },
+    y: { grid: { color: 'rgba(45,50,80,0.6)' }, ticks: { color: '#8892a4', font: { size: 11 } } }
+  }
+};
+
+// ① 每日收入趋势
+const techDaily = [20244.81,87442.46,73327.69,67956.83,74206.20,56323.13,53605.37,57364.68,96579.18,69145.79,69850.06,68292.88,67561.79,55889.29,67657.93,83447.25,86895.15,83112.17,78274.48,77453.50,71244.83,67461.68,49843.31,26010.10,18956.91,42512.90,30867.69,32259.15,71854.07,50758.66,64642.67,33251.04,83434.83,31897.20];
+const vdDaily   = [69581.60,87178.32,85932.57,99461.52,57241.72,68758.54,58996.69,46092.54,55054.13,51085.72,57073.03,84743.44,60206.36,63863.35,60222.35,59454.51,82070.77,83586.25,70140.49,91854.98,77909.78,67058.41,93195.99,76913.66,52510.95,63080.66,80942.93,114915.51,77973.37,78891.31,71708.38,60330.61,47288.81];
+const dayLabels = Array.from({length:34},(_,i)=>`第${i+1}天`);
+new Chart(document.getElementById('dailyChart'), {
+  type: 'line',
+  data: {
+    labels: dayLabels.slice(0, Math.max(techDaily.length, vdDaily.length)),
+    datasets: [
+      { label: '科技节（bingo）', data: techDaily, borderColor: TECH_COLOR, backgroundColor: TECH_BG, tension: 0.35, fill: true, pointRadius: 2 },
+      { label: '情人节（累充档位）', data: vdDaily, borderColor: VD_COLOR, backgroundColor: VD_BG, tension: 0.35, fill: true, pointRadius: 2 }
+    ]
+  },
+  options: { ...chartDefaults, plugins: { ...chartDefaults.plugins, legend: { ...chartDefaults.plugins.legend, position: 'top' } }, scales: { ...chartDefaults.scales, y: { ...chartDefaults.scales.y, ticks: { ...chartDefaults.scales.y.ticks, callback: v => '$'+Math.round(v/1000)+'K' } } } }
+});
+
+// ② 银色棋盘连线分布
+const silverLineLabels = ['1条线','2条线','3条线','4条线','5条线','6条线','7条线','8条线','9条线','10条线','11条线','12条线\n(银色完成)'];
+const silverLineData   = [120, 7924, 3991, 714, 257, 205, 171, 137, 115, 110, 145, 393];
+const silverLineColors = silverLineData.map((_,i) => i === 11 ? 'rgba(67,233,123,0.85)' : SILVER_COLOR);
+new Chart(document.getElementById('silverLineChart'), {
+  type: 'bar',
+  data: { labels: silverLineLabels, datasets: [{ label: '玩家数', data: silverLineData, backgroundColor: silverLineColors, borderRadius: 3 }] },
+  options: {
+    ...chartDefaults,
+    plugins: { ...chartDefaults.plugins, legend: { display: false } },
+    scales: { ...chartDefaults.scales, y: { ...chartDefaults.scales.y, ticks: { ...chartDefaults.scales.y.ticks, callback: v => v >= 1000 ? Math.round(v/1000)+'K' : v } } }
+  }
+});
+
+// ③ 金色棋盘连线分布
+const goldLineLabels = ['4条线','5条线','6条线','7条线','8条线','9条线','10条线','11条线','12条线\n(金色完成)'];
+const goldLineData   = [16, 11, 15, 17, 12, 13, 9, 16, 97];
+const goldLineColors = goldLineData.map((_,i) => i === 8 ? 'rgba(67,233,123,0.85)' : GOLD_COLOR);
+new Chart(document.getElementById('goldLineChart'), {
+  type: 'bar',
+  data: { labels: goldLineLabels, datasets: [{ label: '玩家数', data: goldLineData, backgroundColor: goldLineColors, borderRadius: 3 }] },
+  options: { ...chartDefaults, plugins: { ...chartDefaults.plugins, legend: { display: false } } }
+});
+
+// ④ 情人节档位漏斗
+const vdLabels = ['第1档','第2档','第3档','第4档','第5档','第6档','第7档','第8档','第9档','第10档'];
+const vdData   = [4240,3612,2927,2018,1422,931,513,290,147,90];
+new Chart(document.getElementById('vdFunnelChart'), {
+  type: 'bar',
+  data: { labels: vdLabels, datasets: [{ label: '完成人数', data: vdData, backgroundColor: VD_COLOR, borderRadius: 3 }] },
+  options: { ...chartDefaults, plugins: { ...chartDefaults.plugins, legend: { display: false } } }
+});
+
+// ⑤ 银色棋盘完成次数分布（重复完成）
+const repeatLabels = ['1次','2次','3次','4次','5次','6次','7次','8次','9次','10次','11次','12次\n(进行中)'];
+const repeatData   = [393, 334, 305, 274, 255, 234, 223, 219, 217, 214, 212, 212];
+new Chart(document.getElementById('silverRepeatChart'), {
+  type: 'bar',
+  data: { labels: repeatLabels, datasets: [{ label: '玩家数', data: repeatData, backgroundColor: 'rgba(108,99,255,0.75)', borderRadius: 3 }] },
+  options: { ...chartDefaults, plugins: { ...chartDefaults.plugins, legend: { display: false } }, scales: { ...chartDefaults.scales } }
+});
+
+// ⑥ 各层级ARPU
+const tierLabels = ['≥1银色连线\n(14,282人)', '完成银色棋盘\n(393人)', '完成金色棋盘\n(72人)'];
+const tierArpu   = [151, 2856, 7138];
+const tierColors = ['rgba(79,172,254,0.75)', TECH_COLOR, 'rgba(247,151,30,0.85)'];
+new Chart(document.getElementById('tierArpuChart'), {
+  type: 'bar',
+  data: { labels: tierLabels, datasets: [{ label: 'ARPU ($)', data: tierArpu, backgroundColor: tierColors, borderRadius: 6 }] },
+  options: { ...chartDefaults, plugins: { ...chartDefaults.plugins, legend: { display: false } }, scales: { ...chartDefaults.scales, y: { ...chartDefaults.scales.y, ticks: { callback: v => '$'+v.toLocaleString() } } } }
+});
+
+// ⑦ 各层级人数
+const tierUsers  = [14282, 393, 72];
+new Chart(document.getElementById('tierUsersChart'), {
+  type: 'bar',
+  data: { labels: tierLabels, datasets: [{ label: '人数', data: tierUsers, backgroundColor: tierColors, borderRadius: 6 }] },
+  options: { ...chartDefaults, plugins: { ...chartDefaults.plugins, legend: { display: false } }, scales: { ...chartDefaults.scales, y: { ...chartDefaults.scales.y, ticks: { callback: v => v >= 1000 ? Math.round(v/1000)+'K' : v } } } }
+});
+
+// ⑧ 科技节 vs 情人节 ARPU 对比
+new Chart(document.getElementById('arpuTiersChart'), {
+  type: 'bar',
+  data: {
+    labels: ['参与者全量', '银色棋盘完成', '金色棋盘完成'],
+    datasets: [{ label: 'ARPU ($)', data: [151, 2856, 7138], backgroundColor: [SILVER_COLOR, TECH_COLOR, GOLD_COLOR], borderRadius: 6 }]
+  },
+  options: { ...chartDefaults, plugins: { ...chartDefaults.plugins, legend: { display: false } }, scales: { ...chartDefaults.scales, y: { ...chartDefaults.scales.y, ticks: { callback: v => '$'+v.toLocaleString() } } } }
+});
+
+// ⑨ 两期活动 ARPU 对比
+new Chart(document.getElementById('arpuCompareChart'), {
+  type: 'bar',
+  data: {
+    labels: ['科技节参与者(14,282)', '情人节参与者(4,266)', '科技节银色棋盘(393)', '科技节金色棋盘(72)'],
+    datasets: [{ label: 'ARPU ($)', data: [151, 526, 2856, 7138], backgroundColor: [TECH_COLOR, VD_COLOR, 'rgba(79,172,254,0.8)', GOLD_COLOR], borderRadius: 6 }]
+  },
+  options: { ...chartDefaults, plugins: { ...chartDefaults.plugins, legend: { display: false } }, scales: { ...chartDefaults.scales, y: { ...chartDefaults.scales.y, ticks: { callback: v => '$'+v.toLocaleString() } } } }
+});
+</script>
+</body>
+</html>

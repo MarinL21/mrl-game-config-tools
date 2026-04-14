@@ -1,0 +1,69 @@
+{
+  "_meta": {
+    "description": "游戏术语规范库 - 已确认的标准翻译，优先级最高，无需重复检索",
+    "updated": "2026-03-30",
+    "total_terms": 3
+  },
+  "terms": {
+    "阶段": {
+      "en": "Stage",
+      "fr": "Niveau",
+      "de": "Stufe",
+      "po": "Fase",
+      "zh": "階段",
+      "id": "Tahap",
+      "th": "ด่าน",
+      "sp": "Etapa",
+      "ru": "Этап",
+      "tr": "Aşama",
+      "vi": "Giai Đoạn",
+      "it": "Fase",
+      "pl": "Etap",
+      "ar": "المرحلة",
+      "jp": "ステージ",
+      "kr": "단계",
+      "source": "EVENT/kvk_first_activity_tip_1",
+      "note": "EVENT表3次精确匹配均为Stage，复合文本中也全部一致"
+    },
+    "运输车": {
+      "en": "Convoy",
+      "fr": "Convoi",
+      "de": "Konvoi",
+      "po": "Comboio",
+      "zh": "車隊",
+      "id": "Konvoi",
+      "th": "รถคอนวอย",
+      "sp": "Escolta",
+      "ru": "Караван",
+      "tr": "Konvoy",
+      "vi": "Xe Chuyên Chở",
+      "it": "Convoglio",
+      "pl": "Konwój",
+      "ar": "قافلة",
+      "jp": "輸送車",
+      "kr": "수송차",
+      "source": "MAP/convoy_name",
+      "note": "MAP表3次精确匹配均为Convoy"
+    },
+    "豪华宴会券": {
+      "en": "Deluxe Banquet Voucher",
+      "fr": "Coupon pour festin deluxe",
+      "de": "Deluxe-Festmahl-Gutschein",
+      "po": "Voucher de Banquete Deluxe",
+      "zh": "豪華宴會券",
+      "id": "Voucer Jamuan Istimewa",
+      "th": "บัตรกำนัลงานเลี้ยงดีลักซ์",
+      "sp": "Cupón de Banquete de Lujo",
+      "ru": "Купон на роскошный пир",
+      "tr": "Delüks Ziyafet Fişi",
+      "vi": "Phiếu Ưu Đãi Bữa Tiệc Sang Trọng",
+      "it": "Buono per Banchetti deluxe",
+      "pl": "Bon na ekskluzywny bankiet",
+      "ar": "كوبون وليمة فاخرة",
+      "jp": "豪華なパーティー券",
+      "kr": "디럭스 연회 증명서",
+      "source": "ITEM/hero_gacha_advanced_name",
+      "note": "ITEM表唯一精确匹配"
+    }
+  }
+}

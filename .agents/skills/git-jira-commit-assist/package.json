@@ -1,0 +1,13 @@
+{
+  "name": "git-jira-commit-assist",
+  "version": "1.0.0",
+  "description": "规范 Git 提交并对接 Jira：创建/关联 Issue、备注与状态协助（git-jira-commit-assist）",
+  "main": "scripts/git-jira-commit-assist.js",
+  "scripts": {
+    "setup": "node scripts/setup.js"
+  },
+  "dependencies": {
+    "node-fetch": "^2.7.0",
+    "prompts": "^2.4.2"
+  }
+}

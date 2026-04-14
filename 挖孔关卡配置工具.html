@@ -1,0 +1,2298 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>挖孔关卡配置工具</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: calc(100vh - 40px);
+        }
+
+        /* ── Header ── */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 22px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        .header-content h1 { font-size: 24px; margin-bottom: 3px; font-weight: 700; }
+        .header-content p  { font-size: 12px; opacity: 0.85; }
+        .back-btn {
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.2);
+            border: 2px solid white;
+            border-radius: 8px;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        .back-btn:hover { background: white; color: #667eea; }
+
+        /* ── Tab Bar ── */
+        .tab-bar {
+            display: flex;
+            border-bottom: 2px solid #e9ecef;
+            background: #f8f9fa;
+            flex-shrink: 0;
+        }
+        .tab-btn {
+            padding: 13px 28px;
+            border: none;
+            background: transparent;
+            font-size: 14px;
+            font-weight: 600;
+            color: #888;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+            transition: all 0.2s;
+        }
+        .tab-btn:hover { color: #667eea; background: #eef0ff; }
+        .tab-btn.active { color: #667eea; border-bottom-color: #667eea; background: white; }
+
+        /* ── Tab Panes ── */
+        .tab-pane { display: none; flex-direction: column; flex: 1; overflow: hidden; }
+        .tab-pane.active { display: flex; }
+
+        /* ── Shared Editor Layout ── */
+        .editor-section {
+            display: grid;
+            grid-template-columns: 360px 1fr;
+            flex: 1;
+            min-height: 400px;
+            overflow: hidden;
+        }
+
+        /* ── Left panel shared ── */
+        .left-panel {
+            border-right: 1px solid #e9ecef;
+            display: flex;
+            flex-direction: column;
+            background: #f8f9fa;
+            overflow: hidden;
+        }
+        .left-panel-header {
+            padding: 14px 18px;
+            border-bottom: 1px solid #e9ecef;
+            background: white;
+            flex-shrink: 0;
+        }
+        .left-panel-header h3 { font-size: 14px; font-weight: 700; color: #333; margin-bottom: 3px; }
+        .panel-stats { font-size: 12px; color: #888; }
+        .panel-stats span { font-weight: 600; color: #667eea; }
+
+        .code-output {
+            flex: 1;
+            padding: 12px 14px;
+            font-family: 'Cascadia Code', 'Fira Code', 'Courier New', monospace;
+            font-size: 11px;
+            line-height: 1.7;
+            background: #1e1e2e;
+            color: #cdd6f4;
+            margin: 12px;
+            border-radius: 10px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+            min-height: 80px;
+        }
+
+        .panel-actions {
+            padding: 10px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+            flex-shrink: 0;
+        }
+
+        /* ── Buttons ── */
+        .btn {
+            padding: 9px 10px;
+            border: none;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+            white-space: nowrap;
+        }
+        .btn-row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+        .btn-primary  { background: linear-gradient(135deg,#667eea,#764ba2); color: white; }
+        .btn-primary:hover  { opacity: 0.9; transform: translateY(-1px); }
+        .btn-primary:active { transform: translateY(0); }
+        .btn-secondary { background: #eef0ff; color: #667eea; border: 1px solid #c7d0f8; }
+        .btn-secondary:hover { background: #dde2ff; }
+        .btn-success  { background: #f0fff4; color: #276749; border: 1px solid #9ae6b4; }
+        .btn-success:hover  { background: #c6f6d5; }
+        .btn-warning  { background: #fffbeb; color: #b45309; border: 1px solid #fde68a; }
+        .btn-warning:hover  { background: #fef3c7; }
+        .btn-danger   { background: #fff0f0; color: #e53e3e; border: 1px solid #fed7d7; }
+        .btn-danger:hover   { background: #fed7d7; }
+        .feedback-line {
+            text-align: center; font-size: 11px; font-weight: 600; height: 14px;
+        }
+
+        /* ── Right config panel shared ── */
+        .config-panel {
+            display: flex;
+            flex-direction: column;
+            padding: 16px 20px;
+            gap: 12px;
+            overflow-y: auto;
+        }
+        .config-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .config-group {
+            display: flex; align-items: center; gap: 8px;
+            background: #f8f9fa; border-radius: 10px;
+            padding: 8px 13px; border: 1px solid #e9ecef;
+        }
+        .config-group label { font-size: 13px; font-weight: 600; color: #555; white-space: nowrap; }
+        .config-group input[type="number"] {
+            width: 60px; padding: 4px 6px;
+            border: 1.5px solid #d0d7de; border-radius: 6px;
+            font-size: 15px; font-weight: 700; color: #333;
+            text-align: center; outline: none; transition: border-color 0.2s;
+        }
+        .config-group input[type="number"]:focus {
+            border-color: #667eea; box-shadow: 0 0 0 3px rgba(102,126,234,0.15);
+        }
+        .config-hint { font-size: 12px; color: #aaa; }
+
+        .legend {
+            display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+            padding: 8px 12px; background: #f8f9fa;
+            border-radius: 10px; border: 1px solid #e9ecef;
+        }
+        .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #555; }
+        .legend-box { width: 16px; height: 16px; border-radius: 3px; border: 1.5px solid rgba(0,0,0,0.12); }
+        .legend-box.passable  { background: #fff; border-color: #c9d1da; }
+        .legend-box.obstacle  { background: linear-gradient(135deg,#e53e3e,#c53030); border-color: #c53030; }
+        .legend-box.shape-cell { background: linear-gradient(135deg,#48bb78,#276749); border-color: #276749; }
+        .drag-hint { font-size: 11px; color: #bbb; margin-left: auto; }
+
+        .board-wrapper { flex: 1; overflow: auto; padding-bottom: 10px; }
+        .board-with-axis { display: inline-flex; flex-direction: column; user-select: none; }
+        .col-labels { display: flex; margin-bottom: 3px; }
+        .col-label { display: flex; align-items: center; justify-content: center; font-size: 10px; color: #ccc; font-weight: 600; }
+        .row-spacer { width: 26px; flex-shrink: 0; }
+        .board-rows  { display: flex; flex-direction: column; }
+        .axis-row    { display: flex; align-items: center; }
+        .row-label   { width: 26px; display: flex; align-items: center; justify-content: flex-end; padding-right: 4px; font-size: 10px; color: #ccc; font-weight: 600; flex-shrink: 0; }
+
+        /* Main board cells */
+        .cell {
+            background: #fff; cursor: crosshair;
+            display: flex; align-items: center; justify-content: center;
+            user-select: none; flex-shrink: 0;
+            border: 1px solid #dde2ea; transition: background 0.07s;
+        }
+        .cell:hover { background: #eef0ff; }
+        .cell.obstacle { background: linear-gradient(135deg,#fc8181,#e53e3e); border-color: #c53030; }
+        .cell.obstacle:hover { background: linear-gradient(135deg,#feb2b2,#fc8181); }
+        .cell.obstacle::after { content:'✕'; color:rgba(255,255,255,0.8); font-weight:700; line-height:1; }
+
+        /* Shape drawing cells */
+        .scell {
+            background: #f8faff; cursor: crosshair;
+            display: flex; align-items: center; justify-content: center;
+            user-select: none; flex-shrink: 0;
+            border: 1px solid #dde2ea; transition: background 0.07s;
+        }
+        .scell:hover { background: #d4f5e2; }
+        .scell.selected { background: linear-gradient(135deg,#68d391,#276749); border-color: #276749; }
+        .scell.selected:hover { background: linear-gradient(135deg,#9ae6b4,#68d391); }
+
+        body.dragging { user-select: none; cursor: crosshair; }
+
+        /* ── Variant Preview Modal ── */
+        .modal-overlay {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.55);
+            z-index: 2000;
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.18s;
+        }
+        .modal-overlay.open { opacity: 1; pointer-events: all; }
+        .preview-modal {
+            background: white;
+            border-radius: 18px;
+            padding: 24px 26px;
+            width: 500px;
+            max-width: 94vw;
+            max-height: 92vh;
+            overflow-y: auto;
+            box-shadow: 0 24px 70px rgba(0,0,0,0.45);
+            transform: scale(0.94) translateY(10px);
+            transition: transform 0.18s;
+            display: flex; flex-direction: column; gap: 14px;
+        }
+        .modal-overlay.open .preview-modal { transform: scale(1) translateY(0); }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; }
+        .modal-title  { font-size: 17px; font-weight: 700; color: #333; }
+        .modal-id-badge {
+            background: linear-gradient(135deg,#667eea,#764ba2);
+            color: white; padding: 4px 14px;
+            border-radius: 20px; font-size: 13px; font-weight: 700;
+            font-family: 'Cascadia Code','Fira Code',monospace;
+        }
+        .modal-close {
+            font-size: 18px; cursor: pointer; color: #aaa;
+            background: #f0f0f0; border: none; border-radius: 50%;
+            width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;
+            transition: background 0.15s; margin-left: 10px;
+        }
+        .modal-close:hover { background: #e0e0e0; color: #333; }
+        .modal-canvas-area {
+            background: #f4f7ff; border-radius: 12px; padding: 16px;
+            display: flex; justify-content: center; align-items: center;
+            border: 1.5px solid #e2e8f0; min-height: 180px;
+        }
+        .modal-canvas-area canvas { border-radius: 6px; }
+        .modal-section-label {
+            font-size: 11px; font-weight: 700; color: #888;
+            letter-spacing: 0.06em; text-transform: uppercase;
+        }
+        .modal-json-box {
+            background: #1e1e2e; color: #a6e3a1;
+            border-radius: 10px; padding: 12px 14px;
+            font-family: 'Cascadia Code','Fira Code','Courier New',monospace;
+            font-size: 11.5px; line-height: 1.75;
+            white-space: pre-wrap; word-break: break-all;
+            max-height: 180px; overflow-y: auto;
+        }
+        .modal-actions { display: flex; gap: 10px; }
+        .modal-actions .btn { flex: 1; padding: 11px 14px; font-size: 13px; }
+        /* clickable mini canvas */
+        .variant-preview canvas {
+            cursor: zoom-in; border-radius: 4px;
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+        .variant-preview canvas:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 14px rgba(102,126,234,0.3);
+        }
+        /* variant item action rows */
+        .variant-item-actions { display: flex; flex-direction: column; gap: 4px; flex-shrink: 0; }
+        .v-act-row { display: flex; gap: 4px; }
+        .v-act-row .btn { width: 54px; padding: 5px 3px; font-size: 10px; border-radius: 5px; }
+        .v-act-wide { display: flex; }
+        .v-act-wide .btn { width: 112px; padding: 5px 5px; font-size: 10px; border-radius: 5px; }
+
+        /* ── Variants Tab specifics ── */
+        .variant-right-panel {
+            display: flex;
+            flex-direction: column;
+            padding: 16px 20px;
+            gap: 12px;
+            overflow-y: auto;
+        }
+
+        .id-config {
+            display: flex; align-items: center; gap: 10px;
+            background: #f8f9fa; border-radius: 10px;
+            padding: 10px 14px; border: 1px solid #e9ecef;
+            flex-wrap: wrap;
+        }
+        .id-config label { font-size: 13px; font-weight: 600; color: #555; white-space: nowrap; }
+        .id-config input[type="number"] {
+            width: 130px; padding: 5px 8px;
+            border: 1.5px solid #d0d7de; border-radius: 6px;
+            font-size: 14px; font-weight: 700; color: #333;
+            outline: none; transition: border-color 0.2s;
+        }
+        .id-config input[type="number"]:focus {
+            border-color: #667eea; box-shadow: 0 0 0 3px rgba(102,126,234,0.15);
+        }
+        .id-config .hint { font-size: 12px; color: #aaa; }
+
+        /* Variant list in left panel */
+        .variant-list {
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 8px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 580px;
+            /* 自定义滚动条 */
+        }
+        .variant-list::-webkit-scrollbar { width: 5px; }
+        .variant-list::-webkit-scrollbar-track { background: #f0f2ff; border-radius: 3px; }
+        .variant-list::-webkit-scrollbar-thumb { background: #c7d0f8; border-radius: 3px; }
+        .variant-list::-webkit-scrollbar-thumb:hover { background: #9eb0f5; }
+        .variant-item {
+            background: white;
+            border: 1.5px solid #e9ecef;
+            border-radius: 10px;
+            padding: 10px 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: border-color 0.2s;
+        }
+        .variant-item:hover { border-color: #667eea; }
+
+        /* 重复图形：左侧彩色条 + 标签 */
+        .variant-item.is-dup {
+            border-left-width: 4px;
+        }
+        .dup-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            font-size: 9px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 10px;
+            color: white;
+            margin-left: 5px;
+            vertical-align: middle;
+            letter-spacing: 0.02em;
+        }
+        .variant-id-row {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 3px;
+            margin-bottom: 3px;
+        }
+
+        /* 折叠模式：被折叠的多个ID列表 */
+        .collapsed-ids {
+            font-size: 9px;
+            color: #aaa;
+            margin-top: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* 标头右侧折叠切换按钮 */
+        .collapse-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 3px 10px;
+            border-radius: 20px;
+            border: 1.5px solid #c7d0f8;
+            background: #eef0ff;
+            color: #667eea;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .collapse-toggle:hover { background: #dde2ff; }
+        .collapse-toggle.active { background: #667eea; color: white; border-color: #667eea; }
+
+        .variant-preview canvas { border-radius: 4px; flex-shrink: 0; }
+
+        .variant-info { flex: 1; min-width: 0; }
+        .variant-id {
+            font-size: 12px; font-weight: 700;
+            color: #667eea; margin-bottom: 3px;
+        }
+        .variant-json {
+            font-family: 'Cascadia Code', 'Fira Code', monospace;
+            font-size: 10px;
+            color: #666;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .variant-item-actions { display: flex; flex-direction: column; gap: 4px; flex-shrink: 0; }
+        .variant-item-actions .btn { width: 52px; padding: 5px 4px; font-size: 10px; border-radius: 5px; }
+
+        .variant-empty {
+            text-align: center; color: #ccc; font-size: 13px;
+            padding: 30px 10px;
+            display: block;
+        }
+
+        /* Variant output table */
+        .variant-table-wrap {
+            background: #1e1e2e;
+            border-radius: 10px;
+            margin: 10px 12px 0;
+            overflow: auto;
+            max-height: 200px;
+            flex-shrink: 0;
+        }
+        .variant-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'Cascadia Code', 'Fira Code', monospace;
+            font-size: 10.5px;
+        }
+        .variant-table th {
+            background: #313244;
+            color: #89b4fa;
+            padding: 7px 10px;
+            text-align: left;
+            font-weight: 700;
+            position: sticky;
+            top: 0;
+            white-space: nowrap;
+        }
+        .variant-table td {
+            padding: 5px 10px;
+            color: #cdd6f4;
+            border-bottom: 1px solid #313244;
+            white-space: nowrap;
+        }
+        .variant-table tr:hover td { background: #313244; }
+        .variant-table .td-id { color: #a6e3a1; font-weight: 700; }
+        .variant-table .td-json { color: #f9e2af; max-width: 300px; overflow: hidden; text-overflow: ellipsis; }
+
+        /* ── Saves section ── */
+        .saves-section {
+            border-top: 2px solid #e9ecef;
+            background: #f4f6fb;
+            flex-shrink: 0;
+        }
+        .saves-header {
+            padding: 12px 20px 8px;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .saves-title {
+            font-size: 14px; font-weight: 700; color: #333;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .saves-count-badge {
+            background: #667eea; color: white;
+            font-size: 10px; font-weight: 700;
+            padding: 2px 7px; border-radius: 20px;
+        }
+        .saves-empty { padding: 16px 20px; color: #bbb; font-size: 12px; text-align: center; }
+        .saves-gallery {
+            display: flex; gap: 12px; padding: 0 20px 16px; overflow-x: auto; min-height: 10px;
+        }
+        .saves-gallery::-webkit-scrollbar { height: 5px; }
+        .saves-gallery::-webkit-scrollbar-track { background: #e9ecef; border-radius: 3px; }
+        .saves-gallery::-webkit-scrollbar-thumb { background: #b8c0d0; border-radius: 3px; }
+
+        /* Save card */
+        .save-card {
+            background: white; border: 2px solid #e9ecef; border-radius: 12px;
+            padding: 10px; width: 180px; flex-shrink: 0;
+            display: flex; flex-direction: column; gap: 7px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .save-card:hover { border-color: #667eea; box-shadow: 0 4px 16px rgba(102,126,234,0.18); }
+        .save-card-name {
+            font-size: 12px; font-weight: 700; color: #333;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+            cursor: text; border-bottom: 1.5px dashed transparent;
+            padding: 1px 3px; border-radius: 3px; transition: border-color 0.2s, background 0.2s;
+        }
+        .save-card-name:hover { border-color: #c7d0f8; background: #f5f6ff; }
+        .save-card-name:focus { outline: none; border-color: #667eea; background: #f0f2ff; }
+        .save-card-preview {
+            display: flex; justify-content: center; align-items: center;
+            background: #f8f9fa; border-radius: 7px; padding: 5px; height: 100px; overflow: hidden;
+        }
+        .save-card-preview canvas { border-radius: 3px; }
+        .save-card-info { font-size: 10px; color: #888; display: flex; justify-content: space-between; }
+        .save-card-time { font-size: 9px; color: #bbb; }
+        .save-card-actions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px; }
+        .save-card-actions .btn { padding: 5px 3px; font-size: 10px; border-radius: 5px; }
+
+        /* ══════════════ Section 3: 关卡配置 ══════════════ */
+
+        .lv-compose-area {
+            display: grid;
+            grid-template-columns: 360px 1fr;
+            flex: 1;
+            min-height: 400px;
+            overflow: hidden;
+        }
+        .lv-right-panel {
+            display: flex; flex-direction: column;
+            padding: 14px 20px; gap: 10px;
+            overflow-y: auto;
+        }
+
+        /* 关卡名输入条 */
+        .lv-name-bar {
+            display: flex; align-items: center; gap: 8px;
+            background: #f8f9fa; border-radius: 10px;
+            padding: 8px 13px; border: 1px solid #e9ecef;
+        }
+        .lv-name-bar label { font-size: 12px; font-weight: 600; color: #555; white-space: nowrap; }
+        .lv-name-bar input {
+            flex: 1; padding: 4px 8px;
+            border: 1.5px solid #d0d7de; border-radius: 6px;
+            font-size: 13px; color: #333; outline: none;
+        }
+        .lv-name-bar input:focus { border-color: #667eea; box-shadow: 0 0 0 3px rgba(102,126,234,0.15); }
+
+        /* 编辑中徽章 */
+        .editing-badge {
+            display: none;
+            font-size: 10px; font-weight: 700;
+            background: #fef3c7; color: #b45309;
+            border: 1px solid #fde68a;
+            padding: 2px 8px; border-radius: 12px;
+            white-space: nowrap;
+        }
+
+        /* 子区域标题 */
+        .lv-sub-section { display: flex; flex-direction: column; gap: 6px; }
+        .lv-sub-header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 6px 0; border-bottom: 1.5px solid #e8ecf4;
+            font-size: 13px; color: #444; font-weight: 700;
+        }
+        .lv-sub-hint { font-size: 11px; color: #bbb; font-weight: 400; }
+
+        /* 障碍物方案选择 */
+        .lv-obs-picker {
+            display: flex; flex-wrap: wrap; gap: 8px;
+            max-height: 160px; overflow-y: auto; padding: 4px 0;
+        }
+        .lv-obs-picker::-webkit-scrollbar { width: 5px; }
+        .lv-obs-picker::-webkit-scrollbar-thumb { background: #c4b5fd; border-radius: 3px; }
+        .lv-obs-card {
+            width: 130px; border: 2px solid #e2e8f0;
+            border-radius: 10px; background: #fafbff;
+            padding: 6px; display: flex; flex-direction: column;
+            align-items: center; gap: 4px; cursor: pointer;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .lv-obs-card:hover { border-color: #93c5fd; }
+        .lv-obs-card.selected {
+            border-color: #2563eb; box-shadow: 0 2px 10px rgba(37,99,235,0.22);
+            background: #eff6ff;
+        }
+        .lv-obs-card canvas { border-radius: 4px; }
+        .lv-obs-card-name { font-size: 10px; font-weight: 600; color: #555; text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
+        .lv-obs-card-info { font-size: 9px; color: #aaa; }
+
+        /* 图形数量选择器 */
+        .lv-shape-picker {
+            display: flex; flex-wrap: wrap; gap: 10px;
+            max-height: 200px; overflow-y: auto; padding: 4px 0;
+        }
+        .lv-shape-picker::-webkit-scrollbar { width: 5px; }
+        .lv-shape-picker::-webkit-scrollbar-thumb { background: #c4b5fd; border-radius: 3px; }
+        .lv-shape-card {
+            width: 100px; border: 2px solid #e2e8f0;
+            border-radius: 10px; background: #fafbff;
+            padding: 6px; display: flex; flex-direction: column;
+            align-items: center; gap: 4px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .lv-shape-card.has-count {
+            border-color: #7c3aed; box-shadow: 0 2px 10px rgba(124,58,237,0.18);
+            background: #faf5ff;
+        }
+        .lv-shape-card canvas { border-radius: 6px; display: block; }
+        .lv-shape-card-id { font-size: 10px; color: #999; font-weight: 600; }
+        .lv-count-ctrl { display: flex; align-items: center; gap: 4px; }
+        .lv-count-btn {
+            width: 24px; height: 24px; border-radius: 6px;
+            border: 1.5px solid #c4b5fd; background: #f3efff;
+            color: #7c3aed; font-size: 15px; font-weight: 700; line-height: 1;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            transition: background 0.15s; padding: 0;
+        }
+        .lv-count-btn:hover { background: #ede9fe; border-color: #7c3aed; }
+        .lv-count-num {
+            min-width: 26px; text-align: center;
+            font-size: 16px; font-weight: 700; color: #4c1d95;
+        }
+        .lv-no-shapes {
+            width: 100%; padding: 20px 0; text-align: center;
+            color: #999; font-size: 12px; line-height: 1.7;
+        }
+
+        /* 关卡预览区 */
+        .lv-preview-section {
+            border-top: 1.5px solid #e8ecf4;
+            padding-top: 8px; margin-top: 4px;
+        }
+        .lv-preview-header {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        .lv-preview-header span { font-size: 13px; font-weight: 700; color: #444; }
+        .lv-preview-btns { display: flex; gap: 6px; }
+        .lv-preview-btns .btn { padding: 5px 12px; font-size: 11px; }
+        .lv-preview-box {
+            background: #f4f7ff; border: 1.5px solid #e2e8f0;
+            border-radius: 12px; padding: 12px;
+            display: flex; justify-content: center; align-items: center;
+            min-height: 120px; position: relative;
+        }
+        .lv-preview-empty {
+            color: #bbb; font-size: 12px; text-align: center; line-height: 1.7;
+        }
+        .lv-preview-legend {
+            display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px;
+            padding: 4px 0;
+        }
+        .lv-preview-legend-item {
+            display: flex; align-items: center; gap: 4px;
+            font-size: 10px; color: #666;
+        }
+        .lv-preview-legend-box {
+            width: 12px; height: 12px; border-radius: 2px;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+
+        /* 关卡画廊 */
+        .level-gallery-section { border-top: 2px solid #e9ecef; background: #eef3ff; flex-shrink: 0; }
+        .level-card {
+            background: white; border: 2px solid #e9ecef; border-radius: 12px;
+            padding: 10px; width: 200px; flex-shrink: 0;
+            display: flex; flex-direction: column; gap: 6px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .level-card:hover { border-color: #667eea; box-shadow: 0 4px 16px rgba(102,126,234,0.18); }
+        .level-card-name {
+            font-size: 12px; font-weight: 700; color: #333;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+            cursor: text; border-bottom: 1.5px dashed transparent;
+            padding: 1px 3px; border-radius: 3px; transition: all 0.2s;
+        }
+        .level-card-name:hover { border-color: #c7d0f8; background: #f5f6ff; }
+        .level-card-name:focus { outline: none; border-color: #667eea; background: #f0f2ff; }
+        .level-card-preview {
+            display: flex; flex-wrap: wrap; gap: 5px;
+            justify-content: center; align-items: center;
+            background: #f0f4ff; border-radius: 7px; padding: 6px; min-height: 72px;
+        }
+        .level-card-shape { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+        .level-card-shape-count { font-size: 10px; font-weight: 700; color: #7c3aed; }
+        .level-card-info { font-size: 10px; color: #888; display: flex; justify-content: space-between; gap: 4px; }
+        .level-card-actions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px; }
+        .level-card-actions .btn { padding: 5px 3px; font-size: 10px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <h1>⛏️ 挖孔关卡配置工具</h1>
+            <p>障碍物配置 → 过关图形配置 → 组合关卡配置</p>
+        </div>
+        <a href="index.html" class="back-btn">← 返回主页</a>
+    </div>
+
+    <!-- Tab Bar -->
+    <div class="tab-bar">
+        <button class="tab-btn active" id="tab-btn-obstacles" onclick="switchTab('obstacles')">⛏️ 障碍物配置</button>
+        <button class="tab-btn" id="tab-btn-variants" onclick="switchTab('variants')">🧩 过关图形配置</button>
+        <button class="tab-btn" id="tab-btn-levels"   onclick="switchTab('levels')">🗺️ 关卡配置</button>
+    </div>
+
+    <!-- Tab 1: 障碍物配置 -->
+    <div class="tab-pane active" id="tab-obstacles">
+        <div class="editor-section">
+
+            <!-- Left: JSON panel -->
+            <div class="left-panel">
+                <div class="left-panel-header">
+                    <h3>📋 障碍物配置 JSON</h3>
+                    <div class="panel-stats">
+                        障碍物：<span id="obstacle-count">0</span> 个 &nbsp;|&nbsp;
+                        棋盘：<span id="board-size-display">9 × 9</span>
+                    </div>
+                </div>
+                <div class="code-output" id="json-output">[]</div>
+                <div class="panel-actions">
+                    <div class="btn-row2">
+                        <button class="btn btn-primary"   onclick="copyObstacleJSON(false)">📋 复制格式化</button>
+                        <button class="btn btn-secondary" onclick="copyObstacleJSON(true)">📎 复制压缩</button>
+                    </div>
+                    <div class="feedback-line" id="obstacle-feedback" style="color:#48bb78;"></div>
+                    <button class="btn btn-success" onclick="saveLevel()">💾 保存当前关卡</button>
+                    <button class="btn btn-danger"  onclick="clearObstacles()">🗑️ 清除所有障碍物</button>
+                </div>
+            </div>
+
+            <!-- Right: Board -->
+            <div class="config-panel">
+                <div class="config-row">
+                    <div class="config-group">
+                        <label>行数 (Row)</label>
+                        <input type="number" id="rows-input" value="9" min="1" max="30" onchange="rebuildBoard()">
+                    </div>
+                    <div class="config-group">
+                        <label>列数 (Col)</label>
+                        <input type="number" id="cols-input" value="9" min="1" max="30" onchange="rebuildBoard()">
+                    </div>
+                    <div class="config-hint">💡 修改尺寸自动重建</div>
+                </div>
+                <div class="legend">
+                    <div class="legend-item"><div class="legend-box passable"></div><span>可挖格子</span></div>
+                    <div class="legend-item"><div class="legend-box obstacle"></div><span>障碍物</span></div>
+                    <div class="drag-hint">🖱️ 按住拖动批量选取</div>
+                </div>
+                <div class="board-wrapper">
+                    <div class="board-with-axis" id="board-with-axis"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Saves Gallery -->
+        <div class="saves-section">
+            <div class="saves-header">
+                <div class="saves-title">
+                    📦 已保存的关卡
+                    <span class="saves-count-badge" id="saves-count">0</span>
+                </div>
+            </div>
+            <div id="saves-empty" class="saves-empty">还没有保存的关卡，点击「保存当前关卡」添加</div>
+            <div class="saves-gallery" id="saves-gallery"></div>
+        </div>
+    </div>
+
+    <!-- Tab 2: 过关图形配置 -->
+    <div class="tab-pane" id="tab-variants">
+        <div class="editor-section">
+
+            <!-- Left: Variant list + output table -->
+            <div class="left-panel">
+                <div class="left-panel-header">
+                    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+                        <div>
+                            <h3>🧩 过关图形列表</h3>
+                            <div class="panel-stats">
+                                已添加：<span id="variant-count">0</span> 个图形
+                                &nbsp;|&nbsp; 唯一：<span id="variant-unique-count">0</span> 种
+                            </div>
+                        </div>
+                        <button class="collapse-toggle" id="collapse-toggle-btn" onclick="toggleCollapseDups()" title="折叠后每种图形只显示一行">
+                            <span id="collapse-icon">▦</span>
+                            <span id="collapse-label">展开全部</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Variant list -->
+                <div class="variant-empty" id="variant-empty">绘制图形后点击「添加图形」</div>
+                <div class="variant-list" id="variant-list"></div>
+
+                <!-- Output table -->
+                <div class="variant-table-wrap" id="variant-table-wrap" style="display:none;">
+                    <table class="variant-table" id="variant-table">
+                        <thead>
+                            <tr><th>A_INT_id</th><th>A_ARR_variants</th></tr>
+                        </thead>
+                        <tbody id="variant-table-body"></tbody>
+                    </table>
+                </div>
+
+                <div class="panel-actions">
+                    <div class="btn-row2">
+                        <button class="btn btn-primary"   onclick="copyVariantFull()">📋 复制完整配置</button>
+                        <button class="btn btn-secondary" onclick="copyVariantOnly()">📎 复制图形数组</button>
+                    </div>
+                    <div class="feedback-line" id="variant-feedback" style="color:#48bb78;"></div>
+                    <button class="btn btn-danger" onclick="clearVariants()">🗑️ 清空所有图形</button>
+                </div>
+            </div>
+
+            <!-- Right: Shape drawing -->
+            <div class="variant-right-panel">
+
+                <!-- Starting ID -->
+                <div class="id-config">
+                    <label>起始 A_INT_id</label>
+                    <input type="number" id="variant-start-id" value="21750001" min="0" onchange="renderVariantList()">
+                    <span class="hint">每添加一个自动 +1</span>
+                </div>
+
+                <!-- Shape grid size -->
+                <div class="config-row">
+                    <div class="config-group">
+                        <label>画板行数</label>
+                        <input type="number" id="srows-input" value="5" min="1" max="20" onchange="rebuildShapeGrid()">
+                    </div>
+                    <div class="config-group">
+                        <label>画板列数</label>
+                        <input type="number" id="scols-input" value="5" min="1" max="20" onchange="rebuildShapeGrid()">
+                    </div>
+                    <div class="config-hint">💡 画板尺寸（图形自动归零）</div>
+                </div>
+
+                <div class="legend">
+                    <div class="legend-item"><div class="legend-box passable"></div><span>空格</span></div>
+                    <div class="legend-item"><div class="legend-box shape-cell"></div><span>图形格子</span></div>
+                    <div class="drag-hint">🖱️ 按住拖动批量选取</div>
+                </div>
+
+                <!-- Shape grid -->
+                <div class="board-wrapper">
+                    <div class="board-with-axis" id="shape-board-axis"></div>
+                </div>
+
+                <!-- Add / Clear buttons -->
+                <div class="btn-row2">
+                    <button class="btn btn-success" onclick="addVariant()">➕ 添加图形</button>
+                    <button class="btn btn-warning" onclick="clearShapeGrid()">🔄 清空画板</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab 3: 关卡配置 -->
+    <div class="tab-pane" id="tab-levels">
+        <div class="lv-compose-area">
+
+            <!-- Left: JSON + actions -->
+            <div class="left-panel">
+                <div class="left-panel-header">
+                    <h3>📋 关卡 JSON</h3>
+                    <div class="panel-stats">
+                        障碍物方案：<span id="lv-obs-label">未选择</span><br>
+                        图形：<span id="lv-total-count">0</span> 个
+                    </div>
+                </div>
+                <div class="code-output" id="lv-json-output" style="font-size:10.5px;">{}</div>
+                <div class="panel-actions">
+                    <button class="btn btn-primary" onclick="copyLevelJSON(false)">📋 复制完整配置</button>
+                    <button class="btn btn-secondary" onclick="copyLevelJSON(true)">📎 压缩格式</button>
+                    <div class="feedback-line" id="lv-feedback" style="color:#48bb78;"></div>
+                    <button class="btn btn-success" onclick="saveLevelConfig()">💾 保存当前关卡</button>
+                    <button class="btn btn-warning" onclick="clearLevelAll()">🔄 清空全部</button>
+                </div>
+            </div>
+
+            <!-- Right: two-part picker -->
+            <div class="lv-right-panel">
+
+                <!-- 关卡名 + 编辑标记 -->
+                <div class="lv-name-bar">
+                    <label>关卡名称</label>
+                    <input type="text" id="lv-name-input" placeholder="自动命名，可修改">
+                    <span class="editing-badge" id="lv-edit-badge"></span>
+                </div>
+
+                <!-- ① 障碍物方案选择 -->
+                <div class="lv-sub-section">
+                    <div class="lv-sub-header">
+                        <span>① 选择障碍物方案</span>
+                        <span class="lv-sub-hint">从上方「障碍物配置」中保存的方案选择</span>
+                    </div>
+                    <div class="lv-no-shapes" id="lv-no-obs">⚠️ 还没有保存的障碍物方案<br>请先到「障碍物配置」页签保存</div>
+                    <div class="lv-obs-picker" id="lv-obs-picker"></div>
+                </div>
+
+                <!-- ② 图形数量选择 -->
+                <div class="lv-sub-section">
+                    <div class="lv-sub-header">
+                        <span>② 选择每种图形数量</span>
+                        <span class="lv-sub-hint">点击 + / − 调整</span>
+                    </div>
+                    <div class="lv-no-shapes" id="lv-no-shapes">⚠️ 还没有配置图形<br>请先到「过关图形配置」页签添加</div>
+                    <div class="lv-shape-picker" id="lv-shape-picker"></div>
+                </div>
+
+                <!-- ③ 关卡预览 -->
+                <div class="lv-preview-section">
+                    <div class="lv-preview-header">
+                        <span>③ 关卡预览</span>
+                        <div class="lv-preview-btns">
+                            <button class="btn btn-primary" onclick="generateLevelPreview()">🎲 随机摆放</button>
+                            <button class="btn btn-secondary" onclick="generateLevelPreview()">🔄 换一种</button>
+                        </div>
+                    </div>
+                    <div class="lv-preview-box" id="lv-preview-box">
+                        <div class="lv-preview-empty" id="lv-preview-empty">选好障碍物方案和图形后，点击「随机摆放」预览</div>
+                        <canvas id="lv-preview-canvas" style="display:none;border-radius:8px;"></canvas>
+                    </div>
+                    <div class="lv-preview-legend" id="lv-preview-legend"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 已保存关卡画廊 -->
+        <div class="level-gallery-section">
+            <div class="saves-header">
+                <div class="saves-title">
+                    📦 已保存关卡
+                    <span class="saves-count-badge" id="lv-count-badge">0</span>
+                </div>
+            </div>
+            <div id="lv-gallery-empty" class="saves-empty">还没有保存的关卡，点击「保存当前关卡」添加</div>
+            <div class="saves-gallery" id="lv-gallery"></div>
+        </div>
+    </div>
+
+</div><!-- end .container -->
+
+<!-- ═══════ Preview Modal ═══════ -->
+<div class="modal-overlay" id="preview-modal-overlay" onclick="onModalOverlayClick(event)">
+    <div class="preview-modal" id="preview-modal">
+        <div class="modal-header">
+            <div class="modal-title">🧩 图形预览</div>
+            <div style="display:flex;align-items:center;gap:8px;">
+                <span class="modal-id-badge" id="modal-id-badge">21750001</span>
+                <span style="font-size:11px;color:#888;" id="modal-cell-count">0 格</span>
+                <button class="modal-close" onclick="closePreviewModal()">✕</button>
+            </div>
+        </div>
+
+        <!-- Large canvas -->
+        <div class="modal-canvas-area">
+            <canvas id="modal-canvas"></canvas>
+        </div>
+
+        <!-- A_ARR_variants JSON -->
+        <div class="modal-section-label">A_ARR_variants</div>
+        <div class="modal-json-box" id="modal-json-box"></div>
+
+        <!-- Actions -->
+        <div class="modal-actions">
+            <button class="btn btn-primary" id="modal-copy-btn" onclick="copyModalVariant(false)">📋 复制 A_ARR_variants</button>
+            <button class="btn btn-secondary" onclick="copyModalVariant(true)">📎 压缩格式</button>
+            <button class="btn btn-secondary" style="flex:0;padding:11px 16px;" onclick="closePreviewModal()">关闭</button>
+        </div>
+    </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════
+   OBSTACLE BOARD STATE
+═══════════════════════════════════════════════════════ */
+let obstacles   = new Set();
+let rows = 9, cols = 9, cellSize = 40;
+let isDragging = false, dragMode = null;
+let saves = [];
+const SAVES_KEY = 'dighole_saves_v1';
+
+/* ═══════════════════════════════════════════════════════
+   SHAPE DRAWING STATE
+═══════════════════════════════════════════════════════ */
+let shapeCells = new Set();
+let srows = 5, scols = 5, sCellSize = 48;
+let sIsDragging = false, sDragMode = null;
+
+/* ═══════════════════════════════════════════════════════
+   VARIANTS STATE
+═══════════════════════════════════════════════════════ */
+let variants = []; // [{cells: [{Row,Col},...]}]
+const VARIANTS_KEY = 'dighole_variants_v1';
+
+/* ═══════════════════════════════════════════════════════
+   UTILS
+═══════════════════════════════════════════════════════ */
+function cellKey(r, c) { return `${r},${c}`; }
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
+function pad2(n) { return String(n).padStart(2,'0'); }
+function formatTime(ts) {
+    const d = new Date(ts);
+    return `${d.getMonth()+1}/${d.getDate()} ${pad2(d.getHours())}:${pad2(d.getMinutes())}`;
+}
+
+function showFeedback(id, msg, color) {
+    const el = document.getElementById(id);
+    el.textContent = msg;
+    el.style.color = color || '#48bb78';
+    setTimeout(() => { el.textContent = ''; }, 2200);
+}
+
+function doCopy(text) {
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).catch(() => fallbackCopy(text));
+    } else { fallbackCopy(text); }
+}
+function fallbackCopy(text) {
+    const ta = Object.assign(document.createElement('textarea'), {value: text});
+    ta.style.cssText = 'position:fixed;opacity:0;';
+    document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta);
+}
+
+/* ═══════════════════════════════════════════════════════
+   TAB SWITCHING
+═══════════════════════════════════════════════════════ */
+function switchTab(tab) {
+    document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + tab).classList.add('active');
+    document.getElementById('tab-btn-' + tab).classList.add('active');
+    if (tab === 'levels') { renderObsPicker(); renderLevelShapePicker(); }
+}
+
+/* ═══════════════════════════════════════════════════════
+   OBSTACLE BOARD
+═══════════════════════════════════════════════════════ */
+function calcCellSize(r, c) {
+    const m = Math.max(r, c);
+    if (m > 25) return 22; if (m > 20) return 26; if (m > 15) return 32; return 40;
+}
+
+function rebuildBoard() {
+    rows = Math.min(Math.max(parseInt(document.getElementById('rows-input').value)||9,1),30);
+    cols = Math.min(Math.max(parseInt(document.getElementById('cols-input').value)||9,1),30);
+    const valid = new Set();
+    obstacles.forEach(k => { const [r,c]=k.split(',').map(Number); if(r<rows&&c<cols) valid.add(k); });
+    obstacles = valid;
+    renderBoard('board-with-axis', rows, cols, obstacles, 'cell', onCellDown, onCellEnter);
+    document.getElementById('board-size-display').textContent = `${rows} × ${cols}`;
+    updateObstacleJSON();
+}
+
+function renderBoard(containerId, R, C, selectedSet, cellClass, downFn, enterFn) {
+    cellSize = calcCellSize(R, C);
+    const gap = 1;
+    const container = document.getElementById(containerId);
+    container.innerHTML = '';
+
+    // Col labels
+    const colLabels = document.createElement('div');
+    colLabels.className = 'col-labels';
+    const sp = document.createElement('div'); sp.className = 'row-spacer'; colLabels.appendChild(sp);
+    for (let c = 0; c < C; c++) {
+        const lbl = document.createElement('div');
+        lbl.className = 'col-label';
+        lbl.style.cssText = `width:${cellSize}px;margin-right:${gap}px;`;
+        lbl.textContent = c; colLabels.appendChild(lbl);
+    }
+    container.appendChild(colLabels);
+
+    // Board rows (Row 0 at bottom)
+    const boardRows = document.createElement('div');
+    boardRows.className = 'board-rows';
+    boardRows.style.cssText = `display:flex;flex-direction:column;gap:${gap}px;`;
+
+    for (let r = R - 1; r >= 0; r--) {
+        const rowEl = document.createElement('div');
+        rowEl.className = 'axis-row'; rowEl.style.gap = gap + 'px';
+        const rowLbl = document.createElement('div');
+        rowLbl.className = 'row-label'; rowLbl.style.height = cellSize + 'px'; rowLbl.textContent = r;
+        rowEl.appendChild(rowLbl);
+
+        for (let c = 0; c < C; c++) {
+            const cell = document.createElement('div');
+            const active = selectedSet.has(cellKey(r, c));
+            cell.className = cellClass + (active ? ' ' + (cellClass === 'cell' ? 'obstacle' : 'selected') : '');
+            cell.style.cssText = `width:${cellSize}px;height:${cellSize}px;font-size:${Math.floor(cellSize*0.38)}px;`;
+            cell.dataset.r = r; cell.dataset.c = c;
+            cell.addEventListener('mousedown', downFn);
+            cell.addEventListener('mouseenter', enterFn);
+            rowEl.appendChild(cell);
+        }
+        boardRows.appendChild(rowEl);
+    }
+    container.appendChild(boardRows);
+}
+
+// Obstacle cell handlers
+function toggleObstacleCell(cell, mode) {
+    const r = parseInt(cell.dataset.r), c = parseInt(cell.dataset.c), key = cellKey(r,c);
+    if (mode==='add' && !obstacles.has(key))    { obstacles.add(key);    cell.classList.add('obstacle'); }
+    else if (mode==='remove' && obstacles.has(key)) { obstacles.delete(key); cell.classList.remove('obstacle'); }
+}
+function onCellDown(e) {
+    if (e.button!==0) return; e.preventDefault();
+    isDragging = true; document.body.classList.add('dragging');
+    const r=parseInt(e.currentTarget.dataset.r), c=parseInt(e.currentTarget.dataset.c);
+    dragMode = obstacles.has(cellKey(r,c)) ? 'remove' : 'add';
+    toggleObstacleCell(e.currentTarget, dragMode); updateObstacleJSON();
+}
+function onCellEnter(e) { if(!isDragging) return; toggleObstacleCell(e.currentTarget,dragMode); updateObstacleJSON(); }
+
+function getObstacleArray() {
+    return Array.from(obstacles)
+        .map(k=>{const[r,c]=k.split(',').map(Number);return{Row:r,Col:c};})
+        .sort((a,b)=>a.Row!==b.Row?a.Row-b.Row:a.Col-b.Col);
+}
+function formatObstacleJSON(arr) {
+    return arr.length===0?'[]':'[\n'+arr.map(o=>`  {"Row":${o.Row},"Col":${o.Col}}`).join(',\n')+'\n]';
+}
+function updateObstacleJSON() {
+    const arr = getObstacleArray();
+    document.getElementById('json-output').textContent = formatObstacleJSON(arr);
+    document.getElementById('obstacle-count').textContent = arr.length;
+}
+function copyObstacleJSON(compact) {
+    const arr = getObstacleArray();
+    doCopy(compact ? JSON.stringify(arr) : formatObstacleJSON(arr));
+    showFeedback('obstacle-feedback', compact?'✅ 压缩 JSON 已复制！':'✅ 格式化 JSON 已复制！');
+}
+function clearObstacles() {
+    obstacles.clear();
+    document.querySelectorAll('.cell.obstacle').forEach(el=>el.classList.remove('obstacle'));
+    updateObstacleJSON();
+}
+
+/* ═══════════════════════════════════════════════════════
+   SAVES (obstacle configs)
+═══════════════════════════════════════════════════════ */
+function loadSavesFromStorage() { try { saves=JSON.parse(localStorage.getItem(SAVES_KEY))||[]; } catch(_){saves=[];} }
+function persistSaves() { localStorage.setItem(SAVES_KEY, JSON.stringify(saves)); }
+
+function saveLevel() {
+    const name = `方案 ${saves.length+1}`;
+    saves.unshift({ id:uid(), name, rows, cols, obstacles:Array.from(obstacles), savedAt:Date.now() });
+    persistSaves(); renderSavesGallery(); renderObsPicker();
+    showFeedback('obstacle-feedback', `✅ 已保存为「${name}」`);
+}
+function deleteSave(id) {
+    if (selectedObsSaveId === id) selectedObsSaveId = null;
+    saves = saves.filter(s=>s.id!==id); persistSaves(); renderSavesGallery(); renderObsPicker();
+}
+function loadSave(id) {
+    const s = saves.find(s=>s.id===id); if(!s) return;
+    rows=s.rows; cols=s.cols;
+    document.getElementById('rows-input').value=rows;
+    document.getElementById('cols-input').value=cols;
+    obstacles = new Set(s.obstacles);
+    renderBoard('board-with-axis', rows, cols, obstacles, 'cell', onCellDown, onCellEnter);
+    document.getElementById('board-size-display').textContent=`${rows} × ${cols}`;
+    updateObstacleJSON();
+    showFeedback('obstacle-feedback', `✅ 已载入「${s.name}」`);
+}
+function copySaveJSON(id) {
+    const s = saves.find(s=>s.id===id); if(!s) return;
+    const arr = s.obstacles.map(k=>{const[r,c]=k.split(',').map(Number);return{Row:r,Col:c};})
+        .sort((a,b)=>a.Row!==b.Row?a.Row-b.Row:a.Col-b.Col);
+    doCopy(JSON.stringify(arr));
+}
+
+function renderSavesGallery() {
+    const gallery = document.getElementById('saves-gallery');
+    const empty   = document.getElementById('saves-empty');
+    document.getElementById('saves-count').textContent = saves.length;
+    gallery.innerHTML = '';
+    if (saves.length===0) { empty.style.display='block'; return; }
+    empty.style.display = 'none';
+
+    saves.forEach(s => {
+        const card = document.createElement('div');
+        card.className = 'save-card';
+
+        const nameEl = document.createElement('div');
+        nameEl.className = 'save-card-name';
+        nameEl.contentEditable = true; nameEl.spellcheck = false; nameEl.textContent = s.name;
+        nameEl.addEventListener('blur', ()=>{ s.name=nameEl.textContent.trim()||s.name; nameEl.textContent=s.name; persistSaves(); });
+        nameEl.addEventListener('keydown', e=>{ if(e.key==='Enter'){e.preventDefault();nameEl.blur();} });
+
+        const previewBox = document.createElement('div');
+        previewBox.className = 'save-card-preview';
+        const canvas = document.createElement('canvas');
+        canvas.width=144; canvas.height=92;
+        drawMiniObstacleGrid(canvas, s);
+        previewBox.appendChild(canvas);
+
+        const info = document.createElement('div');
+        info.className = 'save-card-info';
+        info.innerHTML = `<span>🔲 ${s.rows}×${s.cols}</span><span>⛔ ${s.obstacles.length}</span>`;
+
+        const timeEl = document.createElement('div');
+        timeEl.className = 'save-card-time';
+        timeEl.textContent = '🕐 '+formatTime(s.savedAt);
+
+        const actions = document.createElement('div');
+        actions.className = 'save-card-actions';
+
+        const loadBtn = document.createElement('button');
+        loadBtn.className='btn btn-primary'; loadBtn.textContent='📂 载入';
+        loadBtn.onclick=()=>loadSave(s.id);
+
+        const copyBtn = document.createElement('button');
+        copyBtn.className='btn btn-secondary'; copyBtn.textContent='📋 复制';
+        copyBtn.onclick=()=>{ copySaveJSON(s.id); copyBtn.textContent='✅'; setTimeout(()=>{copyBtn.textContent='📋 复制';},1800); };
+
+        const delBtn = document.createElement('button');
+        delBtn.className='btn btn-danger'; delBtn.textContent='🗑️ 删除';
+        delBtn.onclick=()=>{ if(confirm(`确定删除「${s.name}」？`)) deleteSave(s.id); };
+
+        actions.appendChild(loadBtn); actions.appendChild(copyBtn); actions.appendChild(delBtn);
+        card.appendChild(nameEl); card.appendChild(previewBox);
+        card.appendChild(info); card.appendChild(timeEl); card.appendChild(actions);
+        gallery.appendChild(card);
+    });
+}
+
+/* ═══════════════════════════════════════════════════════
+   SHAPE DRAWING GRID
+═══════════════════════════════════════════════════════ */
+function calcShapeCellSize(r, c) {
+    const m = Math.max(r, c);
+    if (m > 15) return 30; if (m > 10) return 36; return 48;
+}
+
+function rebuildShapeGrid() {
+    srows = Math.min(Math.max(parseInt(document.getElementById('srows-input').value)||5,1),20);
+    scols = Math.min(Math.max(parseInt(document.getElementById('scols-input').value)||5,1),20);
+    // trim out-of-bounds
+    const valid = new Set();
+    shapeCells.forEach(k=>{const[r,c]=k.split(',').map(Number);if(r<srows&&c<scols)valid.add(k);});
+    shapeCells = valid;
+    renderShapeGrid();
+}
+
+function renderShapeGrid() {
+    sCellSize = calcShapeCellSize(srows, scols);
+    const gap = 1;
+    const container = document.getElementById('shape-board-axis');
+    container.innerHTML = '';
+
+    const colLabels = document.createElement('div');
+    colLabels.className = 'col-labels';
+    const sp = document.createElement('div'); sp.className='row-spacer'; colLabels.appendChild(sp);
+    for (let c=0;c<scols;c++) {
+        const lbl=document.createElement('div'); lbl.className='col-label';
+        lbl.style.cssText=`width:${sCellSize}px;margin-right:${gap}px;`; lbl.textContent=c;
+        colLabels.appendChild(lbl);
+    }
+    container.appendChild(colLabels);
+
+    const boardRows=document.createElement('div');
+    boardRows.className='board-rows';
+    boardRows.style.cssText=`display:flex;flex-direction:column;gap:${gap}px;`;
+
+    for (let r=srows-1;r>=0;r--) {
+        const rowEl=document.createElement('div'); rowEl.className='axis-row'; rowEl.style.gap=gap+'px';
+        const rowLbl=document.createElement('div'); rowLbl.className='row-label';
+        rowLbl.style.height=sCellSize+'px'; rowLbl.textContent=r; rowEl.appendChild(rowLbl);
+
+        for (let c=0;c<scols;c++) {
+            const cell=document.createElement('div');
+            cell.className='scell'+(shapeCells.has(cellKey(r,c))?' selected':'');
+            cell.style.cssText=`width:${sCellSize}px;height:${sCellSize}px;`;
+            cell.dataset.r=r; cell.dataset.c=c;
+            cell.addEventListener('mousedown', onSCellDown);
+            cell.addEventListener('mouseenter', onSCellEnter);
+            rowEl.appendChild(cell);
+        }
+        boardRows.appendChild(rowEl);
+    }
+    container.appendChild(boardRows);
+}
+
+function toggleShapeCell(cell, mode) {
+    const r=parseInt(cell.dataset.r), c=parseInt(cell.dataset.c), key=cellKey(r,c);
+    if(mode==='add'&&!shapeCells.has(key))    { shapeCells.add(key);    cell.classList.add('selected'); }
+    else if(mode==='remove'&&shapeCells.has(key)) { shapeCells.delete(key); cell.classList.remove('selected'); }
+}
+function onSCellDown(e) {
+    if(e.button!==0) return; e.preventDefault();
+    sIsDragging=true; document.body.classList.add('dragging');
+    const r=parseInt(e.currentTarget.dataset.r), c=parseInt(e.currentTarget.dataset.c);
+    sDragMode = shapeCells.has(cellKey(r,c)) ? 'remove' : 'add';
+    toggleShapeCell(e.currentTarget, sDragMode);
+}
+function onSCellEnter(e) { if(!sIsDragging) return; toggleShapeCell(e.currentTarget, sDragMode); }
+
+function clearShapeGrid() {
+    shapeCells.clear();
+    document.querySelectorAll('.scell.selected').forEach(el=>el.classList.remove('selected'));
+}
+
+/* ═══════════════════════════════════════════════════════
+   VARIANTS
+═══════════════════════════════════════════════════════ */
+function loadVariantsFromStorage() { try { variants=JSON.parse(localStorage.getItem(VARIANTS_KEY))||[]; } catch(_){variants=[];} }
+function persistVariants() { localStorage.setItem(VARIANTS_KEY, JSON.stringify(variants)); }
+
+function normalizeShape(cellSet) {
+    if (cellSet.size===0) return null;
+    const coords = Array.from(cellSet).map(k=>{const[r,c]=k.split(',').map(Number);return{Row:r,Col:c};});
+    const minRow = Math.min(...coords.map(p=>p.Row));
+    const minCol = Math.min(...coords.map(p=>p.Col));
+    return coords.map(p=>({Row:p.Row-minRow,Col:p.Col-minCol}))
+        .sort((a,b)=>a.Row!==b.Row?a.Row-b.Row:a.Col-b.Col);
+}
+
+function addVariant() {
+    if (shapeCells.size===0) { showFeedback('variant-feedback','⚠️ 请先在画板上绘制图形','#e53e3e'); return; }
+    const cells = normalizeShape(shapeCells);
+    variants.push({ cells });
+    persistVariants();
+    clearShapeGrid();
+    renderVariantList();
+    renderLevelShapePicker();
+    showFeedback('variant-feedback',`✅ 图形已添加（第 ${variants.length} 个）`);
+}
+
+function deleteVariant(idx) {
+    variants.splice(idx,1); persistVariants(); renderVariantList(); renderLevelShapePicker();
+}
+
+function clearVariants() {
+    if (!variants.length) return;
+    if (confirm(`确定清空全部 ${variants.length} 个图形？`)) {
+        variants=[]; persistVariants(); renderVariantList(); renderLevelShapePicker();
+    }
+}
+
+function getStartId() {
+    return parseInt(document.getElementById('variant-start-id').value)||21750001;
+}
+
+// 重复图形检测
+const DUP_COLORS = ['#f59e0b','#ef4444','#7c3aed','#db2777','#0891b2','#059669','#ea580c','#0284c7'];
+
+function buildGroups() {
+    // groups: canonicalKey -> [indices]
+    const groups = {};
+    variants.forEach((v, idx) => {
+        const key = JSON.stringify(v.cells);
+        if (!groups[key]) groups[key] = [];
+        groups[key].push(idx);
+    });
+    return groups;
+}
+
+function getDuplicateColorMap(groups) {
+    groups = groups || buildGroups();
+    const colorMap = {}; // idx -> {color, groupSize}
+    let colorIdx = 0;
+    Object.values(groups).forEach(indices => {
+        if (indices.length > 1) {
+            const color = DUP_COLORS[colorIdx % DUP_COLORS.length];
+            indices.forEach(i => { colorMap[i] = { color, groupSize: indices.length }; });
+            colorIdx++;
+        }
+    });
+    return colorMap;
+}
+
+// 折叠状态
+let collapseDups = false;
+function toggleCollapseDups() {
+    collapseDups = !collapseDups;
+    const btn   = document.getElementById('collapse-toggle-btn');
+    const icon  = document.getElementById('collapse-icon');
+    const label = document.getElementById('collapse-label');
+    btn.classList.toggle('active', collapseDups);
+    icon.textContent  = collapseDups ? '▤' : '▦';
+    label.textContent = collapseDups ? '展开全部' : '折叠重复';
+    renderVariantList();
+}
+
+function renderVariantList() {
+    const list  = document.getElementById('variant-list');
+    const empty = document.getElementById('variant-empty');
+    const wrap  = document.getElementById('variant-table-wrap');
+    document.getElementById('variant-count').textContent = variants.length;
+
+    list.innerHTML='';
+    if (variants.length===0) {
+        empty.style.display='block'; wrap.style.display='none';
+        updateVariantOutput(); return;
+    }
+    empty.style.display='none';
+    wrap.style.display='block';
+
+    const startId  = getStartId();
+    const groups   = buildGroups();
+    const colorMap = getDuplicateColorMap(groups);
+
+    // 统计唯一图形数量
+    const uniqueCount = Object.keys(groups).length;
+    document.getElementById('variant-unique-count').textContent = uniqueCount;
+
+    // 折叠模式：每种图形只渲染第一个，附带所有同款 idx
+    let renderItems; // [{idx, collapsedIndices}]
+    if (collapseDups) {
+        const seen = new Set();
+        renderItems = [];
+        variants.forEach((v, idx) => {
+            const key = JSON.stringify(v.cells);
+            if (!seen.has(key)) {
+                seen.add(key);
+                renderItems.push({ idx, collapsedIndices: groups[key] });
+            }
+        });
+    } else {
+        renderItems = variants.map((_, idx) => ({ idx, collapsedIndices: null }));
+    }
+
+    renderItems.forEach(({ idx, collapsedIndices }) => {
+        const v   = variants[idx];
+        const dup = colorMap[idx];
+        const isCollapsedGroup = collapsedIndices && collapsedIndices.length > 1;
+
+        const item = document.createElement('div');
+        item.className = 'variant-item' + (dup ? ' is-dup' : '');
+        if (dup) {
+            item.style.borderColor     = dup.color;
+            item.style.backgroundColor = dup.color + '0d';
+        }
+
+        // Mini canvas
+        const previewDiv = document.createElement('div');
+        previewDiv.className = 'variant-preview';
+        const canvas = document.createElement('canvas');
+        canvas.width = 60; canvas.height = 60;
+        drawShapePreview(canvas, v.cells, 60, 60);
+        canvas.title = '点击查看大图';
+        canvas.onclick = () => openVariantPreview(idx);
+        previewDiv.appendChild(canvas);
+
+        // Info
+        const info = document.createElement('div');
+        info.className = 'variant-info';
+        const jsonShort = JSON.stringify(v.cells);
+
+        // ID 显示：折叠时显示所有 id；展开时只显示当前
+        let idHtml;
+        if (isCollapsedGroup) {
+            const allIds = collapsedIndices.map(i => startId + i).join(', ');
+            idHtml = `<span class="variant-id">${startId + idx}</span>
+                      <span class="dup-badge" style="background:${dup.color};" title="ID：${allIds}">×${collapsedIndices.length} 个</span>
+                      <span class="collapsed-ids" title="所有 ID：${allIds}">ID: ${allIds}</span>`;
+        } else {
+            const dupBadge = dup
+                ? `<span class="dup-badge" style="background:${dup.color};" title="共 ${dup.groupSize} 个相同图形">重复 ×${dup.groupSize}</span>`
+                : '';
+            idHtml = `<span class="variant-id">${startId + idx}</span>
+                      <span style="font-size:10px;color:#aaa;font-weight:normal;">${v.cells.length} 格</span>
+                      ${dupBadge}`;
+        }
+
+        info.innerHTML = `<div class="variant-id-row">${idHtml}</div>
+            <div class="variant-json">${jsonShort}</div>`;
+
+        // Actions
+        const acts = document.createElement('div');
+        acts.className = 'variant-item-actions';
+
+        const row1 = document.createElement('div');
+        row1.className = 'v-act-row';
+
+        const previewBtn = document.createElement('button');
+        previewBtn.className = 'btn btn-secondary'; previewBtn.textContent = '👁️';
+        previewBtn.title = '预览大图'; previewBtn.onclick = () => openVariantPreview(idx);
+
+        const copyArrBtn = document.createElement('button');
+        copyArrBtn.className = 'btn btn-primary'; copyArrBtn.textContent = '📋';
+        copyArrBtn.title = '复制 A_ARR_variants';
+        copyArrBtn.onclick = () => {
+            doCopy(JSON.stringify(v.cells));
+            copyArrBtn.textContent = '✅';
+            setTimeout(() => { copyArrBtn.textContent = '📋'; }, 1800);
+        };
+
+        row1.appendChild(previewBtn); row1.appendChild(copyArrBtn);
+
+        const row2 = document.createElement('div');
+        row2.className = 'v-act-row';
+
+        const loadBtn = document.createElement('button');
+        loadBtn.className = 'btn btn-warning'; loadBtn.textContent = '✏️';
+        loadBtn.title = '载入画板编辑'; loadBtn.onclick = () => loadVariantToCanvas(idx);
+
+        const delBtn = document.createElement('button');
+        delBtn.className = 'btn btn-danger'; delBtn.textContent = '🗑️';
+        delBtn.title = isCollapsedGroup ? `删除全部 ${collapsedIndices.length} 个相同图形` : '删除此图形';
+        delBtn.onclick = () => {
+            if (isCollapsedGroup) {
+                if (confirm(`删除全部 ${collapsedIndices.length} 个「${jsonShort.slice(0,30)}…」？`)) {
+                    // 从大到小删除避免下标错位
+                    [...collapsedIndices].sort((a,b)=>b-a).forEach(i => variants.splice(i, 1));
+                    persistVariants(); renderVariantList(); renderLevelShapePicker();
+                }
+            } else {
+                deleteVariant(idx);
+            }
+        };
+
+        row2.appendChild(loadBtn); row2.appendChild(delBtn);
+        acts.appendChild(row1); acts.appendChild(row2);
+        item.appendChild(previewDiv); item.appendChild(info); item.appendChild(acts);
+        list.appendChild(item);
+    });
+
+    updateVariantOutput();
+}
+
+function loadVariantToCanvas(idx) {
+    const v = variants[idx];
+    // Compute max row/col to adjust grid if needed
+    const maxRow = Math.max(...v.cells.map(p=>p.Row));
+    const maxCol = Math.max(...v.cells.map(p=>p.Col));
+    srows = Math.max(srows, maxRow+1);
+    scols = Math.max(scols, maxCol+1);
+    document.getElementById('srows-input').value = srows;
+    document.getElementById('scols-input').value = scols;
+    shapeCells = new Set(v.cells.map(p=>cellKey(p.Row,p.Col)));
+    renderShapeGrid();
+}
+
+/* ═══════════════════════════════════════════════════════
+   VARIANT PREVIEW MODAL
+═══════════════════════════════════════════════════════ */
+let previewingIdx = null;
+
+function openVariantPreview(idx) {
+    const v = variants[idx];
+    const id = getStartId() + idx;
+    previewingIdx = idx;
+
+    // Badge & count
+    document.getElementById('modal-id-badge').textContent = id;
+    document.getElementById('modal-cell-count').textContent = v.cells.length + ' 格';
+
+    // Draw large canvas with axis labels
+    const cells = v.cells;
+    const maxRow = cells.length ? Math.max(...cells.map(p=>p.Row)) : 0;
+    const maxCol = cells.length ? Math.max(...cells.map(p=>p.Col)) : 0;
+    const R = maxRow + 1, C = maxCol + 1;
+
+    // Decide cell pixel size so canvas fits nicely
+    const maxCells = Math.max(R, C);
+    const cellPx   = maxCells <= 3 ? 64 : maxCells <= 5 ? 48 : maxCells <= 8 ? 36 : 28;
+    const AXIS_W   = 24; // space for row labels
+    const AXIS_H   = 20; // space for col labels
+    const W = C * cellPx + AXIS_W;
+    const H = R * cellPx + AXIS_H;
+
+    const canvas = document.getElementById('modal-canvas');
+    canvas.width  = W;
+    canvas.height = H;
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0,0,W,H);
+
+    // Background
+    ctx.fillStyle = '#f4f7ff';
+    ctx.fillRect(0,0,W,H);
+
+    const cellSet = new Set(cells.map(p=>cellKey(p.Row,p.Col)));
+
+    // Draw cells (first quadrant: Row 0 at bottom)
+    for (let r=0; r<R; r++) {
+        for (let c=0; c<C; c++) {
+            const x = AXIS_W + c * cellPx;
+            const y = H - AXIS_H - (r+1) * cellPx;
+            if (cellSet.has(`${r},${c}`)) {
+                // Filled cell: green gradient approximation
+                ctx.fillStyle = '#68d391';
+                ctx.beginPath();
+                ctx.roundRect ? ctx.roundRect(x+2,y+2,cellPx-4,cellPx-4,4)
+                              : ctx.rect(x+2,y+2,cellPx-4,cellPx-4);
+                ctx.fill();
+                // Inner highlight
+                ctx.fillStyle = 'rgba(255,255,255,0.25)';
+                ctx.fillRect(x+4,y+4,cellPx-8,6);
+            } else {
+                ctx.fillStyle = '#eef2ff';
+                ctx.fillRect(x+1,y+1,cellPx-2,cellPx-2);
+            }
+        }
+    }
+
+    // Grid lines
+    ctx.strokeStyle = '#c9d1da'; ctx.lineWidth = 0.5;
+    for (let c=0;c<=C;c++) {
+        ctx.beginPath();
+        ctx.moveTo(AXIS_W+c*cellPx, H-AXIS_H);
+        ctx.lineTo(AXIS_W+c*cellPx, 0);
+        ctx.stroke();
+    }
+    for (let r=0;r<=R;r++) {
+        ctx.beginPath();
+        ctx.moveTo(AXIS_W, H-AXIS_H-r*cellPx);
+        ctx.lineTo(W,      H-AXIS_H-r*cellPx);
+        ctx.stroke();
+    }
+
+    // Col labels (bottom)
+    ctx.fillStyle='#aaa'; ctx.font=`bold ${Math.min(11,cellPx*0.3)}px sans-serif`; ctx.textAlign='center';
+    for (let c=0;c<C;c++) {
+        ctx.fillText(c, AXIS_W + c*cellPx + cellPx/2, H - 5);
+    }
+    // Row labels (left)
+    ctx.textAlign='right';
+    for (let r=0;r<R;r++) {
+        ctx.fillText(r, AXIS_W - 4, H - AXIS_H - r*cellPx - cellPx/2 + 4);
+    }
+
+    // Formatted JSON
+    const formatted = cells.length === 0 ? '[]'
+        : '[\n' + cells.map(p=>`  {"Row":${p.Row},"Col":${p.Col}}`).join(',\n') + '\n]';
+    document.getElementById('modal-json-box').textContent = formatted;
+
+    // Reset copy button
+    document.getElementById('modal-copy-btn').textContent = '📋 复制 A_ARR_variants';
+
+    document.getElementById('preview-modal-overlay').classList.add('open');
+}
+
+function closePreviewModal() {
+    document.getElementById('preview-modal-overlay').classList.remove('open');
+    previewingIdx = null;
+}
+
+function onModalOverlayClick(e) {
+    if (e.target === document.getElementById('preview-modal-overlay')) closePreviewModal();
+}
+
+function copyModalVariant(compact) {
+    if (previewingIdx === null) return;
+    const v = variants[previewingIdx];
+    const text = compact
+        ? JSON.stringify(v.cells)
+        : '[\n' + v.cells.map(p=>`  {"Row":${p.Row},"Col":${p.Col}}`).join(',\n') + '\n]';
+    doCopy(text);
+    const btn = document.getElementById('modal-copy-btn');
+    btn.textContent = '✅ 已复制！';
+    setTimeout(()=>{ btn.textContent = '📋 复制 A_ARR_variants'; }, 2000);
+}
+
+// Close modal with Escape key
+document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closePreviewModal();
+});
+
+function updateVariantOutput() {
+    const tbody = document.getElementById('variant-table-body');
+    tbody.innerHTML='';
+    const startId = getStartId();
+    variants.forEach((v,i)=>{
+        const tr=document.createElement('tr');
+        tr.innerHTML=`<td class="td-id">${startId+i}</td><td class="td-json">${JSON.stringify(v.cells)}</td>`;
+        tbody.appendChild(tr);
+    });
+}
+
+function copyVariantFull() {
+    if (!variants.length) { showFeedback('variant-feedback','⚠️ 还没有图形','#e53e3e'); return; }
+    const startId = getStartId();
+    const arr = variants.map((v,i)=>({A_INT_id: startId+i, A_ARR_variants: v.cells}));
+    doCopy(JSON.stringify(arr, null, 2));
+    showFeedback('variant-feedback','✅ 完整配置 JSON 已复制！');
+}
+
+function copyVariantOnly() {
+    if (!variants.length) { showFeedback('variant-feedback','⚠️ 还没有图形','#e53e3e'); return; }
+    // 每个图形单独一行，格式与 A_ARR_variants 列一致
+    const text = variants.map(v => JSON.stringify(v.cells)).join('\n');
+    doCopy(text);
+    showFeedback('variant-feedback','✅ 图形数组已复制（每行一个）！');
+}
+
+/* ═══════════════════════════════════════════════════════
+   CANVAS DRAWING
+═══════════════════════════════════════════════════════ */
+function drawMiniObstacleGrid(canvas, saveData) {
+    const {rows:R, cols:C, obstacles:obs} = saveData;
+    const obsSet = new Set(obs);
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+    const cellPx = Math.floor(Math.min(W / C, H / R));
+    const totalW = C * cellPx, totalH = R * cellPx;
+    const ox = Math.floor((W - totalW) / 2);
+    const oy = Math.floor((H - totalH) / 2);
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#f4f7ff';
+    ctx.fillRect(0, 0, W, H);
+    for (let r = 0; r < R; r++) for (let c = 0; c < C; c++) {
+        const x = ox + c * cellPx, y = oy + totalH - (r + 1) * cellPx;
+        ctx.fillStyle = obsSet.has(`${r},${c}`) ? '#e53e3e' : '#f0f4ff';
+        ctx.fillRect(x + 0.5, y + 0.5, cellPx - 1, cellPx - 1);
+    }
+    ctx.strokeStyle = '#c9d1da'; ctx.lineWidth = 0.5;
+    for (let c = 0; c <= C; c++) { ctx.beginPath(); ctx.moveTo(ox + c * cellPx, oy); ctx.lineTo(ox + c * cellPx, oy + totalH); ctx.stroke(); }
+    for (let r = 0; r <= R; r++) { ctx.beginPath(); ctx.moveTo(ox, oy + r * cellPx); ctx.lineTo(ox + totalW, oy + r * cellPx); ctx.stroke(); }
+}
+
+function drawShapePreview(canvas, cells, W, H) {
+    if (!cells.length) return;
+    const ctx = canvas.getContext('2d');
+    const maxRow = Math.max(...cells.map(p=>p.Row));
+    const maxCol = Math.max(...cells.map(p=>p.Col));
+    const R = maxRow + 1, C = maxCol + 1;
+
+    // 正方形格子：取宽高方向中较小的那个，保持格子为正方形
+    const cellPx = Math.floor(Math.min(W / C, H / R));
+    const totalW = C * cellPx;
+    const totalH = R * cellPx;
+    // 居中显示
+    const ox = Math.floor((W - totalW) / 2);
+    const oy = Math.floor((H - totalH) / 2);
+
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#f4f7ff';
+    ctx.fillRect(0, 0, W, H);
+
+    const cellSet = new Set(cells.map(p => cellKey(p.Row, p.Col)));
+    for (let r = 0; r < R; r++) {
+        for (let c = 0; c < C; c++) {
+            // 第一象限：Row 0 在底部
+            const x = ox + c * cellPx;
+            const y = oy + totalH - (r + 1) * cellPx;
+            if (cellSet.has(`${r},${c}`)) {
+                ctx.fillStyle = '#48bb78';
+                ctx.fillRect(x + 1, y + 1, cellPx - 2, cellPx - 2);
+            } else {
+                ctx.fillStyle = '#eef2ff';
+                ctx.fillRect(x + 1, y + 1, cellPx - 2, cellPx - 2);
+            }
+        }
+    }
+    // 网格线（只画图形区域内）
+    ctx.strokeStyle = '#c9d1da'; ctx.lineWidth = 0.5;
+    for (let c = 0; c <= C; c++) {
+        ctx.beginPath();
+        ctx.moveTo(ox + c * cellPx, oy);
+        ctx.lineTo(ox + c * cellPx, oy + totalH);
+        ctx.stroke();
+    }
+    for (let r = 0; r <= R; r++) {
+        ctx.beginPath();
+        ctx.moveTo(ox, oy + r * cellPx);
+        ctx.lineTo(ox + totalW, oy + r * cellPx);
+        ctx.stroke();
+    }
+}
+
+/* ═══════════════════════════════════════════════════════
+   LEVEL CONFIG (Section 3) — 障碍物方案 + 图形数量
+═══════════════════════════════════════════════════════ */
+let selectedObsSaveId = null;   // 选中的障碍物方案 save id
+let levelCounts = new Map();    // normalizedKey → count
+let savedLevels = [];
+const SAVED_LEVELS_KEY = 'dighole_savedlevels_v4';
+let lvEditingId = null;
+
+function loadSavedLevels() {
+    try { savedLevels = JSON.parse(localStorage.getItem(SAVED_LEVELS_KEY)) || []; } catch(_) { savedLevels = []; }
+}
+function persistSavedLevels() { localStorage.setItem(SAVED_LEVELS_KEY, JSON.stringify(savedLevels)); }
+
+function normKey(cells) { return JSON.stringify(cells); }
+
+/* ---- ① 障碍物方案选择卡片 ---- */
+function renderObsPicker() {
+    const container = document.getElementById('lv-obs-picker');
+    const noObs = document.getElementById('lv-no-obs');
+    container.innerHTML = '';
+    if (!saves.length) {
+        noObs.style.display = 'block';
+        return;
+    }
+    noObs.style.display = 'none';
+
+    saves.forEach(s => {
+        const card = document.createElement('div');
+        card.className = 'lv-obs-card' + (selectedObsSaveId === s.id ? ' selected' : '');
+        card.onclick = () => {
+            selectedObsSaveId = selectedObsSaveId === s.id ? null : s.id;
+            renderObsPicker();
+            updateLevelJSON();
+            autoPreview();
+        };
+
+        const cv = document.createElement('canvas');
+        cv.width = 110; cv.height = 66;
+        drawMiniObstacleGrid(cv, s);
+
+        const nameEl = document.createElement('div');
+        nameEl.className = 'lv-obs-card-name';
+        nameEl.textContent = s.name;
+
+        const infoEl = document.createElement('div');
+        infoEl.className = 'lv-obs-card-info';
+        infoEl.textContent = `${s.rows}×${s.cols}  ⛔${s.obstacles.length}`;
+
+        card.appendChild(cv);
+        card.appendChild(nameEl);
+        card.appendChild(infoEl);
+        container.appendChild(card);
+    });
+}
+
+/* ---- ② 图形数量选择卡片 ---- */
+function renderLevelShapePicker() {
+    const container = document.getElementById('lv-shape-picker');
+    const noShapes  = document.getElementById('lv-no-shapes');
+    container.innerHTML = '';
+
+    if (!variants.length) {
+        noShapes.style.display = 'block';
+        updateLevelJSON();
+        return;
+    }
+    noShapes.style.display = 'none';
+    const startId = getStartId();
+
+    variants.forEach((v, i) => {
+        const nk    = normKey(v.cells);
+        const count = levelCounts.get(nk) || 0;
+        const id    = startId + i;
+
+        const card = document.createElement('div');
+        card.className = 'lv-shape-card' + (count > 0 ? ' has-count' : '');
+
+        const canvas = document.createElement('canvas');
+        canvas.width = 64; canvas.height = 64;
+        drawShapePreview(canvas, v.cells, 64, 64);
+
+        const idEl = document.createElement('div');
+        idEl.className = 'lv-shape-card-id';
+        idEl.textContent = id;
+
+        const ctrl = document.createElement('div');
+        ctrl.className = 'lv-count-ctrl';
+
+        const numEl = document.createElement('div');
+        numEl.className = 'lv-count-num';
+        numEl.textContent = count;
+
+        const minusBtn = document.createElement('button');
+        minusBtn.className = 'lv-count-btn';
+        minusBtn.textContent = '−';
+        minusBtn.onclick = (e) => { e.stopPropagation(); changeLevelCount(nk, -1, numEl, card); };
+
+        const plusBtn = document.createElement('button');
+        plusBtn.className = 'lv-count-btn';
+        plusBtn.textContent = '+';
+        plusBtn.onclick = (e) => { e.stopPropagation(); changeLevelCount(nk, 1, numEl, card); };
+
+        ctrl.appendChild(minusBtn);
+        ctrl.appendChild(numEl);
+        ctrl.appendChild(plusBtn);
+
+        card.appendChild(canvas);
+        card.appendChild(idEl);
+        card.appendChild(ctrl);
+        container.appendChild(card);
+    });
+
+    updateLevelJSON();
+}
+
+function changeLevelCount(nk, delta, numEl, card) {
+    const cur = levelCounts.get(nk) || 0;
+    const next = Math.max(0, cur + delta);
+    if (next === 0) levelCounts.delete(nk); else levelCounts.set(nk, next);
+    numEl.textContent = next;
+    card.classList.toggle('has-count', next > 0);
+    updateLevelJSON();
+    autoPreview();
+}
+
+/* ---- 合并输出 JSON ---- */
+function getLevelData() {
+    const startId = getStartId();
+    const shapesArr = variants
+        .map((v, i) => ({ A_INT_id: startId + i, count: levelCounts.get(normKey(v.cells)) || 0 }))
+        .filter(x => x.count > 0);
+
+    const obsSave = selectedObsSaveId ? saves.find(s => s.id === selectedObsSaveId) : null;
+    let obstaclesArr = [];
+    let obsRows = 0, obsCols = 0;
+    if (obsSave) {
+        obsRows = obsSave.rows; obsCols = obsSave.cols;
+        obstaclesArr = obsSave.obstacles
+            .map(k => { const [r,c] = k.split(',').map(Number); return {Row:r,Col:c}; })
+            .sort((a,b) => a.Row !== b.Row ? a.Row - b.Row : a.Col - b.Col);
+    }
+    return { obstacles: obstaclesArr, rows: obsRows, cols: obsCols, shapes: shapesArr, obsSaveId: selectedObsSaveId };
+}
+
+function updateLevelJSON() {
+    const d = getLevelData();
+    const total = d.shapes.reduce((s, x) => s + x.count, 0);
+    const lines = [];
+    lines.push('{');
+    if (d.obsSaveId) {
+        lines.push(`  "rows": ${d.rows},`);
+        lines.push(`  "cols": ${d.cols},`);
+        lines.push(`  "obstacles": ${JSON.stringify(d.obstacles)},`);
+    }
+    lines.push(`  "shapes": ${d.shapes.length === 0 ? '[]' : '[\n    ' + d.shapes.map(x => `{"A_INT_id":${x.A_INT_id},"count":${x.count}}`).join(',\n    ') + '\n  ]'}`);
+    lines.push('}');
+    document.getElementById('lv-json-output').textContent = lines.join('\n');
+    document.getElementById('lv-total-count').textContent = total;
+    document.getElementById('lv-obs-label').textContent = d.obsSaveId
+        ? (saves.find(s => s.id === d.obsSaveId) || {}).name || '已选择'
+        : '未选择';
+}
+
+function copyLevelJSON(compact) {
+    const d = getLevelData();
+    if (!d.shapes.length && !d.obsSaveId) { showFeedback('lv-feedback', '⚠️ 请先选择配置', '#e53e3e'); return; }
+    const obj = {};
+    if (d.obsSaveId) { obj.rows = d.rows; obj.cols = d.cols; obj.obstacles = d.obstacles; }
+    obj.shapes = d.shapes;
+    doCopy(compact ? JSON.stringify(obj) : JSON.stringify(obj, null, 2));
+    showFeedback('lv-feedback', '✅ 关卡配置已复制！');
+}
+
+function clearLevelAll() {
+    selectedObsSaveId = null;
+    levelCounts.clear();
+    renderObsPicker();
+    renderLevelShapePicker();
+    clearLevelPreview();
+}
+
+/* ---- ③ 关卡预览：随机摆放 ---- */
+const SHAPE_COLORS = [
+    '#6366f1','#f59e0b','#10b981','#ef4444','#8b5cf6',
+    '#ec4899','#14b8a6','#f97316','#06b6d4','#84cc16',
+    '#e879f9','#22d3ee','#a3e635','#fb7185','#38bdf8'
+];
+
+function generateLevelPreview() {
+    const canvas  = document.getElementById('lv-preview-canvas');
+    const emptyEl = document.getElementById('lv-preview-empty');
+    const legendEl= document.getElementById('lv-preview-legend');
+
+    const obsSave = selectedObsSaveId ? saves.find(s => s.id === selectedObsSaveId) : null;
+    if (!obsSave) {
+        clearLevelPreview();
+        emptyEl.textContent = '⚠️ 请先选择障碍物方案';
+        return;
+    }
+
+    const R = obsSave.rows, C = obsSave.cols;
+    const obsSet = new Set(obsSave.obstacles);
+
+    // grid: 0=空闲, -1=障碍物, >0=图形编号
+    const grid = Array.from({length: R}, () => new Int16Array(C));
+    for (let r = 0; r < R; r++)
+        for (let c = 0; c < C; c++)
+            if (obsSet.has(`${r},${c}`)) grid[r][c] = -1;
+
+    // 收集所有需要摆放的图形实例
+    const startId = getStartId();
+    const instances = [];
+    variants.forEach((v, i) => {
+        const cnt = levelCounts.get(normKey(v.cells)) || 0;
+        for (let n = 0; n < cnt; n++)
+            instances.push({ cells: v.cells, colorIdx: i, id: startId + i });
+    });
+
+    // 按格子数从大到小排序（大图形先放）
+    instances.sort((a, b) => b.cells.length - a.cells.length);
+
+    const placed = []; // {cells: [{r,c}], colorIdx}
+    const MAX_TRIES = 200;
+
+    for (const inst of instances) {
+        let ok = false;
+        for (let t = 0; t < MAX_TRIES && !ok; t++) {
+            const offR = Math.floor(Math.random() * R);
+            const offC = Math.floor(Math.random() * C);
+            const positions = inst.cells.map(p => ({ r: p.Row + offR, c: p.Col + offC }));
+            const valid = positions.every(p =>
+                p.r >= 0 && p.r < R && p.c >= 0 && p.c < C && grid[p.r][p.c] === 0
+            );
+            if (valid) {
+                const shapeNum = placed.length + 1;
+                positions.forEach(p => { grid[p.r][p.c] = shapeNum; });
+                placed.push({ positions, colorIdx: inst.colorIdx, id: inst.id });
+                ok = true;
+            }
+        }
+    }
+
+    // 渲染
+    const maxDim = Math.max(R, C);
+    const cellPx = maxDim <= 6 ? 40 : maxDim <= 10 ? 32 : maxDim <= 15 ? 24 : maxDim <= 20 ? 18 : 14;
+    const AXIS = 22;
+    const W = C * cellPx + AXIS, H = R * cellPx + AXIS;
+    canvas.width = W; canvas.height = H;
+    canvas.style.display = 'block';
+    emptyEl.style.display = 'none';
+
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#f8faff';
+    ctx.fillRect(0, 0, W, H);
+
+    // 画格子（第一象限：Row 0 在底部）
+    for (let r = 0; r < R; r++) {
+        for (let c = 0; c < C; c++) {
+            const x = AXIS + c * cellPx;
+            const y = H - AXIS - (r + 1) * cellPx;
+            const v = grid[r][c];
+            if (v === -1) {
+                ctx.fillStyle = '#e53e3e';
+                ctx.fillRect(x + 1, y + 1, cellPx - 2, cellPx - 2);
+                // X 标记
+                ctx.strokeStyle = 'rgba(255,255,255,0.6)'; ctx.lineWidth = 1.5;
+                ctx.beginPath(); ctx.moveTo(x + 4, y + 4); ctx.lineTo(x + cellPx - 4, y + cellPx - 4); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(x + cellPx - 4, y + 4); ctx.lineTo(x + 4, y + cellPx - 4); ctx.stroke();
+            } else if (v > 0) {
+                const pi = placed[v - 1];
+                ctx.fillStyle = SHAPE_COLORS[pi.colorIdx % SHAPE_COLORS.length];
+                ctx.fillRect(x + 1, y + 1, cellPx - 2, cellPx - 2);
+                // 高光
+                ctx.fillStyle = 'rgba(255,255,255,0.25)';
+                ctx.fillRect(x + 2, y + 2, cellPx - 4, Math.max(3, cellPx * 0.2));
+            } else {
+                ctx.fillStyle = '#fff';
+                ctx.fillRect(x + 1, y + 1, cellPx - 2, cellPx - 2);
+            }
+        }
+    }
+
+    // 网格线
+    ctx.strokeStyle = '#d0d5e0'; ctx.lineWidth = 0.5;
+    for (let c = 0; c <= C; c++) {
+        ctx.beginPath(); ctx.moveTo(AXIS + c * cellPx, 0); ctx.lineTo(AXIS + c * cellPx, H - AXIS); ctx.stroke();
+    }
+    for (let r = 0; r <= R; r++) {
+        ctx.beginPath(); ctx.moveTo(AXIS, H - AXIS - r * cellPx); ctx.lineTo(W, H - AXIS - r * cellPx); ctx.stroke();
+    }
+
+    // 坐标轴标签
+    ctx.fillStyle = '#aaa'; ctx.font = `bold ${Math.min(10, cellPx * 0.35)}px sans-serif`;
+    ctx.textAlign = 'center';
+    for (let c = 0; c < C; c++)
+        ctx.fillText(c, AXIS + c * cellPx + cellPx / 2, H - 4);
+    ctx.textAlign = 'right';
+    for (let r = 0; r < R; r++)
+        ctx.fillText(r, AXIS - 3, H - AXIS - r * cellPx - cellPx / 2 + 4);
+
+    // 图例
+    legendEl.innerHTML = '';
+    const usedColors = new Map();
+    placed.forEach(p => {
+        if (!usedColors.has(p.colorIdx)) usedColors.set(p.colorIdx, p.id);
+    });
+    // 障碍物
+    legendEl.innerHTML += `<div class="lv-preview-legend-item"><div class="lv-preview-legend-box" style="background:#e53e3e;"></div>障碍物</div>`;
+    legendEl.innerHTML += `<div class="lv-preview-legend-item"><div class="lv-preview-legend-box" style="background:#fff;border-color:#ccc;"></div>空闲</div>`;
+    usedColors.forEach((id, ci) => {
+        const color = SHAPE_COLORS[ci % SHAPE_COLORS.length];
+        legendEl.innerHTML += `<div class="lv-preview-legend-item"><div class="lv-preview-legend-box" style="background:${color};"></div>${id}</div>`;
+    });
+
+    const unplaced = instances.length - placed.length;
+    if (unplaced > 0) {
+        legendEl.innerHTML += `<div class="lv-preview-legend-item" style="color:#e53e3e;font-weight:600;">⚠️ ${unplaced} 个图形未能放入</div>`;
+    }
+}
+
+function autoPreview() {
+    const hasObs = !!selectedObsSaveId;
+    const hasShapes = [...levelCounts.values()].some(c => c > 0);
+    if (hasObs || hasShapes) generateLevelPreview();
+    else clearLevelPreview();
+}
+
+function clearLevelPreview() {
+    const canvas  = document.getElementById('lv-preview-canvas');
+    const emptyEl = document.getElementById('lv-preview-empty');
+    const legendEl= document.getElementById('lv-preview-legend');
+    canvas.style.display = 'none';
+    emptyEl.style.display = 'block';
+    emptyEl.textContent = '选好障碍物方案和图形后，点击「随机摆放」预览';
+    legendEl.innerHTML = '';
+}
+
+/* ---- 保存 / 载入 / 删除 ---- */
+function saveLevelConfig() {
+    const nameInput = document.getElementById('lv-name-input');
+    const name = nameInput.value.trim() || `关卡 ${savedLevels.length + 1}`;
+    const d = getLevelData();
+    if (!d.shapes.length && !d.obsSaveId) { showFeedback('lv-feedback', '⚠️ 请先选择配置', '#e53e3e'); return; }
+
+    const startId = getStartId();
+    const shapesWithCells = d.shapes.map(s => {
+        const vIdx = s.A_INT_id - startId;
+        return { ...s, cells: variants[vIdx] ? variants[vIdx].cells : [] };
+    });
+
+    const entry = {
+        id: lvEditingId || uid(),
+        name,
+        obsSaveId: selectedObsSaveId,
+        obsSnapshot: d.obsSaveId ? { rows: d.rows, cols: d.cols, obstacles: d.obstacles } : null,
+        shapes: shapesWithCells,
+        countsMap: Array.from(levelCounts.entries()),
+        savedAt: Date.now()
+    };
+
+    if (lvEditingId) {
+        const idx = savedLevels.findIndex(l => l.id === lvEditingId);
+        if (idx !== -1) { savedLevels[idx] = entry; showFeedback('lv-feedback', `✅ 「${name}」已更新`); }
+        else { savedLevels.unshift(entry); showFeedback('lv-feedback', `✅ 已保存「${name}」`); }
+    } else {
+        savedLevels.unshift(entry);
+        showFeedback('lv-feedback', `✅ 已保存「${name}」`);
+    }
+
+    lvEditingId = entry.id;
+    nameInput.value = name;
+    const badge = document.getElementById('lv-edit-badge');
+    badge.textContent = `✏️ 编辑中：${name}`;
+    badge.style.display = 'inline-block';
+    persistSavedLevels();
+    renderLevelGallery();
+}
+
+function loadLevelConfig(id) {
+    const l = savedLevels.find(x => x.id === id);
+    if (!l) return;
+    selectedObsSaveId = l.obsSaveId || null;
+    levelCounts = new Map(l.countsMap || []);
+    document.getElementById('lv-name-input').value = l.name;
+    lvEditingId = id;
+    const badge = document.getElementById('lv-edit-badge');
+    badge.textContent = `✏️ 编辑中：${l.name}`;
+    badge.style.display = 'inline-block';
+    renderObsPicker();
+    renderLevelShapePicker();
+    autoPreview();
+    showFeedback('lv-feedback', `✅ 已载入「${l.name}」`);
+    switchTab('levels');
+}
+
+function deleteLevelConfig(id) {
+    const l = savedLevels.find(x => x.id === id);
+    if (!l || !confirm(`确定删除「${l.name}」？`)) return;
+    if (lvEditingId === id) {
+        lvEditingId = null;
+        document.getElementById('lv-edit-badge').style.display = 'none';
+    }
+    savedLevels = savedLevels.filter(x => x.id !== id);
+    persistSavedLevels();
+    renderLevelGallery();
+}
+
+/* ---- 画廊 ---- */
+function renderLevelGallery() {
+    const gallery = document.getElementById('lv-gallery');
+    const empty   = document.getElementById('lv-gallery-empty');
+    document.getElementById('lv-count-badge').textContent = savedLevels.length;
+    gallery.innerHTML = '';
+    if (!savedLevels.length) { empty.style.display = 'block'; return; }
+    empty.style.display = 'none';
+
+    savedLevels.forEach(l => {
+        const card = document.createElement('div');
+        card.className = 'level-card';
+
+        const nameEl = document.createElement('div');
+        nameEl.className = 'level-card-name';
+        nameEl.contentEditable = true; nameEl.spellcheck = false; nameEl.textContent = l.name;
+        nameEl.addEventListener('blur', () => { l.name = nameEl.textContent.trim() || l.name; nameEl.textContent = l.name; persistSavedLevels(); });
+        nameEl.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); nameEl.blur(); } });
+
+        const previewBox = document.createElement('div');
+        previewBox.className = 'level-card-preview';
+
+        // 障碍物缩略图
+        if (l.obsSnapshot) {
+            const wrap = document.createElement('div');
+            wrap.className = 'level-card-shape';
+            const cv = document.createElement('canvas');
+            cv.width = 52; cv.height = 36;
+            const obsSet = new Set(l.obsSnapshot.obstacles.map(p => `${p.Row},${p.Col}`));
+            drawMiniObstacleGrid(cv, { rows: l.obsSnapshot.rows, cols: l.obsSnapshot.cols, obstacles: Array.from(obsSet) });
+            const label = document.createElement('div');
+            label.className = 'level-card-shape-count';
+            label.textContent = `⛔${l.obsSnapshot.obstacles.length}`;
+            wrap.appendChild(cv); wrap.appendChild(label);
+            previewBox.appendChild(wrap);
+        }
+
+        l.shapes.forEach(s => {
+            if (!s.cells || !s.cells.length) return;
+            const wrap = document.createElement('div');
+            wrap.className = 'level-card-shape';
+            const cv = document.createElement('canvas');
+            cv.width = 36; cv.height = 36;
+            drawShapePreview(cv, s.cells, 36, 36);
+            const cnt = document.createElement('div');
+            cnt.className = 'level-card-shape-count';
+            cnt.textContent = `×${s.count}`;
+            wrap.appendChild(cv); wrap.appendChild(cnt);
+            previewBox.appendChild(wrap);
+        });
+
+        const totalShapes = l.shapes.reduce((s, x) => s + x.count, 0);
+        const info = document.createElement('div');
+        info.className = 'level-card-info';
+        info.innerHTML = `<span>🧩 ${l.shapes.length} 种 / ${totalShapes} 个</span><span>${l.obsSnapshot ? '⛔'+l.obsSnapshot.obstacles.length : '无障碍物'}</span>`;
+
+        const timeEl = document.createElement('div');
+        timeEl.className = 'save-card-time';
+        timeEl.textContent = '🕐 ' + formatTime(l.savedAt);
+
+        const actions = document.createElement('div');
+        actions.className = 'level-card-actions';
+
+        const loadBtn = document.createElement('button');
+        loadBtn.className = 'btn btn-primary'; loadBtn.textContent = '📂 载入';
+        loadBtn.onclick = () => loadLevelConfig(l.id);
+
+        const copyBtn = document.createElement('button');
+        copyBtn.className = 'btn btn-secondary'; copyBtn.textContent = '📋 复制';
+        copyBtn.onclick = () => {
+            const obj = {};
+            if (l.obsSnapshot) { obj.rows = l.obsSnapshot.rows; obj.cols = l.obsSnapshot.cols; obj.obstacles = l.obsSnapshot.obstacles; }
+            obj.shapes = l.shapes;
+            doCopy(JSON.stringify(obj));
+            copyBtn.textContent = '✅'; setTimeout(() => { copyBtn.textContent = '📋 复制'; }, 1800);
+        };
+
+        const delBtn = document.createElement('button');
+        delBtn.className = 'btn btn-danger'; delBtn.textContent = '🗑️ 删除';
+        delBtn.onclick = () => deleteLevelConfig(l.id);
+
+        actions.appendChild(loadBtn); actions.appendChild(copyBtn); actions.appendChild(delBtn);
+        card.appendChild(nameEl); card.appendChild(previewBox);
+        card.appendChild(info); card.appendChild(timeEl); card.appendChild(actions);
+        gallery.appendChild(card);
+    });
+}
+
+/* ═══════════════════════════════════════════════════════
+   GLOBAL MOUSE UP
+═══════════════════════════════════════════════════════ */
+function resetAllDrag() {
+    isDragging=false; dragMode=null;
+    sIsDragging=false; sDragMode=null;
+    document.body.classList.remove('dragging');
+}
+document.addEventListener('mouseup',    resetAllDrag);
+document.addEventListener('mouseleave', resetAllDrag);
+
+/* ═══════════════════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════════════════ */
+loadSavesFromStorage();
+loadVariantsFromStorage();
+loadSavedLevels();
+rebuildBoard();
+updateObstacleJSON();
+renderSavesGallery();
+renderShapeGrid();
+renderVariantList();
+renderObsPicker();
+renderLevelShapePicker();
+renderLevelGallery();
+</script>
+</body>
+</html>
