@@ -50,3 +50,4 @@ htmlcov/
 
 # Vercel
 .vercel
+.claude/worktrees/
