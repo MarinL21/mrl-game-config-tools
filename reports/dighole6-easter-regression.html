@@ -124,7 +124,7 @@ code { background: var(--surface-2); border: 1px solid var(--border); padding: 1
     <div class="meta-item"><span class="label">时长</span> 7天(UTC)</div>
     <div class="meta-item"><span class="label">活动服</span> 146</div>
     <div class="meta-item"><span class="label">普通关卡</span> 1~100</div>
-    <div class="meta-item"><span class="label">奖励关卡</span> 付费15 + 免费15</div>
+    <div class="meta-item"><span class="label">奖励关卡</span> 15（进入=免费奖励，通关=付费奖励）</div>
     <div class="meta-item"><span class="label">循环关卡</span> 5</div>
     <div class="meta-item"><span class="label">礼包ID</span> 2013505000~028</div>
   </div>
@@ -161,11 +161,11 @@ code { background: var(--surface-2); border: 1px solid var(--border); padding: 1
       <tr><td class="label-col">触达率</td><td>62.3%</td><td>61.8%</td><td>-0.5pp</td><td>持平</td></tr>
       <tr><td class="label-col">活动服活跃</td><td>25,104</td><td>26,330</td><td class="green">+1,226 (+4.9%)</td><td>活动服基数增长</td></tr>
       <tr><td class="label-col">进入活动（到达Lv1）</td><td>22,373</td><td>23,445</td><td class="green">+1,072 (+4.8%)</td><td>触达转化的实际进入数</td></tr>
-      <tr><td class="label-col">完成第1关</td><td>13,915</td><td>14,927</td><td class="green">+1,012 (+7.3%)</td><td>首关通关率 62.2%→63.7% 持平</td></tr>
-      <tr><td class="label-col">完成第30关</td><td>6,398</td><td>6,368</td><td>-30 (-0.5%)</td><td>前 30 关参与度持平</td></tr>
-      <tr><td class="label-col">完成第60关</td><td>1,028</td><td class="red">777</td><td class="red">-251 (-24.4%)</td><td><strong>60关行军特效触发人数</strong></td></tr>
-      <tr><td class="label-col">完成第80关</td><td>320</td><td class="red">84</td><td class="red">-236 (-73.8%)</td><td>中后期严重断崖</td></tr>
-      <tr><td class="label-col">完成第100关</td><td>178</td><td class="red">34</td><td class="red">-144 (-80.9%)</td><td><strong>100关主城皮肤触发人数</strong></td></tr>
+      <tr><td class="label-col">完成第1关</td><td>13,915</td><td>14,927</td><td class="green">+1,012 (+7.3%)</td><td>首关通关率持平</td></tr>
+      <tr><td class="label-col">完成第30关</td><td>5,952</td><td>5,854</td><td>-98 (-1.6%)</td><td>前 30 关持平</td></tr>
+      <tr><td class="label-col">完成第60关</td><td>616</td><td class="red">241</td><td class="red">-375 (-60.9%)</td><td><strong>60关行军特效触发人数</strong></td></tr>
+      <tr><td class="label-col">完成第80关</td><td>209</td><td class="red">44</td><td class="red">-165 (-78.9%)</td><td>中后期严重断崖</td></tr>
+      <tr><td class="label-col">完成第100关</td><td>110</td><td class="red">26</td><td class="red">-84 (-76.4%)</td><td><strong>100关主城皮肤触发人数（item 11119897）</strong></td></tr>
       <tr><td class="label-col">订单数</td><td>11,773</td><td>9,403</td><td class="red">-2,370 (-20.1%)</td><td>付费次数下滑</td></tr>
     </tbody>
   </table>
@@ -173,12 +173,12 @@ code { background: var(--surface-2); border: 1px solid var(--border); padding: 1
   <div class="alert-box">
     <div class="alert-title">🚨 核心异常：中后期关卡通关率断崖</div>
     <p>
-      <strong style="color:var(--text)">前期玩家参与度不减反增</strong>——进入活动 23,445 人（+4.8%）、完成首关 14,927 人（+7.3%）、完成 30 关 6,368 人（-0.5%）三项都和 5 期持平或更好。
-      但从 <strong style="color:var(--orange)">40 关</strong> 开始 6 期开始掉队，<strong style="color:var(--red)">60 关 -24.4%、70 关 -60.5%、80 关 -73.8%、100 关 -80.9%</strong>，
-      完成 100 关仅 34 人（5 期 178 人）。本期通关率下滑的核心区间是 <strong>40~60 关</strong>，不是首关。
+      <strong style="color:var(--text)">前期玩家参与度不减反增</strong>——进入活动 23,445 人（+4.8%）、完成首关 14,927 人（+7.3%）、完成 Lv10 9,852 人（vs 5期 7,678，+28.3%）三项都和 5 期持平或更好。
+      但从 <strong style="color:var(--orange)">Lv40</strong> 开始 6 期开始掉队，<strong style="color:var(--red)">Lv60 -60.9%、Lv70 -76.8%、Lv80 -78.9%、Lv100 -76.4%</strong>，
+      完成 100 关仅 26 人（5 期 110 人）。本期通关率下滑的核心区间是 <strong>Lv40~Lv60</strong>，不是首关。
       成就礼包收入 -42.7% 可直接归因到"中后期里程碑玩家流失"：
-      成就礼包的 $49.99 / $99.99 高价档需要玩家打到 60 关 / 100 关才触发，这些里程碑人数分别 -24% / -81%，导致高价档买家大幅减少。
-      同时<strong style="color:var(--green)">前 40 关都偏健康</strong>——所以问题不在"挖孔机制本身变难"，更像是 <strong>40-60 关段的难度曲线 / 道具投放 / 产出节奏</strong> 出现了变化。
+      成就礼包的 $49.99 / $99.99 高价档需要玩家打到 Lv60 / Lv100 才触发，这些里程碑人数分别 -61% / -76%，导致高价档买家大幅减少。
+      同时<strong style="color:var(--green)">前 Lv30 基本持平</strong>——所以问题不在"挖孔机制本身变难"，更像是 <strong>Lv40-60 段的难度曲线 / 道具投放 / 产出节奏</strong> 出现了变化。
     </p>
   </div>
 
@@ -465,12 +465,12 @@ code { background: var(--surface-2); border: 1px solid var(--border); padding: 1
   <h2>六、关卡通关分析</h2>
 
   <div class="alert-box" style="margin-top:-8px;">
-    <div class="alert-title">📖 数据口径说明（仅本期有效）</div>
+    <div class="alert-title">📖 数据口径说明</div>
     <p>
-      本期 <code>ods_user_task.status=1</code> 埋点在客户端版本中写入链路异常、Datain 记录不到，
-      临时改用 <code>ods_user_event.event_name='digkeys_start_level'</code>（"开始关卡"事件）计算：
-      <strong>"完成第 N 关" = 到达第 (N+1) 关的玩家数</strong>（能到下一关说明上一关已通过）。
-      5 期数据也用相同口径重新查询，确保两期对比一致。
+      <strong>6 期口径：</strong>本期 <code>ods_user_task.status=1</code> 埋点在客户端版本中写入链路异常、Datain 记录不到，
+      临时改用 <code>ods_user_event.event_name='digkeys_start_level'</code>（"开始关卡"事件）计算，按 <strong>2174 表 A_INT_id → A_INT_level 真实关卡号</strong> 映射。
+      <strong>"完成第 N 关" = 启动 2174 中的下一行</strong>（挖孔 N+1 或紧接其后的奖励关卡）；完成 Lv100 因事件尾部数据不完整，改用<strong>节日期间获得道具 <code>11119897</code>（主城皮肤）的人数</strong>。<br>
+      <strong>5 期口径：</strong>用标准 <code>ods_user_task</code> + <code>status=1</code> 任务 SQL，按 2174 的 A_INT_task_id 映射到真实关卡。<br>
       <strong style="color:var(--cyan)">程序端下期会修复，后续回归沿用原 status=1 查询即可</strong>。
     </p>
   </div>
@@ -478,18 +478,18 @@ code { background: var(--surface-2); border: 1px solid var(--border); padding: 1
   <div class="kpi-grid" style="grid-template-columns: repeat(3,1fr);">
     <div class="kpi-card">
       <div class="kpi-label">完成60关（行军特效）</div>
-      <div class="kpi-value orange">777</div>
-      <div class="kpi-sub">5期 1,028 · <strong style="color:var(--red)">-24.4%</strong></div>
+      <div class="kpi-value orange">241</div>
+      <div class="kpi-sub">5期 616 · <strong style="color:var(--red)">-60.9%</strong></div>
     </div>
     <div class="kpi-card">
       <div class="kpi-label">完成100关（主城皮肤）</div>
-      <div class="kpi-value red">34</div>
-      <div class="kpi-sub">5期 178 · <strong style="color:var(--red)">-80.9%</strong></div>
+      <div class="kpi-value red">26</div>
+      <div class="kpi-sub">5期 110 · <strong style="color:var(--red)">-76.4%</strong> · 道具 11119897 获得</div>
     </div>
     <div class="kpi-card">
-      <div class="kpi-label">完成奖励15关(进循环)</div>
+      <div class="kpi-label">进入循环关卡（完成Lv100后）</div>
       <div class="kpi-value purple">25</div>
-      <div class="kpi-sub">5期 110 · <strong style="color:var(--red)">-77.3%</strong></div>
+      <div class="kpi-sub">5期 84 · <strong style="color:var(--red)">-70.2%</strong> · 启动循环-1</div>
     </div>
   </div>
 
@@ -503,52 +503,61 @@ code { background: var(--surface-2); border: 1px solid var(--border); padding: 1
   <table>
     <thead><tr><th>完成第N关</th><th>5期·科技节</th><th>6期·复活节</th><th>变化</th><th>备注</th></tr></thead>
     <tbody>
-      <tr><td class="label-col">第1关</td><td>13,915</td><td class="green">14,927</td><td class="green">+7.3%</td><td>首关通关率 62.2%→63.7%</td></tr>
+      <tr><td class="label-col">第1关</td><td>13,915</td><td class="green">14,927</td><td class="green">+7.3%</td><td>首关通关率持平</td></tr>
       <tr><td class="label-col">第5关</td><td>12,381</td><td class="green">13,632</td><td class="green">+10.1%</td><td>前期更活跃</td></tr>
-      <tr><td class="label-col">第10关</td><td>7,831</td><td class="green">11,216</td><td class="green">+43.2%</td><td>6期前期断崖更缓</td></tr>
-      <tr><td class="label-col">第20关</td><td>6,946</td><td>7,302</td><td class="green">+5.1%</td><td>持平</td></tr>
-      <tr><td class="label-col">第30关</td><td>6,398</td><td>6,368</td><td>-0.5%</td><td>持平</td></tr>
-      <tr><td class="label-col">第40关 <span class="tag tag-orange">分水岭</span></td><td>4,596</td><td>4,379</td><td class="orange">-4.7%</td><td>6期开始掉队</td></tr>
-      <tr><td class="label-col">第50关</td><td>2,586</td><td class="orange">2,183</td><td class="orange">-15.6%</td><td>差距扩大</td></tr>
-      <tr><td class="label-col">第60关 <span class="tag tag-red">里程碑</span></td><td>1,028</td><td class="red">777</td><td class="red">-24.4%</td><td>行军特效奖励</td></tr>
-      <tr><td class="label-col">第70关</td><td>621</td><td class="red">245</td><td class="red">-60.5%</td><td>显著断崖</td></tr>
-      <tr><td class="label-col">第80关</td><td>320</td><td class="red">84</td><td class="red">-73.8%</td><td>—</td></tr>
-      <tr><td class="label-col">第90关</td><td>225</td><td class="red">46</td><td class="red">-79.6%</td><td>—</td></tr>
-      <tr><td class="label-col">第100关 <span class="tag tag-red">里程碑</span></td><td>178</td><td class="red">34</td><td class="red">-80.9%</td><td>主城皮肤奖励</td></tr>
+      <tr><td class="label-col">第10关</td><td>7,678</td><td class="green">9,852</td><td class="green">+28.3%</td><td>6期前期断崖更缓</td></tr>
+      <tr><td class="label-col">第20关</td><td>6,780</td><td>7,014</td><td class="green">+3.5%</td><td>持平</td></tr>
+      <tr><td class="label-col">第30关</td><td>5,952</td><td>5,854</td><td>-1.6%</td><td>持平</td></tr>
+      <tr><td class="label-col">第40关 <span class="tag tag-orange">分水岭</span></td><td>2,915</td><td>2,532</td><td class="orange">-13.1%</td><td>6期开始掉队</td></tr>
+      <tr><td class="label-col">第50关</td><td>1,028</td><td class="orange">780</td><td class="orange">-24.1%</td><td>差距扩大</td></tr>
+      <tr><td class="label-col">第60关 <span class="tag tag-red">里程碑</span></td><td>616</td><td class="red">241</td><td class="red">-60.9%</td><td>行军特效奖励</td></tr>
+      <tr><td class="label-col">第70关</td><td>241</td><td class="red">56</td><td class="red">-76.8%</td><td>显著断崖</td></tr>
+      <tr><td class="label-col">第80关</td><td>209</td><td class="red">44</td><td class="red">-78.9%</td><td>—</td></tr>
+      <tr><td class="label-col">第90关</td><td>145</td><td class="red">32</td><td class="red">-77.9%</td><td>—</td></tr>
+      <tr><td class="label-col">第100关 <span class="tag tag-red">里程碑</span></td><td>110</td><td class="red">26</td><td class="red">-76.4%</td><td>主城皮肤奖励（道具 11119897 获得数）</td></tr>
     </tbody>
   </table>
 
   <p style="font-size:0.88rem;color:var(--text-dim);margin-top:8px;">
     <strong style="color:var(--accent)">关键观察：</strong>
-    6 期在前 30 关的完成数全面优于 5 期（第10关 +43.2%），<strong>说明前期体验和参与意愿更好</strong>；
-    从 <strong style="color:var(--orange)">第 40 关开始出现拐点</strong>，到 60 关差距扩大到 -24%，70+ 关骤降到 -60%~-80%。
+    6 期在前 30 关的完成数全面优于或持平 5 期（第10关 +28.3%），<strong>说明前期体验和参与意愿更好</strong>；
+    从 <strong style="color:var(--orange)">第 40 关开始出现拐点</strong>，到 60 关差距扩大到 -61%，70+ 关骤降到 -77%~-79%。
     <strong>问题是中后期关卡的通关效率，不是活动入口。</strong> 可能原因：
     ① 挂机产出/道具投放在 40-60 关段不足；② 关卡难度在该区间跳变；③ 主城皮肤奖励吸引力不如 5 期科技节主题。
   </p>
 
   <h3 class="sub-title">奖励关卡 & 循环关卡</h3>
+  <p style="font-size:0.85rem;color:var(--text-dim);margin:-6px 0 10px;">
+    <strong>结构说明：</strong>奖励关卡共 15 关，<strong>穿插在挖孔 Lv5/10/15/.../Lv70/Lv80 之后</strong>（不是 Lv100 之后）。每个奖励关卡 <strong>进入时发放免费奖励、通关后发放付费奖励</strong>，两套 task_id 对应同一组 15 关的不同奖励节点。循环关卡 1~5 在 <strong>完成 Lv100 之后</strong>进入。
+  </p>
   <table>
     <thead><tr><th>阶段</th><th>完成人数 (5期)</th><th>完成人数 (6期)</th><th>说明</th></tr></thead>
     <tbody>
-      <tr><td class="label-col">完成 100 关（到达奖励1）</td><td>178</td><td class="red">34</td><td>-80.9% · 需打完普通 1-100 关才进入奖励阶段</td></tr>
-      <tr><td class="label-col">完成奖励 5 关（到达奖励6）</td><td>145</td><td>30</td><td>-79.3%</td></tr>
-      <tr><td class="label-col">完成奖励 10 关（到达奖励11）</td><td>122</td><td>29</td><td>-76.2%</td></tr>
-      <tr><td class="label-col">完成奖励 15 关（进入循环）</td><td>110</td><td>25</td><td>-77.3% · 循环关卡准入门槛</td></tr>
-      <tr><td class="label-col">完成循环 4 关</td><td>55</td><td class="red">8</td><td>-85.5% · 6期循环参与极少</td></tr>
+      <tr><td class="label-col">完成 Lv100（可进循环）</td><td>110</td><td class="red">26</td><td>-76.4% · 道具 11119897 获得数</td></tr>
+      <tr><td class="label-col">启动循环-1（进入循环）</td><td>84</td><td class="red">25</td><td>-70.2%</td></tr>
+      <tr><td class="label-col">启动循环-3</td><td>84</td><td class="red">17</td><td>-79.8%</td></tr>
+      <tr><td class="label-col">启动循环-5</td><td>84</td><td class="red">8</td><td>-90.5%</td></tr>
     </tbody>
   </table>
   <p style="font-size:0.88rem;color:var(--text-dim);margin-top:8px;">
-    <strong>循环关卡需先完成 100 关 + 15 奖励关卡才能进入</strong>——5 期同结构下 110 人进入循环（并有 55 人打到第 4 循环），6 期仅 25 人进入、8 人打到第 4 循环，<strong style="color:var(--red)">-85%</strong>。
-    由于 6 期完成 100 关仅 34 人，循环关卡上游漏斗严重断裂，"服务人群"大幅缩水。
+    <strong>循环关卡需先完成 Lv100 才能进入</strong>——5 期 84 人进入循环、6 期仅 25 人，<strong style="color:var(--red)">-70.2%</strong>。
+    6 期循环关卡 1→5 递减 25→20→17→12→8，越往后活跃越少；5 期循环所有 5 关任务计数恒为 84（task status=1 的聚合口径，无每次启动的衰减）。
+    由于 6 期完成 Lv100 仅 26 人，循环关卡上游漏斗严重断裂，"服务人群"大幅缩水。
   </p>
 </section>
 
 <!-- ================== 关卡奖励付费分析 ================== -->
 <section>
   <h2>七、关卡进度 × 付费分析</h2>
+  <div class="alert-box" style="border-color:var(--yellow);margin-top:-8px;">
+    <div class="alert-title" style="color:var(--yellow)">⚠ 本段分段口径遗留说明</div>
+    <p style="font-size:0.85rem;">
+      下表按玩家"最远到达关卡"分段。<strong>原分段 SQL 使用了 level_cfg_id 偏移代替真实关卡号</strong>——例如"完成 60~99 关"段对应的实际是 level_cfg_id 21740415~21740454（2174 id 偏移 60~99），涵盖挖孔关卡 51~挖孔关卡 85 + 夹在其中的奖励关卡。与本报告漏斗表的"真实 Lv60 完成 241 人"口径存在差异。<strong>分段总人数（23,441）与各段收入仍有效</strong>，但"Lv60 里程碑人数"请以漏斗表为准。如需严格按真实关卡号重分段，需重跑一次 SQL。
+    </p>
+  </div>
   <p style="font-size:0.88rem;color:var(--text-dim);margin-bottom:20px;">
-    按玩家本期最高到达关卡分段分析付费行为（基于 <code>digkeys_start_level</code> 事件，即"最远到达第 N 关"）。
-    6 期收入高度集中在完成 60+ 关的玩家，中后期通关率下滑是成就礼包 -42.7% 的直接原因。
+    按玩家本期最高到达关卡分段分析付费行为（基于 <code>digkeys_start_level</code> 事件）。
+    6 期收入高度集中在中高阶关卡玩家，中后期通关率下滑是成就礼包 -42.7% 的直接原因。
   </p>
 
   <table>
@@ -641,11 +650,11 @@ code { background: var(--surface-2); border: 1px solid var(--border); padding: 1
   </div>
 
   <p style="font-size:0.88rem;color:var(--text-dim);margin-top:12px;">
-    <strong style="color:var(--accent)">关键发现：</strong><br>
-    ① <strong style="color:var(--red)">777 名完成 60 关以上的玩家（3.3%）贡献 $120,126（85.8% 收入）</strong>——6 期核心付费段和 5 期（1,028 人 $172,700 83.2%）结构一致，但<strong style="color:var(--red)">人数少 24%，收入少 30%</strong>。<br>
-    ② <strong>完成 100 关以上的 34 人贡献 $44,858（32.0%）</strong>，人均 ARPU $1,152。5 期同段 110 人贡献 $83,904（40.4%）。<strong>本期 100 关完成人数 -81%</strong>，高 ARPU 玩家的流失是成就礼包高价档 -71%（$99.99 档）的直接原因。<br>
-    ③ <strong style="color:var(--green)">完成 30~59 关的 5,591 名玩家付费率 27.5%、人均 $3.35</strong>——这部分主要消费 锚点 $0.99/$2.99 和存钱罐/集结。本期这段人数和 5 期相当，贡献了锚点礼包 +6.8% 和存钱罐/集结的付费覆盖。<br>
-    ④ <strong>结论：收入下滑 -32.5% 完全集中在"完成 60 关以上"的玩家段</strong>（-$52,574 ≈ 下滑 $67,470 的 78%）。<strong>修复 40-60 关通关门槛是本期最高回报的优化点</strong>。
+    <strong style="color:var(--accent)">关键发现（按原分段口径）：</strong><br>
+    ① <strong style="color:var(--red)">高阶段（旧口径"完成60关以上"）777 名玩家（3.3%）贡献 $120,126（85.8% 收入）</strong>——结构与 5 期一致，人数/收入双降。<br>
+    ② <strong>高阶段中"完成100关以上"34 人贡献 $44,858（32.0%）</strong>，人均 ARPU $1,152。5 期同段 110 人贡献 $83,904（40.4%）。<strong>真实 Lv100 完成仅 26 人（道具 11119897 获得数）</strong>，高 ARPU 玩家流失是成就礼包高价档 -71%（$99.99 档）的直接原因。<br>
+    ③ <strong style="color:var(--green)">中阶段（旧口径"完成30~59关"）5,591 名玩家付费率 27.5%、人均 $3.35</strong>——主要消费锚点 $0.99/$2.99 和存钱罐/集结。本段人数和 5 期相当，贡献了锚点 +6.8% 和存钱罐/集结的付费覆盖。<br>
+    ④ <strong>结论：收入下滑 -32.5% 几乎全部集中在高阶段玩家</strong>（-$52,574 ≈ 下滑 $67,470 的 78%）。<strong>修复 40-60 关通关门槛是本期最高回报的优化点</strong>。
   </p>
 </section>
 
@@ -659,8 +668,8 @@ code { background: var(--surface-2); border: 1px solid var(--border); padding: 1
     </div>
   </div>
   <p style="font-size:0.88rem;color:var(--text-dim);margin-top:8px;">
-    <strong style="color:var(--green)">6 期曲线在前 30 关明显高于 5 期</strong>（完成 Lv10 11,216 vs 5期 7,831，+43%），说明活动入口体验和前期内容 6 期更好。
-    两条曲线在 <strong style="color:var(--orange)">第 30~40 关交汇</strong>，40 关后 6 期开始掉队，60 关 -24%，80 关 -74%，100 关 -81%。
+    <strong style="color:var(--green)">6 期曲线在前 30 关明显高于 5 期</strong>（完成 Lv10 9,852 vs 5期 7,678，+28%），说明活动入口体验和前期内容 6 期更好。
+    两条曲线在 <strong style="color:var(--orange)">第 30 关交汇</strong>，40 关后 6 期开始掉队，60 关 -61%，80 关 -79%，100 关 -76%。
     这种"前高后低"的漏斗形态与 1-4 期明显不同——说明本期问题是 <strong>40-60 关区间的通关门槛改变</strong>，
     而非整体难度飙升或活动质量下降。
   </p>
@@ -672,22 +681,22 @@ code { background: var(--surface-2); border: 1px solid var(--border); padding: 1
 
   <h3 class="sub-title">核心发现</h3>
   <ol class="insight-list">
-    <li><strong style="color:var(--red)">前期参与度更好，但 40-60 关区间通关率断崖</strong>：完成 Lv10 同比 +43%、Lv30 持平、Lv40 -4.7%、<strong>Lv60 -24.4%、Lv80 -73.8%、Lv100 -80.9%</strong>。核心问题在 <strong>40-60 关的难度曲线 / 道具投放 / 产出节奏</strong>，而不是首关或前期内容</li>
+    <li><strong style="color:var(--red)">前期参与度更好，但 40-60 关区间通关率断崖</strong>：完成 Lv10 同比 +28%、Lv30 -1.6%、Lv40 -13%、<strong>Lv60 -60.9%、Lv80 -78.9%、Lv100 -76.4%</strong>。核心问题在 <strong>40-60 关的难度曲线 / 道具投放 / 产出节奏</strong>，而不是首关或前期内容</li>
     <li><strong>活动总收入 $140,065，环比 5期 -32.5%（-$67,470）</strong>：成就礼包 -$67,497（-42.7%）是唯一下滑来源；锚点 +6.8%、存钱罐 -9.8%、集结 -24.4%</li>
-    <li><strong>收入下滑 78% 来自"完成 60 关以上"的玩家段</strong>：该段 777 人贡献 $120,126（85.8%），5 期同段 1,028 人贡献 $172,700——人数 -24%、收入 -30%，成就礼包高价档（$49.99 -63% / $99.99 -71%）正对应这部分玩家流失</li>
+    <li><strong>中后期里程碑玩家流失</strong>：完成 Lv60 人数从 616 降到 241（-61%），完成 Lv100 从 110 降到 26（-76%）——成就礼包高价档（$49.99 -63% / $99.99 -71%）的下滑直接对应这部分玩家流失</li>
     <li><strong>大R -36%、超R -50%</strong>：高端付费人数显著流失；但留下来的超R 人均 $1,053 反而比 5 期 $804 高 31%——说明留下的超R 消费意愿更猛</li>
-    <li><strong>完成 100 关仅 34 人</strong>（5期 178）、<strong>完成循环 25 人</strong>（5期 110）：主城皮肤奖励触发人数 -80%，循环关卡因上游漏斗失去"服务人群"</li>
+    <li><strong>完成 Lv100 仅 26 人</strong>（5期 110）、<strong>进入循环 25 人</strong>（5期 84）：主城皮肤奖励触发人数 -76%，循环关卡因上游漏斗失去"服务人群"</li>
     <li><strong>D6/D7 末段反弹</strong>：D5 触底 $15,570 → D6 $19,899 → D7 $24,620，尾段锚点 99.99 被超R 补货 $16,498，证明末端购买力真实存在</li>
-    <li><strong>前期体验实际上更好</strong>：进入活动 23,445 人（+4.8%）、完成首关 14,927 人（+7.3%）、完成 Lv10 增加 43%——活动入口和前期内容设计不是问题</li>
-    <li><strong>奖励关卡（付费/免费）参与比仍是 1:1</strong>：与 5 期结构一致，免费奖励线对关卡参与无裂变效应，两期都这样，属于设计预期的"镜像产出"</li>
+    <li><strong>前期体验实际上更好</strong>：进入活动 23,445 人（+4.8%）、完成首关 14,927 人（+7.3%）、完成 Lv10 +28%——活动入口和前期内容设计不是问题</li>
+    <li><strong>奖励关卡结构：15 关穿插在 Lv5~Lv80 之间</strong>，进入给免费奖励、通关给付费奖励；不是"付费 15 + 免费 15"共 30 个独立关卡</li>
     <li><strong>下架两个成就礼包</strong>（2013505015 / 017）：是 6 期相对 5 期唯一的配置改动</li>
   </ol>
 
   <h3 class="sub-title">问题与风险</h3>
   <ol class="insight-list risk-list">
     <li><strong>40-60 关段通关效率是最大风险</strong>——本期损失估算：若中后期通关率回到 5 期水平，成就礼包可多回收约 <strong>$50,000~$65,000</strong>（对应成就礼包 -$67K 的 70%~95%）</li>
-    <li><strong>完成 100 关 -81%</strong>：主城皮肤这种最高价值奖励的吸引力大打折扣，下一期不修复会有"末端黑洞"效应</li>
-    <li><strong>循环关卡机制失效</strong>：本意延长高玩生命周期，但 100 关通关人数不足 40 人，循环关卡沦为摆设</li>
+    <li><strong>完成 Lv100 -76%</strong>：主城皮肤这种最高价值奖励的吸引力大打折扣，下一期不修复会有"末端黑洞"效应</li>
+    <li><strong>循环关卡机制失效</strong>：本意延长高玩生命周期，但 Lv100 通关仅 26 人、进入循环 25 人，循环关卡沦为摆设</li>
     <li><strong>集结 D1 下滑 41%</strong>：开服首日触发节奏偏弱，属于独立问题（D1 集结礼包触发与关卡无关）</li>
   </ol>
 </section>
@@ -705,7 +714,7 @@ code { background: var(--surface-2); border: 1px solid var(--border); padding: 1
   <div class="opt-group opt-p1">
     <h4>P1 — 下期优化</h4>
     <ul>
-      <li><strong>40-60 关难度 / 投放调整</strong>——把通关 60 关人数从 777 回拉到 1,000+，预期回收 $20-30k 成就礼包收入</li>
+      <li><strong>40-60 关难度 / 投放调整</strong>——把完成 Lv60 的人数从 241 回拉到 5 期水平 616+，预期回收 $20-30k 成就礼包收入</li>
       <li><strong>100 关奖励吸引力评估</strong>——主城皮肤在科技节（5 期）更受欢迎，复活节主题若不如科技节对大R 吸引力强，可以考虑对齐资源美术或换高价值奖励</li>
       <li><strong>循环关卡前置门槛降低</strong>——当前需完成 115 关才能进入循环；若降低到 60 关或 80 关，会有数百玩家可用</li>
       <li><strong>末端冲刺提醒</strong>——D6/D7 自然反弹证明末端购买力，下期主动推倒计时 / 限时加码礼包放大这一窗口</li>
@@ -742,10 +751,9 @@ code { background: var(--surface-2); border: 1px solid var(--border); padding: 1
   <table>
     <thead><tr><th>关卡类型</th><th>任务ID范围</th><th>数量</th><th>说明</th></tr></thead>
     <tbody>
-      <tr><td class="label-col">普通关卡 1~100</td><td>211584701 ~ 211584800</td><td>100</td><td>5期延续</td></tr>
-      <tr><td class="label-col">付费奖励关卡 1~15</td><td>211584801 ~ 211584815</td><td>15</td><td>5期延续</td></tr>
-      <tr><td class="label-col">免费奖励关卡 1~15</td><td>211584816 ~ 211584830</td><td>15</td><td>5期延续</td></tr>
-      <tr><td class="label-col">循环关卡 1~5</td><td>211584831 ~ 211584835</td><td>5</td><td>5期延续</td></tr>
+      <tr><td class="label-col">普通关卡 1~100</td><td>211584701 ~ 211584800（paid task）</td><td>100</td><td>5期延续</td></tr>
+      <tr><td class="label-col">奖励关卡 1~15（穿插在 Lv5/10/.../Lv70/Lv80 之后）</td><td>211584801 ~ 211584815（paid）/ 211584816 ~ 211584830（free）</td><td>15</td><td>同一组 15 关：进入发 free 奖励，通关发 paid 奖励</td></tr>
+      <tr><td class="label-col">循环关卡 1~5（完成 Lv100 后进入）</td><td>211584831 ~ 211584835</td><td>5</td><td>5期延续</td></tr>
     </tbody>
   </table>
 
@@ -756,7 +764,9 @@ code { background: var(--surface-2); border: 1px solid var(--border); padding: 1
       <tr><td class="label-col" style="white-space:nowrap;">触达用户</td><td style="font-size:0.75rem;word-break:break-all;">SELECT COUNT(DISTINCT user_id) FROM v1041.ods_user_click WHERE partition_date BETWEEN '2026-04-12' AND '2026-04-20' AND control_id='UiActivityMain.ActivityItem_21127575' — 结果 16,280</td></tr>
       <tr><td class="label-col" style="white-space:nowrap;">活动服活跃</td><td style="font-size:0.75rem;word-break:break-all;">WITH s AS (SELECT DISTINCT server_id FROM v1041.ods_user_task WHERE task_id='211584701' AND attribute1='{"event":"21127575"}' AND status=1) SELECT COUNT(DISTINCT l.user_id) FROM v1041.ods_user_login l JOIN s ON l.server_id=s.server_id WHERE l.partition_date BETWEEN '2026-04-13' AND '2026-04-20' — 146 个活动服，26,330 活跃</td></tr>
       <tr><td class="label-col" style="white-space:nowrap;">活动收入</td><td style="font-size:0.75rem;word-break:break-all;">SELECT SUM(pay_price) FROM v1041.ods_user_order WHERE partition_date BETWEEN '2026-04-12' AND '2026-04-20' AND iap_id IN (2013505000_normal..028_normal) AND timestamps >= 1776038400 AND timestamps &lt; 1776643200 — UTC 4/13 00:00 ~ 4/20 00:00</td></tr>
-      <tr><td class="label-col" style="white-space:nowrap;">关卡通关（本期口径）</td><td style="font-size:0.75rem;word-break:break-all;">WITH t AS (SELECT user_id, CAST(json_extract_scalar(event_paramter,'$.level_cfg_id') AS BIGINT) AS level_cfg_id FROM v1041.ods_user_event WHERE partition_date BETWEEN '2026-04-12' AND '2026-04-20' AND event_name='digkeys_start_level') SELECT level_cfg_id, COUNT(DISTINCT user_id) FROM t WHERE level_cfg_id BETWEEN 21740355 AND 21740474 GROUP BY level_cfg_id — "完成第N关"=到达第N+1关人数</td></tr>
+      <tr><td class="label-col" style="white-space:nowrap;">关卡通关（6期事件口径）</td><td style="font-size:0.75rem;word-break:break-all;">WITH t AS (SELECT user_id, CAST(json_extract_scalar(event_paramter,'$.level_cfg_id') AS BIGINT) AS level_cfg_id FROM v1041.ods_user_event WHERE partition_date BETWEEN '2026-04-12' AND '2026-04-20' AND event_name='digkeys_start_level') SELECT level_cfg_id, COUNT(DISTINCT user_id) FROM t WHERE level_cfg_id BETWEEN 21740355 AND 21740474 GROUP BY level_cfg_id ORDER BY level_cfg_id — 返回 120 行 (id, count)，按 2174 的 A_INT_id→A_INT_level/N_STR_comment 映射到真实关卡号；"完成第N关" = 启动 2174 下一行</td></tr>
+      <tr><td class="label-col" style="white-space:nowrap;">完成 Lv100（道具获得口径）</td><td style="font-size:0.75rem;word-break:break-all;">SELECT COUNT(DISTINCT user_id) FROM v1041.dl_user_asset_reason_detail_d WHERE partition_date BETWEEN '2026-04-12' AND '2026-04-20' AND asset_id='11119897' AND add_num&gt;0 — 26 人获得主城皮肤，即完成 Lv100 的真实人数</td></tr>
+      <tr><td class="label-col" style="white-space:nowrap;">5期 关卡通关（task 口径）</td><td style="font-size:0.75rem;word-break:break-all;">SELECT task_id, COUNT(DISTINCT user_id) FROM v1041.ods_user_task WHERE partition_date BETWEEN '2026-03-27' AND '2026-04-03' AND task_id BETWEEN '211584701' AND '211584835' AND attribute1 LIKE '%21127575%' AND status=1 GROUP BY task_id ORDER BY task_id — 返回 135 行（100 挖孔 paid + 15 奖励 paid + 15 奖励 free + 5 循环），通过 2174 的 A_INT_task_id / A_INT_free_task_id 映射到真实关卡号</td></tr>
     </tbody>
   </table>
 </section>
@@ -867,14 +877,14 @@ new Chart(document.getElementById('chartRlevel'), {
   }
 });
 
-// 5. 普通关卡漏斗对比 5期 vs 6期
+// 5. 普通关卡漏斗对比 5期 vs 6期（2026-04-22 修正：按 2174 真实 task_id→关卡 映射重算）
 new Chart(document.getElementById('chartLevelFunnel'), {
   type: 'bar',
   data: {
     labels: ['Lv1','Lv5','Lv10','Lv20','Lv30','Lv40','Lv50','Lv60','Lv70','Lv80','Lv90','Lv100'],
     datasets: [
-      { label:'5期·科技节', data:[13915,12381,7831,6946,6398,4596,2586,1028,621,320,225,178], backgroundColor:C.cyan+'cc', borderRadius:4 },
-      { label:'6期·复活节', data:[14927,13632,11216,7302,6368,4379,2183,777,245,84,46,34], backgroundColor:C.orange+'cc', borderRadius:4 }
+      { label:'5期·科技节', data:[13915,12381,7678,6780,5952,2915,1028,616,241,209,145,110], backgroundColor:C.cyan+'cc', borderRadius:4 },
+      { label:'6期·复活节', data:[14927,13632,9852,7014,5854,2532,780,241,56,44,32,26], backgroundColor:C.orange+'cc', borderRadius:4 }
     ]
   },
   options: {
@@ -935,8 +945,8 @@ new Chart(document.getElementById('chartSegArpu'), {
   const christmas = [12108,11372,11227,11080,10630,7613,7245,6964,6793,6677,6471,6335,6184,6044,5953,5765,5704,5630,5550,5439,5226,5033,4855,4739,4613,4448,4328,4220,4127,3831,3420,3065,2692,2362,1994,1709,1458,1240,1055,814,722,633,518,436,381,363,327,304,270,248,237,218,207,202,195,193,187,186,185,182,170,146,139,126,122,116,110,100,97,95,92,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null];
   const cny = [13591,12911,12797,12617,12057,8340,7744,7246,6946,6676,6290,6068,5881,5735,5600,5348,5277,5202,5155,5059,4919,4798,4719,4663,4610,4525,4458,4400,4344,4155,3759,3387,3039,2706,2419,2203,1980,1706,1485,1174,1076,997,865,728,620,582,515,466,397,349,329,296,265,250,233,230,227,223,219,214,185,154,127,109,93,87,79,70,70,69,68,65,60,56,56,56,54,52,51,50,50,50,44,43,42,42,42,38,38,38,36,34,32,30,30,29,27,27,27,26];
   const valentine = [13410,12766,12635,12544,12286,9993,9094,8462,8165,7944,7628,7439,7299,7178,7092,6946,6882,6832,6799,6699,6598,6521,6443,6391,6340,6244,5811,5750,5698,5430,5023,4665,4260,3888,3536,3201,2902,2565,2245,1860,1691,1513,1327,1066,930,902,817,734,621,555,546,522,473,452,431,424,419,414,399,395,380,338,323,301,255,253,221,196,185,174,169,163,161,161,159,159,159,157,156,156,156,154,139,128,125,124,122,117,114,111,108,108,98,98,97,97,91,91,90,85];
-  const tech = [13915,13075,12896,12730,12381,10508,8928,8298,8000,7831,7678,7611,7503,7385,7291,7191,7116,7065,7015,6946,6891,6846,6780,6750,6659,6584,6509,6458,6412,6398,6329,6255,6228,6189,5952,5923,5587,5258,4911,4596,4261,4250,4023,3725,3475,3228,2915,2897,2760,2586,2358,2045,1819,1818,1774,1605,1445,1211,1028,1028,1014,943,823,772,694,693,690,680,652,621,616,616,578,518,482,438,374,374,364,320,299,286,241,241,230,230,227,225,225,225,225,215,209,209,209,209,209,200,185,178];
-  const easter = [14927,14201,13980,13807,13632,13292,13022,12820,12331,11216,9852,9254,8649,8290,8056,7876,7693,7534,7414,7302,7211,7129,7014,6981,6835,6687,6557,6477,6392,6368,6291,6203,6133,6075,5854,5825,5470,5086,4709,4379,4062,4038,3778,3482,3205,2923,2532,2521,2354,2183,1962,1647,1416,1413,1333,1207,1088,896,780,777,750,669,544,477,407,406,358,308,271,245,241,240,211,171,146,124,103,103,96,84,67,64,56,56,50,49,48,46,46,46,46,45,45,44,44,44,41,40,37,34];
+  const tech = [13915,13075,12896,12730,12381,8928,8298,8000,7831,7678,7503,7385,7291,7191,7116,7015,6946,6891,6846,6780,6659,6584,6509,6458,6412,6329,6255,6228,6189,5952,5587,5258,4911,4596,4261,4023,3725,3475,3228,2915,2760,2586,2358,2045,1819,1774,1605,1445,1211,1028,1014,943,823,772,694,690,680,652,621,616,578,518,482,438,374,364,320,299,286,241,230,230,227,225,225,225,225,215,209,209,209,209,200,185,178,170,169,158,150,145,138,134,127,127,122,120,118,117,112,110];
+  const easter = [14927,14201,13980,13807,13632,13022,12820,12331,11216,9852,8649,8290,8056,7876,7693,7414,7302,7211,7129,7014,6835,6687,6557,6477,6392,6291,6203,6133,6075,5854,5470,5086,4709,4379,4062,3778,3482,3205,2923,2532,2354,2183,1962,1647,1416,1333,1207,1088,896,780,750,669,544,477,407,358,308,271,245,241,211,171,146,124,103,96,84,67,64,56,50,49,48,46,46,46,46,45,45,44,44,41,40,37,34,34,33,32,32,32,32,31,30,30,29,28,28,28,27,26];
   new Chart(document.getElementById('chartHistoryLevels'), {
     type: 'line',
     data: {
