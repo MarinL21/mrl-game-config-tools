@@ -22,7 +22,7 @@ description: >-
 
 ## 知识库正本
 
-**位置**: `/Users/marinl/游戏运营策划工具/docs/festival_art_brief/`
+**位置**: `knowledge/`（skill 自带，13 份节日 MD + 竞品样本）
 
 | 文件 | 节日 | 循环身份 |
 |------|------|---------|
@@ -46,13 +46,13 @@ description: >-
 
 ---
 
-## 数据源（需要核对或补新样本时）
+## 数据源（知识库已冻结在 `knowledge/` 里，这里仅给年末维护用）
 
-| 表 | 用途 | ID / 路径 |
-|----|------|-----------|
+| 表 | 用途 | ID |
+|----|------|-----|
 | 节日本地化文案主表 | 所有节日中文原档按月归档 | `1pPlo0ccRBmlQj9OFWnGXhQg1wLiihfQfSxEsoKA0hLA` |
-| 本地压缩版 | 每节日紧凑表（方便快速扫） | `/Users/marinl/游戏运营策划工具/output/festival_raw/compact/*.md` |
-| 本地原始 JSON | 如果 compact 列丢数据，回源这里 | `/Users/marinl/游戏运营策划工具/output/festival_raw/*.json` |
+
+每年新增 1-2 轮节日后，从主表 dump 最新原档，手动补一段进对应 `knowledge/<NN>_<节日>.md` 的"档期演变表"和"元素库"。脚本化的回源工具保留在作者本地仓库，未随 skill 发布。
 
 ---
 
@@ -61,7 +61,7 @@ description: >-
 ### Step 0 自主学习（必做，不跳过）
 
 1. **识别目标节日**：从用户请求里提取节日名（"科技节""情人节"……）
-2. **读对应 MD**：`/Users/marinl/游戏运营策划工具/docs/festival_art_brief/<NN>_<节日>.md`
+2. **读对应 MD**：`knowledge/<NN>_<节日>.md`（相对 skill 根目录）
 3. 确认：循环身份、过去 2 年主题方向、已用过的创意方向、历年命名样本
 4. **向用户汇报**你读到的现状（1-2 段），等确认再产出
 
@@ -189,7 +189,7 @@ cat > /tmp/art_brief_spec.json <<'EOF'
 EOF
 
 # 2. 调脚本建 tab（成功后打印 tab URL）
-python3 /Users/marinl/游戏运营策划工具/.claude/skills/p2-festival-art-brief/scripts/create_art_brief_tab.py /tmp/art_brief_spec.json
+python3 scripts/create_art_brief_tab.py /tmp/art_brief_spec.json   # 在 skill 根目录执行
 ```
 
 **脚本行为**：
@@ -273,15 +273,11 @@ https://docs.google.com/spreadsheets/d/1pPlo0ccRBmlQj9OFWnGXhQg1wLiihfQfSxEsoKA0
 
 ## 知识库维护
 
-年末或新版本上线后，用以下流程刷新：
+`knowledge/` 里的 MD 是本 skill 的核心，定期（建议每半年 / 年末）要增量更新：
 
-```bash
-cd /Users/marinl/游戏运营策划工具/output/festival_raw
-python3 _dump.py    # 重新拉 Google Sheet 所有节日 tab
-python3 _compact.py # 重跑 compact
-```
-
-然后人工增量更新对应节日 MD 的"档期演变表"和"元素库"。
+1. 从节日本地化主表 `1pPlo0ccRBmlQj9OFWnGXhQg1wLiihfQfSxEsoKA0hLA` dump 最新档期
+2. 按 `knowledge/README.md` 的模板，往对应节日 MD 里补：新一轮的档期演变表行 + 命名样本 + 元素库 + 避坑项
+3. 本 skill 作者（liusiyi@happyfactory.com）有回源脚本，如需自动化刷新请提 issue / 直接联系
 
 ---
 
