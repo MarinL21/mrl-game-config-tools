@@ -33,10 +33,11 @@ ANCHORS_DIR = SKILL_DIR / "anchors"
 PROJECT_ROOT = SKILL_DIR.parent.parent.parent             # 项目根（游戏运营策划工具/）
 OUTPUT_ROOT = PROJECT_ROOT / "output" / "grfal"
 
-STYLE_SUFFIX = {
-    "ui": "保留参考竞品的整体构图、UI 节奏和视觉层级，但替换为 P2 卡通 3D 游戏画风，干净描边，丰富粒子光效，居中主体，画面协调",
-    "chest": "保持参考图的宝箱结构比例、金色描边、面板装饰位和 P2 卡通 3D 材质感；白色背景；居中构图；道具图标风格；不要文字",
-    "item": "保持参考图的 P2 卡通 3D 道具画风：金色镶边/高对比度光影/顶光/圆润体积感；白色背景；居中主体；道具图标风格；不要文字",
+# 一句话风格指令，放在 prompt 最前面
+STYLE_PREFIX = {
+    "ui": "保留参考竞品的整体构图、UI 节奏和视觉层级，但替换为 P2 卡通 3D 游戏画风。图标上不要有任何文字。",
+    "chest": "仅借鉴图片的绘画风格，生成道具自选箱。图标上不要有任何文字。",
+    "item": "仅借鉴图片的绘画风格，生成道具图标。图标上不要有任何文字。",
 }
 
 BATCH_PER_CALL = 4     # 单次调用最多 4 张
@@ -167,10 +168,9 @@ def list_subcategories(module: str) -> list[str]:
 
 
 def build_prompt(module: str, user_prompt: str, theme: str | None) -> str:
-    parts = [user_prompt.strip()]
+    parts = [STYLE_PREFIX[module], user_prompt.strip()]
     if theme:
         parts.append(f"主题：{theme}")
-    parts.append(STYLE_SUFFIX[module])
     return "。".join(p for p in parts if p)
 
 
@@ -216,7 +216,7 @@ def main():
     ap.add_argument("--anchor", help="逗号分隔的显式锚点文件名，优先级最高，绕过 festival 过滤。例：151105075.png")
     ap.add_argument("--exclude", help="逗号分隔的排除文件名（随机抽取时剔除）")
     ap.add_argument("--ref-count", type=int, default=0,
-                    help="随机挑几张锚点参考图；0=自动（有 subcategory 时 3，否则 1）")
+                    help="随机挑几张锚点参考图；0=默认 3 张")
     ap.add_argument("--engines", default="gemini",
                     help="逗号分隔的引擎键，默认 gemini（Nano Banana 2）单引擎；需要对比可传 gpt,gemini")
     ap.add_argument("--batch", type=int, default=4, help="总张数（会均分到各引擎），默认 4")
@@ -244,8 +244,8 @@ def main():
     if not engines:
         sys.exit("--engines 不能为空")
 
-    # 解析 ref_count 自动默认
-    ref_count = args.ref_count or (3 if args.subcategory else 1)
+    # 解析 ref_count 自动默认（每次 3 张差异化 ref）
+    ref_count = args.ref_count or 3
     explicit_names = [s.strip() for s in args.anchor.split(",") if s.strip()] if args.anchor else None
     exclude_names = [s.strip() for s in args.exclude.split(",") if s.strip()] if args.exclude else None
 
@@ -303,7 +303,9 @@ def main():
         sys.exit("全部批次失败，终止")
 
     # 下载（带 engine 标签）
-    ts = time.strftime("%Y%m%d_%H%M%S")
+    # ts 含 PID 后缀，避免多个并行进程同秒启动时文件名冲突
+    import os as _os
+    ts = time.strftime("%Y%m%d_%H%M%S") + f"_{_os.getpid()}"
     local_dir = OUTPUT_ROOT / "images" / args.module
     local_dir.mkdir(parents=True, exist_ok=True)
     items: list[dict] = []  # [{"path": relpath, "engine": eng}, ...]

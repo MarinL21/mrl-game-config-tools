@@ -232,7 +232,7 @@ def append_batch(
     batch_html = (
         f'<div class="batch">'
         f'<div class="batch-meta">'
-        f'<span><b>{time.strftime("%Y-%m-%d %H:%M", time.strptime(timestamp, "%Y%m%d_%H%M%S"))}</b></span>'
+        f'<span><b>{time.strftime("%Y-%m-%d %H:%M", time.strptime(timestamp[:15], "%Y%m%d_%H%M%S"))}</b></span>'
         f'<span>引擎: <b>{html.escape(engines_label)}</b></span>'
         f'<span>张数: <b>{len(items)}</b></span>'
         f'<span>耗时: <b>{duration_s:.0f}s</b></span>'
