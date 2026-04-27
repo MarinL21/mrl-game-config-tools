@@ -1,13 +1,13 @@
 ---
 name: p2-art-gen
-description: P2 活动美术素材批量生成工具，对接 grfal.tap4fun.com。三个模块：活动界面 UI（用户贴竞品截图 + P2 锚点）、宝箱图标（固定 P2 宝箱锚点池）、活动道具（固定 P2 道具锚点池）。每次 8 张并发 = GPT × 4 + Nano Banana 2（谷歌） × 4 双引擎，自动下载 + 入 gallery.html 分区展示，图片徽章显示引擎来源。支持 13 个引擎（gpt/gemini/seedream/flux/vidu/wan/runway/qwen/ideogram/hunyuan/grok/zimage/firered）。触发：生图、活动 UI 美术、宝箱图标、道具图标、P2 素材生成、grfal。
+description: P2 活动美术素材批量生成工具，对接 ai-art-api.tap4fun.com（REST API，比老 grfal 快 10×）。三个模块：活动界面 UI（用户贴竞品截图 + P2 锚点）、宝箱图标（固定 P2 宝箱锚点池）、活动道具（固定 P2 道具锚点池）。默认工作流 4 风格 × 2 轮 × 每轮 2 张 nano（Nano Banana 2 = 谷歌）= 16 张/批，8 个并行后台带 PID 后缀防撞秒。自动下载 + 入 gallery.html 分区展示。可选引擎：gpt / seedream / flux / qwen。触发：生图、活动 UI 美术、宝箱图标、道具图标、P2 素材生成。
 ---
 
 # p2-art-gen
 
 ## 一句话
 
-"给我画 8 张 P2 风格的 {春节宝箱 / 复活节礼包 UI / 科技节加速道具}" — 脚本自动挑 P2 锚点图、并发调 grfal 生成、下载、入 gallery。
+"给我画 16 张 P2 风格的 {春节宝箱 / 复活节礼包 UI / 科技节加速道具}" — Claude 出 4 个差异化风格 + 主题元素，脚本自动挑合规 P2 锚点、并发调 ai-art-api 生成、下载、入 gallery。
 
 ## ⚠ 核心原则（Claude 给 AI 只做 3 件事）
 
@@ -45,14 +45,16 @@ description: P2 活动美术素材批量生成工具，对接 grfal.tap4fun.com�
 
 ```bash
 cd .claude/skills/p2-art-gen/scripts
-python3 generate.py chest --prompt "火焰节宝箱，熔岩纹理橙红配色" --batch 8
+python3 generate.py chest --subcategory "节日道具自选箱" --festival 春节 \
+    --prompt "金锦祥云风格：主题红绒锦缎+祥云金边+灯笼吊穗+铜钱铆钉；红金配色" \
+    --batch 2
 ```
 
 脚本自动：
-1. 随机挑一张 P2 宝箱锚点（`anchors/chest/` 下 4 张）
-2. 上传到 grfal
-3. 并发跑 2 轮 × 4 张 = 8 张
-4. 下载到 `output/grfal/images/chest/`
+1. 按 `manifest.json` 过滤当前节日合规锚点，随机挑 3 张差异化 ref（`--ref-count 3` 默认）
+2. 上传 ref 到 ai-art-api
+3. 并发调 nanobanana（gemini）出 2 张
+4. 下载到 `output/grfal/images/chest/`，文件名带 PID 后缀防撞秒
 5. 追加到 `output/grfal/gallery.html` 宝箱分区顶部
 
 ### 活动道具
@@ -67,28 +69,26 @@ python3 generate.py item --prompt "加速卡道具，钟表造型" --theme "科�
 python3 generate.py ui --prompt "替换主题为 P2 春节活动" --competitor ~/Downloads/competitor.png
 ```
 
-`ui` 模块会上传两张 ref：你的竞品截图 + 一张 P2 活动面板锚点，让 grfal 同时学构图和画风。
+`ui` 模块会上传两张 ref：你的竞品截图 + 一张 P2 活动面板锚点，让 ai-art-api 同时学构图和画风。
 如只要"完全按竞品画"不加 P2 修饰，用 `--no-p2-anchor`。
 
-### 引擎配置（默认双引擎）
+### 引擎配置
 
-**默认**：`--engines gpt,gemini` → GPT × 4 + Nano Banana 2 × 4 并发。
-grfal API 键 `gemini` 对应的产品实际是**谷歌 Nano Banana 2**（不要叫它 Gemini）。
+**默认单引擎**：`--engines gemini`（= 谷歌 Nano Banana 2）。`gpt` 在节日宝箱/道具场景效果差已弃。
+ai-art-api 键 `gemini` 对应的产品是**谷歌 Nano Banana 2**（不要叫它 Gemini）。
 
 ```bash
-# 单引擎
-python3 generate.py chest --prompt "..." --engines gpt
-python3 generate.py chest --prompt "..." --engines seedream   # 即梦豆包
-python3 generate.py chest --prompt "..." --engines gemini     # Nano Banana 2
+# 默认（推荐）
+python3 generate.py chest --prompt "..." --engines gemini --batch 2
 
-# 自定义组合（总 batch 会均分）
-python3 generate.py chest --prompt "..." --engines gpt,seedream,flux --batch 9  # 3×3
+# 调风格切其它引擎（少用）
+python3 generate.py chest --prompt "..." --engines seedream   # 即梦豆包，国风/红金质感强
+python3 generate.py chest --prompt "..." --engines flux       # Flux Kontext，写实质感
+python3 generate.py chest --prompt "..." --engines qwen       # 阿里千问编辑
 ```
 
-可用引擎键（grfal API 名 / 产品名）：
-`gpt`（OpenAI GPT Image 2）· `gemini`（谷歌 Nano Banana 2）· `seedream`（即梦豆包）·
-`flux`（Flux Max）· `vidu` · `wan`（阿里万象）· `runway` · `qwen`（阿里千问）·
-`ideogram` · `hunyuan`（混元）· `grok` · `zimage` · `firered`（FireRed Edit）
+可用引擎键（ai-art-api 已上线）：
+`gemini`（谷歌 Nano Banana 2，**默认**）· `gpt`（OpenAI GPT Image，已弃）· `seedream`（即梦豆包）· `flux`（Flux Kontext）· `qwen`（阿里千问编辑）。
 
 ### 指定锚点
 
@@ -119,20 +119,20 @@ python3 generate.py chest --subcategory "节日道具自选箱" \
 
 ## 凭据管理
 
-`~/.grfal-auth.json`：
+`~/.ai-art-auth.json`（建议 `chmod 600`）：
 
 ```json
 {
-  "session_cookie": "<grfal_session 的 value>",
-  "base_url": "https://grfal.tap4fun.com"
+  "api_host": "https://ai-art-api.tap4fun.com/v2",
+  "token": "<JWT 持久 token>"
 }
 ```
 
-**过期刷新流程**：session cookie 大约一周一换。当脚本报 401/未认证：
-1. 浏览器登录 `https://grfal.tap4fun.com/v2/`
-2. F12 → Application → Cookies → `grfal.tap4fun.com`
-3. 找 `grfal_session` 那行，复制 value
-4. 覆盖 `~/.grfal-auth.json` 里的 `session_cookie` 字段
+**Token 来源**：浏览器登录 ai-art portal → 右上角头像 → "生成令牌"。是持久 JWT，不像老 grfal cookie 一周一换。
+
+**报 `AiArtAuthError` / 401**：去 portal 重生成 token，覆写文件 `token` 字段。
+
+> macOS + Python 3.14 可能报 `CERTIFICATE_VERIFY_FAILED`。客户端 import 时已自动 `os.environ.setdefault("SSL_CERT_FILE", certifi.where())`，正常无需手动设；仍报错则 `pip install --upgrade certifi`。
 
 ## 锚点库扩充（**唯一来源：AssetsSVN**）
 
@@ -173,24 +173,26 @@ cp output/grfal/images/chest/20260424_120000_03.png .claude/skills/p2-art-gen/an
 .claude/skills/p2-art-gen/
 ├── SKILL.md
 ├── scripts/
-│   ├── grfal_client.py      # 客户端（upload + generate + SSE）
-│   ├── gallery.py            # HTML 画廊模板 + 增量写入
-│   └── generate.py           # 三模块入口 CLI
+│   ├── ai_art_client.py     # 主客户端（REST：upload_image + generate + download，内置 ThreadPoolExecutor）
+│   ├── grfal_client.py      # 老客户端，留作 fallback（ai-art 挂时改一行 import 即可回切）
+│   ├── gallery.py            # HTML 画廊模板 + 增量写入（兼容 PID 后缀文件名）
+│   └── generate.py           # 三模块入口 CLI（STYLE_PREFIX 前置 + --ref-count 3 默认 + ts 加 PID 后缀）
 └── anchors/
-    ├── chest/      # 4 张 P2 宝箱
-    ├── item/       # 13 张 P2 道具
-    └── ui_panel/   # 4 张 P2 活动面板效果图
+    ├── chest/
+    │   └── 节日道具自选箱/  # 13+ 张 P2 自选箱图 + manifest.json（按节日打标签）
+    ├── item/                # 13+ 张 P2 道具
+    └── ui_panel/            # 4 张 P2 活动面板效果图
 ```
 
-输出：
+输出（目录名 `grfal/` 是历史遗留——已迁 ai-art-api 但保留以兼容旧 gallery 链接，不要改）：
 
 ```
 output/grfal/
-├── gallery.html          # 单一持久画廊，三分区累积
+├── gallery.html          # 单一持久画廊，三分区累积，最新批次置顶
 └── images/
     ├── ui/
     ├── chest/
-    └── item/
+    └── item/             # 文件名：YYYYMMDD_HHMMSS_<PID>_<engine>_<idx>.png
 ```
 
 ## 成本
@@ -202,13 +204,15 @@ output/grfal/
 
 | 症状 | 原因 / 处理 |
 |---|---|
-| `GrfalAuthError` | session 过期，按上面流程刷新 |
-| `生成标记失败` | 提示词可能触发安全过滤，改中性词重试 |
-| 长时间无响应 | grfal 队列排队，正常；SSE 会持续心跳 |
+| `AiArtAuthError` / 401 | token 过期或没设，去 ai-art portal 重生成覆写 `~/.ai-art-auth.json` 的 `token` 字段 |
+| `AiArtAPIError: 生成失败: ...` | 提示词触发安全过滤，改中性词重试；或 ref 文件路径不对 |
+| `CERTIFICATE_VERIFY_FAILED` | macOS Python 3.14 SSL 链，客户端已自动 `SSL_CERT_FILE=certifi.where()`，仍报错则 `pip install --upgrade certifi` |
 | 部分批次失败 | 脚本继续收集已成功批次，最终打印失败数 |
+| 出图全跑偏主题 | ref 选错（manifest 节日筛漏？查 `--festival` 是否传对），或 prompt 含形态/位置/造型限定（违反核心原则） |
 
 ## 已知约束
 
 - `ui` 模块强制需要 `--competitor`
-- `ideogram` 引擎只支持 1 张参考图、`zimage` 纯文生图不支持参考
-- gradio 单次请求 batch ≤ 4；脚本内部已拆分并发
+- ai-art-api 的 nanobanana 单次响应 1 张图，client 内置 `ThreadPoolExecutor(max_workers=4)` 自动 fan-out 到 batch 张
+- 节日子分类（带 `manifest.json`）必须传 `--festival`，否则脚本拒绝执行
+- prompt 不带「节日·」前缀（节日由 `--festival` 过滤 manifest）；不写形态/位置/造型限定（违反核心原则）
