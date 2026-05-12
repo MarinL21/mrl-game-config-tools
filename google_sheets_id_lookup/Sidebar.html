@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <meta charset="utf-8">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                   "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+      font-size: 13px;
+      color: #333;
+      padding: 12px;
+      background: #fafafa;
+    }
+
+    /* ---- 搜索栏 ---- */
+    .search-bar { display: flex; gap: 6px; margin-bottom: 10px; }
+    .search-bar input {
+      flex: 1; padding: 8px 10px;
+      border: 1px solid #ddd; border-radius: 6px;
+      font-size: 13px; outline: none;
+    }
+    .search-bar input:focus {
+      border-color: #1a73e8;
+      box-shadow: 0 0 0 2px rgba(26,115,232,.15);
+    }
+    .search-bar button {
+      padding: 8px 10px; border: 1px solid #ddd; border-radius: 6px;
+      background: #fff; cursor: pointer; font-size: 13px; white-space: nowrap;
+    }
+    .search-bar button:hover { background: #f0f0f0; }
+    .search-bar button.primary {
+      background: #1a73e8; color: #fff; border-color: #1a73e8;
+    }
+    .search-bar button.primary:hover { background: #1557b0; }
+
+    /* ---- 历史记录 ---- */
+    .history-bar { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 10px; align-items: center; }
+    .history-bar .label { font-size: 11px; color: #999; margin-right: 2px; }
+    .history-chip {
+      display: inline-flex; align-items: center; gap: 3px;
+      padding: 2px 4px 2px 8px; border-radius: 12px;
+      font-size: 11px; background: #f0f0f0; color: #555;
+      cursor: pointer; border: none;
+    }
+    .history-chip:hover { background: #e0e0e0; }
+    .history-chip .del {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 14px; height: 14px; border-radius: 50%;
+      font-size: 10px; color: #999; cursor: pointer;
+    }
+    .history-chip .del:hover { background: #ccc; color: #333; }
+    .history-clear {
+      font-size: 11px; color: #999; cursor: pointer;
+      border: none; background: none; margin-left: 4px;
+    }
+    .history-clear:hover { color: #d93025; }
+
+    /* ---- 状态 ---- */
+    .empty-state {
+      text-align: center; padding: 40px 20px; color: #999;
+    }
+    .empty-state .icon { font-size: 36px; margin-bottom: 8px; }
+
+    .loading { text-align: center; padding: 24px; color: #666; }
+    .spinner {
+      display: inline-block; width: 18px; height: 18px;
+      border: 2px solid #e0e0e0; border-top-color: #1a73e8;
+      border-radius: 50%; animation: spin .6s linear infinite;
+      margin-right: 8px; vertical-align: middle;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .error-box {
+      background: #fce8e6; color: #d93025;
+      padding: 10px 12px; border-radius: 6px;
+      margin-bottom: 12px; white-space: pre-wrap; font-size: 12px;
+    }
+
+    /* ---- 结果卡片 ---- */
+    .result-card {
+      background: #fff; border: 1px solid #e0e0e0;
+      border-radius: 8px; overflow: hidden; margin-bottom: 12px;
+    }
+    .result-header {
+      padding: 10px 12px; background: #f8f9fa;
+      border-bottom: 1px solid #e0e0e0;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .badge {
+      display: inline-block; padding: 2px 8px; border-radius: 4px;
+      font-size: 11px; font-weight: 600; color: #fff; background: #1a73e8;
+      font-family: monospace;
+    }
+    .table-name { font-weight: 600; font-size: 13px; }
+
+    .result-meta {
+      padding: 8px 12px; font-size: 12px; color: #666;
+      border-bottom: 1px solid #f0f0f0;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .result-meta a {
+      color: #1a73e8; text-decoration: none; font-size: 12px;
+    }
+    .result-meta a:hover { text-decoration: underline; }
+
+    /* ---- 字段列表 ---- */
+    .field-list { padding: 0; }
+    .field-item {
+      padding: 8px 12px; border-bottom: 1px solid #f5f5f5;
+    }
+    .field-item:last-child { border-bottom: none; }
+    .field-name {
+      font-size: 11px; color: #888;
+      font-family: "SF Mono", Monaco, "Cascadia Code", monospace;
+      margin-bottom: 2px;
+    }
+    .field-value { font-size: 13px; word-break: break-all; }
+    .field-value.json {
+      font-family: "SF Mono", Monaco, "Cascadia Code", monospace;
+      font-size: 11px; white-space: pre-wrap;
+      background: #f8f9fa; padding: 6px 8px;
+      border-radius: 4px; margin-top: 4px;
+      max-height: 160px; overflow-y: auto;
+    }
+
+    /* ---- 引用标签 ---- */
+    .ref-chip {
+      display: inline-block; padding: 1px 7px; margin: 3px 2px 0;
+      border-radius: 3px; font-size: 11px;
+      background: #e8f0fe; color: #1a73e8;
+      cursor: pointer; border: 1px solid #d2e3fc;
+    }
+    .ref-chip:hover { background: #d2e3fc; }
+
+    /* ---- 反向查询 ---- */
+    .reverse-section { margin-top: 12px; }
+    .reverse-btn {
+      width: 100%; padding: 10px;
+      border: 1px solid #ddd; border-radius: 6px;
+      background: #fff; cursor: pointer; font-size: 13px; color: #555;
+    }
+    .reverse-btn:hover { background: #f0f0f0; }
+    .reverse-btn:disabled { opacity: .6; cursor: default; }
+
+    .reverse-card {
+      background: #fff; border: 1px solid #e0e0e0;
+      border-radius: 6px; margin-top: 8px; padding: 10px 12px;
+    }
+    .reverse-table-name {
+      font-weight: 600; font-size: 12px; margin-bottom: 4px;
+    }
+    .reverse-loc {
+      font-size: 11px; color: #666;
+      font-family: "SF Mono", Monaco, monospace;
+      line-height: 1.6;
+    }
+    .reverse-loc a { color: #1a73e8; text-decoration: none; }
+    .reverse-loc a:hover { text-decoration: underline; }
+
+    .no-ref {
+      text-align: center; color: #999; padding: 12px;
+      font-size: 12px;
+    }
+
+    /* ---- 折叠/展开 ---- */
+    .toggle-btn {
+      background: none; border: none; color: #1a73e8;
+      font-size: 11px; cursor: pointer; padding: 2px 0;
+    }
+    .toggle-btn:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <!-- 搜索栏 -->
+  <div class="search-bar">
+    <input id="idInput" type="text" placeholder="粘贴或输入 ID，自动查询"
+           onkeydown="if(event.key==='Enter'){doLookup();}"
+           oninput="onInputChange()">
+    <button class="primary" onclick="doLookup()" title="查询">查询</button>
+  </div>
+
+  <!-- 历史记录 -->
+  <div id="history" class="history-bar"></div>
+
+  <!-- 状态区域 -->
+  <div id="empty" class="empty-state">
+    <div class="icon">🔍</div>
+    <div>粘贴或输入 ID<br>自动查询对应配置信息</div>
+  </div>
+  <div id="loading" class="loading" style="display:none">
+    <span class="spinner"></span>查询中...
+  </div>
+  <div id="error" style="display:none"></div>
+  <div id="results" style="display:none"></div>
+
+<script>
+  var lookupHistory = [];
+  var currentId = '';
+  var inputTimer = null;
+
+  // ---- 粘贴/输入后自动查询（防抖 300ms） ----
+  function onInputChange() {
+    clearTimeout(inputTimer);
+    inputTimer = setTimeout(function() {
+      var val = document.getElementById('idInput').value.trim();
+      var cleaned = val.replace(/[^0-9]/g, '');
+      if (cleaned.length >= 5) {
+        doLookup(val);
+      }
+    }, 300);
+  }
+
+  // ---- 主查询 ----
+  function doLookup(id) {
+    id = id || document.getElementById('idInput').value.trim();
+    if (!id) return;
+    currentId = id;
+    document.getElementById('idInput').value = id;
+    addHistory(id);
+    show('loading');
+
+    google.script.run
+      .withSuccessHandler(showResult)
+      .withFailureHandler(function(err) {
+        showError('脚本执行出错: ' + err.message);
+      })
+      .lookupId(id);
+  }
+
+  // ---- 显示查询结果 ----
+  function showResult(data) {
+    if (!data || data.error) {
+      showError(data ? data.error : '未知错误');
+      return;
+    }
+    if (!data.found) {
+      showError(data.error || '未找到');
+      return;
+    }
+
+    var html = '<div class="result-card">';
+
+    // 表头
+    html += '<div class="result-header">';
+    html += '<span class="badge">' + esc(data.prefix) + '</span>';
+    html += '<span class="table-name">' + esc(data.tableName) + '</span>';
+    html += '</div>';
+
+    // 元信息
+    html += '<div class="result-meta">';
+    html += '<span>ID ' + esc(data.queriedId) + ' &middot; 第 ' + data.rowNumber + ' 行</span>';
+    html += '<a href="' + esc(data.sourceUrl) + '" target="_blank">跳转源表 ↗</a>';
+    html += '</div>';
+
+    // 字段列表
+    html += '<div class="field-list">';
+    var FOLD_LIMIT = 15;
+    for (var i = 0; i < data.fields.length; i++) {
+      var f = data.fields[i];
+      var hidden = (i >= FOLD_LIMIT) ? ' style="display:none" data-extra' : '';
+      html += '<div class="field-item"' + hidden + '>';
+      html += '<div class="field-name">' + esc(f.name) + '</div>';
+
+      if (f.isJson) {
+        html += '<div class="field-value json">' + esc(f.value) + '</div>';
+      } else {
+        html += '<div class="field-value">' + esc(f.value) + '</div>';
+      }
+
+      // 引用标签
+      if (f.refs && f.refs.length > 0) {
+        for (var r = 0; r < f.refs.length; r++) {
+          var ref = f.refs[r];
+          html += '<span class="ref-chip" onclick="doLookup(\'' + esc(ref.id) + '\')" title="查看此 ID">';
+          html += '→ ' + esc(ref.tableName) + ' ' + esc(ref.id);
+          if (ref.key) html += ' (' + esc(ref.key) + ')';
+          html += '</span>';
+        }
+      }
+      html += '</div>';
+    }
+
+    // 字段过多时显示展开按钮
+    if (data.fields.length > FOLD_LIMIT) {
+      html += '<div style="padding:6px 12px;text-align:center;">';
+      html += '<button class="toggle-btn" onclick="toggleExtra(this)">展开全部 ' + data.fields.length + ' 个字段</button>';
+      html += '</div>';
+    }
+
+    html += '</div></div>';
+
+    // 反向查询按钮
+    html += '<div class="reverse-section">';
+    html += '<button class="reverse-btn" onclick="doReverse()" id="reverseBtn">';
+    html += '🔄 反向查询：谁引用了 ' + esc(currentId) + '？';
+    html += '</button>';
+    html += '<div id="reverseResults"></div>';
+    html += '</div>';
+
+    document.getElementById('results').innerHTML = html;
+    show('results');
+  }
+
+  // ---- 展开/折叠 ----
+  function toggleExtra(btn) {
+    var items = document.querySelectorAll('[data-extra]');
+    var showing = btn.textContent.indexOf('展开') !== -1;
+    for (var i = 0; i < items.length; i++) {
+      items[i].style.display = showing ? '' : 'none';
+    }
+    btn.textContent = showing ? '收起多余字段' : '展开全部字段';
+  }
+
+  // ---- 反向查询 ----
+  function doReverse() {
+    var btn = document.getElementById('reverseBtn');
+    btn.disabled = true;
+    btn.textContent = '⏳ 正在搜索，请稍候...';
+
+    google.script.run
+      .withSuccessHandler(showReverseResults)
+      .withFailureHandler(function(err) {
+        document.getElementById('reverseResults').innerHTML =
+          '<div class="error-box">反向查询出错: ' + esc(err.message) + '</div>';
+        btn.disabled = false;
+        btn.textContent = '🔄 重新反向查询';
+      })
+      .reverseSearch(currentId);
+  }
+
+  function showReverseResults(results) {
+    var btn = document.getElementById('reverseBtn');
+    btn.disabled = false;
+    btn.textContent = '🔄 重新反向查询';
+
+    var el = document.getElementById('reverseResults');
+
+    if (!results || results.length === 0) {
+      el.innerHTML = '<div class="no-ref">没有其他表引用此 ID</div>';
+      return;
+    }
+
+    var html = '';
+    for (var i = 0; i < results.length; i++) {
+      var r = results[i];
+      var baseUrl = 'https://docs.google.com/spreadsheets/d/' + r.sid +
+                    '/edit#gid=' + r.sheetGid;
+      html += '<div class="reverse-card">';
+      html += '<div class="reverse-table-name">';
+      html += '<span class="badge" style="font-size:10px;padding:1px 5px;margin-right:4px;">' + esc(r.prefix) + '</span>';
+      html += esc(r.tableName);
+      html += ' <span style="color:#888;font-weight:normal;">(' + r.count + ' 处)</span>';
+      html += '</div>';
+
+      for (var j = 0; j < r.locations.length; j++) {
+        var loc = r.locations[j];
+        html += '<div class="reverse-loc">';
+        html += '<a href="' + baseUrl + '&range=' + esc(loc.cell) + '" target="_blank">';
+        html += '行 ' + loc.row + '</a>';
+        html += ' &middot; ' + esc(loc.col);
+        html += '</div>';
+      }
+      html += '</div>';
+    }
+    el.innerHTML = html;
+  }
+
+  // ---- 工具函数 ----
+
+  function show(id) {
+    var panels = ['empty', 'loading', 'error', 'results'];
+    for (var i = 0; i < panels.length; i++) {
+      document.getElementById(panels[i]).style.display =
+        (panels[i] === id) ? 'block' : 'none';
+    }
+  }
+
+  function showError(msg) {
+    var el = document.getElementById('error');
+    el.className = 'error-box';
+    el.textContent = msg;
+    show('error');
+  }
+
+  function addHistory(id) {
+    lookupHistory = lookupHistory.filter(function(h) { return h !== id; });
+    lookupHistory.unshift(id);
+    if (lookupHistory.length > 8) lookupHistory.pop();
+    renderHistory();
+  }
+
+  function removeHistory(id) {
+    lookupHistory = lookupHistory.filter(function(h) { return h !== id; });
+    renderHistory();
+  }
+
+  function clearHistory() {
+    lookupHistory = [];
+    renderHistory();
+  }
+
+  function renderHistory() {
+    var el = document.getElementById('history');
+    if (lookupHistory.length <= 1) { el.innerHTML = ''; return; }
+    var html = '<span class="label">历史:</span>';
+    for (var i = 0; i < lookupHistory.length; i++) {
+      var hid = esc(lookupHistory[i]);
+      html += '<span class="history-chip">';
+      html += '<span onclick="doLookup(\'' + hid + '\')">' + hid + '</span>';
+      html += '<span class="del" onclick="event.stopPropagation();removeHistory(\'' + hid + '\')" title="删除">✕</span>';
+      html += '</span>';
+    }
+    html += '<button class="history-clear" onclick="clearHistory()" title="清空历史">清空</button>';
+    el.innerHTML = html;
+  }
+
+  function esc(s) {
+    if (s === null || s === undefined) return '';
+    var d = document.createElement('div');
+    d.textContent = String(s);
+    return d.innerHTML;
+  }
+</script>
+</body>
+</html>

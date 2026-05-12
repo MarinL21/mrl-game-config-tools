@@ -24,9 +24,11 @@ LANG_NAMES = {
 def get_credentials():
     result = subprocess.run(
         ["gws", "auth", "export", "--unmasked"],
-        capture_output=True, text=True, encoding="utf-8", shell=True,
+        capture_output=True, text=True, encoding="utf-8",
     )
-    return json.loads(result.stdout.strip())
+    out = result.stdout
+    idx = out.find("{")
+    return json.loads(out[idx:])
 
 
 def main():

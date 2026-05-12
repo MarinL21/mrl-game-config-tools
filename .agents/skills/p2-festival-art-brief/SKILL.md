@@ -146,6 +146,8 @@ description: >-
 
 ### Step 6 落 Google Sheet（主产物）
 
+**硬规则 · 一节日 = 一 tab**：同一节日的所有模块（主城/行军/装饰/手札/BP/头像框/铭牌/机甲染色 等）**合并到同一个 preview tab**，按行追加，moduleGroup 字段区分。禁止按模块分多 tab。历史节日 tab 就是这个惯例（看 2024 祖灵节、2025 万圣节），按模块分会让主表膨胀、跨模块对照被打散。tab 名格式：`_PREVIEW YYYY N月上线-{节日}（{方向}）`，不写模块限定。如果用户分批要求追加新模块，用 `gws values.append` + `batchUpdate` 富文本 H 列写入原 tab，**不要调脚本建新 tab**。
+
 **硬规则 · `insertAfterTabTitle` 必填**：主表是按"年倒序 + 月正序"组织的（2026 各月 → 2025 各月 → ...）。新美需 tab 必须按日历顺序插入，紧贴**同年 (N-1) 月节日 tab** 之后。禁止追加到末尾、禁止放到最前。
 
 | 目标节日 | `insertAfterTabTitle` 锚点 |

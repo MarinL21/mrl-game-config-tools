@@ -36,8 +36,9 @@ OUTPUT_ROOT = PROJECT_ROOT / "output" / "grfal"
 # 一句话风格指令，放在 prompt 最前面
 STYLE_PREFIX = {
     "ui": "保留参考竞品的整体构图、UI 节奏和视觉层级，但替换为 P2 卡通 3D 游戏画风。图标上不要有任何文字。",
-    "chest": "仅借鉴图片的绘画风格，生成道具自选箱。图标上不要有任何文字。",
-    "item": "仅借鉴图片的绘画风格，生成道具图标。图标上不要有任何文字。",
+    "chest": "仅借鉴图片的绘画风格，不要照抄形状，生成道具自选箱，箱子样式自由发挥。图标上不要有任何文字。",
+    "item": "参考绘画风格，帮我生成 {prompt} 道具，正面平视图。图标上不要有任何文字。",
+    "dighole": "参考绘画风格，按照图1的形状，生成图2及之后绘画风格的 {prompt}，不要背景。只给我道具图标，正面平视图。图标上不要有任何文字。",
 }
 
 BATCH_PER_CALL = 4     # 单次调用最多 4 张
@@ -48,7 +49,7 @@ IMG_EXT = {".png", ".jpg", ".jpeg", ".webp"}
 
 
 def _module_root(module: str) -> Path:
-    return ANCHORS_DIR / {"ui": "ui_panel", "chest": "chest", "item": "item"}[module]
+    return ANCHORS_DIR / {"ui": "ui_panel", "chest": "chest", "item": "item", "dighole": "dighole"}[module]
 
 
 def _load_manifest(folder: Path) -> dict | None:
@@ -168,7 +169,16 @@ def list_subcategories(module: str) -> list[str]:
 
 
 def build_prompt(module: str, user_prompt: str, theme: str | None) -> str:
-    parts = [STYLE_PREFIX[module], user_prompt.strip()]
+    template = STYLE_PREFIX[module]
+    user_prompt = user_prompt.strip()
+    # 模板模式：含 {prompt} 占位符 → 嵌入用户输入
+    if "{prompt}" in template:
+        result = template.replace("{prompt}", user_prompt)
+        if theme:
+            result += f"。主题：{theme}"
+        return result
+    # 前缀模式（默认）：拼接
+    parts = [template, user_prompt]
     if theme:
         parts.append(f"主题：{theme}")
     return "。".join(p for p in parts if p)
@@ -193,7 +203,8 @@ def plan_rounds(engines: list[str], total_batch: int) -> list[tuple[str, int]]:
 
 
 def run_one_call(client: GrfalClient, prompt: str, ref_paths: list[str],
-                 engine: str, batch: int, label: str, timeout_s: int = 600) -> tuple[str, list[str]]:
+                 engine: str, batch: int, label: str, timeout_s: int = 600,
+                 aspect_ratio: str = "1:1") -> tuple[str, list[str]]:
     def _print(desc, p):
         print(f"  [{label}][{p*100:5.1f}%] {desc}", file=sys.stderr, flush=True)
     urls = client.generate(
@@ -201,13 +212,14 @@ def run_one_call(client: GrfalClient, prompt: str, ref_paths: list[str],
         engine=engine, batch=batch,
         timeout_s=timeout_s,
         on_progress=_print,
+        aspect_ratio=aspect_ratio,
     )
     return engine, urls
 
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("module", choices=["ui", "chest", "item"])
+    ap.add_argument("module", choices=["ui", "chest", "item", "dighole"])
     ap.add_argument("--prompt", help="生图提示词（--list-subcategories 时可省略）")
     ap.add_argument("--theme", default="")
     ap.add_argument("--competitor", help="ui 模块必需：竞品截图路径")
@@ -226,6 +238,8 @@ def main():
                     help="ui 模块专用：只用竞品截图不加 P2 锚点")
     ap.add_argument("--list-subcategories", action="store_true",
                     help="只列出当前模块下可用的 subcategory 文件夹然后退出")
+    ap.add_argument("--aspect-ratio", default="1:1",
+                    help="输出图长宽比，例：1:1 / 4:3 / 1:2 / 16:9（dighole 一般跟形状走）")
     args = ap.parse_args()
 
     if args.list_subcategories:
@@ -287,7 +301,7 @@ def main():
     results: list[tuple[str, str]] = []  # [(engine, url), ...]
     with cf.ThreadPoolExecutor(max_workers=min(MAX_CONCURRENT, len(plans))) as ex:
         futures = [
-            ex.submit(run_one_call, client, prompt, ref_paths, eng, n, f"{eng}-R{i+1}", args.timeout)
+            ex.submit(run_one_call, client, prompt, ref_paths, eng, n, f"{eng}-R{i+1}", args.timeout, args.aspect_ratio)
             for i, (eng, n) in enumerate(plans)
         ]
         for fut in cf.as_completed(futures):

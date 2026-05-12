@@ -1,0 +1,109 @@
+{
+  "_version": "3.0",
+  "_note": "100+ 款跨品类游戏监控清单。每天全量聚合搜索（每组 3-4 款共一个 query）。",
+  "_strategy": "daily_full_scan_aggregated",
+  "_total_games": 100,
+
+  "A_slg_overseas": {
+    "label": "SLG 海外核心",
+    "count": 20,
+    "games": [
+      "Whiteout Survival", "Last War Survival", "Rise of Kingdoms", "Call of Dragons",
+      "Lords Mobile", "Evony", "King of Avalon", "Guns of Glory",
+      "State of Survival", "Age of Origins", "Top War", "Mafia City",
+      "War and Order", "Infinity Kingdom", "Last Shelter Survival", "Z-Day",
+      "Warpath", "Game of Sultans", "Viking Rise", "Sea of Conquest"
+    ]
+  },
+
+  "B_slg_domestic": {
+    "label": "SLG 国产",
+    "count": 12,
+    "games": [
+      "率土之滨", "三国志·战略版", "世界启元", "重返帝国",
+      "万国觉醒国服", "鸿图之下", "文明与征服", "无尽冬日",
+      "三国：谋定天下", "荣耀新三国", "寒霜启示录国服", "三国志·幻想大陆"
+    ]
+  },
+
+  "C_puzzle_slg_hybrid": {
+    "label": "三消+SLG 混合",
+    "count": 6,
+    "games": [
+      "Puzzles and Survival", "Top Troops", "Match Empire",
+      "Project Makeover", "梦境家园", "开心消消乐"
+    ]
+  },
+
+  "D_merge": {
+    "label": "合成 Merge / 二合",
+    "count": 8,
+    "games": [
+      "Gossip Harbor", "Merge Mansion", "Travel Town", "EverMerge",
+      "Seaside Escape", "Merge Magic", "Love and Pies", "Merge Dragons"
+    ]
+  },
+
+  "E_match3": {
+    "label": "三消",
+    "count": 8,
+    "games": [
+      "Royal Match", "Gardenscapes", "Homescapes", "Candy Crush Saga",
+      "Candy Crush Soda", "Toon Blast", "Fishdom", "梦幻西游三消"
+    ]
+  },
+
+  "F_gacha_anime": {
+    "label": "二次元抽卡",
+    "count": 10,
+    "games": [
+      "原神", "崩坏星穹铁道", "鸣潮", "蔚蓝档案", "崩坏3",
+      "公主连结", "阴阳师", "明日方舟", "FGO", "白夜极光"
+    ]
+  },
+
+  "G_simulation_idle": {
+    "label": "模拟经营 / 放置 / 养成",
+    "count": 12,
+    "games": [
+      "Township", "Hay Day", "咸鱼之王", "菇勇者传说",
+      "AFK Arena", "AFK Journey", "放置奇兵", "最强蜗牛",
+      "寻道大千", "向僵尸开炮", "Legend of Mushroom", "剑与远征启程"
+    ]
+  },
+
+  "H_casual_blockbuster": {
+    "label": "休闲 / 大作爆款",
+    "count": 8,
+    "games": [
+      "Monopoly GO", "Clash of Clans", "Clash Royale", "Brawl Stars",
+      "Pokemon GO", "蛋仔派对", "元梦之星", "Royal Kingdom"
+    ]
+  },
+
+  "I_card_rpg": {
+    "label": "卡牌 / RPG",
+    "count": 10,
+    "games": [
+      "Marvel Snap", "炉石传说", "金铲铲之战", "剑与家园",
+      "Summoners War", "RAID Shadow Legends", "三国杀", "万智牌",
+      "阴阳师百闻牌", "Legends of Runeterra"
+    ]
+  },
+
+  "J_shooter_survival": {
+    "label": "生存 / 射击 SLG",
+    "count": 6,
+    "games": [
+      "PUBG Mobile", "COD Mobile", "Arena Breakout",
+      "Warzone Mobile", "Free Fire", "Left to Survive"
+    ]
+  },
+
+  "_aggregation_strategy": {
+    "note": "每天 full scan 通过聚合搜索实现",
+    "aggregation_rules": "每 3-4 款同品类游戏拼一个 query，如 '\"Royal Match\" OR \"Gardenscapes\" OR \"Candy Crush\" new event 2026'",
+    "expected_queries_per_day": 30,
+    "expected_runtime_minutes": 15
+  }
+}

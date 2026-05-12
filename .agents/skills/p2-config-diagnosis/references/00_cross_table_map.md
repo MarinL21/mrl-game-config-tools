@@ -1,0 +1,1 @@
+../../../docs/p2_config_spec/00_cross_table_map.md

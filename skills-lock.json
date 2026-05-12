@@ -26,6 +26,12 @@
       "sourceType": "git",
       "computedHash": "2143ebf322d8785d0c91e1887e5b63eb4922fafb4616235003d87e677607f7f5"
     },
+    "grfal-api": {
+      "source": "git@git.tap4fun.com:skills/grfal-api.git",
+      "sourceType": "git",
+      "skillPath": "SKILL.md",
+      "computedHash": "df7f28486a4827acfded535ceacbe0ac8456a91f36fbc6c5465bbbcb760ddcd8"
+    },
     "gws-workspace": {
       "source": "git@git.tap4fun.com:skills/bi/gws-workspace.git",
       "sourceType": "git",
@@ -36,10 +42,20 @@
       "sourceType": "git",
       "computedHash": "7836404cf48027c2050c723c3cfe617d233fd6441b784d4e8f7a41d92781f115"
     },
+    "learning-loop": {
+      "source": "git@git.tap4fun.com:skills/learning-loop.git",
+      "sourceType": "git",
+      "computedHash": "8bc64fcbbab4d162db0369504deabb016235bd05eaf7294de98b1b2e61bb285a"
+    },
     "login-oauth2": {
       "source": "git@git.tap4fun.com:skills/bi-web/login-oauth2.git",
       "sourceType": "git",
       "computedHash": "dd7216e0b8f4a2cf7bc686c3129e6bf607f357bfb1e3e785f77d426fdb43aab7"
+    },
+    "p2-numerical-design": {
+      "source": "git@git.tap4fun.com:skills/p2/p2-numerical-design.git",
+      "sourceType": "git",
+      "computedHash": "01b851865cb52016732ead973040c3c488e4522f2b1298e01ff6b66bed519785"
     },
     "p2-translation-automatic": {
       "source": "git@git.tap4fun.com:skills/p2/p2-translation-automatic.git",
@@ -50,6 +66,16 @@
       "source": "git@git.tap4fun.com:skills/publish-skill.git",
       "sourceType": "git",
       "computedHash": "e543a0ba236723ea3ef2b01f648b568d08757976795604f885d255327a99dd17"
+    },
+    "sensortower-query": {
+      "source": "git@git.tap4fun.com:skills/sensortower-query-skill.git",
+      "sourceType": "git",
+      "computedHash": "3770d4e563b792a57984e2428df0e4be6bf31bc6fc907eb745c6d12c68e0c328"
+    },
+    "youtube-analyzer": {
+      "source": "git@git.tap4fun.com:skills/youtube-analyzer.git",
+      "sourceType": "git",
+      "computedHash": "4f7c254d7337c5046418f8a15d5ab889f0d038455cc4fe3692ee919f20b26140"
     }
   }
 }

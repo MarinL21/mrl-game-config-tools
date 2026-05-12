@@ -1,0 +1,1363 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>月影轮盘 · Moon Reels</title>
+<style>
+  /* ============== DESIGN SYSTEM ============== */
+  :root {
+    --ink-900: #060821;
+    --ink-800: #0b0f35;
+    --ink-700: #151a4a;
+    --ink-600: #1f2560;
+    --ink-500: #2b3182;
+    --violet-500: #7b5cff;
+    --violet-400: #a68bff;
+    --pink-500: #ff4b9d;
+    --pink-400: #ff82c5;
+    --gold-500: #ffcd4a;
+    --gold-400: #ffe58b;
+    --gold-300: #fff3c4;
+    --cyan-400: #5be7ff;
+    --lime-400: #7cf59b;
+    --text: #eaeefc;
+    --muted: #8a93bf;
+    --dim: #5a638f;
+    --glow-pink: 0 0 24px rgba(255,75,157,.55), 0 0 60px rgba(255,75,157,.25);
+    --glow-gold: 0 0 20px rgba(255,205,74,.6), 0 0 40px rgba(255,205,74,.3);
+    --glow-violet: 0 0 20px rgba(123,92,255,.6), 0 0 40px rgba(123,92,255,.3);
+    --ring: 1px solid rgba(255,255,255,.08);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { font-family: "Inter", -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; color: var(--text); min-height: 100vh; overflow-x: hidden; }
+
+  /* nebula backdrop */
+  body {
+    background:
+      radial-gradient(ellipse 80% 50% at 30% 10%, rgba(123,92,255,.35), transparent 60%),
+      radial-gradient(ellipse 70% 50% at 80% 20%, rgba(255,75,157,.25), transparent 55%),
+      radial-gradient(ellipse 50% 40% at 50% 90%, rgba(91,231,255,.18), transparent 60%),
+      linear-gradient(180deg, #050720 0%, #0a0d30 60%, #060821 100%);
+    position: relative;
+  }
+  /* starfield */
+  body::before {
+    content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background-image:
+      radial-gradient(1px 1px at 10% 20%, #fff, transparent),
+      radial-gradient(1px 1px at 85% 15%, rgba(255,255,255,.8), transparent),
+      radial-gradient(1.5px 1.5px at 25% 80%, rgba(255,255,255,.7), transparent),
+      radial-gradient(1px 1px at 60% 45%, #fff, transparent),
+      radial-gradient(2px 2px at 75% 70%, rgba(255,255,255,.6), transparent),
+      radial-gradient(1px 1px at 40% 30%, rgba(255,255,255,.5), transparent),
+      radial-gradient(1px 1px at 90% 60%, #fff, transparent),
+      radial-gradient(1px 1px at 5% 55%, rgba(255,255,255,.6), transparent),
+      radial-gradient(1.5px 1.5px at 55% 90%, rgba(255,255,255,.7), transparent);
+    background-size: 600px 600px;
+    animation: starDrift 60s linear infinite;
+    opacity: .7;
+  }
+  @keyframes starDrift { to { background-position: 600px 600px; } }
+  body::after {
+    content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background: radial-gradient(ellipse at 50% 100%, transparent 40%, rgba(6,8,33,.6) 100%);
+  }
+
+  /* ============== HEADER ============== */
+  header {
+    position: sticky; top: 0; z-index: 50;
+    padding: 14px 32px; display: flex; align-items: center; gap: 16px;
+    background: linear-gradient(180deg, rgba(6,8,33,.85), rgba(6,8,33,.4));
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(255,255,255,.06);
+  }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand-logo {
+    width: 42px; height: 42px; border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #fff8d8, #ffcd4a 40%, #ff7a00 90%);
+    box-shadow: inset -6px -8px 16px rgba(0,0,0,.35), var(--glow-gold);
+    position: relative;
+  }
+  .brand-logo::after {
+    content: ''; position: absolute; inset: 0; border-radius: 50%;
+    background: radial-gradient(circle at 70% 70%, rgba(123,92,255,.5), transparent 40%);
+  }
+  h1 {
+    font-size: 22px; letter-spacing: 3px; font-weight: 800;
+    background: linear-gradient(135deg, #fff8d8 0%, #ffcd4a 35%, #ff82c5 65%, #7b5cff 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .brand-sub { font-size: 11px; color: var(--muted); letter-spacing: 4px; text-transform: uppercase; margin-top: 2px; }
+
+  .wallet { margin-left: auto; display: flex; gap: 10px; align-items: center; }
+  .chip {
+    background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.02));
+    border: 1px solid rgba(255,255,255,.1);
+    padding: 8px 14px; border-radius: 100px; font-size: 13px;
+    display: flex; align-items: center; gap: 8px; font-weight: 500;
+    backdrop-filter: blur(8px);
+    transition: all .2s;
+  }
+  .chip:hover { border-color: rgba(255,255,255,.2); }
+  .chip .ico { font-size: 16px; }
+  .chip b { color: var(--gold-400); font-variant-numeric: tabular-nums; font-weight: 700; min-width: 20px; text-align: right; }
+  .chip.ticket b { color: var(--pink-400); }
+  .chip.mat b { color: var(--cyan-400); }
+
+  .btn {
+    font-family: inherit; cursor: pointer; border: none; outline: none;
+    padding: 9px 16px; border-radius: 10px; font-size: 13px; font-weight: 600;
+    background: linear-gradient(180deg, #3d49b8, #25296e);
+    color: white; border: 1px solid rgba(255,255,255,.15);
+    transition: all .15s; letter-spacing: .5px;
+  }
+  .btn:hover { filter: brightness(1.2); transform: translateY(-1px); }
+  .btn:active { transform: translateY(0); }
+  .btn.primary {
+    background: linear-gradient(180deg, #ffdd6e, #ff9c2a);
+    color: #3a1b00; border-color: rgba(255,255,255,.4);
+    box-shadow: var(--glow-gold);
+  }
+  .btn.ghost { background: transparent; border-color: rgba(255,255,255,.15); }
+  .btn:disabled { opacity: .4; cursor: not-allowed; filter: grayscale(.3); transform: none; }
+
+  /* ============== LAYOUT ============== */
+  main {
+    position: relative; z-index: 1;
+    max-width: 1360px; margin: 0 auto; padding: 24px 32px 80px;
+    display: grid; grid-template-columns: 1.25fr 1fr; gap: 24px;
+  }
+  .panel {
+    background: linear-gradient(180deg, rgba(31,37,96,.55), rgba(21,26,74,.55));
+    border: var(--ring); border-radius: 20px;
+    padding: 22px; backdrop-filter: blur(16px);
+    box-shadow: 0 12px 40px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.05);
+  }
+  .panel-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 16px; padding-bottom: 14px;
+    border-bottom: 1px dashed rgba(255,255,255,.08);
+  }
+  .panel-title {
+    font-size: 13px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--gold-400);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .panel-title::before {
+    content: ''; width: 8px; height: 8px; border-radius: 50%;
+    background: var(--gold-500); box-shadow: var(--glow-gold);
+  }
+
+  /* ============== SLOT MACHINE ============== */
+  .slot-stage {
+    position: relative;
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(255,75,157,.4), transparent 60%),
+      radial-gradient(ellipse at 50% 100%, rgba(123,92,255,.3), transparent 60%),
+      linear-gradient(180deg, #1a1e5c 0%, #0a0d30 100%);
+    border-radius: 20px; overflow: hidden;
+    padding: 28px 24px 20px;
+    border: 1px solid rgba(255,205,74,.2);
+    box-shadow: inset 0 2px 0 rgba(255,255,255,.08), 0 0 40px rgba(255,75,157,.2);
+  }
+  /* decorative side rails with bulbs */
+  .slot-stage::before, .slot-stage::after {
+    content: ''; position: absolute; top: 10px; bottom: 10px; width: 6px;
+    background-image: radial-gradient(circle, var(--gold-400) 0, var(--gold-400) 2px, transparent 3px);
+    background-size: 6px 16px;
+    background-repeat: repeat-y;
+    filter: drop-shadow(0 0 4px var(--gold-400));
+    animation: bulbs 1.5s linear infinite;
+  }
+  .slot-stage::before { left: 8px; }
+  .slot-stage::after { right: 8px; animation-delay: .75s; }
+  @keyframes bulbs { 50% { opacity: .3; } }
+
+  .slot-title {
+    text-align: center; font-size: 14px; letter-spacing: 6px; font-weight: 700;
+    color: var(--gold-300); text-shadow: 0 0 12px rgba(255,205,74,.6); margin-bottom: 16px;
+  }
+
+  .reels-frame {
+    background: linear-gradient(180deg, #1a1055 0%, #07081f 100%);
+    border: 3px solid transparent;
+    background-clip: padding-box;
+    border-radius: 16px; padding: 10px;
+    position: relative;
+    box-shadow: inset 0 0 24px rgba(0,0,0,.6);
+  }
+  .reels-frame::before {
+    content: ''; position: absolute; inset: -3px; z-index: -1;
+    border-radius: 16px;
+    background: linear-gradient(135deg, var(--gold-400), var(--pink-500), var(--violet-500), var(--gold-400));
+    background-size: 300% 300%;
+    animation: borderFlow 6s linear infinite;
+  }
+  @keyframes borderFlow { to { background-position: 300% 300%; } }
+
+  .reels {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+    background: #04061a; padding: 8px; border-radius: 10px;
+    position: relative;
+  }
+  /* payline */
+  .reels::before {
+    content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--pink-500) 20%, var(--gold-400) 50%, var(--pink-500) 80%, transparent);
+    filter: drop-shadow(0 0 4px var(--pink-500));
+    transform: translateY(-1px);
+    z-index: 2; pointer-events: none;
+  }
+  .reel {
+    height: 140px; overflow: hidden; position: relative;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.05) 0%, transparent 30%, transparent 70%, rgba(0,0,0,.4) 100%),
+      radial-gradient(ellipse at 50% 50%, #1b2168 0%, #0a0d38 100%);
+    border-radius: 8px;
+    box-shadow: inset 0 0 20px rgba(0,0,0,.7);
+  }
+  .reel-inner {
+    display: flex; flex-direction: column; align-items: center;
+    will-change: transform;
+  }
+  .symbol {
+    height: 140px; width: 100%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 72px;
+    filter: drop-shadow(0 4px 12px rgba(0,0,0,.5));
+    position: relative;
+  }
+  .reel.win {
+    animation: winPulse 1.2s ease-in-out;
+  }
+  @keyframes winPulse {
+    0%, 100% { box-shadow: inset 0 0 20px rgba(0,0,0,.7); }
+    50% {
+      box-shadow: inset 0 0 30px var(--gold-400), 0 0 20px var(--gold-400);
+      transform: scale(1.04);
+    }
+  }
+  .reel.spinning .reel-inner { filter: blur(2px); }
+
+  /* controls */
+  .controls {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 18px; gap: 16px; flex-wrap: wrap;
+  }
+  .bet-toggle {
+    display: flex; gap: 4px; background: rgba(0,0,0,.3);
+    padding: 4px; border-radius: 100px; border: 1px solid rgba(255,255,255,.08);
+  }
+  .bet-btn {
+    padding: 8px 16px; border-radius: 100px; font-size: 13px; font-weight: 700;
+    background: transparent; border: none; color: var(--muted); cursor: pointer;
+    transition: all .2s; letter-spacing: .5px;
+  }
+  .bet-btn.active {
+    background: linear-gradient(135deg, var(--pink-500), var(--gold-500));
+    color: #2a0e00; box-shadow: var(--glow-pink);
+  }
+
+  .spin-btn {
+    position: relative; font-family: inherit; cursor: pointer; border: none; outline: none;
+    width: 130px; height: 60px; border-radius: 30px; font-weight: 900; font-size: 18px;
+    color: white; letter-spacing: 3px;
+    background: linear-gradient(180deg, #ff6cba, #c91a5f 90%);
+    border: 2px solid rgba(255,255,255,.3);
+    box-shadow:
+      inset 0 2px 0 rgba(255,255,255,.4),
+      inset 0 -3px 0 rgba(0,0,0,.3),
+      0 6px 0 #6a0a34,
+      var(--glow-pink);
+    text-shadow: 0 2px 4px rgba(0,0,0,.4);
+    transition: all .08s;
+  }
+  .spin-btn::before {
+    content: ''; position: absolute; inset: 0; border-radius: 30px;
+    background: linear-gradient(180deg, rgba(255,255,255,.3), transparent 50%);
+    pointer-events: none;
+  }
+  .spin-btn:active { box-shadow: inset 0 2px 0 rgba(255,255,255,.4), 0 2px 0 #6a0a34, var(--glow-pink); transform: translateY(4px); }
+  .spin-btn:disabled { opacity: .5; cursor: not-allowed; filter: grayscale(.4); }
+
+  .skip-toggle {
+    font-size: 11px; color: var(--muted); display: flex; align-items: center; gap: 6px;
+    background: rgba(0,0,0,.3); padding: 6px 12px; border-radius: 100px;
+    border: 1px solid rgba(255,255,255,.08); cursor: pointer;
+  }
+  .skip-toggle input { accent-color: var(--pink-500); }
+  .skip-corner { position: absolute; right: 16px; bottom: 12px; backdrop-filter: blur(6px); }
+
+  .cost-row { font-size: 12px; color: var(--muted); text-align: center; margin-top: 10px; }
+  .cost-row b { color: var(--gold-400); font-weight: 700; }
+
+  /* win banner */
+  .win-banner {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    padding: 20px 40px; border-radius: 16px;
+    background: linear-gradient(135deg, rgba(255,75,157,.95), rgba(255,205,74,.95));
+    font-weight: 900; font-size: 22px; color: #2a0e00; letter-spacing: 3px;
+    box-shadow: 0 10px 40px rgba(255,75,157,.6), 0 0 80px rgba(255,205,74,.5);
+    text-shadow: 0 2px 4px rgba(255,255,255,.4);
+    z-index: 20; pointer-events: none;
+    opacity: 0;
+  }
+  .win-banner.show { animation: winPop 1.4s cubic-bezier(.3,1.5,.6,1) forwards; }
+  @keyframes winPop {
+    0% { transform: translate(-50%, -50%) scale(0) rotate(-20deg); opacity: 0; }
+    20% { transform: translate(-50%, -50%) scale(1.15) rotate(2deg); opacity: 1; }
+    40% { transform: translate(-50%, -50%) scale(1) rotate(-2deg); }
+    60% { transform: translate(-50%, -50%) scale(1.03) rotate(0); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(0.9) rotate(0); opacity: 0; }
+  }
+
+  /* log */
+  .log {
+    margin-top: 14px; max-height: 140px; overflow-y: auto;
+    background: rgba(0,0,0,.3); border-radius: 10px; padding: 8px 12px;
+    font-size: 12px; color: #9fa8d0;
+    border: 1px solid rgba(255,255,255,.04);
+  }
+  .log::-webkit-scrollbar { width: 4px; }
+  .log::-webkit-scrollbar-thumb { background: rgba(255,255,255,.1); border-radius: 2px; }
+  .log-entry { padding: 4px 0; border-bottom: 1px dashed rgba(255,255,255,.04); line-height: 1.4; }
+  .log-entry:last-child { border: 0; }
+  .log-entry.win { color: var(--gold-400); font-weight: 500; }
+  .log-entry.chest { color: var(--pink-400); font-weight: 500; }
+
+  /* ============== STAGE BAR ============== */
+  .stage-track {
+    position: relative; height: 56px;
+    background: linear-gradient(180deg, #0a0d30, #141863);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 100px; overflow: hidden;
+    margin-bottom: 16px;
+    box-shadow: inset 0 2px 6px rgba(0,0,0,.5);
+  }
+  .stage-fill {
+    position: absolute; top: 0; left: 0; height: 100%;
+    background: linear-gradient(90deg, var(--pink-500), var(--gold-500) 70%, var(--gold-400));
+    box-shadow: 0 0 20px rgba(255,75,157,.6);
+    transition: width .8s cubic-bezier(.2,.8,.3,1);
+    border-radius: 100px;
+  }
+  .stage-fill::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,.3) 40%, rgba(255,255,255,.6) 50%, rgba(255,255,255,.3) 60%, transparent 100%);
+    background-size: 200% 100%;
+    animation: shimmer 2.5s linear infinite;
+    border-radius: 100px;
+  }
+  @keyframes shimmer { to { background-position: -200% 0; } }
+  .stage-markers {
+    position: absolute; inset: 0; display: flex; align-items: center;
+    pointer-events: none; padding: 0 6px;
+  }
+  .marker {
+    position: absolute; top: 50%; transform: translate(-50%, -50%);
+    width: 36px; height: 36px; border-radius: 50%;
+    background: linear-gradient(180deg, rgba(255,255,255,.15), rgba(0,0,0,.25));
+    border: 2px solid rgba(255,255,255,.2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; color: #fff;
+    backdrop-filter: blur(4px);
+    transition: all .3s;
+  }
+  .marker.reached {
+    background: linear-gradient(180deg, var(--gold-400), var(--gold-500));
+    border-color: #fff; color: #2a1b00;
+    box-shadow: var(--glow-gold);
+  }
+  .marker.claimed { filter: grayscale(1) opacity(.5); }
+
+  .stages-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+  }
+  .stage-card {
+    position: relative;
+    background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(0,0,0,.15));
+    border: 1px solid rgba(255,255,255,.06);
+    border-radius: 14px; padding: 12px;
+    transition: all .3s;
+    overflow: hidden;
+  }
+  .stage-card::before {
+    content: ''; position: absolute; inset: 0; opacity: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(255,205,74,.3), transparent 70%);
+    transition: opacity .3s;
+    pointer-events: none;
+  }
+  .stage-card.reached { border-color: rgba(255,205,74,.4); }
+  .stage-card.reached::before { opacity: 1; }
+  .stage-card.claimed { opacity: .4; }
+  .stage-card .stage-pts {
+    font-size: 20px; font-weight: 900;
+    background: linear-gradient(135deg, var(--gold-300), var(--gold-500));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    margin-bottom: 4px;
+  }
+  .stage-card .stage-pts::after { content: ' pts'; font-size: 11px; color: var(--muted); font-weight: 400; }
+  .stage-card .stage-reward { font-size: 11px; color: #c0c8ec; line-height: 1.5; margin-bottom: 8px; min-height: 32px; }
+  .stage-card button {
+    width: 100%; padding: 6px; font-size: 12px; font-weight: 700;
+    border: none; border-radius: 8px; cursor: pointer;
+    background: linear-gradient(180deg, var(--gold-400), var(--gold-500));
+    color: #2a1b00; transition: all .2s;
+  }
+  .stage-card button:disabled {
+    background: rgba(255,255,255,.05); color: var(--dim); cursor: not-allowed;
+  }
+  .stage-card button:not(:disabled):hover { filter: brightness(1.15); }
+
+  /* ============== TABS ============== */
+  .tabs {
+    display: flex; gap: 4px; padding: 4px; background: rgba(0,0,0,.3);
+    border-radius: 12px; margin-bottom: 14px; border: 1px solid rgba(255,255,255,.05);
+  }
+  .tab {
+    flex: 1; padding: 10px 12px; border-radius: 8px; font-size: 12px; font-weight: 600;
+    color: var(--muted); cursor: pointer; text-align: center;
+    transition: all .2s; letter-spacing: 1px;
+  }
+  .tab:hover:not(.active) { color: var(--text); background: rgba(255,255,255,.04); }
+  .tab.active {
+    background: linear-gradient(180deg, rgba(255,75,157,.2), rgba(123,92,255,.15));
+    color: var(--gold-400);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.1);
+  }
+  .tab-content { display: none; animation: fadeIn .3s; }
+  .tab-content.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ============== ITEM ROWS (task/shop) ============== */
+  .item-list { display: flex; flex-direction: column; gap: 8px; }
+  .item-row {
+    display: flex; align-items: center; gap: 12px;
+    background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(0,0,0,.15));
+    padding: 12px 14px; border-radius: 12px;
+    border: 1px solid rgba(255,255,255,.05);
+    transition: all .2s;
+  }
+  .item-row:hover { border-color: rgba(255,255,255,.12); transform: translateX(2px); }
+  .item-icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center; font-size: 22px;
+    background: linear-gradient(135deg, rgba(123,92,255,.2), rgba(255,75,157,.15));
+    border: 1px solid rgba(255,255,255,.08);
+    flex-shrink: 0;
+  }
+  .item-body { flex: 1; min-width: 0; }
+  .item-title { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+  .item-desc { font-size: 11px; color: var(--muted); }
+  .item-progress {
+    margin-top: 6px; height: 4px; background: rgba(0,0,0,.3); border-radius: 2px; overflow: hidden;
+  }
+  .item-progress-fill {
+    height: 100%; background: linear-gradient(90deg, var(--pink-500), var(--gold-500));
+    transition: width .4s; border-radius: 2px;
+  }
+  .item-reward { font-size: 11px; color: var(--lime-400); white-space: nowrap; font-weight: 600; }
+  .item-cost { font-size: 11px; color: var(--gold-400); white-space: nowrap; font-weight: 600; }
+  .item-action {
+    padding: 7px 14px; font-size: 12px; font-weight: 700; border-radius: 8px;
+    border: none; cursor: pointer; transition: all .2s;
+    background: linear-gradient(180deg, var(--gold-400), var(--gold-500));
+    color: #2a1b00;
+    white-space: nowrap;
+  }
+  .item-action:hover:not(:disabled) { filter: brightness(1.15); }
+  .item-action:disabled {
+    background: rgba(255,255,255,.05); color: var(--dim); cursor: not-allowed;
+  }
+
+  /* ============== CHEST MODAL ============== */
+  .modal-bg {
+    position: fixed; inset: 0; z-index: 200;
+    display: none; align-items: center; justify-content: center;
+    background: rgba(6,8,33,.85); backdrop-filter: blur(12px);
+  }
+  .modal-bg.show { display: flex; animation: fadeIn .3s; }
+  .modal {
+    background: linear-gradient(180deg, #1f2560 0%, #0b0f35 100%);
+    border: 2px solid transparent;
+    border-radius: 24px; padding: 28px;
+    max-width: 600px; width: 92vw; text-align: center;
+    position: relative; overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0,0,0,.6), var(--glow-pink);
+  }
+  .modal::before {
+    content: ''; position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(255,75,157,.3), transparent 50%),
+      radial-gradient(ellipse at 50% 100%, rgba(123,92,255,.25), transparent 50%);
+    pointer-events: none;
+  }
+  .modal > * { position: relative; z-index: 1; }
+  .modal h3 {
+    font-size: 22px; font-weight: 900; letter-spacing: 3px;
+    background: linear-gradient(135deg, var(--gold-300), var(--pink-400));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    margin-bottom: 8px;
+  }
+  .modal-sub { font-size: 12px; color: var(--muted); margin-bottom: 20px; }
+  .modal-sub b { color: var(--gold-400); font-size: 16px; }
+
+  .chest-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
+  .chest-box {
+    aspect-ratio: 4 / 3; border-radius: 14px;
+    cursor: pointer; position: relative; overflow: hidden;
+    background: linear-gradient(180deg, #2d2177 0%, #0e0a3a 100%);
+    border: 2px solid rgba(255,75,157,.4);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 54px; transition: all .25s;
+    filter: drop-shadow(0 6px 20px rgba(0,0,0,.4));
+  }
+  .chest-box::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(255,75,157,.3), transparent 50%, rgba(255,205,74,.2));
+    opacity: .5; transition: opacity .3s;
+    pointer-events: none;
+  }
+  .chest-box:not(.opened):hover {
+    transform: translateY(-3px) scale(1.03);
+    border-color: var(--gold-400);
+    box-shadow: var(--glow-gold);
+  }
+  .chest-box:not(.opened):hover::before { opacity: 1; }
+  .chest-box.opened {
+    cursor: default; border-color: var(--gold-400);
+    background: linear-gradient(180deg, rgba(255,205,74,.2), rgba(123,92,255,.15));
+    animation: chestOpen .5s;
+  }
+  @keyframes chestOpen {
+    0% { transform: scale(.95); }
+    50% { transform: scale(1.08); box-shadow: var(--glow-gold); }
+    100% { transform: scale(1); }
+  }
+
+  .chest-result {
+    font-size: 14px; color: var(--lime-400); min-height: 22px; margin-bottom: 14px; font-weight: 600;
+  }
+
+  /* ============== RECHARGE ============== */
+  .recharge-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .recharge-card {
+    background: linear-gradient(180deg, rgba(255,75,157,.1), rgba(123,92,255,.1));
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 14px; padding: 16px 12px; cursor: pointer; text-align: center;
+    transition: all .2s;
+  }
+  .recharge-card:hover { transform: translateY(-2px); border-color: var(--gold-400); box-shadow: var(--glow-gold); }
+  .recharge-card .r-icon { font-size: 32px; margin-bottom: 6px; }
+  .recharge-card .r-amt { font-size: 20px; font-weight: 900; color: var(--gold-400); }
+  .recharge-card .r-price { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .recharge-card .r-bonus { font-size: 10px; color: var(--lime-400); margin-top: 4px; font-weight: 600; }
+
+  /* ============== MECHA ============== */
+  .mecha-showcase {
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(123,92,255,.3), transparent 60%),
+      linear-gradient(180deg, rgba(255,255,255,.04), rgba(0,0,0,.2));
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 16px; padding: 20px; margin-bottom: 12px;
+    text-align: center; position: relative; overflow: hidden;
+  }
+  .mecha-name {
+    font-size: 18px; font-weight: 900; letter-spacing: 4px;
+    background: linear-gradient(135deg, var(--gold-300), var(--pink-400), var(--violet-400));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    margin-bottom: 4px;
+  }
+  .mecha-tag { font-size: 11px; color: var(--muted); letter-spacing: 2px; margin-bottom: 14px; }
+
+  .mecha-parts {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px;
+  }
+  .mecha-part {
+    background: rgba(0,0,0,.3); padding: 12px 8px; border-radius: 12px; text-align: center;
+    border: 1px solid rgba(255,255,255,.06); position: relative; overflow: hidden;
+  }
+  .mecha-part.owned {
+    border-color: var(--gold-400); box-shadow: var(--glow-gold);
+    background: linear-gradient(180deg, rgba(255,205,74,.15), rgba(255,75,157,.08));
+  }
+  .mecha-part .p-icon { font-size: 32px; margin-bottom: 4px; filter: grayscale(1) opacity(.4); }
+  .mecha-part.owned .p-icon { filter: none; }
+  .mecha-part .p-name { font-size: 12px; font-weight: 700; }
+  .mecha-part .p-status { font-size: 10px; color: var(--muted); }
+  .mecha-part.owned .p-status { color: var(--lime-400); }
+
+  .mecha-levels { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  .lv-card {
+    background: rgba(0,0,0,.25); padding: 10px 6px; border-radius: 10px;
+    font-size: 11px; text-align: center; border: 1px solid rgba(255,255,255,.05);
+    transition: all .3s;
+  }
+  .lv-card.reached { border-color: var(--gold-400); color: var(--gold-400); }
+  .lv-card.top {
+    background: linear-gradient(135deg, var(--pink-500), var(--gold-500));
+    color: #2a0e00; font-weight: 700; border-color: #fff;
+    box-shadow: var(--glow-pink);
+  }
+  .lv-card .lv-label { font-weight: 700; font-size: 12px; margin-bottom: 2px; }
+  .lv-card .lv-req { font-size: 10px; opacity: .8; }
+
+  /* ============== RULES ============== */
+  .rules { font-size: 13px; line-height: 1.8; color: #c8cfe8; }
+  .rules h4 {
+    font-size: 12px; color: var(--gold-400); letter-spacing: 2px;
+    text-transform: uppercase; margin: 14px 0 8px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .rules h4::before { content: ''; width: 16px; height: 2px; background: var(--gold-400); }
+  .rules ul { padding-left: 20px; }
+  .rules li { margin-bottom: 4px; }
+
+  .paytable {
+    width: 100%; border-collapse: separate; border-spacing: 0 4px; margin-top: 8px; font-size: 12px;
+  }
+  .paytable tr { transition: all .2s; }
+  .paytable tr:hover td { background: rgba(255,255,255,.04); }
+  .paytable th, .paytable td {
+    padding: 8px 10px; text-align: left;
+  }
+  .paytable th { color: var(--gold-400); font-weight: 600; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; }
+  .paytable td:first-child { border-radius: 8px 0 0 8px; font-size: 20px; }
+  .paytable td:last-child { border-radius: 0 8px 8px 0; color: var(--gold-400); font-weight: 700; text-align: right; }
+
+  /* ============== TOAST ============== */
+  .toast-wrap { position: fixed; top: 80px; right: 24px; z-index: 1000; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
+  .toast {
+    background: linear-gradient(180deg, rgba(31,37,96,.95), rgba(15,18,60,.95));
+    border: 1px solid rgba(255,205,74,.4);
+    padding: 12px 18px; border-radius: 12px; font-size: 13px; font-weight: 500;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 10px 30px rgba(0,0,0,.5), var(--glow-gold);
+    animation: toastSlide .4s cubic-bezier(.2,1.2,.3,1), toastOut .3s 2.6s forwards;
+    max-width: 340px; display: flex; align-items: center; gap: 10px;
+  }
+  .toast.chest { border-color: var(--pink-400); box-shadow: 0 10px 30px rgba(0,0,0,.5), var(--glow-pink); }
+  .toast.stage { border-color: var(--lime-400); box-shadow: 0 10px 30px rgba(0,0,0,.5), 0 0 20px rgba(124,245,155,.4); }
+  @keyframes toastSlide { from { transform: translateX(40px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+  @keyframes toastOut { to { transform: translateX(40px); opacity: 0; } }
+
+  /* ============== RESET BTN ============== */
+  .reset-btn {
+    position: fixed; bottom: 12px; right: 12px; z-index: 40;
+    padding: 6px 12px; font-size: 11px;
+    background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1);
+    color: var(--muted); border-radius: 8px; cursor: pointer; backdrop-filter: blur(4px);
+  }
+  .reset-btn:hover { color: var(--pink-400); border-color: var(--pink-400); }
+
+  /* confetti */
+  .confetti {
+    position: fixed; width: 8px; height: 8px; z-index: 500; pointer-events: none;
+    top: -10px;
+  }
+
+  @media (max-width: 960px) { main { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <div class="brand-logo"></div>
+    <div>
+      <h1>月影轮盘</h1>
+      <div class="brand-sub">MOON · REELS · ANNIVERSARY</div>
+    </div>
+  </div>
+  <div class="wallet">
+    <div class="chip"><span class="ico">🌙</span>月亮币 <b id="w-moon">0</b></div>
+    <div class="chip ticket"><span class="ico">🎫</span>兑换券 <b id="w-ticket">0</b></div>
+    <div class="chip mat"><span class="ico">🔧</span>升级料 <b id="w-mat">0</b></div>
+    <button class="btn primary" onclick="openShop()">＋ 充值月亮币</button>
+  </div>
+</header>
+
+<div class="toast-wrap" id="toast-wrap"></div>
+
+<main>
+  <!-- LEFT: SLOT -->
+  <section>
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">月亮老虎机</div>
+        <div style="font-size: 11px; color: var(--muted); letter-spacing: 1px;">SPIN TO WIN</div>
+      </div>
+
+      <div class="slot-stage">
+        <div class="slot-title">✦ LUNAR SLOT ✦</div>
+        <div class="reels-frame">
+          <div class="reels" id="reels">
+            <div class="reel"><div class="reel-inner"><div class="symbol">🌙</div></div></div>
+            <div class="reel"><div class="reel-inner"><div class="symbol">⭐</div></div></div>
+            <div class="reel"><div class="reel-inner"><div class="symbol">💎</div></div></div>
+          </div>
+        </div>
+
+        <div class="controls">
+          <div class="bet-toggle">
+            <button class="bet-btn active" data-bet="1">×1</button>
+            <button class="bet-btn" data-bet="5">×5</button>
+            <button class="bet-btn" data-bet="10">×10</button>
+          </div>
+          <button class="spin-btn" id="spin-btn" onclick="spin()">SPIN</button>
+        </div>
+
+        <div class="cost-row">单次消耗 <b id="cost-label">1</b> × 🌙 月亮币 · 单价 $0.5</div>
+
+        <label class="skip-toggle skip-corner"><input type="checkbox" id="skip-anim"> 跳过动画</label>
+        <div class="win-banner" id="win-banner"></div>
+      </div>
+
+      <div class="log" id="log"></div>
+    </div>
+
+    <div class="panel" style="margin-top: 20px;">
+      <div class="panel-header">
+        <div class="panel-title">每日收集</div>
+        <div style="font-size: 11px; color: var(--muted);">每 24h 刷新</div>
+      </div>
+      <div class="item-list" id="daily-collect-list"></div>
+    </div>
+  </section>
+
+  <!-- RIGHT -->
+  <section>
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">阶段奖励</div>
+        <div style="font-size: 11px; color: var(--muted);">消耗月亮币累积积分</div>
+      </div>
+      <div class="stage-track">
+        <div class="stage-fill" id="stage-bar-fill"></div>
+        <div class="stage-markers" id="stage-markers"></div>
+      </div>
+      <div style="text-align: center; font-size: 13px; margin-bottom: 14px; color: var(--muted);">
+        <b id="stage-bar-text" style="color: var(--gold-400); font-size: 16px; font-weight: 800; font-variant-numeric: tabular-nums;">0 / 50</b> <span style="font-size:11px;">积分</span>
+      </div>
+      <div class="stages-grid" id="stages"></div>
+    </div>
+
+    <div class="panel" style="margin-top: 20px;">
+      <div class="tabs" id="tabs">
+        <div class="tab active" data-tab="tasks">每日任务</div>
+        <div class="tab" data-tab="shop">兑换商店</div>
+        <div class="tab" data-tab="mecha">机甲收集</div>
+        <div class="tab" data-tab="rules">规则赔率</div>
+      </div>
+
+      <div class="tab-content active" id="tab-tasks">
+        <div class="item-list" id="daily-task-list"></div>
+      </div>
+
+      <div class="tab-content" id="tab-shop">
+        <div class="item-list" id="shop-list"></div>
+      </div>
+
+      <div class="tab-content" id="tab-mecha">
+        <div class="mecha-showcase">
+          <div class="mecha-name">夜枭 · 月霜型</div>
+          <div class="mecha-tag">NIGHT OWL · MOONFROST EDITION</div>
+          <div class="mecha-parts" id="mecha-parts"></div>
+          <div class="mecha-levels" id="mecha-levels"></div>
+        </div>
+        <div style="font-size: 11px; color: var(--muted); text-align: center; padding: 4px 12px;">
+          活动结束后，未使用的月亮币将自动转换为通用加速道具通过邮件补发
+        </div>
+      </div>
+
+      <div class="tab-content" id="tab-rules">
+        <div class="rules">
+          <h4>核心玩法</h4>
+          <ul>
+            <li>消耗 🌙 月亮币抽老虎机，支持 ×1 / ×5 / ×10 倍抽</li>
+            <li>相同图案越多奖励越好：三连满奖 / 二连 30%</li>
+            <li>出现 🎁 满月宝箱图案，每个图案触发 1 次开箱</li>
+            <li>每次抽奖获得 = 消耗月亮币数的积分，到档解锁阶段奖励（兑换券）</li>
+            <li>每日任务 & 收集每 24h 刷新；未领取次日通过邮件补发</li>
+            <li>活动结束未用月亮币 → 自动转通用加速发到邮箱；过期可在背包手动转换</li>
+          </ul>
+          <h4>核心道具产出</h4>
+          <ul>
+            <li>🌙 <b>月亮币</b>：活动商城充值 + 每日任务 · 用于抽取老虎机</li>
+            <li>🎫 <b>兑换券</b>：老虎机奖励 + 阶段奖励 · 用于兑换商店</li>
+            <li>🔧 <b>机甲升级道具</b>：老虎机奖励 + 兑换商店（少量）· 用于升级机甲</li>
+          </ul>
+          <h4>三连赔率表（×1 模式）</h4>
+          <table class="paytable">
+            <thead><tr><th style="width:40px;">图</th><th>说明</th><th style="text-align:right;">奖励</th></tr></thead>
+            <tbody id="paytable-body"></tbody>
+          </table>
+          <h4>其他</h4>
+          <ul>
+            <li>二连：按对应图案满奖的 30% 结算</li>
+            <li>无连：无奖励，但仍计积分</li>
+            <li>🎁 无视连线，每个独立触发开箱；三连 🎁 额外 +3 次开箱</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- Chest modal -->
+<div class="modal-bg" id="chest-modal">
+  <div class="modal">
+    <h3>🎁 满月宝箱</h3>
+    <div class="modal-sub">点击选择一个宝箱打开 · 剩余次数 <b id="chest-left">0</b></div>
+    <div class="chest-grid">
+      <div class="chest-box" data-idx="0">🎁</div>
+      <div class="chest-box" data-idx="1">🎁</div>
+      <div class="chest-box" data-idx="2">🎁</div>
+      <div class="chest-box" data-idx="3">🎁</div>
+      <div class="chest-box" data-idx="4">🎁</div>
+      <div class="chest-box" data-idx="5">🎁</div>
+    </div>
+    <div class="chest-result" id="chest-result">&nbsp;</div>
+    <button class="btn primary" id="chest-close" onclick="closeChest()" disabled>继续抽奖</button>
+  </div>
+</div>
+
+<!-- Recharge modal -->
+<div class="modal-bg" id="shop-modal">
+  <div class="modal" style="max-width: 500px;">
+    <h3>💰 月亮币充值</h3>
+    <div class="modal-sub">单价 $0.5 / 枚 · 试玩版模拟</div>
+    <div class="recharge-grid">
+      <div class="recharge-card" onclick="recharge(10)">
+        <div class="r-icon">🌙</div>
+        <div class="r-amt">× 10</div>
+        <div class="r-price">$5.00</div>
+      </div>
+      <div class="recharge-card" onclick="recharge(55)">
+        <div class="r-icon">🌙</div>
+        <div class="r-amt">× 55</div>
+        <div class="r-price">$25.00</div>
+        <div class="r-bonus">+ 5 赠送</div>
+      </div>
+      <div class="recharge-card" onclick="recharge(230)">
+        <div class="r-icon">🌙</div>
+        <div class="r-amt">× 230</div>
+        <div class="r-price">$100.00</div>
+        <div class="r-bonus">+ 30 赠送</div>
+      </div>
+    </div>
+    <button class="btn" onclick="closeShop()" style="margin-top: 18px;">关闭</button>
+  </div>
+</div>
+
+<button class="reset-btn" onclick="if(confirm('清空全部进度？')){localStorage.removeItem('moonReelsSave');location.reload();}">重置进度</button>
+
+<script>
+// ============== SYMBOL POOL & PAYTABLE ==============
+const SYMBOLS = [
+  { id: 'moon', emoji: '🌙', name: '月亮', weight: 30 },
+  { id: 'star', emoji: '⭐', name: '星星', weight: 25 },
+  { id: 'gear', emoji: '⚙️', name: '齿轮', weight: 18 },
+  { id: 'wrench', emoji: '🔧', name: '扳手', weight: 14 },
+  { id: 'diamond', emoji: '💎', name: '钻石', weight: 8 },
+  { id: 'mecha', emoji: '🤖', name: '机甲', weight: 4 },
+  { id: 'chest', emoji: '🎁', name: '满月宝箱', weight: 1 },
+];
+const PAYTABLE = {
+  moon:    { tickets: 3,  mats: 0, desc: '月亮回溯' },
+  star:    { tickets: 8,  mats: 0, desc: '星辰共鸣' },
+  gear:    { tickets: 20, mats: 0, desc: '兑换奔流' },
+  wrench:  { tickets: 0,  mats: 3, desc: '升级包' },
+  diamond: { tickets: 40, mats: 2, desc: '皇冠线' },
+  mecha:   { tickets: 60, mats: 5, desc: '机甲巨奖' },
+  chest:   { tickets: 0,  mats: 0, desc: '满月触发 +3 次额外开箱' },
+};
+const STAGES = [
+  { pts: 50,   reward: '🎫 × 20',  tickets: 20,  mats: 0 },
+  { pts: 150,  reward: '🎫 × 60',  tickets: 60,  mats: 0 },
+  { pts: 300,  reward: '🎫 × 120', tickets: 120, mats: 0 },
+  { pts: 500,  reward: '🎫 × 220', tickets: 220, mats: 0 },
+  { pts: 1000, reward: '🎫 × 500', tickets: 500, mats: 0 },
+  { pts: 2000, reward: '🎫 × 1200', tickets: 1200, mats: 0 },
+];
+const CHEST_POOL = [
+  { w: 40, tickets: 20,  mats: 0, label: '🎫 × 20' },
+  { w: 30, tickets: 50,  mats: 1, label: '🎫 × 50 + 🔧 × 1' },
+  { w: 18, tickets: 100, mats: 3, label: '🎫 × 100 + 🔧 × 3' },
+  { w: 8,  tickets: 200, mats: 8, label: '🎫 × 200 + 🔧 × 8' },
+  { w: 3,  tickets: 500, mats: 20, label: '🎫 × 500 + 🔧 × 20' },
+  { w: 1,  tickets: 0,   mats: 0, mecha: true, label: '💫 机甲随机部件 × 1' },
+];
+const DAILY_TASKS = [
+  { id: 't-spin10', icon: '🎰', desc: '抽奖 10 次', goal: 10, key: 'spins', reward: { moon: 3 } },
+  { id: 't-spin30', icon: '🎰', desc: '抽奖 30 次', goal: 30, key: 'spins', reward: { moon: 8 } },
+  { id: 't-bet5',   icon: '5️⃣', desc: '使用 ×5 模式抽奖 1 次', goal: 1, key: 'bet5', reward: { moon: 4 } },
+  { id: 't-bet10',  icon: '🔟', desc: '使用 ×10 模式抽奖 1 次', goal: 1, key: 'bet10', reward: { moon: 6 } },
+  { id: 't-chest',  icon: '🎁', desc: '打开 1 个满月宝箱', goal: 1, key: 'chests', reward: { moon: 5 } },
+];
+const DAILY_COLLECT = [
+  { id: 'c-moon',    symbol: 'moon',    goal: 15, reward: { tickets: 20 } },
+  { id: 'c-star',    symbol: 'star',    goal: 10, reward: { tickets: 30, mats: 1 } },
+  { id: 'c-diamond', symbol: 'diamond', goal: 4,  reward: { tickets: 60, mats: 3 } },
+  { id: 'c-chest',   symbol: 'chest',   goal: 1,  reward: { tickets: 100, mats: 5 } },
+];
+const SHOP_ITEMS = [
+  { id: 's-part-a', icon: '🧠', title: '夜枭·核心 LV1', sub: '1 级机甲部件 A', cost: { tickets: 400 }, reward: { part: 'A' }, stock: 1, unique: 'part-A' },
+  { id: 's-part-b', icon: '💪', title: '夜枭·左臂 LV1', sub: '1 级机甲部件 B', cost: { tickets: 400 }, reward: { part: 'B' }, stock: 1, unique: 'part-B' },
+  { id: 's-part-c', icon: '🚀', title: '夜枭·推进器 LV1', sub: '1 级机甲部件 C', cost: { tickets: 400 }, reward: { part: 'C' }, stock: 1, unique: 'part-C' },
+  { id: 's-mat1', icon: '🔧', title: '升级道具 × 5', sub: '少量补给 · 通用升级料', cost: { tickets: 30 }, reward: { mats: 5 }, stock: 10 },
+  { id: 's-mat2', icon: '🧰', title: '升级道具 × 20', sub: '少量补给 · 批发', cost: { tickets: 100 }, reward: { mats: 20 }, stock: 3 },
+];
+const MECHA_PARTS = [
+  { id: 'A', icon: '🧠', name: '核心' },
+  { id: 'B', icon: '💪', name: '左臂' },
+  { id: 'C', icon: '🚀', name: '推进器' },
+];
+const MECHA_LEVELS = [
+  { lv: 1, req: 0,   label: 'LV1', sub: '基础' },
+  { lv: 2, req: 20,  label: 'LV2', sub: '觉醒' },
+  { lv: 3, req: 60,  label: 'LV3', sub: '月华' },
+  { lv: 4, req: 150, label: 'LV4', sub: '终极' },
+];
+
+// ============== STATE ==============
+let state;
+function defaultState() {
+  return {
+    moon: 30, tickets: 0, mats: 0,
+    points: 0,
+    stagesClaimed: STAGES.map(() => false),
+    pendingChests: 0, bet: 1,
+    dailyDate: new Date().toDateString(),
+    dailyProgress: { spins: 0, bet5: 0, bet10: 0, chests: 0 },
+    dailyTaskClaimed: {}, dailyCollectProgress: {}, dailyCollectClaimed: {},
+    mechaParts: { A: false, B: false, C: false },
+    shopStock: SHOP_ITEMS.reduce((a, i) => (a[i.id] = i.stock, a), {}),
+    log: [],
+  };
+}
+function save() { localStorage.setItem('moonReelsSave', JSON.stringify(state)); }
+function load() {
+  const d = localStorage.getItem('moonReelsSave');
+  if (d) {
+    try { state = Object.assign(defaultState(), JSON.parse(d)); } catch { state = defaultState(); }
+  } else state = defaultState();
+  const today = new Date().toDateString();
+  if (state.dailyDate !== today) {
+    state.dailyDate = today;
+    state.dailyProgress = { spins: 0, bet5: 0, bet10: 0, chests: 0 };
+    state.dailyTaskClaimed = {}; state.dailyCollectProgress = {}; state.dailyCollectClaimed = {};
+    toast('🌅 每日任务已刷新');
+  }
+}
+
+// ============== UI UPDATE ==============
+function updateWallet() {
+  document.getElementById('w-moon').textContent = state.moon;
+  document.getElementById('w-ticket').textContent = state.tickets;
+  document.getElementById('w-mat').textContent = state.mats;
+  document.getElementById('cost-label').textContent = state.bet;
+}
+function updateStage() {
+  const maxPts = STAGES[STAGES.length - 1].pts;
+  const fillPct = Math.min(100, (state.points / maxPts) * 100);
+  document.getElementById('stage-bar-fill').style.width = fillPct + '%';
+  const nextUnclaimed = STAGES.findIndex((s, i) => !state.stagesClaimed[i] && state.points < s.pts);
+  const target = nextUnclaimed >= 0 ? STAGES[nextUnclaimed].pts : maxPts;
+  document.getElementById('stage-bar-text').textContent = state.points + ' / ' + target;
+
+  // markers
+  const markersEl = document.getElementById('stage-markers');
+  markersEl.innerHTML = STAGES.map((s, i) => {
+    const left = (s.pts / maxPts) * 100;
+    const reached = state.points >= s.pts;
+    const claimed = state.stagesClaimed[i];
+    return `<div class="marker ${reached ? 'reached' : ''} ${claimed ? 'claimed' : ''}" style="left:${left}%;">${s.pts >= 1000 ? (s.pts/1000) + 'K' : s.pts}</div>`;
+  }).join('');
+
+  // cards
+  const stagesEl = document.getElementById('stages');
+  stagesEl.innerHTML = STAGES.map((s, i) => {
+    const reached = state.points >= s.pts;
+    const claimed = state.stagesClaimed[i];
+    return `<div class="stage-card ${reached ? 'reached' : ''} ${claimed ? 'claimed' : ''}">
+      <div class="stage-pts">${s.pts}</div>
+      <div class="stage-reward">${s.reward}</div>
+      <button ${!reached || claimed ? 'disabled' : ''} onclick="claimStage(${i})">${claimed ? '已领取' : '领取奖励'}</button>
+    </div>`;
+  }).join('');
+}
+function updateDailyTasks() {
+  const list = document.getElementById('daily-task-list');
+  list.innerHTML = DAILY_TASKS.map(t => {
+    const prog = Math.min(t.goal, state.dailyProgress[t.key] || 0);
+    const pct = (prog / t.goal) * 100;
+    const done = prog >= t.goal;
+    const claimed = state.dailyTaskClaimed[t.id];
+    return `<div class="item-row">
+      <div class="item-icon">${t.icon}</div>
+      <div class="item-body">
+        <div class="item-title">${t.desc}</div>
+        <div class="item-desc">${prog} / ${t.goal}</div>
+        <div class="item-progress"><div class="item-progress-fill" style="width:${pct}%;"></div></div>
+      </div>
+      <div class="item-reward">${rewardStr(t.reward)}</div>
+      <button class="item-action" ${!done || claimed ? 'disabled' : ''} onclick="claimDailyTask('${t.id}')">${claimed ? '已领' : '领取'}</button>
+    </div>`;
+  }).join('');
+}
+function updateDailyCollect() {
+  const list = document.getElementById('daily-collect-list');
+  list.innerHTML = DAILY_COLLECT.map(c => {
+    const sym = SYMBOLS.find(s => s.id === c.symbol);
+    const prog = Math.min(c.goal, state.dailyCollectProgress[c.id] || 0);
+    const pct = (prog / c.goal) * 100;
+    const done = prog >= c.goal;
+    const claimed = state.dailyCollectClaimed[c.id];
+    return `<div class="item-row">
+      <div class="item-icon" style="font-size:26px;">${sym.emoji}</div>
+      <div class="item-body">
+        <div class="item-title">收集 ${sym.name} × ${c.goal}</div>
+        <div class="item-desc">进度 ${prog} / ${c.goal}</div>
+        <div class="item-progress"><div class="item-progress-fill" style="width:${pct}%;"></div></div>
+      </div>
+      <div class="item-reward">${rewardStr(c.reward)}</div>
+      <button class="item-action" ${!done || claimed ? 'disabled' : ''} onclick="claimDailyCollect('${c.id}')">${claimed ? '已领' : '领取'}</button>
+    </div>`;
+  }).join('');
+}
+function updateShop() {
+  const list = document.getElementById('shop-list');
+  list.innerHTML = SHOP_ITEMS.map(i => {
+    const stock = state.shopStock[i.id] === undefined ? i.stock : state.shopStock[i.id];
+    const alreadyHave = i.unique && state.mechaParts[i.reward.part];
+    const disabled = stock <= 0 || alreadyHave || !canAfford(i.cost);
+    return `<div class="item-row">
+      <div class="item-icon">${i.icon}</div>
+      <div class="item-body">
+        <div class="item-title">${i.title}</div>
+        <div class="item-desc">${i.sub} · 剩余 ${stock}${alreadyHave ? ' · 已拥有' : ''}</div>
+      </div>
+      <div class="item-cost">${costStr(i.cost)}</div>
+      <button class="item-action" ${disabled ? 'disabled' : ''} onclick="buy('${i.id}')">${alreadyHave ? '已有' : stock <= 0 ? '售罄' : '兑换'}</button>
+    </div>`;
+  }).join('');
+}
+function updateMecha() {
+  const partsEl = document.getElementById('mecha-parts');
+  partsEl.innerHTML = MECHA_PARTS.map(p => {
+    const owned = state.mechaParts[p.id];
+    return `<div class="mecha-part ${owned ? 'owned' : ''}">
+      <div class="p-icon">${p.icon}</div>
+      <div class="p-name">${p.name}</div>
+      <div class="p-status">${owned ? '已获得' : '未获得'}</div>
+    </div>`;
+  }).join('');
+  const allParts = Object.values(state.mechaParts).every(Boolean);
+  const lv = allParts ? MECHA_LEVELS.reduce((acc, l) => state.mats >= l.req ? l.lv : acc, 0) : 0;
+  const lvEl = document.getElementById('mecha-levels');
+  lvEl.innerHTML = MECHA_LEVELS.map(l => {
+    const topLv = MECHA_LEVELS[MECHA_LEVELS.length-1].lv;
+    const isTop = lv === l.lv && l.lv === topLv;
+    return `<div class="lv-card ${lv >= l.lv ? 'reached' : ''} ${isTop ? 'top' : ''}">
+      <div class="lv-label">${l.label}</div>
+      <div class="lv-req">${l.sub}${l.req ? ` · 🔧${l.req}` : ''}</div>
+    </div>`;
+  }).join('');
+}
+function updatePaytable() {
+  document.getElementById('paytable-body').innerHTML = SYMBOLS.map(s => {
+    const p = PAYTABLE[s.id];
+    const parts = [];
+    if (p.tickets) parts.push(`🎫×${p.tickets}`);
+    if (p.mats) parts.push(`🔧×${p.mats}`);
+    if (s.id === 'chest') parts.push('+3 开箱');
+    return `<tr><td>${s.emoji}</td><td>${p.desc}</td><td>${parts.join(' + ') || '—'}</td></tr>`;
+  }).join('');
+}
+function updateAll() { updateWallet(); updateStage(); updateDailyTasks(); updateDailyCollect(); updateShop(); updateMecha(); updatePaytable(); renderLog(); }
+function renderLog() {
+  document.getElementById('log').innerHTML = state.log.slice(-30).reverse().map(l => `<div class="log-entry ${l.cls||''}">${l.msg}</div>`).join('');
+}
+function logMsg(msg, cls='') { state.log.push({ msg, cls }); renderLog(); }
+
+// ============== HELPERS ==============
+function canAfford(c) { return (!c.moon || state.moon >= c.moon) && (!c.tickets || state.tickets >= c.tickets) && (!c.mats || state.mats >= c.mats); }
+function payCost(c) { state.moon -= c.moon || 0; state.tickets -= c.tickets || 0; state.mats -= c.mats || 0; }
+function grantReward(r) {
+  if (r.moon) state.moon += r.moon;
+  if (r.tickets) state.tickets += r.tickets;
+  if (r.mats) state.mats += r.mats;
+  if (r.part) state.mechaParts[r.part] = true;
+  if (r.mecha) {
+    const unowned = MECHA_PARTS.filter(p => !state.mechaParts[p.id]);
+    if (unowned.length) state.mechaParts[unowned[Math.floor(Math.random()*unowned.length)].id] = true;
+    else state.mats += 10;
+  }
+}
+function rewardStr(r) {
+  const p = [];
+  if (r.moon) p.push('🌙×' + r.moon);
+  if (r.tickets) p.push('🎫×' + r.tickets);
+  if (r.mats) p.push('🔧×' + r.mats);
+  if (r.part) p.push('🤖 部件' + r.part);
+  return p.join(' ') || '—';
+}
+function costStr(c) {
+  const p = [];
+  if (c.moon) p.push('🌙×' + c.moon);
+  if (c.tickets) p.push('🎫×' + c.tickets);
+  if (c.mats) p.push('🔧×' + c.mats);
+  return p.join(' ');
+}
+
+// ============== SPIN ==============
+function pickSymbol() {
+  const total = SYMBOLS.reduce((s, x) => s + x.weight, 0);
+  let r = Math.random() * total;
+  for (const s of SYMBOLS) { r -= s.weight; if (r <= 0) return s; }
+  return SYMBOLS[0];
+}
+async function spin() {
+  if (state.pendingChests > 0) { toast('先打开满月宝箱'); return; }
+  const bet = state.bet;
+  if (state.moon < bet) { toast('月亮币不够，先去充值或做任务'); return; }
+  payCost({ moon: bet });
+  state.dailyProgress.spins = (state.dailyProgress.spins || 0) + 1;
+  if (bet === 5) state.dailyProgress.bet5++;
+  if (bet === 10) state.dailyProgress.bet10++;
+
+  document.getElementById('spin-btn').disabled = true;
+  const reels = [...document.querySelectorAll('.reel')];
+  reels.forEach(r => r.classList.remove('win'));
+
+  const result = [pickSymbol(), pickSymbol(), pickSymbol()];
+  const skip = document.getElementById('skip-anim').checked;
+
+  if (skip) {
+    reels.forEach((r, i) => r.querySelector('.reel-inner').innerHTML = `<div class="symbol">${result[i].emoji}</div>`);
+  } else {
+    reels.forEach(r => r.classList.add('spinning'));
+    const ROW = 140; const LEN = 20;
+    for (let i = 0; i < 3; i++) {
+      const sequence = [];
+      for (let j = 0; j < LEN - 1; j++) sequence.push(SYMBOLS[Math.floor(Math.random()*SYMBOLS.length)]);
+      sequence.push(result[i]);
+      const inner = reels[i].querySelector('.reel-inner');
+      inner.innerHTML = sequence.map(s => `<div class="symbol">${s.emoji}</div>`).join('');
+      inner.style.transition = 'none';
+      inner.style.transform = 'translateY(0)';
+      void inner.offsetWidth;
+      const dur = 1.2 + i * 0.3;
+      inner.style.transition = `transform ${dur}s cubic-bezier(.17,.67,.3,1.2)`;
+      inner.style.transform = `translateY(-${(sequence.length - 1) * ROW}px)`;
+    }
+    await wait(1900);
+    reels.forEach(r => r.classList.remove('spinning'));
+    reels.forEach((r, i) => {
+      const inner = r.querySelector('.reel-inner');
+      inner.style.transition = 'none';
+      inner.innerHTML = `<div class="symbol">${result[i].emoji}</div>`;
+      inner.style.transform = 'translateY(0)';
+    });
+  }
+
+  result.forEach(s => {
+    DAILY_COLLECT.forEach(c => { if (c.symbol === s.id) state.dailyCollectProgress[c.id] = (state.dailyCollectProgress[c.id] || 0) + bet; });
+  });
+
+  const ids = result.map(s => s.id);
+  const chests = ids.filter(x => x === 'chest').length;
+  const allSame = ids[0] === ids[1] && ids[1] === ids[2];
+  const twoSame = !allSame && (ids[0]===ids[1] || ids[1]===ids[2] || ids[0]===ids[2]);
+
+  let r = { tickets: 0, mats: 0 };
+  const points = bet;
+  let msg = `🎰 ${result.map(s=>s.emoji).join(' ')}`;
+  let cls = '';
+
+  if (allSame) {
+    const p = PAYTABLE[ids[0]];
+    r.tickets = p.tickets * bet; r.mats = p.mats * bet;
+    msg += ` · 三连·${p.desc}`;
+    cls = 'win';
+    reels.forEach(rr => rr.classList.add('win'));
+    if (ids[0] === 'chest') state.pendingChests += 3 * bet;
+    showWinBanner(`${result[0].emoji} ${p.desc}！`);
+    confetti();
+  } else if (twoSame) {
+    const sym = ids[0]===ids[1] ? ids[0] : (ids[1]===ids[2] ? ids[1] : ids[0]);
+    const p = PAYTABLE[sym];
+    r.tickets = Math.floor(p.tickets * 0.3) * bet;
+    r.mats = Math.floor(p.mats * 0.3) * bet;
+    if (r.tickets || r.mats) msg += ` · 二连·${p.desc}(30%)`;
+    else msg += ' · 二连';
+  }
+
+  if (chests > 0 && !allSame) {
+    state.pendingChests += chests * bet;
+    msg += ` · 🎁×${chests}${bet > 1 ? '×'+bet : ''} 触发宝箱`;
+    cls = 'chest';
+  }
+
+  grantReward(r);
+  state.points += points;
+  msg += ` · +${points} 积分${r.tickets || r.mats ? ' · ' + rewardStr(r) : ''}`;
+  logMsg(msg, cls);
+  if (allSame) toast('🎉 ' + PAYTABLE[ids[0]].desc, cls || 'win');
+
+  if (state.pendingChests > 0) {
+    await wait(500);
+    openChestModal();
+  } else {
+    document.getElementById('spin-btn').disabled = false;
+  }
+  save(); updateAll();
+}
+function wait(ms) { return new Promise(r => setTimeout(r, ms)); }
+function showWinBanner(text) {
+  const el = document.getElementById('win-banner');
+  el.textContent = '🎊 ' + text + ' 🎊';
+  el.classList.remove('show'); void el.offsetWidth;
+  el.classList.add('show');
+}
+function confetti() {
+  const colors = ['#ff4b9d', '#ffcd4a', '#7b5cff', '#5be7ff', '#7cf59b'];
+  for (let i = 0; i < 40; i++) {
+    const c = document.createElement('div');
+    c.className = 'confetti';
+    c.style.left = (Math.random() * 100) + 'vw';
+    c.style.background = colors[Math.floor(Math.random()*colors.length)];
+    c.style.transform = `rotate(${Math.random()*360}deg)`;
+    c.style.borderRadius = Math.random() > .5 ? '50%' : '2px';
+    c.style.animation = `confettiFall ${1.5 + Math.random()*1.5}s linear forwards`;
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 3200);
+  }
+}
+const style = document.createElement('style');
+style.textContent = `@keyframes confettiFall { to { transform: translateY(110vh) rotate(720deg); opacity: 0; } }`;
+document.head.appendChild(style);
+
+// ============== CHEST ==============
+function openChestModal() {
+  document.getElementById('chest-modal').classList.add('show');
+  document.getElementById('chest-left').textContent = state.pendingChests;
+  document.getElementById('chest-result').innerHTML = '&nbsp;';
+  document.getElementById('chest-close').disabled = true;
+  [...document.querySelectorAll('.chest-box')].forEach(b => { b.classList.remove('opened'); b.innerHTML = '🎁'; b.onclick = () => pickChest(b); });
+}
+function pickChest(box) {
+  if (box.classList.contains('opened') || state.pendingChests <= 0) return;
+  box.classList.add('opened');
+  state.pendingChests--;
+  state.dailyProgress.chests = (state.dailyProgress.chests || 0) + 1;
+  const prize = rollChest();
+  grantReward(prize);
+  box.innerHTML = prize.mecha ? '💫' : '✨';
+  document.getElementById('chest-result').textContent = `开出：${prize.label}`;
+  document.getElementById('chest-left').textContent = state.pendingChests;
+  logMsg('🎁 开箱：' + prize.label, 'chest');
+  if (prize.mecha || prize.tickets >= 500) confetti();
+  updateWallet();
+
+  const boxes = [...document.querySelectorAll('.chest-box')];
+  const allOpened = boxes.every(b => b.classList.contains('opened'));
+  if (state.pendingChests > 0 && allOpened) {
+    setTimeout(() => { boxes.forEach(b => { b.classList.remove('opened'); b.innerHTML = '🎁'; }); document.getElementById('chest-result').textContent = '新一轮 · 继续选择'; }, 500);
+  } else if (state.pendingChests <= 0) {
+    document.getElementById('chest-close').disabled = false;
+  }
+  save();
+}
+function rollChest() {
+  const total = CHEST_POOL.reduce((s, p) => s + p.w, 0);
+  let r = Math.random() * total;
+  for (const p of CHEST_POOL) { r -= p.w; if (r <= 0) return p; }
+  return CHEST_POOL[0];
+}
+function closeChest() {
+  if (state.pendingChests > 0) return;
+  document.getElementById('chest-modal').classList.remove('show');
+  document.getElementById('spin-btn').disabled = false;
+  updateAll();
+}
+
+// ============== CLAIM / SHOP ==============
+function claimStage(i) {
+  if (state.stagesClaimed[i] || state.points < STAGES[i].pts) return;
+  state.stagesClaimed[i] = true;
+  grantReward(STAGES[i]);
+  toast('🏆 阶段 ' + STAGES[i].pts + ' · ' + STAGES[i].reward, 'stage');
+  logMsg('🏆 阶段奖励 ' + STAGES[i].pts + '：' + STAGES[i].reward, 'win');
+  confetti();
+  save(); updateAll();
+}
+function claimDailyTask(id) {
+  const t = DAILY_TASKS.find(x => x.id === id);
+  if (!t || state.dailyTaskClaimed[id] || (state.dailyProgress[t.key] || 0) < t.goal) return;
+  state.dailyTaskClaimed[id] = true;
+  grantReward(t.reward);
+  toast('📋 ' + t.desc + ' · ' + rewardStr(t.reward));
+  save(); updateAll();
+}
+function claimDailyCollect(id) {
+  const c = DAILY_COLLECT.find(x => x.id === id);
+  if (!c || state.dailyCollectClaimed[id] || (state.dailyCollectProgress[id] || 0) < c.goal) return;
+  state.dailyCollectClaimed[id] = true;
+  grantReward(c.reward);
+  toast('🌓 每日收集 · ' + rewardStr(c.reward));
+  save(); updateAll();
+}
+function buy(id) {
+  const it = SHOP_ITEMS.find(x => x.id === id);
+  if (!it) return;
+  const stock = state.shopStock[id] === undefined ? it.stock : state.shopStock[id];
+  if (stock <= 0) return;
+  if (it.unique && state.mechaParts[it.reward.part]) return;
+  if (!canAfford(it.cost)) { toast('兑换券不够'); return; }
+  payCost(it.cost); grantReward(it.reward);
+  state.shopStock[id] = stock - 1;
+  toast('🛒 兑换成功 · ' + it.title);
+  logMsg('🛒 兑换：' + it.title, 'win');
+  save(); updateAll();
+}
+function openShop() { document.getElementById('shop-modal').classList.add('show'); }
+function closeShop() { document.getElementById('shop-modal').classList.remove('show'); }
+function recharge(n) { state.moon += n; save(); updateAll(); closeShop(); toast('💰 充值成功 · 月亮币 +' + n); }
+
+// ============== TOAST ==============
+function toast(msg, cls='') {
+  const t = document.createElement('div');
+  t.className = 'toast ' + cls; t.textContent = msg;
+  document.getElementById('toast-wrap').appendChild(t);
+  setTimeout(() => t.remove(), 3100);
+}
+
+// ============== BIND ==============
+document.querySelectorAll('.bet-btn').forEach(b => {
+  b.onclick = () => {
+    document.querySelectorAll('.bet-btn').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    state.bet = parseInt(b.dataset.bet);
+    updateWallet();
+  };
+});
+document.querySelectorAll('.tab').forEach(t => {
+  t.onclick = () => {
+    document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+    document.getElementById('tab-' + t.dataset.tab).classList.add('active');
+  };
+});
+
+load();
+updateAll();
+setTimeout(() => toast('🎰 欢迎来到月影轮盘，祝指挥官好运！'), 300);
+if (state.pendingChests > 0) setTimeout(() => openChestModal(), 300);
+</script>
+</body>
+</html>

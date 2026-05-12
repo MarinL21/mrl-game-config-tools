@@ -2,11 +2,31 @@
 """维护持久的 output/grfal/gallery.html：三分区累积批次。"""
 from __future__ import annotations
 
+import contextlib
+import fcntl
 import html
+import json
+import os
 import shutil
 import subprocess
 import time
 from pathlib import Path
+
+
+@contextlib.contextmanager
+def _exclusive_lock(target: Path):
+    """在 target 同目录开一个 .lock 文件，flock 独占。
+    多个 generate.py 子进程并发 append_batch 时序列化对 gallery_data.json/gallery.html 的读改写。"""
+    target.parent.mkdir(parents=True, exist_ok=True)
+    lock_path = target.parent / f".{target.name}.lock"
+    fd = os.open(str(lock_path), os.O_RDWR | os.O_CREAT, 0o644)
+    try:
+        fcntl.flock(fd, fcntl.LOCK_EX)
+        yield
+    finally:
+        try: fcntl.flock(fd, fcntl.LOCK_UN)
+        except Exception: pass
+        os.close(fd)
 
 THUMB_MAX_PX = 512
 
@@ -30,6 +50,7 @@ MODULE_TITLES = {
     "ui": "活动界面 UI",
     "chest": "宝箱图标",
     "item": "活动道具",
+    "dighole": "挖孔道具",
 }
 
 MARKER = {m: f"<!-- BATCHES_{m.upper()} -->" for m in MODULE_TITLES}
@@ -84,10 +105,20 @@ __SECTIONS__
 <script>
 async function copyImg(btn, src) {
   try {
-    const r = await fetch(src);
-    const blob = await r.blob();
-    const type = blob.type || 'image/png';
-    await navigator.clipboard.write([new ClipboardItem({[type]: blob})]);
+    if (location.protocol === 'file:') {
+      throw new Error('file:// 下浏览器禁止脚本读图\\n请在项目根跑：\\n  python3 -m http.server 8765\\n再访问 http://localhost:8765/output/grfal/gallery.html\\n\\n（或图片右键 → 拷贝图像）');
+    }
+    const blobPromise = (async () => {
+      const img = new Image();
+      img.src = src;
+      await new Promise((res, rej) => { img.onload = res; img.onerror = () => rej(new Error('图片加载失败')); });
+      const canvas = document.createElement('canvas');
+      canvas.width = img.naturalWidth;
+      canvas.height = img.naturalHeight;
+      canvas.getContext('2d').drawImage(img, 0, 0);
+      return await new Promise((res, rej) => canvas.toBlob(b => b ? res(b) : rej(new Error('canvas 导出失败')), 'image/png'));
+    })();
+    await navigator.clipboard.write([new ClipboardItem({ 'image/png': blobPromise })]);
     const label = btn.textContent;
     btn.textContent = '✓ 已复制';
     btn.classList.add('ok');
@@ -167,13 +198,13 @@ def append_batch(
     if not engines and engine:
         engines = [engine]
 
+    # prep（refs/cells/batch_html 渲染）—— 不读写 gallery.html / gallery_data.json，可在锁外
+    gallery_dir = gallery_path.parent
     if not gallery_path.exists():
         _init_html(gallery_path)
-    doc = gallery_path.read_text(encoding="utf-8")
 
     # 渲染 refs：外部路径的 ref 图拷贝到 gallery 本地 refs/ 目录，避免 Chrome file:// 跨目录限制
     ref_html = []
-    gallery_dir = gallery_path.parent
     refs_dir = gallery_dir / "refs" / module
     refs_dir.mkdir(parents=True, exist_ok=True)
     for i, rp in enumerate(ref_paths):
@@ -243,15 +274,62 @@ def append_batch(
         f'</div>'
     )
 
-    # 插到 marker 前 + 清掉 empty 占位
+    # 准备 ref_records / cell_records（无 IO，可在锁外）
     marker = MARKER[module]
-    if marker not in doc:
-        # 老版本文件没有 marker，重建
-        _init_html(gallery_path)
-        doc = gallery_path.read_text(encoding="utf-8")
+    data_path = gallery_path.parent / "gallery_data.json"
+    ref_records = []
+    for rp in ref_paths:
+        rp_abs = Path(rp).resolve()
+        try:
+            ref_src = str(rp_abs.relative_to(gallery_dir))
+        except ValueError:
+            ref_src = f"refs/{module}/{rp_abs.name}"
+        ref_records.append({"src": ref_src, "name": rp_abs.name})
+    cell_records = []
+    for it in items:
+        rel_path = it["path"]
+        eng = it.get("engine", "?")
+        cell_records.append({
+            "thumb": str(Path("thumbs") / Path(rel_path).with_suffix(".jpg")),
+            "engine_label": ENGINE_DISPLAY.get(eng, eng),
+            "src": rel_path,
+            "abs": str((gallery_path.parent / rel_path).resolve()),
+        })
+    new_record = {
+        "module": module,
+        "timestamp": time.strftime("%Y-%m-%d %H:%M", time.strptime(timestamp[:15], "%Y%m%d_%H%M%S")),
+        "engine": engines_label,
+        "count": len(items),
+        "duration": f"{duration_s:.0f}s",
+        "prompt": prompt,
+        "refs": ref_records,
+        "cells": cell_records,
+    }
 
-    # 移除该模块的 empty 占位（如果有）
-    doc = doc.replace(f'<div class="empty empty-{module}">暂无生成，运行 skill 后自动填充</div>\n', "")
-    # 在 marker 后插入（让最新批次出现在模块顶部）
-    doc = doc.replace(marker, f"{marker}\n{batch_html}", 1)
-    gallery_path.write_text(doc, encoding="utf-8")
+    # === 临界区：读-改-写 gallery.html + gallery_data.json，flock 序列化避免并发覆盖 ===
+    with _exclusive_lock(gallery_path):
+        # 重新读 HTML（必须在锁内 read，否则两个进程读到同一份会互相覆盖）
+        if not gallery_path.exists():
+            _init_html(gallery_path)
+        doc = gallery_path.read_text(encoding="utf-8")
+        if marker not in doc:
+            _init_html(gallery_path)
+            doc = gallery_path.read_text(encoding="utf-8")
+        doc = doc.replace(f'<div class="empty empty-{module}">暂无生成，运行 skill 后自动填充</div>\n', "")
+        doc = doc.replace(marker, f"{marker}\n{batch_html}", 1)
+        gallery_path.write_text(doc, encoding="utf-8")
+
+        # 同步写 gallery_data.json（gallery_server.py 的数据源；HTML 仅作 legacy 静态归档）
+        try:
+            data = json.loads(data_path.read_text(encoding="utf-8")) if data_path.exists() else []
+        except Exception:
+            # 损坏时不要直接丢弃—保留备份让用户/恢复脚本处理
+            backup = data_path.with_suffix(f".json.corrupt_{int(time.time())}")
+            try:
+                if data_path.exists(): shutil.copy2(data_path, backup)
+            except Exception: pass
+            data = []
+        if not isinstance(data, list):
+            data = []
+        data.append(new_record)
+        data_path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")

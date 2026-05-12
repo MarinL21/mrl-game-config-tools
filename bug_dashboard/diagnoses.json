@@ -1,0 +1,250 @@
+{
+  "_doc": "诊断库 — 按 jira key 索引。build.py 会把这些诊断合并进 Jira 拉取的数据,渲染到 HTML。",
+  "_schema": {
+    "module": "模块分类(用于左侧分组)",
+    "cause": "根因(字段级具体描述)",
+    "config_tables": "涉及的配置表",
+    "suggestion": "处理建议(可包含 markdown)",
+    "category": "类型: localization / config / art / client / other",
+    "diagnosed_at": "诊断日期 YYYY-MM-DD",
+    "verified": "是否走过真实表 gws 验证(true/false)"
+  },
+
+  "P2DEV-142432": {
+    "module": "5月节日-新套装(巨龙套)",
+    "category": "localization",
+    "cause": "已修复 ✅ — 1011 表 ITEM 主表已含 35 条 labor_2026_city_* 翻译(2026-05-04 通过 p2-translation-automatic 写入暂存区→提交主表)",
+    "config_tables": ["1011"],
+    "suggestion": "等 1011 表 push 到 gdconfig + CI 触发后,QA 重测应通过。验证:`gws read 1011 ITEM` 已确认 row labor_2026_city_1_name cn=\"城市:蓄能高塔\"",
+    "diagnosed_at": "2026-05-05",
+    "verified": true
+  },
+  "P2DEV-142435": {
+    "module": "5月节日-新套装(巨龙套)",
+    "category": "config",
+    "cause": "已修复 ✅ — 1168 row 11684901-904 已加巨龙套 4 件跳转(2026-05-06)。LV1/LV2→推币机21127808+弹珠GACHA21127806;紫电苍龙/万钧雷霆→节日挖孔21127899。",
+    "config_tables": ["1168"],
+    "suggestion": "等 1168 表 push 到 gdconfig + CI 触发后 QA 重测。",
+    "diagnosed_at": "2026-05-06",
+    "verified": true
+  },
+  "P2DEV-142433": {
+    "module": "5月节日-新套装(巨龙套)",
+    "category": "client",
+    "cause": "1312 高级主城 row 13121114 LC 引用正确 (LC_ITEM_labor_2026_city_2_name/desc),items=[111110346-111110349]。配置侧无明显问题,大概率客户端解锁状态判断 bug。",
+    "config_tables": ["1312"],
+    "suggestion": "推给客户端排查解锁状态机。配置侧可对照战地套 13121107(高级)对比是否有字段缺失。",
+    "diagnosed_at": "2026-05-05",
+    "verified": true
+  },
+  "P2DEV-142434": {
+    "module": "5月节日-新套装(巨龙套)",
+    "category": "config",
+    "cause": "1388.13881017 主城特效 C_INT_effect_key=15121054(指向 1512 effect_list),需验证 1512 row 15121054 是否存在 + 资源路径完整",
+    "config_tables": ["1388", "1512"],
+    "suggestion": "gws 读 1512 表 row 15121054,确认 effect_key 资源路径(美术资源/特效配置)是否完整;如不存在则补建,如已存在则推给客户端排查渲染。",
+    "diagnosed_at": "2026-05-05",
+    "verified": true
+  },
+  "P2DEV-142430": {
+    "module": "5月节日-新套装(巨龙套)",
+    "category": "art",
+    "cause": "1389.13891006 巨龙套 C_ARR_scale=[1.1,1.1,1.1] vs 战地套 13891005 是 [0.8,0.8,0.8]。但用户报\"偏小\"——可能模型本身做小了,scale 系数无法补足",
+    "config_tables": ["1389"],
+    "suggestion": "调整 1389.13891006.C_ARR_scale,比如 [1.5,1.5,1.5];或与美术沟通模型尺寸本身。",
+    "diagnosed_at": "2026-05-05",
+    "verified": true
+  },
+  "P2DEV-142502": {
+    "module": "5月节日-新套装(巨龙套)",
+    "category": "art",
+    "cause": "1389.13891006 C_ARR_position=[0.6,-1.1,0] 与战地套 [−0.6,2,0] 完全不同,需美术调整",
+    "config_tables": ["1389"],
+    "suggestion": "调整 1389.13891006.C_ARR_position 参数,与美术对齐效果。",
+    "diagnosed_at": "2026-05-05",
+    "verified": true
+  },
+
+  "P2DEV-142466": {
+    "module": "5月节日-头像框礼包",
+    "category": "localization",
+    "cause": "1011 ITEM 缺 map_emoji_*_labor2026_* 系列 LC_Key(行军表情头像框礼包内的表情未翻译)",
+    "config_tables": ["1011", "1180"],
+    "suggestion": "走 p2-translation-automatic 补本地化,可镜像同节同类(参考 feedback_translation_clone_from_sibling)。",
+    "diagnosed_at": "2026-05-05",
+    "verified": false
+  },
+  "P2DEV-142459": {
+    "module": "5月节日-头像框礼包",
+    "category": "config",
+    "cause": "1142 表已配 3 行 labor_2026 头像框(11421098/100/101),unlock_requirement 与其他节日一致(building 99级通用)。可能 1168 缺 access_group 让玩家不可获取,或客户端缓存",
+    "config_tables": ["1142", "1168"],
+    "suggestion": "先确认 1168 已建头像框礼包对应 access_group(同 142435 链路);客户端清缓存重测;如还不显示需排查 client schema 同步。",
+    "diagnosed_at": "2026-05-05",
+    "verified": true
+  },
+  "P2DEV-142465": {
+    "module": "5月节日-头像框礼包",
+    "category": "config",
+    "cause": "2112.21129003 头像框礼包 A_MAP_event_label.group_label = `LC_EVENT_unite_name_3anni_2025`(2025 周年庆联动包名,沿用没改)→ 客户端读到\"表情上新\"标题",
+    "config_tables": ["2112"],
+    "suggestion": "改 2112.21129003 col 7 的 group_label 引用,新建 LC_EVENT_unite_name_2026_labor_avatar 之类的 key 并在 1011 EVENT 加 18 语翻译。",
+    "diagnosed_at": "2026-05-05",
+    "verified": true
+  },
+  "P2DEV-142463": {
+    "module": "5月节日-头像框礼包",
+    "category": "art",
+    "cause": "1511 display_key 三卡资源未替换(头像框礼包 21129003 沿用了表情包默认资源)",
+    "config_tables": ["1511"],
+    "suggestion": "替换头像框礼包专属 display_key 资源 ID。",
+    "diagnosed_at": "2026-05-05",
+    "verified": false
+  },
+  "P2DEV-142485": {
+    "module": "5月节日-头像框礼包",
+    "category": "config",
+    "cause": "★ 整个 IAP 链路下游断:2135.21359991 邮件 LC 没配 + 2013 表 0 行 config_id=2011610002 模板(头像框礼包模板行不存在),客户端读不到正确邮件名只能 fallback 到表情礼包默认",
+    "config_tables": ["2135", "2013", "2011"],
+    "suggestion": "在 2013 新建头像框礼包模板行(config_id=2011610002, temp_type=normal),配置 pkg_title=新建 LC_EVENT_unite_labor_2026_avatar_pkg_title、pkg_desc 同理、price=$X.99。",
+    "diagnosed_at": "2026-05-05",
+    "verified": true
+  },
+  "P2DEV-142484": {
+    "module": "5月节日-头像框礼包",
+    "category": "config",
+    "cause": "已修复 ✅ — 1168 row 11684905 已加头像框礼包跳转(2026-05-06)。label=non_item, access→21129003,仿同节日动态表情(11684882)写法。",
+    "config_tables": ["1168"],
+    "suggestion": "等 1168 表 push 到 gdconfig + CI 触发后 QA 重测。注意 142488(get_from 引用 2025blafri 老 key)是另一个独立 bug,需单独处理。",
+    "diagnosed_at": "2026-05-06",
+    "verified": true
+  },
+  "P2DEV-142483": {
+    "module": "5月节日-头像框礼包",
+    "category": "config",
+    "cause": "★ 2135.21359991.A_ARR_get_items=`[]`(空数组),购买后不发放任何物品 → 核心破译器没在奖励里所以不显示图标",
+    "config_tables": ["2135", "1111"],
+    "suggestion": "补 2135.21359991.A_ARR_get_items,加入头像框 + 帮派礼物 + 核心破译器(LC_Key 已存 fes_hole-digging_name_5)+ 其他奖励道具。验证 1111 该道具 icon 字段已配。",
+    "diagnosed_at": "2026-05-05",
+    "verified": true
+  },
+  "P2DEV-142486": {
+    "module": "5月节日-头像框礼包",
+    "category": "config",
+    "cause": "已修复 ✅ — 2013.2013560125(2026拓荒节-头像框4.99) A_ARR_other_items 缺 item 11114316 ×1(帮派礼物),其他同节日表情礼包(2013101135 等)都有这条。2026-05-07 已追加(7 项),sheet row 9850 R 列。",
+    "config_tables": ["2013"],
+    "suggestion": "等 2013 表 push 到 gdconfig + CI 后 QA 重测。注意:142486 之前被错误归因为 2135.get_items=[] (那只是 package 链路次要因素),真根因在 2013 这条。",
+    "diagnosed_at": "2026-05-07",
+    "verified": true
+  },
+  "P2DEV-142488": {
+    "module": "5月节日-头像框礼包",
+    "category": "config",
+    "cause": "★ 双重错配:① 1142.11421098 (联动头像框) get_from = `LC_MENU_frame_get_through_2025blafri_after`(黑五2025老key,未改) ② 1011 MENU 表完全没建 labor_2026 对应 frame_get_through key(对照已有 2025blafri/2026vdbp/2026sci 等节日都有,labor 缺)",
+    "config_tables": ["1142", "1011"],
+    "suggestion": "① 在 1011 MENU 新建 LC_MENU_frame_get_through_unite_labor_2026_after + _before 18 语 ② 改 1142.11421098.C_MAP_lc_get_from 引用为新 key。11421100/11421101 引用 group_buy_after,如果业务上是来自团购就保留,否则也要换。",
+    "diagnosed_at": "2026-05-05",
+    "verified": true
+  },
+
+  "P2DEV-142569": {
+    "module": "线上问题",
+    "category": "client",
+    "cause": "趣味电玩特效线上问题 — 3月已上线科技节资源,需查 1365 row 资源完整性 + 客户端渲染",
+    "config_tables": ["1365"],
+    "suggestion": "需要看 Jira 截图,基于现象进一步排查。配置侧从 1365 march_effect 趣味电玩 row 入手。",
+    "diagnosed_at": "2026-05-05",
+    "verified": false
+  },
+  "P2DEV-142423": {
+    "module": "5月节日-其他",
+    "category": "art",
+    "cause": "横版 BP 道具图标未更新为拓荒节新美术",
+    "config_tables": ["1111", "1511"],
+    "suggestion": "更新拓荒节自选宝箱内道具的 icon 字段。",
+    "diagnosed_at": "2026-05-05",
+    "verified": false
+  },
+
+  "X2-42713": {
+    "module": "X2-节日累充",
+    "category": "localization",
+    "cause": "[未真实表验证] 推测 1011 表缺幸运盲盒「Join」按钮 LC_Key",
+    "config_tables": ["1011"],
+    "suggestion": "需 gws 真实表诊断。补 1011 该按钮 LC_Key 18 语。",
+    "diagnosed_at": "2026-05-04",
+    "verified": false
+  },
+  "X2-42711": {
+    "module": "X2-节日累充",
+    "category": "art",
+    "cause": "[未真实表验证] 推测排行榜积分图标未替换",
+    "config_tables": ["2118", "1511"],
+    "suggestion": "需 gws 真实表诊断。改 2118 排行榜配置图标资源。",
+    "diagnosed_at": "2026-05-04",
+    "verified": false
+  },
+  "X2-42707": {
+    "module": "X2-英雄累充",
+    "category": "localization",
+    "cause": "[未真实表验证] 推测 1011 表缺盲盒 Tips LC_Key",
+    "config_tables": ["1011"],
+    "suggestion": "需 gws 真实表诊断。补 1011 Tips LC_Key。",
+    "diagnosed_at": "2026-05-04",
+    "verified": false
+  },
+  "X2-42686": {
+    "module": "X2-英雄累充",
+    "category": "config",
+    "cause": "[未真实表验证] 推测累充盲盒抽奖资格门槛没配",
+    "config_tables": ["2123", "1168"],
+    "suggestion": "需 gws 真实表诊断。",
+    "diagnosed_at": "2026-05-04",
+    "verified": false
+  },
+  "X2-42681": {
+    "module": "X2-英雄累充",
+    "category": "localization",
+    "cause": "已修复 ✅ — P2 1011 EVENT row 4506 (spring_accum_recharge_rule) 追加句 3(盲盒)+句 4(排行榜) 18 语翻译,2026-05-06。前 2 句保留原翻译,术语「幸运盲盒」按规范库 (Lucky Mystery Box / Boîte Mystère Chanceuse 等)。",
+    "config_tables": ["1011"],
+    "suggestion": "等 1011 push 到 gdconfig + CI 触发后 QA 重测。LC_Key=spring_accum_recharge_rule 在 P2 1011 表,X2 客户端跨项目复用此 key。",
+    "diagnosed_at": "2026-05-06",
+    "verified": true
+  },
+  "X2-42680": {
+    "module": "X2-英雄累充",
+    "category": "art",
+    "cause": "[未真实表验证] 推测跑马灯 banner 资源未更新",
+    "config_tables": ["1511"],
+    "suggestion": "需 gws 真实表诊断。",
+    "diagnosed_at": "2026-05-04",
+    "verified": false
+  },
+  "X2-42679": {
+    "module": "X2-英雄累充",
+    "category": "localization",
+    "cause": "[未真实表验证] 推测 1011 缺跑马灯文本 LC_Key",
+    "config_tables": ["1011"],
+    "suggestion": "需 gws 真实表诊断。",
+    "diagnosed_at": "2026-05-04",
+    "verified": false
+  },
+  "X2-42677": {
+    "module": "X2-英雄累充",
+    "category": "localization",
+    "cause": "[未真实表验证] 推测 1011 缺幸运盲盒入口标题 LC_Key",
+    "config_tables": ["1011"],
+    "suggestion": "需 gws 真实表诊断。",
+    "diagnosed_at": "2026-05-04",
+    "verified": false
+  },
+  "X2-41936": {
+    "module": "X2-巨猿活动",
+    "category": "art",
+    "cause": "[未真实表验证] 推测巨猿模型资源未替换",
+    "config_tables": ["1511"],
+    "suggestion": "需 gws 真实表诊断。",
+    "diagnosed_at": "2026-05-04",
+    "verified": false
+  }
+}

@@ -46,7 +46,19 @@
       "Skill(update-config)",
       "Skill(update-config:*)",
       "Bash(python3 -c ':*)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(gws auth *)",
+      "Bash(gws sheets *)",
+      "Bash(python3 -c ' *)",
+      "Bash(python3 -X utf8 -c ' *)",
+      "Bash(mkdir -p /Users/marinl/游戏运营策划工具/.agents/skills/p2-festival-art-brief)",
+      "Bash(cp /Users/marinl/游戏运营策划工具/.claude/skills/p2-festival-art-brief/SKILL.md /Users/marinl/游戏运营策划工具/.agents/skills/p2-festival-art-brief/SKILL.md)",
+      "Bash(rm -f /Users/marinl/.config/art_brief_cse /Users/marinl/.config/art_brief_cse.usage)",
+      "Bash(rm -rf /Users/marinl/游戏运营策划工具/.claude/skills/p2-festival-art-brief/scripts/__pycache__)",
+      "Bash(mkdir -p /Users/marinl/游戏运营策划工具/.claude/skills/p2-festival-art-brief/knowledge)",
+      "Bash(cp /Users/marinl/游戏运营策划工具/docs/festival_art_brief/*.md /Users/marinl/游戏运营策划工具/.claude/skills/p2-festival-art-brief/knowledge/)",
+      "Bash(rm anchors/item/金宝箱-主城.png anchors/item/金宝箱-行军.png anchors/item/银宝箱.png anchors/item/随机碎片宝箱.png anchors/item/装饰物自选宝箱.png)",
+      "Bash(rm -rf scripts/__pycache__)"
     ]
   }
 }

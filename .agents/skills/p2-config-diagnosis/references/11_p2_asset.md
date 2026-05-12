@@ -1,0 +1,1 @@
+../../../../docs/p2_config_spec/11_p2_asset.md

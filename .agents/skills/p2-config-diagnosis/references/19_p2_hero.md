@@ -1,0 +1,1 @@
+../../../../docs/p2_config_spec/19_p2_hero.md

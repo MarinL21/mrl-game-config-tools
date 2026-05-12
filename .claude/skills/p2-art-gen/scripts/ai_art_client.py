@@ -1,44 +1,58 @@
 #!/usr/bin/env python3
-"""ai-art-api.tap4fun.com 客户端：上传 + 生图（同步 REST）。
+"""grfal-api adapter，保持跟旧 AiArtClient 接口兼容。
 
-接口跟 grfal_client 对齐：upload_image / generate / download，
-可直接替换 generate.py 里的 GrfalClient 导入。
+旧 ai-art-api.tap4fun.com 已被 ban，改走 grfal-api skill 的 call_grfal.py CLI。
+对外类签名（AiArtClient.upload_image / generate / download）一字不变，
+所以 generate.py / gallery_server.py / 网页端不用动。
 
-鉴权：读 ~/.ai-art-auth.json {"api_host": "...", "token": "..."}
-依赖：requests + certifi（SSL_CERT_FILE 自动设置）
+鉴权：call_grfal.py 自管理 token（~/.config/grfal-api/token_store.json，30 天有效）。
+依赖：certifi + subprocess。Py3.14 Mac 自动注入 SSL_CERT_FILE。
 """
 from __future__ import annotations
 
-import concurrent.futures as cf
 import json
 import os
 import ssl
+import subprocess
 import sys
-import uuid
+import urllib.request
 from pathlib import Path
 
 import certifi
-import requests
 
-# 修 Python 3.14 on Mac 的证书问题（系统 CA 不含公司证书链）
+# Py3.14 on Mac 系统 CA 不含公司证书链
 os.environ.setdefault("SSL_CERT_FILE", certifi.where())
 
-AUTH_PATH = Path.home() / ".ai-art-auth.json"
+# 定位 grfal-api skill 的 CLI（相对当前文件，不 hardcode 用户名）
+HERE = Path(__file__).resolve()
+SKILLS_DIR = HERE.parents[2]  # .claude/skills/
+GRFAL_CLI = SKILLS_DIR / "grfal-api" / "scripts" / "call_grfal.py"
 
-# 引擎键 → ai-art-api 服务名（保持跟 grfal 的键名兼容）
-ENGINE_TO_SERVICE = {
-    "gemini": "nanobanana",   # 谷歌 Nano Banana 2 —— 对齐 grfal 的命名
-    "gpt": "gptimage",
+# 旧 engine 名 → grfal 的 model 名（grfal 用同名，留映射给以后扩展）
+ENGINE_TO_MODEL = {
+    "gemini": "gemini",
+    "gpt": "gpt",
     "seedream": "seedream",
-    "flux": "kontext",
+    "flux": "flux",
     "qwen": "qwen",
 }
-SERVICE_ENDPOINT = {
-    "nanobanana": "/pay/google/nano/3.1",
-    "gptimage":   "/pay/fal/gpt_image_edit/1.5",
-    "seedream":   "/pay/image/seeddream/5",
-    "kontext":    "/pay/fal/flux_kontext",
-    "qwen":       "/pay/image-edit/aliyun_qwent",
+
+# 兼容老代码（generate.py 等以前 import 这两个常量）
+ENGINE_TO_SERVICE = {k: k for k in ENGINE_TO_MODEL}
+SERVICE_ENDPOINT = {k: "/grfal" for k in ENGINE_TO_MODEL}
+
+# 旧 "1:1" 等 → grfal 的 aspect_ratio 字符串
+# grfal 不支持的（如 3:2/2:3）回退到最接近的，未列的走 auto
+ASPECT_TO_GRFAL = {
+    "1:1": "square_hd",
+    "16:9": "landscape_16_9",
+    "9:16": "portrait_16_9",
+    "4:3": "landscape_4_3",
+    "3:4": "portrait_4_3",
+    "3:2": "landscape_4_3",
+    "2:3": "portrait_4_3",
+    "21:9": "landscape_21_9",
+    "9:21": "portrait_21_9",
 }
 
 
@@ -50,48 +64,50 @@ class AiArtAPIError(RuntimeError):
     pass
 
 
-class AiArtClient:
-    """跟 GrfalClient 同接口的 ai-art-api 封装。"""
+def _parse_grfal_stdout(s: str) -> dict | None:
+    """call_grfal.py 可能在 stdout 输出多个 JSON 对象（warnings + 最终结果）。
+    流式解析，取最后一个能完整解析的 JSON 对象作为最终结果。"""
+    dec = json.JSONDecoder()
+    last = None
+    i, n = 0, len(s)
+    while i < n:
+        while i < n and s[i].isspace():
+            i += 1
+        if i >= n:
+            break
+        try:
+            obj, j = dec.raw_decode(s, i)
+            last = obj
+            i = j
+        except json.JSONDecodeError:
+            # 跳到下一行重试
+            nxt = s.find("\n", i)
+            if nxt == -1:
+                break
+            i = nxt + 1
+    return last
 
-    def __init__(self, auth_path: Path = AUTH_PATH):
-        if not auth_path.exists():
+
+class AiArtClient:
+    """grfal-api adapter 实现，对外接口跟原 AiArtClient 一致。"""
+
+    def __init__(self, auth_path: Path | None = None):
+        # auth_path 仅为保留旧签名，实际不用（grfal-api 自管理 token）
+        if not GRFAL_CLI.exists():
             raise AiArtAuthError(
-                f"{auth_path} 不存在。请在 ai-art 系统右上角头像生成 token，然后写入 "
-                f'{{"api_host": "https://ai-art-api.tap4fun.com/v2", "token": "..."}}'
+                f"找不到 grfal-api CLI: {GRFAL_CLI}\n"
+                f"请先安装：npx skills add git@git.tap4fun.com:skills/grfal-api.git "
+                f"--skill grfal-api --agent claude-code"
             )
-        cfg = json.loads(auth_path.read_text())
-        self.base_url = cfg.get("api_host", "https://ai-art-api.tap4fun.com/v2").rstrip("/")
-        self.token = cfg["token"]
-        self._sess = requests.Session()
-        self._sess.headers.update({"Authorization": self.token})
 
     # ------------------------------------------------------------------ upload
     def upload_image(self, local_path: str | Path) -> str:
-        """上传图片到 ai-art-api，返回 fileKey（后续生图请求用它引用）。"""
+        """grfal-api 不需要预上传，--file reference_images=<path> 自动 base64。
+        这里把本地路径当 'fileKey' 返回，generate() 拿到后透传即可。"""
         p = Path(local_path)
         if not p.exists():
             raise FileNotFoundError(p)
-        with p.open("rb") as f:
-            r = self._sess.post(
-                f"{self.base_url}/upload/base",
-                files={"file": (p.name, f, self._mime_for(p))},
-                timeout=60,
-            )
-        r.raise_for_status()
-        body = r.json()
-        data = body.get("data", body)
-        key = data.get("file_key") or data.get("fileKey") or data.get("key")
-        if not key:
-            raise AiArtAPIError(f"upload succeeded but no fileKey: {body}")
-        return key
-
-    @staticmethod
-    def _mime_for(p: Path) -> str:
-        ext = p.suffix.lower()
-        return {
-            ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg",
-            ".webp": "image/webp", ".gif": "image/gif",
-        }.get(ext, "application/octet-stream")
+        return str(p.resolve())
 
     # ------------------------------------------------------------------ generate
     def generate(
@@ -102,113 +118,106 @@ class AiArtClient:
         batch: int = 1,
         timeout_s: int = 600,
         on_progress=None,
+        aspect_ratio: str = "1:1",
     ) -> list[str]:
-        """生图并返回图片 URL 列表。
-
-        ai-art-api 每次调用产出 1 张；batch>1 时并发多次调用收集结果。
-        """
-        service = ENGINE_TO_SERVICE.get(engine, engine)
-        if service not in SERVICE_ENDPOINT:
-            raise AiArtAPIError(f"不支持的引擎/服务: {engine} -> {service}")
-        endpoint = SERVICE_ENDPOINT[service]
+        """生图并返回图片 URL 列表。grfal 一次调用 num_images=batch 出 N 张。"""
+        model = ENGINE_TO_MODEL.get(engine, engine)
         refs = refs or []
+        batch = max(1, int(batch))
+
+        params: dict = {"prompt": prompt, "model": model, "num_images": batch}
+        ar = ASPECT_TO_GRFAL.get(aspect_ratio)
+        if ar:
+            params["aspect_ratio"] = ar
+        # 留空字段会被 grfal 自动推断；只在已知映射时显式传
+
+        cmd = [
+            "python3", str(GRFAL_CLI),
+            "--tool", "generate_image",
+            "--params", json.dumps(params, ensure_ascii=False),
+            "--timeout", str(timeout_s),
+        ]
+        for ref in refs:
+            cmd += ["--file", f"reference_images={ref}"]
 
         if on_progress:
-            on_progress(f"调用 {engine}({service}) 生成 {batch} 张…", 0.3)
+            on_progress(f"调用 grfal/{model} 生成 {batch} 张…", 0.3)
 
-        def _one() -> str:
-            body = self._build_body(service, prompt, refs)
-            r = self._sess.post(
-                f"{self.base_url}{endpoint}",
-                json=body, timeout=timeout_s,
+        env = {**os.environ, "SSL_CERT_FILE": certifi.where()}
+        try:
+            proc = subprocess.run(
+                cmd, capture_output=True, text=True,
+                timeout=timeout_s + 60, check=False, env=env,
             )
-            r.raise_for_status()
-            payload = r.json()
-            return self._extract_url(payload)
+        except subprocess.TimeoutExpired:
+            raise AiArtAPIError(f"grfal call_grfal.py 超时 ({timeout_s}s)")
 
-        if batch <= 1:
-            url = _one()
-            if on_progress:
-                on_progress("处理完成", 0.9)
-            return [url]
+        last_obj = _parse_grfal_stdout(proc.stdout)
+        if not last_obj:
+            raise AiArtAPIError(
+                f"grfal 返回无法解析:\nSTDOUT(tail):\n{proc.stdout[-800:]}\n"
+                f"STDERR(tail):\n{proc.stderr[-400:]}"
+            )
 
-        urls: list[str] = []
-        with cf.ThreadPoolExecutor(max_workers=min(batch, 4)) as ex:
-            futures = [ex.submit(_one) for _ in range(batch)]
-            for i, fut in enumerate(cf.as_completed(futures)):
-                urls.append(fut.result())
-                if on_progress:
-                    on_progress(f"完成 {i+1}/{batch}", 0.3 + 0.6 * (i + 1) / batch)
+        if not last_obj.get("success"):
+            err = last_obj.get("error") or str(last_obj)
+            raise AiArtAPIError(f"grfal 生成失败: {err}")
+
+        urls = last_obj.get("result") or []
+        if isinstance(urls, str):
+            urls = [urls]
+        if not urls:
+            raise AiArtAPIError(f"grfal success=true 但 result 为空: {last_obj}")
+
+        if on_progress:
+            on_progress(f"完成 {len(urls)} 张", 0.95)
+
         return urls
-
-    def _build_body(self, service: str, prompt: str, refs: list[str]) -> dict:
-        """按服务拼 request body。refs 是上传后的 fileKey 列表。"""
-        common = {"prompt": prompt, "from_source": "skill"}
-        if service == "nanobanana":
-            body = {**common, "module": "nanobanana",
-                    "images": refs, "aspect_ratio": "1:1"}
-        elif service == "gptimage":
-            body = {**common, "module": "gptimage", "images": refs[:5],
-                    "aspect_ratio": "1:1"}
-        elif service == "seedream":
-            body = {**common, "module": "seedream", "images": refs[:10],
-                    "resolution": "2K"}
-        elif service == "kontext":
-            body = {**common, "module": "kontext", "images": refs[:4]}
-        elif service == "qwen":
-            body = {**common, "module": "qwen", "images": refs[:1]}
-        else:
-            raise AiArtAPIError(f"未实现 body 构造: {service}")
-        return body
-
-    def _extract_url(self, payload: dict) -> str:
-        if not payload.get("success"):
-            raise AiArtAPIError(f"生成失败: {payload}")
-        data = payload.get("data") or payload.get("result", {}).get("data") or {}
-        images = data.get("images") or []
-        out_url = data.get("out_url") or data.get("output_url") or ""
-        if not images:
-            raise AiArtAPIError(f"响应里没有 images: {payload}")
-        img = images[0]
-        if img.startswith("http"):
-            return img
-        return f"{out_url.rstrip('/')}/{img.lstrip('/')}" if out_url else img
 
     # ------------------------------------------------------------------ download
     def download(self, url: str, dest: Path) -> Path:
-        if not url.startswith("http"):
-            url = f"{self.base_url}{url}"
+        """grfal 输出 URL 应该是公网可达的；用 certifi cert 走 HTTPS。"""
         dest.parent.mkdir(parents=True, exist_ok=True)
-        with self._sess.get(url, stream=True, timeout=120) as r:
-            r.raise_for_status()
-            with dest.open("wb") as f:
-                for chunk in r.iter_content(64 * 1024):
-                    f.write(chunk)
+        ctx = ssl.create_default_context(cafile=certifi.where())
+        req = urllib.request.Request(url, headers={"User-Agent": "p2-art-gen/grfal-adapter"})
+        with urllib.request.urlopen(req, timeout=180, context=ctx) as r, dest.open("wb") as f:
+            while True:
+                chunk = r.read(64 * 1024)
+                if not chunk:
+                    break
+                f.write(chunk)
         return dest
 
 
 # --------------------------------------------------------------------- CLI
 def _cli():
-    import argparse, time
-    ap = argparse.ArgumentParser(description="ai-art-api 冒烟测试")
+    import argparse
+    import time
+
+    ap = argparse.ArgumentParser(description="grfal-api adapter 冒烟测试")
     ap.add_argument("--ref", action="append", default=[])
     ap.add_argument("--engine", default="gemini")
     ap.add_argument("--batch", type=int, default=1)
+    ap.add_argument("--aspect-ratio", default="1:1")
     ap.add_argument("--out-dir", default="./ai_art_out")
     ap.add_argument("prompt")
     args = ap.parse_args()
 
     c = AiArtClient()
     refs = [c.upload_image(p) for p in args.ref]
-    print(f"uploaded {len(refs)} refs: {refs}", file=sys.stderr)
+    print(f"refs: {refs}", file=sys.stderr)
 
-    def prog(desc, p): print(f"  [{p*100:5.1f}%] {desc}", file=sys.stderr, flush=True)
+    def prog(desc, p):
+        print(f"  [{p*100:5.1f}%] {desc}", file=sys.stderr, flush=True)
 
-    urls = c.generate(prompt=args.prompt, refs=refs, engine=args.engine,
-                      batch=args.batch, on_progress=prog)
+    urls = c.generate(
+        prompt=args.prompt, refs=refs, engine=args.engine,
+        batch=args.batch, aspect_ratio=args.aspect_ratio, on_progress=prog,
+    )
     print(f"got {len(urls)} images", file=sys.stderr)
 
     out_dir = Path(args.out_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
     ts = time.strftime("%Y%m%d_%H%M%S")
     for i, u in enumerate(urls):
         dest = out_dir / f"{ts}_{i}.png"

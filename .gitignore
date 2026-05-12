@@ -51,3 +51,64 @@ htmlcov/
 # Vercel
 .vercel
 .claude/worktrees/
+.claude/skills/slg-event-library/config/feishu.json
+.claude/skills/slg-event-library/daily_feed/*.log
+
+# ============================================================
+# 共享给同事前补充：业务数据 / 个人会话产物 / 第三方资产
+# 加这些是因为仓库要 push 到外部 GitHub（即使私有也是公司外）
+# ============================================================
+
+# 业务数据产出 —— 不出公司内网
+output/
+*_buyers_*.csv
+*_compensation*.csv
+*_compensation*.sql
+*_回收清单*.csv
+*_active_server.csv
+节日服分组*.txt
+
+# 数据回归 / 数据回顾报告 —— 含真实玩家数据图表
+# 中文文件名 glob 用更宽松的模式（带/不带下划线都能命中）
+*数据回顾*.html
+*数据回归*.html
+*数据回归*.md
+*横向回归*.html
+*历史数据*.html
+四节日*.html
+春节*_数据*.html
+情人节*_数据*.html
+复活节*_数据*.html
+科技节*_数据*.html
+圣诞节*_数据*.html
+
+# p2-art-gen 个人锚点会话库 —— 含竞品截图，著作权风险
+.claude/skills/p2-art-gen/anchors/*/_user_lib/
+.claude/skills/p2-art-gen/anchors/*/_user_picks/
+.claude/skills/p2-art-gen/anchors/*/_user_favorites/
+.claude/skills/p2-art-gen/anchors/*/_competitor/
+
+# 翻译记忆缓存（个人会话产物，不是 skill 代码）
+.agents/skills/p2-translation-automatic/scripts/all_existing_keys.json
+.agents/skills/p2-translation-automatic/scripts/translation_memory.json
+
+# datain-skill 数据缓存
+.agents/skills/datain-skill/cache/
+
+# 用户裁决：可疑顶层文档不推
+历年表现好活动总览_2023-2026.html
+中国爆款游戏活动_全品类视野拓宽.html
+爆款活动问题诊断_竞品对照_优化建议.html
+备忘录.html
+
+# 顶层 / workspace 玩家明细数据（含 user_id / server_id）
+item_*_to_*.csv
+item_*_drop_*.csv
+dighole/*.tsv
+dighole/*.csv
+
+# gws 表格快照（可能含配置表实数据）
+gws_inspect/
+
+# p2-numerical-design 内部分析数据（含 $ 量级深度，财务敏感）
+.agents/skills/p2-numerical-design/data/
