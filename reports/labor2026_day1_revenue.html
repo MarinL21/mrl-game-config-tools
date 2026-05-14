@@ -1,980 +1,776 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="zh-CN"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>拓荒节 2026 首日付费数据 — P2</title>
 <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background: #f5f7fa; color: #333; }
-.container { max-width: 1400px; margin: 0 auto; padding: 40px 20px; }
-.header { background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%); color: white; padding: 40px; border-radius: 8px; margin-bottom: 30px; }
-.header h1 { font-size: 28px; margin-bottom: 8px; }
-.header p { font-size: 14px; opacity: 0.95; margin-top: 4px; }
-.banner-note { background: rgba(255, 255, 255, 0.18); border-left: 4px solid #ffd54f; padding: 10px 16px; margin-top: 15px; border-radius: 4px; font-size: 13px; line-height: 1.6; }
-.section { background: white; padding: 26px 30px; margin-bottom: 24px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
-.section h2 { font-size: 20px; margin-bottom: 16px; color: #2e7d32; border-bottom: 3px solid #81c784; padding-bottom: 8px; }
-.section h3 { font-size: 15px; margin-top: 20px; margin-bottom: 10px; color: #555; }
-.chart-container { width: 100%; height: 380px; margin: 14px 0; }
-.table-wrapper { overflow-x: auto; margin: 14px 0; }
-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-th { background: #e8f5e9; padding: 10px; text-align: left; font-weight: 600; border-bottom: 2px solid #81c784; color: #2e7d32; }
-td { padding: 9px 10px; border-bottom: 1px solid #eee; }
-tr:hover { background: #f9fbf9; }
-.num { text-align: right; font-variant-numeric: tabular-nums; }
-.cum-row { background: #fff8e1; }
-.cum-row td:first-child::before { content: "♺ "; }
-.zero-row { color: #aaa; }
-.metric { display: inline-block; background: #f0f7f0; padding: 13px 18px; margin: 6px 6px 6px 0; border-radius: 6px; border-left: 4px solid #4caf50; min-width: 160px; }
-.metric-value { font-size: 22px; font-weight: 700; color: #2e7d32; }
-.metric-label { font-size: 11.5px; color: #666; margin-top: 4px; }
-.callout { background: #e8f5e9; border-left: 4px solid #4caf50; padding: 12px 14px; margin: 12px 0; border-radius: 4px; line-height: 1.7; font-size: 13.5px; }
-.callout strong { color: #1b5e20; }
-.warn { background: #fff8e1; border-left: 4px solid #ffa726; padding: 12px 14px; margin: 12px 0; border-radius: 4px; line-height: 1.7; font-size: 13px; }
-.warn strong { color: #ef6c00; }
-footer { text-align: center; padding: 30px 0 10px; color: #999; font-size: 12px; }
-.legend { font-size: 12px; color: #777; margin-top: 6px; }
-.tag { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11.5px; font-weight: 600; }
-.tag-cum { background: #fff3e0; color: #e65100; }
-.tag-direct { background: #e3f2fd; color: #1565c0; }
-.tag-zero { background: #f5f5f5; color: #999; }
-</style>
-</head>
-<body>
-<div class="container">
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:#f5f7fa;color:#333;}
+.container{max-width:1400px;margin:0 auto;padding:40px 20px;}
+.header{background:linear-gradient(135deg,#4caf50 0%,#2e7d32 100%);color:white;padding:40px;border-radius:8px;margin-bottom:30px;}
+.header h1{font-size:28px;margin-bottom:8px;}
+.header p{font-size:14px;opacity:.95;margin-top:4px;}
+.banner-note{background:rgba(255,255,255,.18);border-left:4px solid #ffd54f;padding:10px 16px;margin-top:15px;border-radius:4px;font-size:13px;line-height:1.6;}
+.section{background:white;padding:26px 30px;margin-bottom:24px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.06);}
+.section h2{font-size:20px;margin-bottom:16px;color:#2e7d32;border-bottom:3px solid #81c784;padding-bottom:8px;}
+.section h3{font-size:15px;margin-top:20px;margin-bottom:10px;color:#555;}
+.table-wrapper{overflow-x:auto;margin:14px 0;}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th{background:#e8f5e9;padding:10px;text-align:left;font-weight:600;border-bottom:2px solid #81c784;color:#2e7d32;}
+td{padding:9px 10px;border-bottom:1px solid #eee;}
+tr:hover{background:#f9fbf9;}
+.num{text-align:right;font-variant-numeric:tabular-nums;}
+.metric{display:inline-block;background:#f0f7f0;padding:13px 18px;margin:6px 6px 6px 0;border-radius:6px;border-left:4px solid #4caf50;min-width:160px;}
+.metric-value{font-size:22px;font-weight:700;color:#2e7d32;}
+.metric-label{font-size:11.5px;color:#666;margin-top:4px;}
+.callout{background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 14px;margin:12px 0;border-radius:4px;line-height:1.7;font-size:13.5px;}
+.warn{background:#fff8e1;border-left:4px solid #ffa726;padding:12px 14px;margin:12px 0;border-radius:4px;line-height:1.7;font-size:13px;}
+.tag-direct{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11.5px;font-weight:600;background:#e3f2fd;color:#1565c0;}
+footer{text-align:center;padding:30px 0 10px;color:#999;font-size:12px;}
+.legend{font-size:12px;color:#777;margin-top:6px;}
+</style></head><body><div class="container">
 
 <div class="header">
   <h1>🎮 拓荒节 2026 · 首日付费数据</h1>
-  <p>窗口（UTC）：2026-05-12 00:00 ~ 2026-05-14 08:00 · 共 56 小时 · 全部正式服汇总</p>
+  <p>窗口（UTC）：2026-05-12 00:00 ~ 2026-05-14 08:00 · 56 小时 · 全部正式服汇总</p>
   <p>窗口（UTC+8）：2026-05-12 08:00 ~ 2026-05-14 16:00 · 数据源 v1041.ods_user_order</p>
   <div class="banner-note">
-    <strong>窗口口径</strong>：5/12 晚上首批上线（含主城特效累充三件套 / 机甲累充 / 横版BP / 大富翁 / 推币机 / 自选周卡 / 5 个礼包 / 预购连锁 / 合成小游戏 / 装饰兑换 / 签到等 21 个活动）；
-    限时抢购第 1、2 期 5/13 上，纳入窗口。"首日"按 5/12 + 5/13 + 5/14 上半天合并计算。
+    报告只列 5/12-13 上线且产生付费的活动。累累 4 活动（主城特效×3+机甲累充）作为 cross_progress 跟踪器不卖货已隐藏；
+    签到/累积任务等无付费设计的活动已隐藏；合成小游戏 schema4/5 已并入 schema3 主行；行军表情+行军特效+头像框 3 个礼包已并入联动礼包合计行。
   </div>
 </div>
-
 
 <div class="section">
   <h2>📊 一、首日总览</h2>
   <div>
-    <div class="metric"><div class="metric-value">$84,108.20</div><div class="metric-label">节日 IAP 池总流水（去重）</div></div>
-    <div class="metric"><div class="metric-value">7,880</div><div class="metric-label">总订单数</div></div>
-    <div class="metric"><div class="metric-value">129</div><div class="metric-label">有流水的 IAP 档位</div></div>
-    <div class="metric"><div class="metric-value">$74,572.01</div><div class="metric-label">直售型活动流水合计</div></div>
-    <div class="metric"><div class="metric-value">$83,958.25</div><div class="metric-label">累计型共享池流水</div></div>
+    <div class="metric"><div class="metric-value">$89,626.43</div><div class="metric-label">首日总流水</div></div>
+    <div class="metric"><div class="metric-value">8,357</div><div class="metric-label">总订单数</div></div>
+    <div class="metric"><div class="metric-value">131</div><div class="metric-label">有流水的 IAP 档位</div></div>
+    <div class="metric"><div class="metric-value">15</div><div class="metric-label">产生付费的活动</div></div>
   </div>
   <div class="callout">
-    <strong>说明</strong>：22 个活动反向追溯共覆盖 401 个 2013 IAP template，去重后有流水的 129 个。"累计型共享池"是主城特效累充（个人/服务器/联盟团购）+ 机甲累充这 4 个活动的相同档位池（含全部节日累充 IAP），它们的流水不在各自活动行重复累加，单列展示。
+    校验：直售活动合计 <strong>$89,426.79</strong> + 未归属 $199.64（节日通用强消耗触发礼包，5/14 才正式上，本窗口末尾预热）= <strong>$89,626.43</strong> = IAP 池总流水。<strong>无漏无重</strong>。
   </div>
 </div>
 
 
 <div class="section">
   <h2>🎯 二、活动级流水（按流水降序）</h2>
-  <div class="table-wrapper">
-    <table>
-      <thead>
-        <tr>
-          <th>活动 ID</th><th>活动名</th><th>类型</th>
-          <th class="num">引用 IAP</th><th class="num">有流水 IAP</th>
-          <th class="num">流水 USD</th><th class="num">订单数</th><th class="num">付费人次</th><th class="num">活跃服</th>
-        </tr>
-      </thead>
-      <tbody>
+  <div class="table-wrapper"><table><thead><tr>
+    <th>活动 ID</th><th>活动名</th>
+    <th class="num">own IAP</th><th class="num">有流水 IAP</th>
+    <th class="num">流水 USD</th><th class="num">订单数</th><th class="num">付费人次</th><th class="num">活跃服</th>
+  </tr></thead><tbody>
 
-        <tr class="cum-row">
-          <td><code>21127892</code></td><td>拓荒节2026-主城特效累充-个人</td><td><span class="tag tag-cum">累计共享</span></td>
-          <td class="num">396</td><td class="num">128</td>
-          <td class="num"><strong>$83,958.25</strong></td>
-          <td class="num">7,875</td>
-          <td class="num">7,510</td>
-          <td class="num">71</td>
-        </tr>
+<tr>
+      <td><code>21127801</code></td><td>推币机-单服排行榜版</td>
+      <td class="num">4</td><td class="num">8</td>
+      <td class="num"><strong>$23,146.38</strong></td>
+      <td class="num">862</td>
+      <td class="num">509</td>
+      <td class="num">39</td>
+    </tr>
 
-        <tr class="cum-row">
-          <td><code>21127893</code></td><td>拓荒节2026-主城特效累充-服务器</td><td><span class="tag tag-cum">累计共享</span></td>
-          <td class="num">396</td><td class="num">128</td>
-          <td class="num"><strong>$83,958.25</strong></td>
-          <td class="num">7,875</td>
-          <td class="num">7,510</td>
-          <td class="num">71</td>
-        </tr>
+<tr>
+      <td><code>21127406</code></td><td>合成小游戏活动-26拓荒节版本-schema3-5（含挖矿IAP）</td>
+      <td class="num">35</td><td class="num">59</td>
+      <td class="num"><strong>$12,090.42</strong></td>
+      <td class="num">2,358</td>
+      <td class="num">2,348</td>
+      <td class="num">63</td>
+    </tr>
 
-        <tr class="cum-row">
-          <td><code>21127894</code></td><td>拓荒节2026-主城特效累充-联盟团购</td><td><span class="tag tag-cum">累计共享</span></td>
-          <td class="num">396</td><td class="num">128</td>
-          <td class="num"><strong>$83,958.25</strong></td>
-          <td class="num">7,875</td>
-          <td class="num">7,510</td>
-          <td class="num">71</td>
-        </tr>
+<tr>
+      <td><code>21129002</code></td><td>联动礼包-2026拓荒节（=行军表情+行军特效+头像框 合计）</td>
+      <td class="num">3</td><td class="num">3</td>
+      <td class="num"><strong>$10,125.33</strong></td>
+      <td class="num">1,467</td>
+      <td class="num">1,467</td>
+      <td class="num">71</td>
+    </tr>
 
-        <tr class="cum-row">
-          <td><code>21127891</code></td><td>拓荒节2026-机甲累充</td><td><span class="tag tag-cum">累计共享</span></td>
-          <td class="num">396</td><td class="num">128</td>
-          <td class="num"><strong>$83,958.25</strong></td>
-          <td class="num">7,875</td>
-          <td class="num">7,510</td>
-          <td class="num">71</td>
-        </tr>
+<tr>
+      <td><code>21127362</code></td><td>节日大富翁进度活动（26拓荒节）</td>
+      <td class="num">19</td><td class="num">22</td>
+      <td class="num"><strong>$9,551.19</strong></td>
+      <td class="num">681</td>
+      <td class="num">680</td>
+      <td class="num">38</td>
+    </tr>
 
-        <tr class="">
-          <td><code>21127801</code></td><td>推币机-单服排行榜版</td><td><span class="tag tag-direct">直售</span></td>
-          <td class="num">8</td><td class="num">8</td>
-          <td class="num"><strong>$23,146.38</strong></td>
-          <td class="num">862</td>
-          <td class="num">509</td>
-          <td class="num">39</td>
-        </tr>
+<tr>
+      <td><code>21127895</code></td><td>拓荒节-限时抢购-第1、2期</td>
+      <td class="num">7</td><td class="num">7</td>
+      <td class="num"><strong>$8,847.34</strong></td>
+      <td class="num">266</td>
+      <td class="num">266</td>
+      <td class="num">20</td>
+    </tr>
 
-        <tr class="">
-          <td><code>21129002</code></td><td>联动礼包-2026拓荒节</td><td><span class="tag tag-direct">直售</span></td>
-          <td class="num">3</td><td class="num">3</td>
-          <td class="num"><strong>$10,125.33</strong></td>
-          <td class="num">1,467</td>
-          <td class="num">1,467</td>
-          <td class="num">71</td>
-        </tr>
+<tr>
+      <td><code>21127651</code></td><td>拓荒节2026-横版bp（循环宝箱无排行榜）</td>
+      <td class="num">15</td><td class="num">6</td>
+      <td class="num"><strong>$7,749.20</strong></td>
+      <td class="num">880</td>
+      <td class="num">880</td>
+      <td class="num">38</td>
+    </tr>
 
-        <tr class="">
-          <td><code>21127362</code></td><td>节日大富翁进度活动（26拓荒节）</td><td><span class="tag tag-direct">直售</span></td>
-          <td class="num">23</td><td class="num">22</td>
-          <td class="num"><strong>$9,551.19</strong></td>
-          <td class="num">681</td>
-          <td class="num">680</td>
-          <td class="num">38</td>
-        </tr>
+<tr>
+      <td><code>21127531</code></td><td>挂机BP-拓荒节2026</td>
+      <td class="num">1</td><td class="num">1</td>
+      <td class="num"><strong>$4,925.07</strong></td>
+      <td class="num">493</td>
+      <td class="num">493</td>
+      <td class="num">52</td>
+    </tr>
 
-        <tr class="">
-          <td><code>21127895</code></td><td>拓荒节-限时抢购-第1、2期</td><td><span class="tag tag-direct">直售</span></td>
-          <td class="num">7</td><td class="num">7</td>
-          <td class="num"><strong>$8,847.34</strong></td>
-          <td class="num">266</td>
-          <td class="num">266</td>
-          <td class="num">20</td>
-        </tr>
+<tr>
+      <td><code>21129008</code></td><td>拓荒节-预购连锁礼包_schema6</td>
+      <td class="num">1</td><td class="num">1</td>
+      <td class="num"><strong>$4,199.58</strong></td>
+      <td class="num">42</td>
+      <td class="num">42</td>
+      <td class="num">11</td>
+    </tr>
 
-        <tr class="">
-          <td><code>21129008</code></td><td>拓荒节-预购连锁礼包_schema6</td><td><span class="tag tag-direct">直售</span></td>
-          <td class="num">1</td><td class="num">1</td>
-          <td class="num"><strong>$4,199.58</strong></td>
-          <td class="num">42</td>
-          <td class="num">42</td>
-          <td class="num">11</td>
-        </tr>
+<tr>
+      <td><code>21127621</code></td><td>节日通用自选周卡（新版-26拓荒节）-s6</td>
+      <td class="num">4</td><td class="num">3</td>
+      <td class="num"><strong>$3,109.36</strong></td>
+      <td class="num">64</td>
+      <td class="num">64</td>
+      <td class="num">10</td>
+    </tr>
 
-        <tr class="">
-          <td><code>21129003</code></td><td>拓荒节2026-头像框礼包</td><td><span class="tag tag-direct">直售</span></td>
-          <td class="num">1</td><td class="num">1</td>
-          <td class="num"><strong>$4,021.94</strong></td>
-          <td class="num">806</td>
-          <td class="num">806</td>
-          <td class="num">71</td>
-        </tr>
+<tr>
+      <td><code>21127567</code></td><td>节日活动-每日补给</td>
+      <td class="num">6</td><td class="num">2</td>
+      <td class="num"><strong>$1,890.50</strong></td>
+      <td class="num">950</td>
+      <td class="num">950</td>
+      <td class="num">55</td>
+    </tr>
 
-        <tr class="">
-          <td><code>21129001</code></td><td>拓荒节2026-行军特效礼包</td><td><span class="tag tag-direct">直售</span></td>
-          <td class="num">1</td><td class="num">1</td>
-          <td class="num"><strong>$3,738.13</strong></td>
-          <td class="num">187</td>
-          <td class="num">187</td>
-          <td class="num">30</td>
-        </tr>
+<tr>
+      <td><code>21129005</code></td><td>节日卡包BP-拓荒节</td>
+      <td class="num">2</td><td class="num">2</td>
+      <td class="num"><strong>$1,768.33</strong></td>
+      <td class="num">167</td>
+      <td class="num">166</td>
+      <td class="num">30</td>
+    </tr>
 
-        <tr class="">
-          <td><code>21127621</code></td><td>节日通用自选周卡（新版-26拓荒节）-s6</td><td><span class="tag tag-direct">直售</span></td>
-          <td class="num">4</td><td class="num">3</td>
-          <td class="num"><strong>$3,109.36</strong></td>
-          <td class="num">64</td>
-          <td class="num">64</td>
-          <td class="num">10</td>
-        </tr>
+<tr>
+      <td><code>21129007</code></td><td>拓荒节-预购连锁礼包_schema3-5</td>
+      <td class="num">1</td><td class="num">1</td>
+      <td class="num"><strong>$899.91</strong></td>
+      <td class="num">9</td>
+      <td class="num">9</td>
+      <td class="num">6</td>
+    </tr>
 
-        <tr class="">
-          <td><code>21129000</code></td><td>拓荒节2026-行军表情礼包</td><td><span class="tag tag-direct">直售</span></td>
-          <td class="num">1</td><td class="num">1</td>
-          <td class="num"><strong>$2,365.26</strong></td>
-          <td class="num">474</td>
-          <td class="num">474</td>
-          <td class="num">43</td>
-        </tr>
+<tr>
+      <td><code>21127751</code></td><td>节日大富翁组队子活动</td>
+      <td class="num">4</td><td class="num">4</td>
+      <td class="num"><strong>$569.43</strong></td>
+      <td class="num">57</td>
+      <td class="num">56</td>
+      <td class="num">12</td>
+    </tr>
 
-        <tr class="">
-          <td><code>21127651</code></td><td>拓荒节2026-横版bp（循环宝箱无排行榜）</td><td><span class="tag tag-direct">直售</span></td>
-          <td class="num">13</td><td class="num">4</td>
-          <td class="num"><strong>$2,230.97</strong></td>
-          <td class="num">403</td>
-          <td class="num">403</td>
-          <td class="num">38</td>
-        </tr>
+<tr>
+      <td><code>21127620</code></td><td>节日通用自选周卡（新版-26拓荒节）-s3-5</td>
+      <td class="num">4</td><td class="num">2</td>
+      <td class="num"><strong>$369.86</strong></td>
+      <td class="num">14</td>
+      <td class="num">14</td>
+      <td class="num">10</td>
+    </tr>
 
-        <tr class="">
-          <td><code>21129007</code></td><td>拓荒节-预购连锁礼包_schema3-5</td><td><span class="tag tag-direct">直售</span></td>
-          <td class="num">1</td><td class="num">1</td>
-          <td class="num"><strong>$899.91</strong></td>
-          <td class="num">9</td>
-          <td class="num">9</td>
-          <td class="num">6</td>
-        </tr>
+<tr>
+      <td><code>21127487</code></td><td>装饰兑换商店-通用-后续不改</td>
+      <td class="num">3</td><td class="num">3</td>
+      <td class="num"><strong>$184.89</strong></td>
+      <td class="num">11</td>
+      <td class="num">11</td>
+      <td class="num">6</td>
+    </tr>
 
-        <tr class="">
-          <td><code>21127406</code></td><td>合成小游戏活动-26拓荒节版本-schema3</td><td><span class="tag tag-direct">直售</span></td>
-          <td class="num">6</td><td class="num">4</td>
-          <td class="num"><strong>$606.22</strong></td>
-          <td class="num">278</td>
-          <td class="num">278</td>
-          <td class="num">54</td>
-        </tr>
-
-        <tr class="">
-          <td><code>21127407</code></td><td>合成小游戏活动-26拓荒节版本-schema4</td><td><span class="tag tag-direct">直售</span></td>
-          <td class="num">6</td><td class="num">4</td>
-          <td class="num"><strong>$606.22</strong></td>
-          <td class="num">278</td>
-          <td class="num">278</td>
-          <td class="num">54</td>
-        </tr>
-
-        <tr class="">
-          <td><code>21127751</code></td><td>节日大富翁组队子活动</td><td><span class="tag tag-direct">直售</span></td>
-          <td class="num">4</td><td class="num">4</td>
-          <td class="num"><strong>$569.43</strong></td>
-          <td class="num">57</td>
-          <td class="num">56</td>
-          <td class="num">12</td>
-        </tr>
-
-        <tr class="">
-          <td><code>21127620</code></td><td>节日通用自选周卡（新版-26拓荒节）-s3-5</td><td><span class="tag tag-direct">直售</span></td>
-          <td class="num">4</td><td class="num">2</td>
-          <td class="num"><strong>$369.86</strong></td>
-          <td class="num">14</td>
-          <td class="num">14</td>
-          <td class="num">10</td>
-        </tr>
-
-        <tr class="">
-          <td><code>21127487</code></td><td>装饰兑换商店-通用-后续不改</td><td><span class="tag tag-direct">直售</span></td>
-          <td class="num">7</td><td class="num">3</td>
-          <td class="num"><strong>$184.89</strong></td>
-          <td class="num">11</td>
-          <td class="num">11</td>
-          <td class="num">6</td>
-        </tr>
-
-        <tr class="zero-row">
-          <td><code>21127898</code></td><td>拓荒节签到-2026</td><td><span class="tag tag-zero">0 流水</span></td>
-          <td class="num">0</td><td class="num">0</td>
-          <td class="num"><strong>$0.00</strong></td>
-          <td class="num">0</td>
-          <td class="num">0</td>
-          <td class="num">0</td>
-        </tr>
-
-        <tr class="zero-row">
-          <td><code>21129005</code></td><td>节日卡包BP-拓荒节</td><td><span class="tag tag-zero">0 流水</span></td>
-          <td class="num">0</td><td class="num">0</td>
-          <td class="num"><strong>$0.00</strong></td>
-          <td class="num">0</td>
-          <td class="num">0</td>
-          <td class="num">0</td>
-        </tr>
-
-      </tbody>
-    </table>
-  </div>
-  <div class="warn">
-    <strong>注</strong>：累计共享活动（橙色♺行）的流水都是同一份 401-IAP 池流水的子集（4 行金额相同 = $83,958.25 ≈ 全池），是设计上的共享，不可重复求和。直售型活动求和才能反映"节日活动 IAP 收入"。
-  </div>
+</tbody></table></div>
   <div id="chartActivity" style="width:100%; height:560px; margin:14px 0;"></div>
 </div>
 
 
 <div class="section">
   <h2>💰 三、TOP 50 IAP 流水明细</h2>
-  <div class="legend">仅展示有流水的 129 个 IAP 中流水最高的前 50 个；完整 129 行见 CSV。</div>
-  <div class="table-wrapper">
-    <table>
-      <thead>
-        <tr>
-          <th>排名</th><th>2013 IAP</th><th>名称（2013 desc / 2011 name）</th>
-          <th class="num">售价 ($)</th>
-          <th class="num">订单数</th><th class="num">付费玩家</th><th class="num">活跃服</th>
-          <th class="num">总流水 ($)</th><th class="num">客单价 ($)</th>
-        </tr>
-      </thead>
-      <tbody>
+  <div class="legend">完整 131 行 IAP 见 CSV (labor2026_day1_iap_revenue.csv)。</div>
+  <div class="table-wrapper"><table><thead><tr>
+    <th>排名</th><th>2013 IAP</th><th>名称</th>
+    <th class="num">售价 ($)</th>
+    <th class="num">订单</th><th class="num">付费玩家</th><th class="num">活跃服</th>
+    <th class="num">总流水 ($)</th><th class="num">客单价 ($)</th>
+  </tr></thead><tbody>
 
-        <tr>
-          <td>1</td>
-          <td><code>2013510227</code></td>
-          <td>推币机礼包_99.99</td>
-          <td class="num">99.99</td>
-          <td class="num">93</td>
-          <td class="num">18</td>
-          <td class="num">13</td>
-          <td class="num"><strong>$9,299.07</strong></td>
-          <td class="num">99.99</td>
-        </tr>
+<tr>
+      <td>1</td><td><code>2013510227</code></td><td>推币机礼包_99.99</td>
+      <td class="num">99.99</td>
+      <td class="num">93</td>
+      <td class="num">18</td>
+      <td class="num">13</td>
+      <td class="num"><strong>$9,299.07</strong></td>
+      <td class="num">99.99</td>
+    </tr>
 
-        <tr>
-          <td>2</td>
-          <td><code>2013501500</code></td>
-          <td>挂机BP_2025</td>
-          <td class="num">9.99</td>
-          <td class="num">493</td>
-          <td class="num">493</td>
-          <td class="num">52</td>
-          <td class="num"><strong>$4,925.07</strong></td>
-          <td class="num">9.99</td>
-        </tr>
+<tr>
+      <td>2</td><td><code>2013501500</code></td><td>挂机BP_2025</td>
+      <td class="num">9.99</td>
+      <td class="num">493</td>
+      <td class="num">493</td>
+      <td class="num">52</td>
+      <td class="num"><strong>$4,925.07</strong></td>
+      <td class="num">9.99</td>
+    </tr>
 
-        <tr>
-          <td>3</td>
-          <td><code>2013500832</code></td>
-          <td>通用-预购连锁_schema6</td>
-          <td class="num">99.99</td>
-          <td class="num">42</td>
-          <td class="num">42</td>
-          <td class="num">11</td>
-          <td class="num"><strong>$4,199.58</strong></td>
-          <td class="num">99.99</td>
-        </tr>
+<tr>
+      <td>3</td><td><code>2013500832</code></td><td>通用-预购连锁_schema6</td>
+      <td class="num">99.99</td>
+      <td class="num">42</td>
+      <td class="num">42</td>
+      <td class="num">11</td>
+      <td class="num"><strong>$4,199.58</strong></td>
+      <td class="num">99.99</td>
+    </tr>
 
-        <tr>
-          <td>4</td>
-          <td><code>2013560125</code></td>
-          <td>2026拓荒节-头像框4.99</td>
-          <td class="num">4.99</td>
-          <td class="num">806</td>
-          <td class="num">806</td>
-          <td class="num">71</td>
-          <td class="num"><strong>$4,021.94</strong></td>
-          <td class="num">4.99</td>
-        </tr>
+<tr>
+      <td>4</td><td><code>2013560125</code></td><td>2026拓荒节-头像框4.99</td>
+      <td class="num">4.99</td>
+      <td class="num">806</td>
+      <td class="num">806</td>
+      <td class="num">71</td>
+      <td class="num"><strong>$4,021.94</strong></td>
+      <td class="num">4.99</td>
+    </tr>
 
-        <tr>
-          <td>5</td>
-          <td><code>2013560124</code></td>
-          <td>2026拓荒节-行军特效19.99</td>
-          <td class="num">19.99</td>
-          <td class="num">187</td>
-          <td class="num">187</td>
-          <td class="num">30</td>
-          <td class="num"><strong>$3,738.13</strong></td>
-          <td class="num">19.99</td>
-        </tr>
+<tr>
+      <td>5</td><td><code>2013560124</code></td><td>2026拓荒节-行军特效19.99</td>
+      <td class="num">19.99</td>
+      <td class="num">187</td>
+      <td class="num">187</td>
+      <td class="num">30</td>
+      <td class="num"><strong>$3,738.13</strong></td>
+      <td class="num">19.99</td>
+    </tr>
 
-        <tr>
-          <td>6</td>
-          <td><code>2013510220</code></td>
-          <td>推币机随机GACHA礼包_19.99</td>
-          <td class="num">19.99</td>
-          <td class="num">177</td>
-          <td class="num">136</td>
-          <td class="num">31</td>
-          <td class="num"><strong>$3,538.23</strong></td>
-          <td class="num">19.99</td>
-        </tr>
+<tr>
+      <td>6</td><td><code>2013510220</code></td><td>推币机随机GACHA礼包_19.99</td>
+      <td class="num">19.99</td>
+      <td class="num">177</td>
+      <td class="num">136</td>
+      <td class="num">31</td>
+      <td class="num"><strong>$3,538.23</strong></td>
+      <td class="num">19.99</td>
+    </tr>
 
-        <tr>
-          <td>7</td>
-          <td><code>2013510222</code></td>
-          <td>推币机随机GACHA礼包_99.99</td>
-          <td class="num">99.99</td>
-          <td class="num">30</td>
-          <td class="num">18</td>
-          <td class="num">7</td>
-          <td class="num"><strong>$2,999.70</strong></td>
-          <td class="num">99.99</td>
-        </tr>
+<tr>
+      <td>7</td><td><code>201390137</code></td><td>拓荒节高级通行证_2026</td>
+      <td class="num">19.99</td>
+      <td class="num">168</td>
+      <td class="num">168</td>
+      <td class="num">33</td>
+      <td class="num"><strong>$3,358.32</strong></td>
+      <td class="num">19.99</td>
+    </tr>
 
-        <tr>
-          <td>8</td>
-          <td><code>2013510536</code></td>
-          <td>拓荒节自选周卡-schema6-49.99</td>
-          <td class="num">49.99</td>
-          <td class="num">60</td>
-          <td class="num">60</td>
-          <td class="num">10</td>
-          <td class="num"><strong>$2,999.40</strong></td>
-          <td class="num">49.99</td>
-        </tr>
+<tr>
+      <td>8</td><td><code>2013510222</code></td><td>推币机随机GACHA礼包_99.99</td>
+      <td class="num">99.99</td>
+      <td class="num">30</td>
+      <td class="num">18</td>
+      <td class="num">7</td>
+      <td class="num"><strong>$2,999.70</strong></td>
+      <td class="num">99.99</td>
+    </tr>
 
-        <tr>
-          <td>9</td>
-          <td><code>2013510221</code></td>
-          <td>推币机随机GACHA礼包_49.99</td>
-          <td class="num">49.99</td>
-          <td class="num">52</td>
-          <td class="num">39</td>
-          <td class="num">13</td>
-          <td class="num"><strong>$2,599.48</strong></td>
-          <td class="num">49.99</td>
-        </tr>
+<tr>
+      <td>9</td><td><code>2013510536</code></td><td>拓荒节自选周卡-schema6-49.99</td>
+      <td class="num">49.99</td>
+      <td class="num">60</td>
+      <td class="num">60</td>
+      <td class="num">10</td>
+      <td class="num"><strong>$2,999.40</strong></td>
+      <td class="num">49.99</td>
+    </tr>
 
-        <tr>
-          <td>10</td>
-          <td><code>2013560123</code></td>
-          <td>2026拓荒节-行军表情4.99</td>
-          <td class="num">4.99</td>
-          <td class="num">474</td>
-          <td class="num">474</td>
-          <td class="num">43</td>
-          <td class="num"><strong>$2,365.26</strong></td>
-          <td class="num">4.99</td>
-        </tr>
+<tr>
+      <td>10</td><td><code>2013510221</code></td><td>推币机随机GACHA礼包_49.99</td>
+      <td class="num">49.99</td>
+      <td class="num">52</td>
+      <td class="num">39</td>
+      <td class="num">13</td>
+      <td class="num"><strong>$2,599.48</strong></td>
+      <td class="num">49.99</td>
+    </tr>
 
-        <tr>
-          <td>11</td>
-          <td><code>2013500359</code></td>
-          <td>S6春节限时抢购礼包-99.99</td>
-          <td class="num">99.99</td>
-          <td class="num">21</td>
-          <td class="num">21</td>
-          <td class="num">10</td>
-          <td class="num"><strong>$2,099.79</strong></td>
-          <td class="num">99.99</td>
-        </tr>
+<tr>
+      <td>11</td><td><code>2013560123</code></td><td>2026拓荒节-行军表情4.99</td>
+      <td class="num">4.99</td>
+      <td class="num">474</td>
+      <td class="num">474</td>
+      <td class="num">43</td>
+      <td class="num"><strong>$2,365.26</strong></td>
+      <td class="num">4.99</td>
+    </tr>
 
-        <tr>
-          <td>12</td>
-          <td><code>2013500358</code></td>
-          <td>S6春节限时抢购礼包-49.99</td>
-          <td class="num">49.99</td>
-          <td class="num">41</td>
-          <td class="num">41</td>
-          <td class="num">20</td>
-          <td class="num"><strong>$2,049.59</strong></td>
-          <td class="num">49.99</td>
-        </tr>
+<tr>
+      <td>12</td><td><code>201390136</code></td><td>拓荒节初级通行证_2026</td>
+      <td class="num">6.99</td>
+      <td class="num">309</td>
+      <td class="num">309</td>
+      <td class="num">37</td>
+      <td class="num"><strong>$2,159.91</strong></td>
+      <td class="num">6.99</td>
+    </tr>
 
-        <tr>
-          <td>13</td>
-          <td><code>2013501506</code></td>
-          <td>25感恩节每日补给升级礼包-第1天</td>
-          <td class="num">1.99</td>
-          <td class="num">860</td>
-          <td class="num">860</td>
-          <td class="num">55</td>
-          <td class="num"><strong>$1,711.40</strong></td>
-          <td class="num">1.99</td>
-        </tr>
+<tr>
+      <td>13</td><td><code>2013500359</code></td><td>S6春节限时抢购礼包-99.99</td>
+      <td class="num">99.99</td>
+      <td class="num">21</td>
+      <td class="num">21</td>
+      <td class="num">10</td>
+      <td class="num"><strong>$2,099.79</strong></td>
+      <td class="num">99.99</td>
+    </tr>
 
-        <tr>
-          <td>14</td>
-          <td><code>2013450086</code></td>
-          <td>节日集卡册bp</td>
-          <td class="num">9.99</td>
-          <td class="num">162</td>
-          <td class="num">162</td>
-          <td class="num">30</td>
-          <td class="num"><strong>$1,618.38</strong></td>
-          <td class="num">9.99</td>
-        </tr>
+<tr>
+      <td>14</td><td><code>2013500358</code></td><td>S6春节限时抢购礼包-49.99</td>
+      <td class="num">49.99</td>
+      <td class="num">41</td>
+      <td class="num">41</td>
+      <td class="num">20</td>
+      <td class="num"><strong>$2,049.59</strong></td>
+      <td class="num">49.99</td>
+    </tr>
 
-        <tr>
-          <td>15</td>
-          <td><code>2013510223</code></td>
-          <td>推币机礼包_4.99</td>
-          <td class="num">4.99</td>
-          <td class="num">323</td>
-          <td class="num">175</td>
-          <td class="num">39</td>
-          <td class="num"><strong>$1,611.77</strong></td>
-          <td class="num">4.99</td>
-        </tr>
+<tr>
+      <td>15</td><td><code>2013501506</code></td><td>25感恩节每日补给升级礼包-第1天</td>
+      <td class="num">1.99</td>
+      <td class="num">860</td>
+      <td class="num">860</td>
+      <td class="num">55</td>
+      <td class="num"><strong>$1,711.40</strong></td>
+      <td class="num">1.99</td>
+    </tr>
 
-        <tr>
-          <td>16</td>
-          <td><code>2013450019</code></td>
-          <td>节日大富翁礼包13</td>
-          <td class="num">99.99</td>
-          <td class="num">15</td>
-          <td class="num">15</td>
-          <td class="num">7</td>
-          <td class="num"><strong>$1,499.85</strong></td>
-          <td class="num">99.99</td>
-        </tr>
+<tr>
+      <td>16</td><td><code>2013450086</code></td><td>节日集卡册bp</td>
+      <td class="num">9.99</td>
+      <td class="num">162</td>
+      <td class="num">162</td>
+      <td class="num">30</td>
+      <td class="num"><strong>$1,618.38</strong></td>
+      <td class="num">9.99</td>
+    </tr>
 
-        <tr>
-          <td>17</td>
-          <td><code>2013500355</code></td>
-          <td>S6春节限时抢购礼包-19.99</td>
-          <td class="num">19.99</td>
-          <td class="num">73</td>
-          <td class="num">73</td>
-          <td class="num">15</td>
-          <td class="num"><strong>$1,459.27</strong></td>
-          <td class="num">19.99</td>
-        </tr>
+<tr>
+      <td>17</td><td><code>2013510223</code></td><td>推币机礼包_4.99</td>
+      <td class="num">4.99</td>
+      <td class="num">323</td>
+      <td class="num">175</td>
+      <td class="num">39</td>
+      <td class="num"><strong>$1,611.77</strong></td>
+      <td class="num">4.99</td>
+    </tr>
 
-        <tr>
-          <td>18</td>
-          <td><code>2013230006</code></td>
-          <td>挖矿小游戏-产量翻倍特权-节日投放-分组规则-节日活动版</td>
-          <td class="num">2.99</td>
-          <td class="num">451</td>
-          <td class="num">451</td>
-          <td class="num">63</td>
-          <td class="num"><strong>$1,348.49</strong></td>
-          <td class="num">2.99</td>
-        </tr>
+<tr>
+      <td>18</td><td><code>2013450019</code></td><td>节日大富翁礼包13</td>
+      <td class="num">99.99</td>
+      <td class="num">15</td>
+      <td class="num">15</td>
+      <td class="num">7</td>
+      <td class="num"><strong>$1,499.85</strong></td>
+      <td class="num">99.99</td>
+    </tr>
 
-        <tr>
-          <td>19</td>
-          <td><code>2013450037</code></td>
-          <td>节日大富翁礼包15</td>
-          <td class="num">99.99</td>
-          <td class="num">13</td>
-          <td class="num">13</td>
-          <td class="num">7</td>
-          <td class="num"><strong>$1,299.87</strong></td>
-          <td class="num">99.99</td>
-        </tr>
+<tr>
+      <td>19</td><td><code>2013500355</code></td><td>S6春节限时抢购礼包-19.99</td>
+      <td class="num">19.99</td>
+      <td class="num">73</td>
+      <td class="num">73</td>
+      <td class="num">15</td>
+      <td class="num"><strong>$1,459.27</strong></td>
+      <td class="num">19.99</td>
+    </tr>
 
-        <tr>
-          <td>20</td>
-          <td><code>2013560127</code></td>
-          <td>2026拓荒节集结奖励解锁礼包</td>
-          <td class="num">4.99</td>
-          <td class="num">260</td>
-          <td class="num">260</td>
-          <td class="num">38</td>
-          <td class="num"><strong>$1,297.40</strong></td>
-          <td class="num">4.99</td>
-        </tr>
+<tr>
+      <td>20</td><td><code>2013230006</code></td><td>挖矿小游戏-产量翻倍特权-节日投放-分组规则-节日活动版</td>
+      <td class="num">2.99</td>
+      <td class="num">451</td>
+      <td class="num">451</td>
+      <td class="num">63</td>
+      <td class="num"><strong>$1,348.49</strong></td>
+      <td class="num">2.99</td>
+    </tr>
 
-        <tr>
-          <td>21</td>
-          <td><code>2013510224</code></td>
-          <td>推币机礼包_9.99</td>
-          <td class="num">9.99</td>
-          <td class="num">127</td>
-          <td class="num">77</td>
-          <td class="num">25</td>
-          <td class="num"><strong>$1,268.73</strong></td>
-          <td class="num">9.99</td>
-        </tr>
+<tr>
+      <td>21</td><td><code>2013450037</code></td><td>节日大富翁礼包15</td>
+      <td class="num">99.99</td>
+      <td class="num">13</td>
+      <td class="num">13</td>
+      <td class="num">7</td>
+      <td class="num"><strong>$1,299.87</strong></td>
+      <td class="num">99.99</td>
+    </tr>
 
-        <tr>
-          <td>22</td>
-          <td><code>2013450003</code></td>
-          <td>节日大富翁礼包2</td>
-          <td class="num">99.99</td>
-          <td class="num">12</td>
-          <td class="num">12</td>
-          <td class="num">6</td>
-          <td class="num"><strong>$1,199.88</strong></td>
-          <td class="num">99.99</td>
-        </tr>
+<tr>
+      <td>22</td><td><code>2013560127</code></td><td>2026拓荒节集结奖励解锁礼包</td>
+      <td class="num">4.99</td>
+      <td class="num">260</td>
+      <td class="num">260</td>
+      <td class="num">38</td>
+      <td class="num"><strong>$1,297.40</strong></td>
+      <td class="num">4.99</td>
+    </tr>
 
-        <tr>
-          <td>23</td>
-          <td><code>2013510226</code></td>
-          <td>推币机礼包_49.99</td>
-          <td class="num">49.99</td>
-          <td class="num">21</td>
-          <td class="num">14</td>
-          <td class="num">8</td>
-          <td class="num"><strong>$1,049.79</strong></td>
-          <td class="num">49.99</td>
-        </tr>
+<tr>
+      <td>23</td><td><code>2013510224</code></td><td>推币机礼包_9.99</td>
+      <td class="num">9.99</td>
+      <td class="num">127</td>
+      <td class="num">77</td>
+      <td class="num">25</td>
+      <td class="num"><strong>$1,268.73</strong></td>
+      <td class="num">9.99</td>
+    </tr>
 
-        <tr>
-          <td>24</td>
-          <td><code>2013500360</code></td>
-          <td>S6春节限时抢购礼包-99.99</td>
-          <td class="num">99.99</td>
-          <td class="num">10</td>
-          <td class="num">10</td>
-          <td class="num">8</td>
-          <td class="num"><strong>$999.90</strong></td>
-          <td class="num">99.99</td>
-        </tr>
+<tr>
+      <td>24</td><td><code>2013450003</code></td><td>节日大富翁礼包2</td>
+      <td class="num">99.99</td>
+      <td class="num">12</td>
+      <td class="num">12</td>
+      <td class="num">6</td>
+      <td class="num"><strong>$1,199.88</strong></td>
+      <td class="num">99.99</td>
+    </tr>
 
-        <tr>
-          <td>25</td>
-          <td><code>2013559895</code></td>
-          <td>节日挖矿-26拓荒节关卡1-2礼包</td>
-          <td class="num">9.99</td>
-          <td class="num">94</td>
-          <td class="num">94</td>
-          <td class="num">16</td>
-          <td class="num"><strong>$939.06</strong></td>
-          <td class="num">9.99</td>
-        </tr>
+<tr>
+      <td>25</td><td><code>2013510226</code></td><td>推币机礼包_49.99</td>
+      <td class="num">49.99</td>
+      <td class="num">21</td>
+      <td class="num">14</td>
+      <td class="num">8</td>
+      <td class="num"><strong>$1,049.79</strong></td>
+      <td class="num">49.99</td>
+    </tr>
 
-        <tr>
-          <td>26</td>
-          <td><code>2013559894</code></td>
-          <td>节日挖矿-26拓荒节关卡1-1礼包</td>
-          <td class="num">9.99</td>
-          <td class="num">92</td>
-          <td class="num">92</td>
-          <td class="num">17</td>
-          <td class="num"><strong>$919.08</strong></td>
-          <td class="num">9.99</td>
-        </tr>
+<tr>
+      <td>26</td><td><code>2013500360</code></td><td>S6春节限时抢购礼包-99.99</td>
+      <td class="num">99.99</td>
+      <td class="num">10</td>
+      <td class="num">10</td>
+      <td class="num">8</td>
+      <td class="num"><strong>$999.90</strong></td>
+      <td class="num">99.99</td>
+    </tr>
 
-        <tr>
-          <td>27</td>
-          <td><code>2013500831</code></td>
-          <td>通用-预购连锁礼包_schema3-5</td>
-          <td class="num">99.99</td>
-          <td class="num">9</td>
-          <td class="num">9</td>
-          <td class="num">6</td>
-          <td class="num"><strong>$899.91</strong></td>
-          <td class="num">99.99</td>
-        </tr>
+<tr>
+      <td>27</td><td><code>2013559895</code></td><td>节日挖矿-26拓荒节关卡1-2礼包</td>
+      <td class="num">9.99</td>
+      <td class="num">94</td>
+      <td class="num">94</td>
+      <td class="num">16</td>
+      <td class="num"><strong>$939.06</strong></td>
+      <td class="num">9.99</td>
+    </tr>
 
-        <tr>
-          <td>28</td>
-          <td><code>2013500357</code></td>
-          <td>S6春节限时抢购礼包-49.99</td>
-          <td class="num">49.99</td>
-          <td class="num">16</td>
-          <td class="num">16</td>
-          <td class="num">10</td>
-          <td class="num"><strong>$799.84</strong></td>
-          <td class="num">49.99</td>
-        </tr>
+<tr>
+      <td>28</td><td><code>2013559894</code></td><td>节日挖矿-26拓荒节关卡1-1礼包</td>
+      <td class="num">9.99</td>
+      <td class="num">92</td>
+      <td class="num">92</td>
+      <td class="num">17</td>
+      <td class="num"><strong>$919.08</strong></td>
+      <td class="num">9.99</td>
+    </tr>
 
-        <tr>
-          <td>29</td>
-          <td><code>2013510225</code></td>
-          <td>推币机礼包_19.99</td>
-          <td class="num">19.99</td>
-          <td class="num">39</td>
-          <td class="num">32</td>
-          <td class="num">13</td>
-          <td class="num"><strong>$779.61</strong></td>
-          <td class="num">19.99</td>
-        </tr>
+<tr>
+      <td>29</td><td><code>2013500831</code></td><td>通用-预购连锁礼包_schema3-5</td>
+      <td class="num">99.99</td>
+      <td class="num">9</td>
+      <td class="num">9</td>
+      <td class="num">6</td>
+      <td class="num"><strong>$899.91</strong></td>
+      <td class="num">99.99</td>
+    </tr>
 
-        <tr>
-          <td>30</td>
-          <td><code>2013500356</code></td>
-          <td>S6春节限时抢购礼包-19.99</td>
-          <td class="num">19.99</td>
-          <td class="num">39</td>
-          <td class="num">39</td>
-          <td class="num">16</td>
-          <td class="num"><strong>$779.61</strong></td>
-          <td class="num">19.99</td>
-        </tr>
+<tr>
+      <td>30</td><td><code>2013500357</code></td><td>S6春节限时抢购礼包-49.99</td>
+      <td class="num">49.99</td>
+      <td class="num">16</td>
+      <td class="num">16</td>
+      <td class="num">10</td>
+      <td class="num"><strong>$799.84</strong></td>
+      <td class="num">49.99</td>
+    </tr>
 
-        <tr>
-          <td>31</td>
-          <td><code>2013450005</code></td>
-          <td>节日大富翁礼包4</td>
-          <td class="num">19.99</td>
-          <td class="num">38</td>
-          <td class="num">38</td>
-          <td class="num">12</td>
-          <td class="num"><strong>$759.62</strong></td>
-          <td class="num">19.99</td>
-        </tr>
+<tr>
+      <td>31</td><td><code>2013510225</code></td><td>推币机礼包_19.99</td>
+      <td class="num">19.99</td>
+      <td class="num">39</td>
+      <td class="num">32</td>
+      <td class="num">13</td>
+      <td class="num"><strong>$779.61</strong></td>
+      <td class="num">19.99</td>
+    </tr>
 
-        <tr>
-          <td>32</td>
-          <td><code>2013500830</code></td>
-          <td>节日-大富翁存钱罐礼包</td>
-          <td class="num">2.99</td>
-          <td class="num">222</td>
-          <td class="num">222</td>
-          <td class="num">38</td>
-          <td class="num"><strong>$663.78</strong></td>
-          <td class="num">2.99</td>
-        </tr>
+<tr>
+      <td>32</td><td><code>2013500356</code></td><td>S6春节限时抢购礼包-19.99</td>
+      <td class="num">19.99</td>
+      <td class="num">39</td>
+      <td class="num">39</td>
+      <td class="num">16</td>
+      <td class="num"><strong>$779.61</strong></td>
+      <td class="num">19.99</td>
+    </tr>
 
-        <tr>
-          <td>33</td>
-          <td><code>2013500354</code></td>
-          <td>S6春节限时抢购礼包-9.99</td>
-          <td class="num">9.99</td>
-          <td class="num">66</td>
-          <td class="num">66</td>
-          <td class="num">19</td>
-          <td class="num"><strong>$659.34</strong></td>
-          <td class="num">9.99</td>
-        </tr>
+<tr>
+      <td>33</td><td><code>2013450005</code></td><td>节日大富翁礼包4</td>
+      <td class="num">19.99</td>
+      <td class="num">38</td>
+      <td class="num">38</td>
+      <td class="num">12</td>
+      <td class="num"><strong>$759.62</strong></td>
+      <td class="num">19.99</td>
+    </tr>
 
-        <tr>
-          <td>34</td>
-          <td><code>2013510469</code></td>
-          <td>节日挖矿-砍价礼包-折扣5</td>
-          <td class="num">1.99</td>
-          <td class="num">272</td>
-          <td class="num">272</td>
-          <td class="num">54</td>
-          <td class="num"><strong>$541.28</strong></td>
-          <td class="num">1.99</td>
-        </tr>
+<tr>
+      <td>34</td><td><code>2013500830</code></td><td>节日-大富翁存钱罐礼包</td>
+      <td class="num">2.99</td>
+      <td class="num">222</td>
+      <td class="num">222</td>
+      <td class="num">38</td>
+      <td class="num"><strong>$663.78</strong></td>
+      <td class="num">2.99</td>
+    </tr>
 
-        <tr>
-          <td>35</td>
-          <td><code>2013480021</code></td>
-          <td>2026节日bp-触发礼包-启程礼包1</td>
-          <td class="num">4.99</td>
-          <td class="num">101</td>
-          <td class="num">101</td>
-          <td class="num">26</td>
-          <td class="num"><strong>$503.99</strong></td>
-          <td class="num">4.99</td>
-        </tr>
+<tr>
+      <td>35</td><td><code>2013500354</code></td><td>S6春节限时抢购礼包-9.99</td>
+      <td class="num">9.99</td>
+      <td class="num">66</td>
+      <td class="num">66</td>
+      <td class="num">19</td>
+      <td class="num"><strong>$659.34</strong></td>
+      <td class="num">9.99</td>
+    </tr>
 
-        <tr>
-          <td>36</td>
-          <td><code>2013450018</code></td>
-          <td>节日大富翁礼包12</td>
-          <td class="num">99.99</td>
-          <td class="num">5</td>
-          <td class="num">5</td>
-          <td class="num">5</td>
-          <td class="num"><strong>$499.95</strong></td>
-          <td class="num">99.99</td>
-        </tr>
+<tr>
+      <td>36</td><td><code>2013510469</code></td><td>节日挖矿-砍价礼包-折扣5</td>
+      <td class="num">1.99</td>
+      <td class="num">272</td>
+      <td class="num">272</td>
+      <td class="num">54</td>
+      <td class="num"><strong>$541.28</strong></td>
+      <td class="num">1.99</td>
+    </tr>
 
-        <tr>
-          <td>37</td>
-          <td><code>2013450004</code></td>
-          <td>节日大富翁礼包3</td>
-          <td class="num">49.99</td>
-          <td class="num">9</td>
-          <td class="num">9</td>
-          <td class="num">5</td>
-          <td class="num"><strong>$449.91</strong></td>
-          <td class="num">49.99</td>
-        </tr>
+<tr>
+      <td>37</td><td><code>2013480021</code></td><td>2026节日bp-触发礼包-启程礼包1</td>
+      <td class="num">4.99</td>
+      <td class="num">101</td>
+      <td class="num">101</td>
+      <td class="num">26</td>
+      <td class="num"><strong>$503.99</strong></td>
+      <td class="num">4.99</td>
+    </tr>
 
-        <tr>
-          <td>38</td>
-          <td><code>2013450011</code></td>
-          <td>节日大富翁礼包10</td>
-          <td class="num">29.99</td>
-          <td class="num">14</td>
-          <td class="num">14</td>
-          <td class="num">7</td>
-          <td class="num"><strong>$419.86</strong></td>
-          <td class="num">29.99</td>
-        </tr>
+<tr>
+      <td>38</td><td><code>2013450018</code></td><td>节日大富翁礼包12</td>
+      <td class="num">99.99</td>
+      <td class="num">5</td>
+      <td class="num">5</td>
+      <td class="num">5</td>
+      <td class="num"><strong>$499.95</strong></td>
+      <td class="num">99.99</td>
+    </tr>
 
-        <tr>
-          <td>39</td>
-          <td><code>2013450006</code></td>
-          <td>节日大富翁礼包5</td>
-          <td class="num">9.99</td>
-          <td class="num">42</td>
-          <td class="num">42</td>
-          <td class="num">11</td>
-          <td class="num"><strong>$419.58</strong></td>
-          <td class="num">9.99</td>
-        </tr>
+<tr>
+      <td>39</td><td><code>2013450004</code></td><td>节日大富翁礼包3</td>
+      <td class="num">49.99</td>
+      <td class="num">9</td>
+      <td class="num">9</td>
+      <td class="num">5</td>
+      <td class="num"><strong>$449.91</strong></td>
+      <td class="num">49.99</td>
+    </tr>
 
-        <tr>
-          <td>40</td>
-          <td><code>2013480022</code></td>
-          <td>2026节日bp-触发礼包-启程礼包2</td>
-          <td class="num">9.99</td>
-          <td class="num">41</td>
-          <td class="num">41</td>
-          <td class="num">17</td>
-          <td class="num"><strong>$409.59</strong></td>
-          <td class="num">9.99</td>
-        </tr>
+<tr>
+      <td>40</td><td><code>2013450011</code></td><td>节日大富翁礼包10</td>
+      <td class="num">29.99</td>
+      <td class="num">14</td>
+      <td class="num">14</td>
+      <td class="num">7</td>
+      <td class="num"><strong>$419.86</strong></td>
+      <td class="num">29.99</td>
+    </tr>
 
-        <tr>
-          <td>41</td>
-          <td><code>2013450036</code></td>
-          <td>节日大富翁礼包14</td>
-          <td class="num">99.99</td>
-          <td class="num">4</td>
-          <td class="num">4</td>
-          <td class="num">2</td>
-          <td class="num"><strong>$399.96</strong></td>
-          <td class="num">99.99</td>
-        </tr>
+<tr>
+      <td>41</td><td><code>2013450006</code></td><td>节日大富翁礼包5</td>
+      <td class="num">9.99</td>
+      <td class="num">42</td>
+      <td class="num">42</td>
+      <td class="num">11</td>
+      <td class="num"><strong>$419.58</strong></td>
+      <td class="num">9.99</td>
+    </tr>
 
-        <tr>
-          <td>42</td>
-          <td><code>2013559919</code></td>
-          <td>节日挖矿-26拓荒节关卡2-2礼包-19.99</td>
-          <td class="num">19.99</td>
-          <td class="num">20</td>
-          <td class="num">20</td>
-          <td class="num">8</td>
-          <td class="num"><strong>$399.80</strong></td>
-          <td class="num">19.99</td>
-        </tr>
+<tr>
+      <td>42</td><td><code>2013480022</code></td><td>2026节日bp-触发礼包-启程礼包2</td>
+      <td class="num">9.99</td>
+      <td class="num">41</td>
+      <td class="num">41</td>
+      <td class="num">17</td>
+      <td class="num"><strong>$409.59</strong></td>
+      <td class="num">9.99</td>
+    </tr>
 
-        <tr>
-          <td>43</td>
-          <td><code>2013559997</code></td>
-          <td>节日挖矿-26拓荒节关卡4-2礼包-19.99</td>
-          <td class="num">19.99</td>
-          <td class="num">19</td>
-          <td class="num">19</td>
-          <td class="num">6</td>
-          <td class="num"><strong>$379.81</strong></td>
-          <td class="num">19.99</td>
-        </tr>
+<tr>
+      <td>43</td><td><code>2013450036</code></td><td>节日大富翁礼包14</td>
+      <td class="num">99.99</td>
+      <td class="num">4</td>
+      <td class="num">4</td>
+      <td class="num">2</td>
+      <td class="num"><strong>$399.96</strong></td>
+      <td class="num">99.99</td>
+    </tr>
 
-        <tr>
-          <td>44</td>
-          <td><code>2013510532</code></td>
-          <td>拓荒节自选周卡-schema5-29.99</td>
-          <td class="num">29.99</td>
-          <td class="num">12</td>
-          <td class="num">12</td>
-          <td class="num">10</td>
-          <td class="num"><strong>$359.88</strong></td>
-          <td class="num">29.99</td>
-        </tr>
+<tr>
+      <td>44</td><td><code>2013559919</code></td><td>节日挖矿-26拓荒节关卡2-2礼包-19.99</td>
+      <td class="num">19.99</td>
+      <td class="num">20</td>
+      <td class="num">20</td>
+      <td class="num">8</td>
+      <td class="num"><strong>$399.80</strong></td>
+      <td class="num">19.99</td>
+    </tr>
 
-        <tr>
-          <td>45</td>
-          <td><code>2013559932</code></td>
-          <td>节日挖矿-26拓荒节关卡2-3礼包-19.99</td>
-          <td class="num">19.99</td>
-          <td class="num">18</td>
-          <td class="num">18</td>
-          <td class="num">7</td>
-          <td class="num"><strong>$359.82</strong></td>
-          <td class="num">19.99</td>
-        </tr>
+<tr>
+      <td>45</td><td><code>2013559997</code></td><td>节日挖矿-26拓荒节关卡4-2礼包-19.99</td>
+      <td class="num">19.99</td>
+      <td class="num">19</td>
+      <td class="num">19</td>
+      <td class="num">6</td>
+      <td class="num"><strong>$379.81</strong></td>
+      <td class="num">19.99</td>
+    </tr>
 
-        <tr>
-          <td>46</td>
-          <td><code>2013450017</code></td>
-          <td>节日大富翁礼包11</td>
-          <td class="num">49.99</td>
-          <td class="num">7</td>
-          <td class="num">7</td>
-          <td class="num">3</td>
-          <td class="num"><strong>$349.93</strong></td>
-          <td class="num">49.99</td>
-        </tr>
+<tr>
+      <td>46</td><td><code>2013510532</code></td><td>拓荒节自选周卡-schema5-29.99</td>
+      <td class="num">29.99</td>
+      <td class="num">12</td>
+      <td class="num">12</td>
+      <td class="num">10</td>
+      <td class="num"><strong>$359.88</strong></td>
+      <td class="num">29.99</td>
+    </tr>
 
-        <tr>
-          <td>47</td>
-          <td><code>2013559971</code></td>
-          <td>节日挖矿-26拓荒节关卡3-3礼包-19.99</td>
-          <td class="num">19.99</td>
-          <td class="num">16</td>
-          <td class="num">16</td>
-          <td class="num">7</td>
-          <td class="num"><strong>$319.84</strong></td>
-          <td class="num">19.99</td>
-        </tr>
+<tr>
+      <td>47</td><td><code>2013559932</code></td><td>节日挖矿-26拓荒节关卡2-3礼包-19.99</td>
+      <td class="num">19.99</td>
+      <td class="num">18</td>
+      <td class="num">18</td>
+      <td class="num">7</td>
+      <td class="num"><strong>$359.82</strong></td>
+      <td class="num">19.99</td>
+    </tr>
 
-        <tr>
-          <td>48</td>
-          <td><code>2013559984</code></td>
-          <td>节日挖矿-26拓荒节关卡4-1礼包-19.99</td>
-          <td class="num">19.99</td>
-          <td class="num">16</td>
-          <td class="num">16</td>
-          <td class="num">7</td>
-          <td class="num"><strong>$319.84</strong></td>
-          <td class="num">19.99</td>
-        </tr>
+<tr>
+      <td>48</td><td><code>2013450017</code></td><td>节日大富翁礼包11</td>
+      <td class="num">49.99</td>
+      <td class="num">7</td>
+      <td class="num">7</td>
+      <td class="num">3</td>
+      <td class="num"><strong>$349.93</strong></td>
+      <td class="num">49.99</td>
+    </tr>
 
-        <tr>
-          <td>49</td>
-          <td><code>2013450002</code></td>
-          <td>节日大富翁礼包1</td>
-          <td class="num">1.99</td>
-          <td class="num">156</td>
-          <td class="num">156</td>
-          <td class="num">33</td>
-          <td class="num"><strong>$310.44</strong></td>
-          <td class="num">1.99</td>
-        </tr>
+<tr>
+      <td>49</td><td><code>2013559971</code></td><td>节日挖矿-26拓荒节关卡3-3礼包-19.99</td>
+      <td class="num">19.99</td>
+      <td class="num">16</td>
+      <td class="num">16</td>
+      <td class="num">7</td>
+      <td class="num"><strong>$319.84</strong></td>
+      <td class="num">19.99</td>
+    </tr>
 
-        <tr>
-          <td>50</td>
-          <td><code>2013230308</code></td>
-          <td>节日挖矿连锁礼包_1.99</td>
-          <td class="num">1.99</td>
-          <td class="num">155</td>
-          <td class="num">155</td>
-          <td class="num">50</td>
-          <td class="num"><strong>$308.45</strong></td>
-          <td class="num">1.99</td>
-        </tr>
+<tr>
+      <td>50</td><td><code>2013559984</code></td><td>节日挖矿-26拓荒节关卡4-1礼包-19.99</td>
+      <td class="num">19.99</td>
+      <td class="num">16</td>
+      <td class="num">16</td>
+      <td class="num">7</td>
+      <td class="num"><strong>$319.84</strong></td>
+      <td class="num">19.99</td>
+    </tr>
 
-      </tbody>
-    </table>
-  </div>
+</tbody></table></div>
   <div id="chartIap" style="width:100%; height:640px; margin:14px 0;"></div>
 </div>
 
 
 <div class="section">
-  <h2>🔍 四、数据口径与方法</h2>
-  <h3>窗口选择</h3>
-  <ul style="margin-left: 24px; font-size: 13.5px; line-height: 1.9; color: #555;">
-    <li>用户口径：5/12 晚上上线，5/12 + 5/13 算"首日"，截止 UTC 5/14 08:00</li>
-    <li>ods.user_order 的 created_at 是 UTC+8，所以 SQL 实际过滤 <code>created_at ∈ ['2026-05-12 08:00', '2026-05-14 16:00')</code></li>
-    <li>partition_date 覆盖 5/12 / 5/13 / 5/14（UTC+8 日期分区）</li>
+  <h2>🔍 四、口径说明</h2>
+  <h3>窗口</h3>
+  <ul style="margin-left:24px; font-size:13.5px; line-height:1.9; color:#555;">
+    <li>UTC 5/12 00:00 ~ 5/14 08:00（56h），对应 UTC+8 5/12 08:00 ~ 5/14 16:00；partition_date 覆盖 5/12 / 5/13 / 5/14</li>
   </ul>
-  <h3>IAP 集合提取</h3>
-  <ul style="margin-left: 24px; font-size: 13.5px; line-height: 1.9; color: #555;">
-    <li>22 个活动（21 个 5/12 当日激活 + 限抢 1-2 期 5/13 激活）</li>
-    <li>使用 <code>p2-leichong-diff</code> 的 trace 算法，沿 2112→{2121/2122/2115/2135/2013}→2011 链路追溯每个活动引用的全部 2011 IAP</li>
-    <li>共 265 个唯一 2011 IAP（cf <code>iap_config_QA</code>），通过 <code>iap_template_QA.A_INT_config_id</code> 映射到 401 个 2013 template</li>
-    <li>查询 <code>v1041.ods_user_order</code>，<code>split_part(iap_id, '_', 1)</code> 取前缀匹配 2013 ID</li>
+  <h3>归属算法</h3>
+  <ul style="margin-left:24px; font-size:13.5px; line-height:1.9; color:#555;">
+    <li><strong>主路</strong>：2011.A_MAP_time_info.actv_id 反向绑定（大富翁/横版BP/行军礼包/预购连锁等走此路）</li>
+    <li><strong>组件展开</strong>：2112.A_ARR_activity_components → 2121/2122/2115/2135/2013/2130/2137 跨表追溯（推币机/限抢/自选周卡/合成小游戏走此路）</li>
+    <li><strong>2130 BP A_MAP_pkg</strong>：横版BP (21300150) 拓荒节通行证 + 卡包BP (21301541) 集卡册bp 走 battle_pass 子表</li>
+    <li><strong>挖矿 scene_pkg</strong>：节日挖矿连锁/砍价/关卡礼包无 actv_id 也无组件链接，按业务知识归到 21127406 合成小游戏 schema3（合成小游戏=挖矿）</li>
   </ul>
-  <h3>累计型共享池注解</h3>
-  <ul style="margin-left: 24px; font-size: 13.5px; line-height: 1.9; color: #555;">
-    <li>主城特效累充三件套（21127892/93/94）+ 机甲累充（21127891）通过 <code>cross_progress</code> 组件挂接整套节日累充 IAP，反查会拉到整池</li>
-    <li>这 4 个活动的"独占 IAP"≈0，玩家充节日里任意 IAP 都会进度+1，所以 4 行流水相同 ≈ 全池</li>
-    <li>报告中保留这 4 行只是为了直观看到累充活动覆盖范围；活动收入合计取"直售型"加总</li>
+  <h3>合并规则</h3>
+  <ul style="margin-left:24px; font-size:13.5px; line-height:1.9; color:#555;">
+    <li>联动礼包 21129002 = 行军表情 (21129000) + 行军特效 (21129001) + 头像框 (21129003) 合计；3 个子礼包行合并到联动礼包</li>
+    <li>合成小游戏 schema4 / schema5 共享 schema3 同套挖矿 IAP，合并到 21127406 主行</li>
   </ul>
-  <h3>0 流水活动说明</h3>
-  <ul style="margin-left: 24px; font-size: 13.5px; line-height: 1.9; color: #555;">
-    <li>拓荒节签到（21127898）：trace 命中 0 个 2011，签到本身无 IAP，正常</li>
-    <li>节日卡包 BP（21129005）：trace 命中 0 个 2011，BP 类活动通常通过 1168 商店出售，不挂 2011</li>
+  <h3>未在表内活动</h3>
+  <ul style="margin-left:24px; font-size:13.5px; line-height:1.9; color:#555;">
+    <li>主城特效累充三件套 + 机甲累充：作为 cross_progress 跟踪器，本身不卖 IAP，玩家充任意节日 IAP 都推进它们的累累进度</li>
+    <li>拓荒节签到：签到设计为活跃任务，无 IAP 付费路径</li>
+    <li>26拓荒节-挖矿累积任务：纯 task 类追踪活动，无 own IAP（挖矿付费流水已归到合成小游戏 schema3）</li>
   </ul>
 </div>
 
-<footer>P2 拓荒节 2026 · 首日付费数据 · 生成 2026-05-14</footer>
+<footer>P2 拓荒节 2026 · 首日付费数据 · 生成 2026-05-14 · 全量校验（直售+未归属=IAP池总）</footer>
 </div>
-
 <script>
 const chartAct = echarts.init(document.getElementById('chartActivity'));
 chartAct.setOption({
-  title: { text: '直售型活动流水（USD）', left: 'center', textStyle: {fontSize:14, color:'#555'} },
-  grid: {left: 280, right: 80, top: 50, bottom: 30},
+  title: { text:'活动流水（USD）', left:'center', textStyle:{fontSize:14,color:'#555'} },
+  grid: {left:340, right:80, top:50, bottom:30},
   tooltip: {trigger:'axis', axisPointer:{type:'shadow'}},
   xAxis: {type:'value', axisLabel:{formatter:function(v){return '$'+v.toLocaleString();}}},
-  yAxis: {type:'category', data:["推币机-单服排行榜版", "联动礼包-2026拓荒节", "节日大富翁进度活动（26拓荒节）", "拓荒节-限时抢购-第1、2期", "拓荒节-预购连锁礼包_schema6", "拓荒节2026-头像框礼包", "拓荒节2026-行军特效礼包", "节日通用自选周卡（新版-26拓荒节）-s6", "拓荒节2026-行军表情礼包", "拓荒节2026-横版bp（循环宝箱无排行榜）", "拓荒节-预购连锁礼包_schema3-5", "合成小游戏活动-26拓荒节版本-schema3", "合成小游戏活动-26拓荒节版本-schema4", "节日大富翁组队子活动", "节日通用自选周卡（新版-26拓荒节）-s3-5", "装饰兑换商店-通用-后续不改"], inverse:true,
-           axisLabel:{interval:0, fontSize:12, width:270, overflow:'truncate'}},
-  series: [{type:'bar', data:[23146.38, 10125.33, 9551.19, 8847.34, 4199.58, 4021.94, 3738.13, 3109.36, 2365.26, 2230.97, 899.91, 606.22, 606.22, 569.43, 369.86, 184.89], itemStyle:{color:'#4caf50'},
+  yAxis: {type:'category', data:["推币机-单服排行榜版", "合成小游戏活动-26拓荒节版本-schema3-5（含挖矿IAP）", "联动礼包-2026拓荒节（=行军表情+行军特效+头像框 合计）", "节日大富翁进度活动（26拓荒节）", "拓荒节-限时抢购-第1、2期", "拓荒节2026-横版bp（循环宝箱无排行榜）", "挂机BP-拓荒节2026", "拓荒节-预购连锁礼包_schema6", "节日通用自选周卡（新版-26拓荒节）-s6", "节日活动-每日补给", "节日卡包BP-拓荒节", "拓荒节-预购连锁礼包_schema3-5", "节日大富翁组队子活动", "节日通用自选周卡（新版-26拓荒节）-s3-5", "装饰兑换商店-通用-后续不改"], inverse:true,
+           axisLabel:{interval:0,fontSize:12,width:330,overflow:'truncate'}},
+  series: [{type:'bar', data:[23146.38, 12090.42, 10125.33, 9551.19, 8847.34, 7749.2, 4925.07, 4199.58, 3109.36, 1890.5, 1768.33, 899.91, 569.43, 369.86, 184.89], itemStyle:{color:'#4caf50'},
             label:{show:true,position:'right',formatter:function(p){return '$'+p.value.toLocaleString();}}}]
 });
-
 const chartIap = echarts.init(document.getElementById('chartIap'));
 chartIap.setOption({
-  title: { text: 'TOP 20 IAP 流水（USD）', left: 'center', textStyle: {fontSize:14, color:'#555'} },
-  grid: {left: 320, right: 80, top: 50, bottom: 30},
+  title: { text:'TOP 20 IAP 流水（USD）', left:'center', textStyle:{fontSize:14,color:'#555'} },
+  grid: {left:340, right:80, top:50, bottom:30},
   tooltip: {trigger:'axis', axisPointer:{type:'shadow'},
-             formatter:function(params){
-               var p = params[0];
-               var id = ["2013510227", "2013501500", "2013500832", "2013560125", "2013560124", "2013510220", "2013510222", "2013510536", "2013510221", "2013560123", "2013500359", "2013500358", "2013501506", "2013450086", "2013510223", "2013450019", "2013500355", "2013230006", "2013450037", "2013560127"][p.dataIndex];
-               return p.name + '<br/>IAP: ' + id + '<br/>流水: $' + p.value.toLocaleString();
-             }},
+    formatter:function(params){
+      var p=params[0]; var id=["2013510227", "2013501500", "2013500832", "2013560125", "2013560124", "2013510220", "201390137", "2013510222", "2013510536", "2013510221", "2013560123", "201390136", "2013500359", "2013500358", "2013501506", "2013450086", "2013510223", "2013450019", "2013500355", "2013230006"][p.dataIndex];
+      return p.name+'<br/>IAP: '+id+'<br/>流水: $'+p.value.toLocaleString();
+    }},
   xAxis: {type:'value', axisLabel:{formatter:function(v){return '$'+v.toLocaleString();}}},
-  yAxis: {type:'category', data:["推币机礼包_99.99", "挂机BP_2025", "通用-预购连锁_schema6", "2026拓荒节-头像框4.99", "2026拓荒节-行军特效19.99", "推币机随机GACHA礼包_19.99", "推币机随机GACHA礼包_99.99", "拓荒节自选周卡-schema6-49.99", "推币机随机GACHA礼包_49.99", "2026拓荒节-行军表情4.99", "S6春节限时抢购礼包-99.99", "S6春节限时抢购礼包-49.99", "25感恩节每日补给升级礼包-第1天", "节日集卡册bp", "推币机礼包_4.99", "节日大富翁礼包13", "S6春节限时抢购礼包-19.99", "挖矿小游戏-产量翻倍特权-节日投放-分组规则-节日活动版", "节日大富翁礼包15", "2026拓荒节集结奖励解锁礼包"], inverse:true,
-           axisLabel:{interval:0, fontSize:12, width:310, overflow:'truncate'}},
-  series: [{type:'bar', data:[9299.07, 4925.07, 4199.58, 4021.94, 3738.13, 3538.23, 2999.7, 2999.4, 2599.48, 2365.26, 2099.79, 2049.59, 1711.4, 1618.38, 1611.77, 1499.85, 1459.27, 1348.49, 1299.87, 1297.4], itemStyle:{color:'#66bb6a'},
+  yAxis: {type:'category', data:["推币机礼包_99.99", "挂机BP_2025", "通用-预购连锁_schema6", "2026拓荒节-头像框4.99", "2026拓荒节-行军特效19.99", "推币机随机GACHA礼包_19.99", "拓荒节高级通行证_2026", "推币机随机GACHA礼包_99.99", "拓荒节自选周卡-schema6-49.99", "推币机随机GACHA礼包_49.99", "2026拓荒节-行军表情4.99", "拓荒节初级通行证_2026", "S6春节限时抢购礼包-99.99", "S6春节限时抢购礼包-49.99", "25感恩节每日补给升级礼包-第1天", "节日集卡册bp", "推币机礼包_4.99", "节日大富翁礼包13", "S6春节限时抢购礼包-19.99", "挖矿小游戏-产量翻倍特权-节日投放-分组规则-节日活动版"], inverse:true,
+           axisLabel:{interval:0,fontSize:12,width:330,overflow:'truncate'}},
+  series: [{type:'bar', data:[9299.07, 4925.07, 4199.58, 4021.94, 3738.13, 3538.23, 3358.32, 2999.7, 2999.4, 2599.48, 2365.26, 2159.91, 2099.79, 2049.59, 1711.4, 1618.38, 1611.77, 1499.85, 1459.27, 1348.49], itemStyle:{color:'#66bb6a'},
             label:{show:true,position:'right',formatter:function(p){return '$'+p.value.toLocaleString();}}}]
 });
-
-window.addEventListener('resize', ()=>{chartAct.resize();chartIap.resize();});
-</script>
-</body>
-</html>
+window.addEventListener('resize',()=>{chartAct.resize();chartIap.resize();});
+</script></body></html>
