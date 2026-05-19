@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>复活节2026 限时抢购 · 数据回归（vs 科技节）</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f7f8fa;
+  --surface: #ffffff;
+  --surface-2: #f1f3f6;
+  --border: #e2e6ec;
+  --border-strong: #cbd1da;
+  --text: #1a1f2e;
+  --text-soft: #49506b;
+  --text-dim: #8891a8;
+  --accent: #4a69ff;
+  --accent-soft: rgba(74,105,255,0.08);
+  --green: #12a36e;
+  --green-soft: rgba(18,163,110,0.10);
+  --orange: #e8823a;
+  --orange-soft: rgba(232,130,58,0.12);
+  --red: #e04747;
+  --red-soft: rgba(224,71,71,0.10);
+  --yellow: #d79b1c;
+  --purple: #8a58c7;
+  --cyan: #0ea5ce;
+  --pink: #d6428a;
+  --pink-soft: rgba(214,66,138,0.10);
+  --tech: #4a69ff;
+  --easter: #d6428a;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Sans SC', sans-serif;
+  font-weight: 400;
+  line-height: 1.65;
+  padding: 0 0 80px;
+}
+.hero {
+  position: relative;
+  padding: 48px 0 36px;
+  text-align: center;
+  overflow: hidden;
+  background: linear-gradient(180deg, #fff 0%, var(--bg) 100%);
+  border-bottom: 1px solid var(--border);
+}
+.hero h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+.hero h1 .accent {
+  background: linear-gradient(135deg, var(--easter) 0%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.hero .subtitle {
+  color: var(--text-soft);
+  font-size: 0.95rem;
+  margin-top: 8px;
+  font-weight: 400;
+}
+.hero .meta-row {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-top: 18px;
+  flex-wrap: wrap;
+}
+.hero .meta-item {
+  font-size: 0.78rem;
+  color: var(--text-soft);
+  font-family: 'JetBrains Mono', monospace;
+}
+.hero .meta-item .label { color: var(--accent); font-weight: 600; margin-right: 4px; }
+
+.container { max-width: 1240px; margin: 0 auto; padding: 0 28px; }
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(195px, 1fr));
+  gap: 14px;
+  margin: 32px 0 24px;
+}
+.kpi-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 18px;
+  transition: border-color 0.15s, transform 0.15s;
+  box-shadow: 0 1px 2px rgba(24,28,42,0.03);
+}
+.kpi-card:hover { border-color: var(--border-strong); transform: translateY(-1px); }
+.kpi-card .kpi-label {
+  font-size: 0.74rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+}
+.kpi-card .kpi-value {
+  font-size: 1.75rem;
+  font-weight: 800;
+  margin-top: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+.kpi-card .kpi-delta {
+  font-size: 0.78rem;
+  color: var(--text-soft);
+  margin-top: 4px;
+  font-weight: 500;
+}
+.kpi-value.tech { color: var(--tech); }
+.kpi-value.easter { color: var(--easter); }
+.kpi-value.green { color: var(--green); }
+.kpi-value.orange { color: var(--orange); }
+.kpi-value.red { color: var(--red); }
+.kpi-value.purple { color: var(--purple); }
+.kpi-delta.up { color: var(--green); }
+.kpi-delta.down { color: var(--red); }
+
+section { margin-top: 48px; }
+section > h2 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text);
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--accent);
+  display: inline-block;
+  margin-bottom: 18px;
+}
+.sub-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+  margin: 22px 0 10px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  margin: 8px 0 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+thead th {
+  background: var(--surface-2);
+  color: var(--text-soft);
+  font-weight: 600;
+  text-align: left;
+  padding: 10px 14px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+tbody td {
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--border);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.82rem;
+  color: var(--text);
+}
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover { background: var(--surface-2); }
+td.label-col {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-weight: 500;
+  color: var(--text);
+  white-space: nowrap;
+}
+td.highlight { color: var(--accent); font-weight: 600; }
+td.green, .green-txt { color: var(--green); font-weight: 600; }
+td.red, .red-txt { color: var(--red); font-weight: 600; }
+td.orange, .orange-txt { color: var(--orange); font-weight: 600; }
+td.tech { color: var(--tech); font-weight: 600; }
+td.easter { color: var(--easter); font-weight: 600; }
+td.dim { color: var(--text-dim); }
+
+.chart-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin: 16px 0;
+}
+.chart-row-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+  margin: 16px 0;
+}
+.chart-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 20px;
+  box-shadow: 0 1px 2px rgba(24,28,42,0.03);
+}
+.chart-box.full { grid-column: 1 / -1; }
+.chart-box h4 {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-soft);
+  margin-bottom: 12px;
+}
+.chart-box .canvas-wrap {
+  position: relative;
+  width: 100%;
+  height: 300px;
+}
+.chart-box .canvas-wrap.tall { height: 340px; }
+.chart-box canvas { width: 100% !important; height: 100% !important; }
+
+.tag {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 5px;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+.tag-green { background: var(--green-soft); color: var(--green); }
+.tag-orange { background: var(--orange-soft); color: var(--orange); }
+.tag-red { background: var(--red-soft); color: var(--red); }
+.tag-accent { background: var(--accent-soft); color: var(--accent); }
+.tag-tech { background: var(--accent-soft); color: var(--tech); }
+.tag-easter { background: var(--pink-soft); color: var(--easter); }
+
+.insight-list {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0;
+}
+.insight-list li {
+  padding: 11px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  margin-bottom: 6px;
+  border-radius: 0 8px 8px 0;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--text-soft);
+}
+.insight-list li strong { color: var(--text); }
+.insight-list.critical li { border-left-color: var(--red); }
+.insight-list.critical li strong { color: var(--red); }
+.insight-list.warn li { border-left-color: var(--orange); }
+.insight-list.warn li strong { color: var(--orange); }
+.insight-list.positive li { border-left-color: var(--green); }
+.insight-list.positive li strong { color: var(--green); }
+
+.conclusion-box {
+  background: linear-gradient(135deg, rgba(74,105,255,0.05) 0%, rgba(214,66,138,0.04) 100%);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  border-radius: 10px;
+  padding: 18px 22px;
+  margin: 16px 0 28px;
+}
+.conclusion-box h3 {
+  color: var(--text);
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.conclusion-box p {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: var(--text-soft);
+}
+
+.alert-critical {
+  background: var(--red-soft);
+  border: 1px solid rgba(224,71,71,0.3);
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin: 14px 0;
+}
+.alert-critical h4 {
+  color: var(--red);
+  font-size: 0.92rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.alert-critical p { font-size: 0.86rem; line-height: 1.6; color: var(--text); }
+
+.round-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 12px;
+  margin: 14px 0;
+}
+.round-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+.round-card.tech { border-top: 3px solid var(--tech); }
+.round-card.easter { border-top: 3px solid var(--easter); }
+.round-card.pending { border-top: 3px dashed var(--text-dim); opacity: 0.7; }
+.round-card .rc-title {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-soft);
+  margin-bottom: 2px;
+}
+.round-card .rc-date {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  font-family: 'JetBrains Mono', monospace;
+}
+.round-card .rc-rev {
+  font-size: 1.35rem;
+  font-weight: 800;
+  margin-top: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--text);
+}
+.round-card .rc-detail {
+  font-size: 0.76rem;
+  color: var(--text-soft);
+  margin-top: 4px;
+  font-family: 'JetBrains Mono', monospace;
+}
+.round-card.easter .rc-rev { color: var(--easter); }
+.round-card.tech .rc-rev { color: var(--tech); }
+.round-card.pending .rc-rev { color: var(--text-dim); }
+
+.checklist {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 22px;
+  margin: 14px 0;
+}
+.checklist li {
+  list-style: none;
+  padding: 10px 4px 10px 28px;
+  position: relative;
+  font-size: 0.88rem;
+  border-bottom: 1px dashed var(--border);
+  color: var(--text-soft);
+}
+.checklist li:last-child { border-bottom: none; }
+.checklist li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 13px;
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  border: 1.5px solid var(--border-strong);
+  background: transparent;
+}
+.checklist li.crit::before { border-color: var(--red); }
+.checklist li.warn::before { border-color: var(--orange); }
+.checklist li strong { color: var(--text); }
+.checklist li code {
+  font-family: 'JetBrains Mono', monospace;
+  background: var(--surface-2);
+  padding: 1px 6px;
+  border-radius: 4px;
+  color: var(--accent);
+  font-size: 0.78rem;
+}
+
+.footnote {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  margin-top: 8px;
+  font-style: italic;
+}
+
+@media (max-width: 900px) {
+  .chart-row, .chart-row-3 { grid-template-columns: 1fr; }
+}
+@media (max-width: 768px) {
+  .hero h1 { font-size: 1.4rem; }
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1><span class="accent">复活节 2026 · 限时抢购</span> · 数据回归</h1>
+  <div class="subtitle">基线 · 科技节 2026 限时抢购 · 每节日 3 轮 · 每轮 1 天 · 轮内 3 次 1h 抢购窗（buy_opentime = [2h, 10h, 18h] after activity start）</div>
+  <div class="meta-row">
+    <div class="meta-item"><span class="label">回归日期</span>2026-05-12（R3 补齐版）</div>
+    <div class="meta-item"><span class="label">科技节</span>3/15 · 3/22 · 3/29</div>
+    <div class="meta-item"><span class="label">复活节</span>4/11 · 4/18 · 4/25（3 轮全跑完）</div>
+    <div class="meta-item"><span class="label">数据源</span>v1041.ods_user_order · pay_status=1</div>
+    <div class="meta-item"><span class="label">IAP 范围</span>2013500354-367</div>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- 执行摘要 -->
+<section style="margin-top:32px;">
+  <div class="conclusion-box">
+    <h3>📊 一分钟结论</h3>
+    <p>
+      <strong>科技节 3 轮节奏稳定</strong>：单轮 $14.7k-$15.9k · ARPPU $64-$67 · S6:S3-5 = 82:18，总收入 <strong>$46,108</strong>（1,245 单 · 702 人次）。
+      <strong>复活节 3 轮共收 $93,871</strong>（1,842 单 · 905 人次 · ARPPU $103.7） · <span class="easter">R2 单轮爆发 $43,662 是 R1 的 2.7×，R3 回落至 $34,254</span>（仍 2× R1），高档 358/359/360 在 R2 启动的爆发延续到 R3 — 不是一次性弹窗事故。
+      <span class="orange">⚠️ S3-5 线 R3 终于有付费 $1,250（27 人 / 46 单）</span>，对应 R1+R2 两轮 0 数据的故障已恢复；但 R3 单轮 $1.2k 仍只是科技节单轮 S3-5（约 $2.7k）的 46%，<strong>说明分流虽通但 S3-5 流量基础面比科技节明显偏弱</strong>，与 S6 同节日 +160% 走势形成强烈反差。
+    </p>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-label">科技节总收入（3 轮完整）</div>
+      <div class="kpi-value tech">$46,108</div>
+      <div class="kpi-delta">1,245 单 · 702 人次 · ARPPU $65.7</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">复活节总收入（3 轮完整）</div>
+      <div class="kpi-value easter">$93,871</div>
+      <div class="kpi-delta up">vs 科技节 +103.6%（$46.1k → $93.9k）· ARPPU $103.7</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">复活节 R3 单轮</div>
+      <div class="kpi-value easter">$34,254</div>
+      <div class="kpi-delta up">vs R1 +115% · vs 科技节 R3 +121%</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">复活节 S3-5 线总收入（3 轮）</div>
+      <div class="kpi-value orange">$1,250</div>
+      <div class="kpi-delta down">R1=0 · R2=0 · R3=$1,250 · 仅科技节 S3-5 的 15.5%</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">高档 $99.99 三轮总收入</div>
+      <div class="kpi-value purple">$48,194</div>
+      <div class="kpi-delta">2013500360 R1→R2→R3：$900 → $16,298 → $12,699</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">复活节单人件数变化</div>
+      <div class="kpi-value">1.7 → 2.2 → 2.1</div>
+      <div class="kpi-delta">R3 复购深度回落但仍高于科技节均轮 1.8</div>
+    </div>
+  </div>
+</section>
+
+<!-- 关键告警 -->
+<section style="margin-top:20px;">
+  <div class="alert-critical">
+    <h4>🟡 复活节 S3-5 线 R3 恢复入账，但量级仍显著偏低</h4>
+    <p>
+      R1（4/11）+ R2（4/18）<strong>两轮 0 单 0 收入</strong> → R3（4/25）<strong>27 人 / 46 单 / $1,249.54</strong>，说明 4/18 之后做了修复（推测 IAP 上架 / S3-5 服 ARK 时间窗 / 弹窗过滤 中的一项被修正）。
+      但 R3 单轮 $1,250 vs 科技节单轮 S3-5 均值 $2,682，<strong>恢复后只达到基线的 47%</strong>，且 366 ($99.99) 在 R3 仍 0 单（科技节 R3 卖 $800）。
+      <br>建议 ① 找 4/18-4/25 之间的修复操作（PR/工单/配置变更）入档，避免下个节日再踩；② 单独排查 2013500366 在 S3-5 服的弹窗推荐是否被吞。
+    </p>
+  </div>
+</section>
+
+<!-- ========== 1. 单轮表现对比 ========== -->
+<section>
+  <h2>一、单轮表现 · 5 轮并排对比</h2>
+
+  <div class="round-grid">
+    <div class="round-card tech">
+      <div class="rc-title">科技节 · R1</div>
+      <div class="rc-date">2026-03-15</div>
+      <div class="rc-rev">$14,706</div>
+      <div class="rc-detail">398 单 · 228 人 · ARPPU $64.5</div>
+    </div>
+    <div class="round-card tech">
+      <div class="rc-title">科技节 · R2</div>
+      <div class="rc-date">2026-03-22</div>
+      <div class="rc-rev">$15,895</div>
+      <div class="rc-detail">458 单 · 242 人 · ARPPU $65.7</div>
+    </div>
+    <div class="round-card tech">
+      <div class="rc-title">科技节 · R3</div>
+      <div class="rc-date">2026-03-29</div>
+      <div class="rc-rev">$15,506</div>
+      <div class="rc-detail">389 单 · 232 人 · ARPPU $66.8</div>
+    </div>
+    <div class="round-card easter">
+      <div class="rc-title">复活节 · R1</div>
+      <div class="rc-date">2026-04-11</div>
+      <div class="rc-rev">$15,955</div>
+      <div class="rc-detail">454 单 · 271 人 · ARPPU $58.9</div>
+    </div>
+    <div class="round-card easter">
+      <div class="rc-title">复活节 · R2</div>
+      <div class="rc-date">2026-04-18</div>
+      <div class="rc-rev">$43,662</div>
+      <div class="rc-detail">778 单 · 348 人 · ARPPU $125.5</div>
+    </div>
+    <div class="round-card easter">
+      <div class="rc-title">复活节 · R3</div>
+      <div class="rc-date">2026-04-25</div>
+      <div class="rc-rev">$34,254</div>
+      <div class="rc-detail">610 单 · 286 人 · ARPPU $119.8</div>
+    </div>
+  </div>
+
+  <table>
+    <thead>
+      <tr><th>指标</th><th>科技节 R1</th><th>科技节 R2</th><th>科技节 R3</th><th>科技节小计</th><th>复活节 R1</th><th>复活节 R2</th><th>复活节 R3</th><th>复活节小计</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="label-col">订单数</td><td>398</td><td>458</td><td>389</td><td><strong>1,245</strong></td><td>454</td><td>778</td><td>610</td><td class="easter"><strong>1,842</strong></td></tr>
+      <tr><td class="label-col">付费人数</td><td>228</td><td>242</td><td>232</td><td><strong>702</strong></td><td>271</td><td>348</td><td>286</td><td class="easter"><strong>905</strong></td></tr>
+      <tr><td class="label-col">收入 ($)</td><td>14,706</td><td>15,895</td><td>15,506</td><td><strong>46,108</strong></td><td>15,955</td><td class="orange"><strong>43,662</strong></td><td>34,254</td><td class="easter"><strong>93,871</strong></td></tr>
+      <tr><td class="label-col">ARPPU ($)</td><td>64.50</td><td>65.68</td><td>66.84</td><td><strong>65.68</strong></td><td>58.88</td><td class="orange"><strong>125.47</strong></td><td>119.77</td><td class="easter"><strong>103.72</strong></td></tr>
+      <tr><td class="label-col">人均订单数</td><td>1.7</td><td>1.9</td><td>1.7</td><td>1.8</td><td>1.7</td><td class="orange">2.2</td><td>2.1</td><td>2.0</td></tr>
+      <tr><td class="label-col">S6 收入占比</td><td class="dim">83.9%</td><td class="dim">81.4%</td><td class="dim">82.4%</td><td class="dim"><strong>82.5%</strong></td><td class="easter"><strong>100%</strong></td><td class="easter"><strong>100%</strong></td><td class="easter">96.4%</td><td class="easter"><strong>98.7%</strong></td></tr>
+      <tr><td class="label-col">S3-5 收入 ($)</td><td>2,369</td><td>2,949</td><td>2,729</td><td><strong>8,048</strong></td><td class="red">0</td><td class="red">0</td><td class="orange"><strong>1,250</strong></td><td class="orange"><strong>1,250</strong></td></tr>
+    </tbody>
+  </table>
+
+  <ul class="insight-list positive">
+    <li><strong>科技节三轮节奏极稳</strong> — 收入 14.7k/15.9k/15.5k（标准差 &lt;5%），ARPPU 64-67，人均单数 1.7-1.9。可作为"正常"基线。</li>
+    <li><strong>复活节 3 轮全线压制科技节</strong> — 总收入 $93.9k vs $46.1k（+103.6%）·ARPPU $103.7 vs $65.7（+58%）·付费人次 905 vs 702（+29%）。整体说明复活节用户付费意愿和深度都明显高于科技节。</li>
+    <li><strong>R2 高档爆发延续到 R3</strong> — R2 $43.6k 起初看似"一次性弹窗事故"，但 R3 仍稳 $34.3k（仍 2.1× 科技节单轮），<strong>三个 $49.99/$99.99 高档（358/359/360）继续放量</strong>，说明 R2 的成因是结构性（运营推送 / 弹窗 / 玩家心智）而非偶发，可作为后续节日复用样本。</li>
+  </ul>
+  <ul class="insight-list warn">
+    <li><strong>复活节 R3 较 R2 回落但仍优于 R1</strong> — $34,254 vs R2 $43,662（-22%）vs R1 $15,955（+115%）。R2 爆发未百分百复制，但高档延续性证明可定向运营撬动。</li>
+    <li><strong>S3-5 线两轮 0 + 一轮 $1.2k</strong> — 修复后 R3 入账但仅恢复到科技节单轮 S3-5 的 47%；366 ($99.99) 在 S3-5 R3 仍 0，需单独排查。</li>
+  </ul>
+</section>
+
+<!-- ========== 2. 可视化对比 ========== -->
+<section>
+  <h2>二、收入 × 人数 × ARPPU 趋势</h2>
+
+  <div class="chart-row">
+    <div class="chart-box">
+      <h4>单轮收入（$）</h4>
+      <div class="canvas-wrap"><canvas id="chartRevenue"></canvas></div>
+    </div>
+    <div class="chart-box">
+      <h4>单轮付费人数 vs ARPPU</h4>
+      <div class="canvas-wrap"><canvas id="chartBuyersArppu"></canvas></div>
+    </div>
+  </div>
+
+  <div class="chart-row">
+    <div class="chart-box">
+      <h4>S6 vs S3-5 收入对比（复活节 S3-5 = 0）</h4>
+      <div class="canvas-wrap"><canvas id="chartLineCompare"></canvas></div>
+    </div>
+    <div class="chart-box">
+      <h4>节日总收入（科技节 3 轮 vs 复活节 2+1 轮）</h4>
+      <div class="canvas-wrap"><canvas id="chartFestivalTotal"></canvas></div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 3. 档位分布 ========== -->
+<section>
+  <h2>三、档位收入分布 · R2 爆发是否复制到 R3？</h2>
+
+  <h3 class="sub-title">S6 线 7 档 × 6 轮矩阵（单位：USD）</h3>
+  <table>
+    <thead>
+      <tr><th>iap_id</th><th>价格</th><th>科技节 R1</th><th>科技节 R2</th><th>科技节 R3</th><th>复活节 R1</th><th>复活节 R2</th><th>复活节 R3</th><th>R3 vs 科技节 R3</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>2013500354</td><td>$9.99</td><td>589</td><td>859</td><td>529</td><td>1,039</td><td>1,049</td><td>799</td><td class="dim">+51%</td></tr>
+      <tr><td>2013500355</td><td>$19.99</td><td>2,239</td><td>2,619</td><td>2,219</td><td>2,699</td><td>1,759</td><td>840</td><td class="red">-62%</td></tr>
+      <tr><td>2013500356</td><td>$19.99</td><td>760</td><td>920</td><td>680</td><td>1,219</td><td>1,359</td><td>920</td><td class="dim">+35%</td></tr>
+      <tr><td>2013500357</td><td>$49.99</td><td>1,500</td><td>1,250</td><td>1,100</td><td>1,700</td><td>1,750</td><td>1,050</td><td class="dim">-5%</td></tr>
+      <tr style="background:var(--orange-soft);"><td>2013500358</td><td>$49.99</td><td>1,550</td><td>1,700</td><td>1,450</td><td>2,699</td><td class="orange"><strong>10,448</strong></td><td class="orange"><strong>8,098</strong></td><td class="orange"><strong>+458%</strong></td></tr>
+      <tr style="background:var(--orange-soft);"><td>2013500359</td><td>$99.99</td><td>4,800</td><td>4,600</td><td>6,399</td><td>5,699</td><td class="orange"><strong>10,999</strong></td><td class="orange"><strong>8,599</strong></td><td class="orange"><strong>+34%</strong></td></tr>
+      <tr style="background:var(--red-soft);"><td>2013500360</td><td>$99.99</td><td>900</td><td>1,000</td><td>400</td><td>900</td><td class="red"><strong>16,298</strong></td><td class="red"><strong>12,699</strong></td><td class="red"><strong>+3,075%</strong></td></tr>
+      <tr style="font-weight:700;background:var(--surface-2);"><td colspan="2" class="label-col">S6 线合计</td><td>12,337</td><td>12,946</td><td>12,777</td><td>15,955</td><td class="orange">43,662</td><td class="orange">33,004</td><td class="orange">+158%</td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub-title">S3-5 线 7 档 × 6 轮矩阵（R1+R2 全 0 · R3 恢复部分）</h3>
+  <table>
+    <thead>
+      <tr><th>iap_id</th><th>价格</th><th>科技节 R1</th><th>科技节 R2</th><th>科技节 R3</th><th>复活节 R1</th><th>复活节 R2</th><th>复活节 R3</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>2013500361</td><td>$9.99</td><td>240</td><td>250</td><td>190</td><td class="red">0</td><td class="red">0</td><td class="orange">170</td></tr>
+      <tr><td>2013500362</td><td>$19.99</td><td>280</td><td>240</td><td>360</td><td class="red">0</td><td class="red">0</td><td class="orange">100</td></tr>
+      <tr><td>2013500363</td><td>$19.99</td><td>200</td><td>260</td><td>180</td><td class="red">0</td><td class="red">0</td><td class="orange">180</td></tr>
+      <tr><td>2013500364</td><td>$49.99</td><td>200</td><td>450</td><td>250</td><td class="red">0</td><td class="red">0</td><td class="orange">400</td></tr>
+      <tr><td>2013500365</td><td>$49.99</td><td>450</td><td>350</td><td>350</td><td class="red">0</td><td class="red">0</td><td class="orange">300</td></tr>
+      <tr style="background:var(--red-soft);"><td>2013500366</td><td>$99.99</td><td>500</td><td>700</td><td>800</td><td class="red">0</td><td class="red">0</td><td class="red"><strong>0</strong></td></tr>
+      <tr><td>2013500367</td><td>$99.99</td><td>500</td><td>700</td><td>600</td><td class="red">0</td><td class="red">0</td><td class="orange">100</td></tr>
+      <tr style="font-weight:700;background:var(--surface-2);"><td colspan="2" class="label-col">S3-5 线合计</td><td>2,369</td><td>2,949</td><td>2,729</td><td class="red">0</td><td class="red">0</td><td class="orange"><strong>1,250</strong></td></tr>
+    </tbody>
+  </table>
+
+  <div class="chart-row">
+    <div class="chart-box">
+      <h4>档位收入结构 · 科技节均轮 vs 复活节 R2（S6 线）</h4>
+      <div class="canvas-wrap tall"><canvas id="chartTierCompare"></canvas></div>
+    </div>
+    <div class="chart-box">
+      <h4>复活节 R2 爆发归因（S6 七档）</h4>
+      <div class="canvas-wrap tall"><canvas id="chartR2Breakdown"></canvas></div>
+    </div>
+  </div>
+
+  <ul class="insight-list warn">
+    <li><strong>复活节 R2+R3 高档 358/359/360 持续放量</strong> — 三档 R2 共 $37,744（占 R2 86.4%），R3 共 $29,396（占 R3 89.1%），<strong>R3 仍维持在科技节均轮 3-4×</strong>。低档 354-357 基本回到科技节水位（$3.6k vs 科技节 $4.3k）。</li>
+    <li><strong>2013500360 ($99.99) 是核心变量</strong> — 科技节均轮 ≈9 人 $767 → R1=9 人 $900 → R2=163 人 $16,298 → R3=127 人 $12,699。R2 单次爆发被 R3 验证为可重复，意味着这是<strong>持续运营动作的产物（弹窗推荐 / 大 R 定点 / 活动叠加）</strong>，而非 4/18 当天的偶然事件。</li>
+    <li><strong>R3 反观察：358 $49.99 也已稳定在 $8k 级</strong> — R1 $2,699 → R2 $10,448 → R3 $8,098。同样不是一次性事件，应纳入"复活节限抢标准盘"。</li>
+  </ul>
+</section>
+
+<!-- ========== 4. 小时级分布 ========== -->
+<section>
+  <h2>四、小时级分布 · 确认 3 次抢购窗机制</h2>
+  <p class="footnote" style="margin-bottom:12px;">注：窗位 = 活动起算时点 + [2h, 10h, 18h]。R1/R2 活动起算 08:00 UTC（窗位落在 10/18/次日 02 UTC）；<strong>R3 活动起算 00:00 UTC（窗位整体前移 8h，落在 02/10/18 UTC 同一天）</strong>。表内统一按"窗 1 / 窗 2 / 窗 3"标注以便横向比较。</p>
+  <table>
+    <thead>
+      <tr><th>节日 · 轮</th><th>窗 1（起算+2h）</th><th>窗 2（起算+10h）</th><th>窗 3（起算+18h）</th><th>窗 1 占比</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="label-col tech">科技节 R1（3/15）</td><td>$6,228 · 94 人</td><td>$4,669 · 79 人</td><td>$3,809 · 63 人</td><td class="dim">42%</td></tr>
+      <tr><td class="label-col tech">科技节 R2（3/22）</td><td>$5,978 · 94 人</td><td>$4,539 · 79 人</td><td>$5,309 · 84 人</td><td class="dim">38%</td></tr>
+      <tr><td class="label-col tech">科技节 R3（3/29）</td><td>$5,748 · 98 人</td><td>$5,499 · 73 人</td><td>$4,039 · 75 人</td><td class="dim">38%</td></tr>
+      <tr><td class="label-col easter">复活节 R1（4/11）</td><td>$6,118 · 118 人</td><td>$5,228 · 92 人</td><td>$4,569 · 75 人</td><td class="dim">38%</td></tr>
+      <tr style="background:var(--orange-soft);"><td class="label-col easter">复活节 R2（4/18）</td><td class="orange"><strong>$18,107 · 141 人</strong></td><td class="orange"><strong>$13,498 · 119 人</strong></td><td class="orange"><strong>$12,058 · 112 人</strong></td><td class="dim">41%</td></tr>
+      <tr style="background:var(--orange-soft);"><td class="label-col easter">复活节 R3（4/25 · 起算前移）</td><td class="orange"><strong>$15,527 · 130 人</strong></td><td><strong>$8,738 · 82 人</strong></td><td><strong>$9,988 · 96 人</strong></td><td class="dim">45%</td></tr>
+    </tbody>
+  </table>
+
+  <ul class="insight-list positive">
+    <li><strong>3 个抢购窗节奏机制 6 轮全部正常</strong> — 与 2121 配置 <code style="font-family:monospace;background:var(--surface-2);padding:1px 5px;border-radius:3px;color:var(--accent);">buy_opentime=[7200,36000,64800]</code> + <code style="font-family:monospace;background:var(--surface-2);padding:1px 5px;border-radius:3px;color:var(--accent);">buy_duration=[3600,3600,3600]</code> 完全匹配。R3 起算时点改变也未破坏 2h/8h/8h 节奏。</li>
+    <li><strong>窗 1 是核心战场</strong> — 6 轮中占比 38-45%，复活节 R3 提升到 45%（用户在 R1/R2 教育后更聚集到第一窗）。</li>
+    <li><strong>R3 三窗等比缩小 22-26%</strong> — vs R2 比较：窗 1 $18,107→$15,527 (-14%) · 窗 2 $13,498→$8,738 (-35%) · 窗 3 $12,058→$9,988 (-17%)。R3 整体回落是均匀的，不是某一窗单点崩塌。</li>
+    <li><strong>⚠️ R3 起算时点前移 8 小时</strong> — R1/R2 用 08:00 UTC 起算（亚太晚高峰 16:00 UTC+8），R3 用 00:00 UTC（亚太工作时段 08:00 UTC+8）。这<strong>可能是 R3 收入低于 R2 的关键变量</strong>。需要 PM 确认是配置变更还是 ARK 排期失误，并比对玩家活跃时段决定后续节日采用哪种排程。</li>
+  </ul>
+</section>
+
+<!-- ========== 5. 待确认问题清单 ========== -->
+<section>
+  <h2>五、待排查与 QA 清单</h2>
+  <div class="checklist">
+    <ul>
+      <li class="crit"><strong>【P0】</strong> 找 4/18-4/25 之间使 S3-5 线从 0 恢复的具体修复（PR / 配置变更 / ARK 工单 / iap_status 切换），<strong>归档为"复活节 S3-5 故障 RCA"</strong>，避免下个节日重复踩；同时单独排查 2013500366（$99.99，S3-5 R3 仍 0 单）的弹窗 / 推荐是否被吞。</li>
+      <li class="crit"><strong>【P0】</strong> 确认复活节 R3（4/25）活动起算时点为 00:00 UTC（vs R1/R2 的 08:00 UTC）— 是策划主动调整还是 ARK 配置事故？该 8h 前移使窗 1 落在亚太工作时段，<strong>可能是 R3 vs R2 收入下降 22% 的核心变量</strong>。结论将决定后续节日（独立日 / 周年庆）的起算时点配置。</li>
+      <li class="warn"><strong>【P1】</strong> 复活节 R2+R3 高档持续放量原因 — 358/359/360 三档稳定在科技节 3-4× 水位。运营 / 市场是否在 4/18 起持续做高档定点推 / 弹窗切换 / 大 R 短信？把这套打法记录为"复活节限抢 SOP"。</li>
+      <li class="warn"><strong>【P1】</strong> 2013500360 ($99.99) 在 R2/R3 的弹窗推荐机制 — config 显示 S6 popup 固定为 <code>[21353314, 21353317]</code>，不含 21353318=2013500360，但 R2 $16k + R3 $13k 卖爆。需 dig <code>flash_sale_popup</code> 实际下发数据 vs 配置表，确认是否运营在跑外挂式直推。</li>
+      <li><strong>【P2】</strong> 复活节 ARPPU $103.7 vs 科技节 $65.7（+58%），是节日属性还是档位结构？S6 单线 ARPPU R3 $127.4 已显著拉高基线，需要拆解新付费玩家 vs 复购老玩家比例。</li>
+      <li><strong>【P3】</strong> 2112 层 show_hud / banner_url 的节日差异化（复活节 show_hud=21680031 / banner 沿用情人节通用图）是否影响数据 — R2/R3 表现强烈说明节日 UI 差异化对收入影响有限，可归档"设计约定"。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ========== 6. 数据口径 ========== -->
+<section>
+  <h2>六、数据口径说明</h2>
+  <table>
+    <thead><tr><th>口径项</th><th>取值</th></tr></thead>
+    <tbody>
+      <tr><td class="label-col">数据源</td><td>Datain TRINO_AWS · <code>v1041.ods_user_order</code></td></tr>
+      <tr><td class="label-col">付费过滤</td><td><code>pay_status = 1</code>（已完成付费）</td></tr>
+      <tr><td class="label-col">iap_id 范围</td><td>S6 = 2013500354_normal ~ 2013500360_normal；S3-5 = 2013500361_normal ~ 2013500367_normal</td></tr>
+      <tr><td class="label-col">收入字段</td><td><code>pay_price</code>（USD，未换算本币）</td></tr>
+      <tr><td class="label-col">去重粒度</td><td>订单数 = distinct order_id；付费人数 = distinct user_id</td></tr>
+      <tr><td class="label-col">轮次划分</td><td>按 partition_date 对映 3 × 7 天周循环的 UTC 起止日：R1/R2 起算 08:00 UTC 起 24 小时；<strong>R3 起算 00:00 UTC 起 24 小时（前移 8h）</strong></td></tr>
+      <tr><td class="label-col">小时切片</td><td><code>created_at</code> 由 UTC+8 转回 UTC，<code>date_format(utc_ts, '%Y-%m-%d %H')</code></td></tr>
+      <tr><td class="label-col">样本日期</td><td>2026-03-14 ~ 2026-04-26（含 R3 4/25-4/26 跨日订单）</td></tr>
+    </tbody>
+  </table>
+  <p class="footnote">注：2013500354 ($9.99) 的 orders = buyers 全部相等，符合 2135 <code>cost_limit=1</code> 的单包限购 1 次约束，数据自洽。</p>
+</section>
+
+</div><!-- /container -->
+
+<script>
+Chart.defaults.color = '#49506b';
+Chart.defaults.borderColor = '#e2e6ec';
+Chart.defaults.font.family = "'Noto Sans SC', sans-serif";
+Chart.defaults.font.size = 11;
+
+const techColor = '#4a69ff';
+const easterColor = '#d6428a';
+const orangeColor = '#e8823a';
+const greenColor = '#12a36e';
+const redColor = '#e04747';
+
+// 1. 单轮收入
+new Chart(document.getElementById('chartRevenue'), {
+  type:'bar',
+  data:{
+    labels:['科技节\nR1 (3/15)','科技节\nR2 (3/22)','科技节\nR3 (3/29)','复活节\nR1 (4/11)','复活节\nR2 (4/18)','复活节\nR3 (4/25)'],
+    datasets:[{
+      label:'收入 ($)',
+      data:[14706, 15895, 15506, 15955, 43662, 34254],
+      backgroundColor:[techColor, techColor, techColor, easterColor, orangeColor, easterColor],
+      borderRadius:5
+    }]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    plugins:{
+      legend:{display:false},
+      tooltip:{callbacks:{label:(c)=>'$'+c.parsed.y.toLocaleString()}}
+    },
+    scales:{
+      y:{ticks:{callback:v=>'$'+(v/1000)+'k'},grid:{color:'#edf0f5'}},
+      x:{ticks:{font:{size:10}},grid:{display:false}}
+    }
+  }
+});
+
+// 2. 买家 + ARPPU
+new Chart(document.getElementById('chartBuyersArppu'), {
+  type:'bar',
+  data:{
+    labels:['科技节 R1','科技节 R2','科技节 R3','复活节 R1','复活节 R2','复活节 R3'],
+    datasets:[
+      {
+        label:'付费人数',
+        data:[228, 242, 232, 271, 348, 286],
+        backgroundColor:'rgba(74,105,255,0.35)',
+        borderRadius:5,
+        yAxisID:'y'
+      },
+      {
+        label:'ARPPU ($)',
+        data:[64.50, 65.68, 66.84, 58.88, 125.47, 119.77],
+        type:'line',
+        borderColor:easterColor,
+        backgroundColor:easterColor,
+        tension:0.3,
+        pointRadius:4,
+        pointBackgroundColor:easterColor,
+        yAxisID:'y1'
+      }
+    ]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{labels:{boxWidth:12,font:{size:11}}}},
+    scales:{
+      y:{position:'left',title:{display:true,text:'付费人数',font:{size:10}},grid:{color:'#edf0f5'}},
+      y1:{position:'right',title:{display:true,text:'ARPPU ($)',font:{size:10}},grid:{display:false},ticks:{callback:v=>'$'+v}},
+      x:{grid:{display:false}}
+    }
+  }
+});
+
+// 3. S6 vs S3-5
+new Chart(document.getElementById('chartLineCompare'), {
+  type:'bar',
+  data:{
+    labels:['科技节 R1','科技节 R2','科技节 R3','复活节 R1','复活节 R2','复活节 R3'],
+    datasets:[
+      {label:'S6 线',data:[12337, 12946, 12777, 15955, 43662, 33004],backgroundColor:techColor,borderRadius:4},
+      {label:'S3-5 线',data:[2369, 2949, 2729, 0, 0, 1250],backgroundColor:easterColor,borderRadius:4}
+    ]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    plugins:{
+      legend:{labels:{boxWidth:12,font:{size:11}}},
+      tooltip:{callbacks:{label:(c)=>c.dataset.label+': $'+c.parsed.y.toLocaleString()}}
+    },
+    scales:{
+      y:{stacked:true,ticks:{callback:v=>'$'+(v/1000)+'k'},grid:{color:'#edf0f5'}},
+      x:{stacked:true,grid:{display:false}}
+    }
+  }
+});
+
+// 4. 节日总收入
+new Chart(document.getElementById('chartFestivalTotal'), {
+  type:'bar',
+  data:{
+    labels:['科技节（3 轮完整）','复活节（3 轮完整）'],
+    datasets:[{
+      label:'节日总收入 ($)',
+      data:[46108, 93871],
+      backgroundColor:[techColor, easterColor],
+      borderRadius:6
+    }]
+  },
+  options:{
+    indexAxis:'y',
+    responsive:true, maintainAspectRatio:false,
+    plugins:{
+      legend:{display:false},
+      tooltip:{callbacks:{label:(c)=>'$'+c.parsed.x.toLocaleString()}}
+    },
+    scales:{
+      x:{ticks:{callback:v=>'$'+(v/1000)+'k'},grid:{color:'#edf0f5'}},
+      y:{grid:{display:false},ticks:{font:{size:11}}}
+    }
+  }
+});
+
+// 5. 档位对比（科技节均轮 vs 复活节 R2 vs 复活节 R3）S6 线
+new Chart(document.getElementById('chartTierCompare'), {
+  type:'bar',
+  data:{
+    labels:['$9.99\n(354)','$19.99\n(355)','$19.99\n(356)','$49.99\n(357)','$49.99\n(358)','$99.99\n(359)','$99.99\n(360)'],
+    datasets:[
+      {
+        label:'科技节 3 轮均值',
+        data:[659, 2359, 786, 1283, 1566, 5266, 767],
+        backgroundColor:techColor,
+        borderRadius:4
+      },
+      {
+        label:'复活节 R2',
+        data:[1049, 1759, 1359, 1750, 10448, 10999, 16298],
+        backgroundColor:orangeColor,
+        borderRadius:4
+      },
+      {
+        label:'复活节 R3',
+        data:[799, 840, 920, 1050, 8098, 8599, 12699],
+        backgroundColor:easterColor,
+        borderRadius:4
+      }
+    ]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    plugins:{
+      legend:{labels:{boxWidth:12,font:{size:11}}},
+      tooltip:{callbacks:{label:(c)=>c.dataset.label+': $'+c.parsed.y.toLocaleString()}}
+    },
+    scales:{
+      y:{ticks:{callback:v=>'$'+(v/1000).toFixed(1)+'k'},grid:{color:'#edf0f5'}},
+      x:{ticks:{font:{size:9}},grid:{display:false}}
+    }
+  }
+});
+
+// 6. R2 归因（七档收入占比）
+new Chart(document.getElementById('chartR2Breakdown'), {
+  type:'doughnut',
+  data:{
+    labels:[
+      '2013500354 $9.99',
+      '2013500355 $19.99',
+      '2013500356 $19.99',
+      '2013500357 $49.99',
+      '2013500358 $49.99 ⚡',
+      '2013500359 $99.99 ⚡',
+      '2013500360 $99.99 ⚡'
+    ],
+    datasets:[{
+      data:[1049, 1759, 1359, 1750, 10448, 10999, 16298],
+      backgroundColor:['#cfd5e0','#8fa0cf','#c4b3d9','#f5c99e','#e8823a','#d6428a','#b32163'],
+      borderColor:'#ffffff',
+      borderWidth:2
+    }]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    plugins:{
+      legend:{position:'right',labels:{boxWidth:10,font:{size:10}}},
+      tooltip:{callbacks:{label:(c)=>c.label+': $'+c.parsed.toLocaleString()+' ('+(c.parsed/43662*100).toFixed(1)+'%)'}}
+    }
+  }
+});
+</script>
+
+</body>
+</html>
