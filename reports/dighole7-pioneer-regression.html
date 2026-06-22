@@ -1,0 +1,331 @@
+<!DOCTYPE html><html lang="zh-CN"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>挖孔七期数据回归 — 拓荒节·新挖孔 (21127899)</title>
+<script src="./chart.min.js"></script>
+<script>if(!window.Chart){document.write('<scr'+'ipt src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"><\/scr'+'ipt>');}</script>
+<style>
+:root{--bg:#f7f8fa;--panel:#fff;--ink:#1f2937;--mute:#6b7280;--line:#e5e7eb;--accent:#2563eb;--good:#16a34a;--warn:#d97706;--bad:#dc2626;--pop:#7c3aed}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"Noto Sans SC",Helvetica,Arial,sans-serif;line-height:1.55;font-size:14px}
+.wrap{max-width:1180px;margin:0 auto;padding:24px}
+header{padding:20px 0 14px;border-bottom:1px solid var(--line);margin-bottom:18px}
+h1{margin:0 0 6px;font-size:23px;font-weight:800}
+.meta{color:var(--mute);font-size:13px} .meta b{color:var(--ink)}
+h2{font-size:18px;font-weight:700;margin:30px 0 6px}
+.sub{color:var(--mute);font-size:12.5px;margin:0 0 12px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:12px}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.kpi .lab{font-size:12px;color:var(--mute);margin-bottom:6px}
+.kpi .val{font-size:23px;font-weight:800;line-height:1.1;font-variant-numeric:tabular-nums}
+.kpi .sub{font-size:12px;color:var(--mute);margin-top:5px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px;margin-bottom:14px}
+table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+th,td{border-bottom:1px solid var(--line);padding:8px 10px;font-size:13px;text-align:right}
+th:first-child,td:first-child{text-align:left}
+th{background:#fafbfc;color:var(--mute);font-weight:600}
+tbody tr:hover{background:#fafbfc}
+td.lc{text-align:left}
+.good{color:var(--good)} .bad{color:var(--bad)} .warn{color:var(--warn)}
+.pill{display:inline-block;padding:1px 8px;font-size:11px;border-radius:999px;background:#eef2ff;color:#4338ca}
+.tag{display:inline-block;padding:1px 7px;font-size:11px;border-radius:5px;color:#fff}
+.tag.a{background:#2563eb} .tag.r{background:#d97706} .tag.p{background:#94a3b8} .tag.k{background:#7c3aed}
+.chart-box{position:relative;height:300px} .chart-box.tall{height:430px} .chart-box.sm{height:240px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid23{display:grid;grid-template-columns:1fr 1.3fr;gap:14px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px}
+.card{background:var(--panel);border:1px solid var(--line);border-left-width:4px;border-radius:10px;padding:14px 16px}
+.card .nm{font-size:13px;color:var(--mute)} .card .rv{font-size:22px;font-weight:800;margin:4px 0} .card .dt{font-size:12px;color:var(--mute)}
+.callout{background:#fff;border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:8px;padding:14px 16px;margin:10px 0;font-size:13.5px;line-height:1.7}
+.callout.warn{border-left-color:var(--warn)} .callout.bad{border-left-color:var(--bad)}
+ul.find{margin:6px 0;padding-left:20px;line-height:1.75;font-size:13.5px}
+footer{color:var(--mute);font-size:12px;margin:22px 0 8px;border-top:1px solid var(--line);padding-top:12px}
+@media(max-width:900px){.kpis,.cards{grid-template-columns:repeat(2,1fr)}.grid2,.grid23{grid-template-columns:1fr}}
+</style></head><body><div class="wrap">
+
+<header>
+  <h1>挖孔七期数据回归 — 拓荒节 2026 · 新挖孔</h1>
+  <div class="meta">活动 ID <b>21127899</b>（节日挖孔小游戏·新模板）· 活动周期(UTC) <b>2026-05-26 00:00 ~ 06-02 00:00</b>（7 天，已结束）· 数据源 <b>v1041 / Trino</b></div>
+  <div class="meta" style="margin-top:6px">口径：付费 = 挖孔礼包 <b>2013600001~100（100 个槽位，实际启用 23 个）</b>，<b>毛额 ods_user_order</b>（与历史 wiki 公布口径一致），<code>timestamps</code> 精确 UTC 窗口；关卡 = <code>new_digkeys_in/over_level</code> 事件去重。5/6 期同口径重算，与 wiki 公布值（$207,535 / $140,065）<b>分毫一致</b>。</div>
+</header>
+
+<h2>核心 KPI</h2>
+<p class="sub">营收创挖孔系列新高，涨幅几乎全部来自付费深度（ARPPU），而非付费人数扩张。</p>
+<div class="kpis">
+  <div class="kpi"><div class="lab">活动总收入</div><div class="val">$394,510</div><div class="sub good">史上最高 · vs 6期 +181.7%</div></div>
+  <div class="kpi"><div class="lab">付费人数</div><div class="val">2,791</div><div class="sub good">vs 6期 +12.1%</div></div>
+  <div class="kpi"><div class="lab">ARPPU</div><div class="val">$141.35</div><div class="sub good">vs 6期 +151.2%</div></div>
+  <div class="kpi"><div class="lab">全节日营收占比</div><div class="val">36.1%</div><div class="sub good">拓荒节单活动 No.1 · 全节日付费第一</div></div>
+</div>
+<div class="kpis">
+  <div class="kpi"><div class="lab">活动服在线玩家</div><div class="val">24,433</div><div class="sub">166 个活动服 · 触达率分母</div></div>
+  <div class="kpi"><div class="lab">触达（活动入口点击）</div><div class="val">14,647</div><div class="sub">UIactv · 触达率 59.9%（5期62.3/6期61.8）</div></div>
+  <div class="kpi"><div class="lab">拿到大奖的通关</div><div class="val">161</div><div class="sub">完成 100 关 · 得高级主城皮肤大奖箱（6 期仅 26）</div></div>
+  <div class="kpi"><div class="lab">付费率 / 触达</div><div class="val">19.1%</div><div class="sub">2,791/14,647 · 5/6期 17.5/15.3%（本期最高）</div></div>
+</div>
+
+<h2>一、与历史期对比（5/6/7 期 · 毛额同口径）</h2>
+<p class="sub">拓荒节新挖孔付费结构 = 7 档常规价格阶梯 + 15 档成就里程碑（关1~关85）+ 存钱罐，与旧模板（锚点+成就+存钱罐+集结）总体可比（本期取消集结、成就里程碑加密到 15 档），故对比聚焦可比的金额口径。</p>
+<div class="panel"><table>
+  <thead><tr><th>指标</th><th>5期·科技节</th><th>6期·复活节</th><th>7期·拓荒节(新)</th><th>7期 vs 6期</th></tr></thead>
+  <tbody><tr><td class='lc'>活动总收入</td><td>$207,535</td><td>$140,065</td><td><b>$394,510</b></td><td class='good'>+$254,445 (+181.7%)</td></tr><tr><td class='lc'>付费人数</td><td>2,730</td><td>2,489</td><td><b>2,791</b></td><td class='good'>+302 (+12.1%)</td></tr><tr><td class='lc'>ARPPU</td><td>$76.02</td><td>$56.27</td><td><b>$141.35</b></td><td class='good'>+85.08 (+151.2%)</td></tr><tr><td class='lc'>订单数</td><td>11,773</td><td>9,403</td><td><b>15,217</b></td><td class='good'>+5,814 (+61.8%)</td></tr><tr><td class='lc'>次均单价</td><td>$17.63</td><td>$14.90</td><td><b>$25.93</b></td><td class='good'>+11.03 (+74.0%)</td></tr></tbody>
+</table></div>
+<div class="grid23">
+  <div class="panel"><div class="sub">三期总营收对比</div><div class="chart-box"><canvas id="cPeriod"></canvas></div></div>
+  <div class="callout"><b>营收 +182% 的本质 = ARPPU 翻倍，不是拉新。</b><br>
+  付费人数仅 +12.1%（2,489→2,791），但 ARPPU 暴涨 +151.2%（$56.27→$141.35），次均单价 +74.0%（$14.90→$25.93）。
+  新模板把更多 $99.99 档（10 个成就里程碑 + 常规7/8 可复购锚点）压进付费曲线，显著加深头部玩家付费深度。<br>
+  <span class="warn">⚠ 健康度见第三节：增长高度集中在超R。</span></div>
+</div>
+
+<h2>二、每日营收趋势（day1–7）</h2>
+<p class="sub">D1 单日 29% 营收前置（鲸鱼首发），中段回落，D7 末日反弹 +109% —— 与 6 期末端冲刺一致。</p>
+<div class="panel"><div class="chart-box"><canvas id="cDaily"></canvas></div></div>
+<div class="panel"><table>
+  <thead><tr><th>日期(UTC)</th><th>成就($)</th><th>常规($)</th><th>存钱罐($)</th><th>日合计($)</th><th>付费人</th><th>环比</th></tr></thead>
+  <tbody><tr><td class='lc'>D1 · 05-26</td><td>95,723</td><td>15,473</td><td>3,956</td><td><b>115,151</b></td><td>1,540</td><td><span class='pill'>D1</span></td></tr><tr><td class='lc'>D2 · 05-27</td><td>42,858</td><td>11,342</td><td>1,094</td><td><b>55,295</b></td><td>842</td><td><span class='bad'>-52.0%</span></td></tr><tr><td class='lc'>D3 · 05-28</td><td>29,212</td><td>9,322</td><td>529</td><td><b>39,064</b></td><td>619</td><td><span class='bad'>-29.4%</span></td></tr><tr><td class='lc'>D4 · 05-29</td><td>39,649</td><td>12,171</td><td>526</td><td><b>52,346</b></td><td>713</td><td><span class='good'>+34.0%</span></td></tr><tr><td class='lc'>D5 · 05-30</td><td>33,318</td><td>8,052</td><td>434</td><td><b>41,804</b></td><td>629</td><td><span class='bad'>-20.1%</span></td></tr><tr><td class='lc'>D6 · 05-31</td><td>22,527</td><td>6,590</td><td>329</td><td><b>29,446</b></td><td>573</td><td><span class='bad'>-29.6%</span></td></tr><tr><td class='lc'>D7 · 06-01</td><td>32,915</td><td>28,063</td><td>425</td><td><b>61,403</b></td><td>712</td><td><span class='good'>+108.5%</span></td></tr></tbody>
+</table></div>
+
+<h2>三、活动参与漏斗 · 模块热度</h2>
+<p class="sub">触达 = 活动入口点击 <code>UIactv_new_hole_digging</code>；触达率 = 触达 / 活动服在线（166 个活动服 24,433 人，对齐历史 5/6 期口径）。13 模块为按钮点击打点，作参与热度看。</p>
+<div class="grid23">
+  <div class="panel"><div class="sub">参与漏斗（去重人数）</div><div class="chart-box"><canvas id="cFunnelTop"></canvas></div></div>
+  <div class="callout"><b>活动服在线 24,433 → 触达 14,647（触达率 59.9%）→ 通关 13,511 → 付费 2,791（付费率/触达 19.1%）。</b><br>
+  触达率 59.9%（5期 62.3% / 6期 61.8%，持平略降）；<b>付费率/触达 19.1% 为三期最高</b>（5期 17.5% / 6期 15.3%）——本期触达基数略小、转化更强。通关玩家→付费转化 20.7%。</div>
+</div>
+<div class="panel"><div class="sub">模块按钮点击热度（去重人数 · <code>UIactv_new_hole_digging_*</code>）</div><div class="chart-box"><canvas id="cModules"></canvas></div></div>
+<div class="cards">
+  <div class="card" style="border-left-color:#16a34a"><div class="nm">📖 图鉴宝物 · 完成关卡</div><div class="rv" style="color:#16a34a">718,784</div><div class="dt">13,511 人 · 人均 53 个</div></div>
+  <div class="card" style="border-left-color:#7c3aed"><div class="nm">🔍 图鉴宝物 · 探测仪</div><div class="rv" style="color:#7c3aed">5,948</div><div class="dt">仅 2,414 人用探测仪（18% 玩家）</div></div>
+  <div class="card" style="border-left-color:#d97706"><div class="nm">⛏ 挖掘动作</div><div class="rv" style="color:#d97706">2,383,407</div><div class="dt">13,598 人 · 人均 175 次</div></div>
+  <div class="card" style="border-left-color:#2563eb"><div class="nm">🔨 锄头消耗</div><div class="rv" style="color:#2563eb">6,838,471</div><div class="dt">人均 503 · 2.9/次</div></div>
+</div>
+<p class="sub">注：① 普通/特殊地形探索（normal/special）按钮本期 0 点击；② 图鉴阶段奖励完成（new_digkeys_collect / 1393）event/asset/activity 三表均查空，疑未落点或改名，本期暂缺。</p>
+
+<h2>四、通关纵深 × 付费（深度 = 鲸鱼）</h2>
+<p class="sub">付费随最深通关关卡<b>指数级</b>跃升——这是超R 高度集中的根因，也验证了新模板「深挖才付费」的设计。</p>
+<div class="grid23">
+  <div class="panel"><div class="sub">各通关深度段 · 人均付费（美元）</div><div class="chart-box"><canvas id="cDepth"></canvas></div></div>
+  <div class="callout bad"><b>打到 60 关以上的 398 人（占通关玩家 2.9%）贡献 $336,915 = 全期 85% 营收；其中循环关 149 人独占 57%（人均 $1,522）。</b><br>
+  30 关以下 9,032 人几乎零付费；30–59 关人均 $13.8（走量层）；60 关以上人均 $400–1,500（鲸鱼层）。<b>留存玩家打到中后段才是营收主体</b>——拉付费 = 拉通关深度。</div>
+</div>
+<div class="panel"><table>
+  <thead><tr><th>最深通关</th><th>玩家</th><th>付费人（率）</th><th>人均付费</th><th>段营收</th><th>占总营收</th></tr></thead>
+  <tbody><tr><td class='lc'>1–9 关</td><td>5,266</td><td>16（0%）</td><td>$0.00</td><td>16</td><td>0.0%</td></tr><tr><td class='lc'>10–29 关</td><td>3,766</td><td>246（7%）</td><td>$0.29</td><td>1,076</td><td>0.3%</td></tr><tr><td class='lc'>30–59 关</td><td>4,081</td><td>2,130（52%）</td><td>$13.82</td><td>56,403</td><td>14.3%</td></tr><tr><td class='lc'>60–99 关</td><td>236</td><td>236（100%）</td><td>$409.47</td><td>96,634</td><td>24.5%</td></tr><tr><td class='lc'>完成 100 关</td><td>13</td><td>13（100%）</td><td>$1,036.73</td><td>13,477</td><td>3.4%</td></tr><tr><td class='lc'>循环关 (打穿100后)</td><td>149</td><td>149（100%）</td><td>$1,522.17</td><td>226,804</td><td>57.5%</td></tr></tbody>
+</table></div>
+<h3 style="font-size:15px;font-weight:700;margin:20px 0 8px">图鉴领奖阶段（收集 5/15/25/35/40 种）× 付费分布</h3>
+<p class="sub">图鉴每集齐 5/15/25/35/40 种触发一档领奖。付费高度偏态，<b>看中位数与分位数</b>不只均值。</p>
+<div class="panel"><table>
+  <thead><tr><th>领奖阶段</th><th>奖励道具</th><th>领奖人数</th><th>P15</th><th>中位数</th><th>P75</th><th>P90</th><th>均值</th></tr></thead>
+  <tbody><tr><td class='lc'>收集 ≥5 种</td><td style='font-size:12px;color:var(--mute)'>装饰升级材料 (11112585)</td><td>12,817</td><td>$0</td><td><b>$0</b></td><td>$0.13</td><td>$15</td><td style='color:var(--mute)'>$31</td></tr><tr><td class='lc'>收集 ≥15 种</td><td style='font-size:12px;color:var(--mute)'>成长线宝箱自选 ×10 (11119797)</td><td>7,942</td><td>$0</td><td><b>$0</b></td><td>$3.63</td><td>$41</td><td style='color:var(--mute)'>$50</td></tr><tr><td class='lc'>收集 ≥25 种</td><td style='font-size:12px;color:var(--mute)'>新挖孔头像框 (111130006)</td><td>4,347</td><td>$0</td><td><b>$2.86</b></td><td>$19</td><td>$174</td><td style='color:var(--mute)'>$90</td></tr><tr><td class='lc'>收集 ≥35 种</td><td style='font-size:12px;color:var(--mute)'>铭牌·26异星探索-霓岩拓荒 (111130001)</td><td>221</td><td>$535</td><td><b>$1,058</b></td><td>$1,209</td><td>$2,333</td><td style='color:var(--mute)'>$1,220</td></tr><tr><td class='lc'>集齐 40 种</td><td style='font-size:12px;color:var(--mute)'>高级主城特效自选宝箱 (111130008)</td><td>113</td><td>$990</td><td><b>$1,160</b></td><td>$2,201</td><td>$2,450</td><td style='color:var(--mute)'>$1,584</td></tr></tbody>
+</table></div>
+<div class="grid23">
+  <div class="panel"><div class="sub">各领奖阶段 · 中位数 vs 均值（红线高出蓝柱=偏态）</div><div class="chart-box"><canvas id="cRewardPay"></canvas></div></div>
+  <div class="callout bad"><b>25→35 种之间是一道付费断崖：</b>领到第 25 种（新挖孔头像框）还有 4,347 人、中位仅 $2.86；到第 35 种（铭牌）骤降到 221 人、中位 $1,058、连 P15 都 $535。<b>集齐后段图鉴要靠深层关卡掉落，几乎只有鲸鱼做得到</b>；集齐全 40 种 113 人（中位 $1,160）。前三档中位数 ≈$0（绝大多数白嫖）。</div>
+</div>
+<h4 style="font-size:14px;font-weight:700;margin:18px 0 6px">红色英雄碎片领奖档位 × 付费分布</h4>
+<p class="sub">红碎片（万能英雄碎片·红 11116305）按通关固定值发放，领奖档位 = 累计达到 15/35/65/100/140/190/250/320/400/500 片；下表按每人达到的<b>最高档位</b>归类去重（共 1,279 人）。</p>
+<div class="panel"><table>
+  <thead><tr><th>领奖档位</th><th>人数</th><th>P15</th><th>中位数</th><th>P75</th><th>P90</th><th>均值</th></tr></thead>
+  <tbody><tr><td class='lc'>15 片</td><td>476</td><td>$2.99</td><td><b>$14</b></td><td>$28</td><td>$43</td><td style='color:var(--mute)'>$19</td></tr><tr><td class='lc'>35 片</td><td>225</td><td>$13</td><td><b>$44</b></td><td>$72</td><td>$98</td><td style='color:var(--mute)'>$51</td></tr><tr><td class='lc'>65 片</td><td>159</td><td>$50</td><td><b>$100</b></td><td>$133</td><td>$153</td><td style='color:var(--mute)'>$100</td></tr><tr><td class='lc'>100 片</td><td>75</td><td>$140</td><td><b>$187</b></td><td>$233</td><td>$253</td><td style='color:var(--mute)'>$187</td></tr><tr><td class='lc'>140 片</td><td>58</td><td>$203</td><td><b>$263</b></td><td>$288</td><td>$313</td><td style='color:var(--mute)'>$252</td></tr><tr><td class='lc'>190 片</td><td>66</td><td>$279</td><td><b>$333</b></td><td>$381</td><td>$414</td><td style='color:var(--mute)'>$332</td></tr><tr><td class='lc'>250 片</td><td>20</td><td>$408</td><td><b>$483</b></td><td>$518</td><td>$554</td><td style='color:var(--mute)'>$471</td></tr><tr><td class='lc'>320 片</td><td>19</td><td>$545</td><td><b>$590</b></td><td>$640</td><td>$688</td><td style='color:var(--mute)'>$606</td></tr><tr><td class='lc'>400 片</td><td>14</td><td>$690</td><td><b>$790</b></td><td>$840</td><td>$1,033</td><td style='color:var(--mute)'>$746</td></tr><tr><td class='lc'>500 片</td><td>167</td><td>$1,003</td><td><b>$1,084</b></td><td>$1,328</td><td>$2,333</td><td style='color:var(--mute)'>$1,392</td></tr></tbody>
+</table></div>
+<h4 style="font-size:14px;font-weight:700;margin:18px 0 6px">关键单次里程碑奖励 × 付费分布</h4>
+<div class="panel"><table>
+  <thead><tr><th>奖励</th><th>道具</th><th>人数</th><th>P15</th><th>中位数</th><th>P75</th><th>P90</th><th>均值</th></tr></thead>
+  <tbody><tr><td class='lc'>主城皮肤箱子</td><td style='color:var(--mute);font-size:12px'>高级主城皮肤自选宝箱 (L100 · 111130007)</td><td>161</td><td>$1,040</td><td><b>$1,113</b></td><td>$1,494</td><td>$2,433</td><td style='color:var(--mute)'>$1,491</td></tr><tr><td class='lc'>机甲染色</td><td style='color:var(--mute);font-size:12px'>猎豹白金喷漆 (11118916)</td><td>393</td><td>$260</td><td><b>$684</b></td><td>$1,081</td><td>$1,555</td><td style='color:var(--mute)'>$855</td></tr></tbody>
+</table></div>
+<p class="sub">主城皮肤箱子(L100)获得者连 P15 都 $1,040（全鲸鱼）；机甲染色中位 $684、均值 $855。</p>
+
+<h2>五、R 级付费分布（增长健康度）</h2>
+<p class="sub">本期最需关注：营收暴涨高度依赖超R。</p>
+<div class="grid2">
+  <div class="panel"><div class="sub">各 R 级营收占比</div><div class="chart-box"><canvas id="cRlevel"></canvas></div></div>
+  <div class="panel"><table>
+    <thead><tr><th>R级</th><th>人数</th><th>占付费人</th><th>营收($)</th><th>人均($)</th><th>占营收</th></tr></thead>
+    <tbody><tr><td class='lc'>小R (<$10)</td><td>1,451</td><td>52.0%</td><td>6,126</td><td>4</td><td>1.6%</td></tr><tr><td class='lc'>中R ($10–100)</td><td>790</td><td>28.3%</td><td>29,096</td><td>37</td><td>7.4%</td></tr><tr><td class='lc'>大R ($100–500)</td><td>328</td><td>11.8%</td><td>73,601</td><td>224</td><td>18.7%</td></tr><tr><td class='lc'>超R ($500+)</td><td>222</td><td>8.0%</td><td>285,686</td><td>1287</td><td>72.4%</td></tr></tbody>
+  </table></div>
+</div>
+<div class="callout bad"><b>超R 222 人（占付费人 8.0%）贡献 $285,686 = 全期营收 72.4%，人均 $1,287。</b>
+加上大R，前 550 人（20%）贡献 91.1% 营收。新模板成功撬动头部付费深度，但<b>营收稳定性高度系于少数鲸鱼</b>——少数超R 的留存/竞品流失会直接放大波动，后续节日需关注超R 复购可持续性。</div>
+
+<h2>六、IAP 档位收入结构</h2>
+<div class="cards">
+  <div class="card" style="border-left-color:#2563eb"><div class="nm">🎯 成就礼包（008–022）</div><div class="rv" style="color:#2563eb">$296,204</div><div class="dt">15 档里程碑（关1~关85）· 7,242 单 · 75.1% 营收</div></div>
+  <div class="card" style="border-left-color:#d97706"><div class="nm">⚓ 常规礼包（001–007）</div><div class="rv" style="color:#d97706">$91,014</div><div class="dt">7 档价格阶梯 $0.99~$99.99（常规7 可复购）· 5,536 单 · 23.1%</div></div>
+  <div class="card" style="border-left-color:#7c3aed"><div class="nm">🐷 存钱罐礼包（100）</div><div class="rv" style="color:#7c3aed">$7,293</div><div class="dt">$2.99 · 2,439 单 · 1.8%</div></div>
+</div>
+<div class="panel"><div class="sub">23 个启用 IAP 收入（按营收降序，颜色=分类）</div><div class="chart-box tall"><canvas id="cIap"></canvas></div></div>
+<div class="panel"><table>
+  <thead><tr><th>档位</th><th>分类</th><th>标价</th><th>付费人</th><th>订单</th><th>营收($)</th><th>占比</th></tr></thead>
+  <tbody><tr><td class='lc'>常规7</td><td><span class='tag r'>常规</span></td><td>$99.99</td><td>76</td><td>622</td><td>62,194</td><td>15.8%</td></tr><tr><td class='lc'>成就1 (关1)</td><td><span class='tag a'>成就</span></td><td>$99.99</td><td>394</td><td>394</td><td>39,396</td><td>10.0%</td></tr><tr><td class='lc'>成就10 (关45)</td><td><span class='tag a'>成就</span></td><td>$99.99</td><td>292</td><td>292</td><td>29,197</td><td>7.4%</td></tr><tr><td class='lc'>成就8 (关35)</td><td><span class='tag a'>成就</span></td><td>$99.99</td><td>277</td><td>277</td><td>27,697</td><td>7.0%</td></tr><tr><td class='lc'>成就11 (关50)</td><td><span class='tag a'>成就</span></td><td>$99.99</td><td>250</td><td>250</td><td>24,998</td><td>6.3%</td></tr><tr><td class='lc'>成就9 (关40)</td><td><span class='tag a'>成就</span></td><td>$99.99</td><td>246</td><td>246</td><td>24,598</td><td>6.2%</td></tr><tr><td class='lc'>成就7 (关30)</td><td><span class='tag a'>成就</span></td><td>$49.99</td><td>490</td><td>490</td><td>24,495</td><td>6.2%</td></tr><tr><td class='lc'>成就12 (关60)</td><td><span class='tag a'>成就</span></td><td>$99.99</td><td>213</td><td>213</td><td>21,298</td><td>5.4%</td></tr><tr><td class='lc'>成就13 (关70)</td><td><span class='tag a'>成就</span></td><td>$99.99</td><td>196</td><td>196</td><td>19,598</td><td>5.0%</td></tr><tr><td class='lc'>成就14 (关80)</td><td><span class='tag a'>成就</span></td><td>$99.99</td><td>190</td><td>190</td><td>18,998</td><td>4.8%</td></tr><tr><td class='lc'>成就15 (关85)</td><td><span class='tag a'>成就</span></td><td>$99.99</td><td>168</td><td>168</td><td>16,798</td><td>4.3%</td></tr><tr><td class='lc'>成就6 (关25)</td><td><span class='tag a'>成就</span></td><td>$49.99</td><td>323</td><td>323</td><td>16,147</td><td>4.1%</td></tr><tr><td class='lc'>成就5 (关20)</td><td><span class='tag a'>成就</span></td><td>$19.99</td><td>767</td><td>767</td><td>15,332</td><td>3.9%</td></tr><tr><td class='lc'>常规6</td><td><span class='tag r'>常规</span></td><td>$49.99</td><td>104</td><td>251</td><td>12,547</td><td>3.2%</td></tr><tr><td class='lc'>成就4 (关15)</td><td><span class='tag a'>成就</span></td><td>$9.99</td><td>937</td><td>937</td><td>9,361</td><td>2.4%</td></tr><tr><td class='lc'>存钱罐</td><td><span class='tag k'>存钱罐</span></td><td>$2.99</td><td>2,439</td><td>2,439</td><td>7,293</td><td>1.8%</td></tr><tr><td class='lc'>成就3 (关10)</td><td><span class='tag a'>成就</span></td><td>$4.99</td><td>1,106</td><td>1,106</td><td>5,519</td><td>1.4%</td></tr><tr><td class='lc'>常规5</td><td><span class='tag r'>常规</span></td><td>$19.99</td><td>266</td><td>266</td><td>5,317</td><td>1.3%</td></tr><tr><td class='lc'>常规4</td><td><span class='tag r'>常规</span></td><td>$9.99</td><td>386</td><td>386</td><td>3,856</td><td>1.0%</td></tr><tr><td class='lc'>常规1</td><td><span class='tag r'>常规</span></td><td>$0.99</td><td>1,051</td><td>2,925</td><td>2,896</td><td>0.7%</td></tr><tr><td class='lc'>成就2 (关5)</td><td><span class='tag a'>成就</span></td><td>$1.99</td><td>1,392</td><td>1,393</td><td>2,772</td><td>0.7%</td></tr><tr><td class='lc'>常规3</td><td><span class='tag r'>常规</span></td><td>$4.99</td><td>478</td><td>478</td><td>2,385</td><td>0.6%</td></tr><tr><td class='lc'>常规2</td><td><span class='tag r'>常规</span></td><td>$2.99</td><td>607</td><td>608</td><td>1,818</td><td>0.5%</td></tr></tbody>
+</table></div>
+<div class="callout"><b>常规7（$99.99）是超R 引擎</b>：622 单仅 76 人购买（人均 8.2 次），可复购设计让单档贡献 $62,194（全期最高，15.8%）。成就 1（关 1，$99.99）开局即可买、贡献 $39K 居次；其余成就档按关 5~关 85 里程碑逐级触发，把中段通关玩家转化为高价档买家。<br>
+<span class="sub">注：挖孔礼包实际 23 档 = 7 常规（$0.99~$99.99 阶梯）+ 15 成就（关1~关85）+ 1 存钱罐（$2.99）= 2013600001-022 + 100；累充表另预留 2013600023-099 共 77 槽位本期未启用（$0）。</span></div>
+
+<h2>七、关卡通关漏斗（新模板留存）· 历期对比</h2>
+<p class="sub">各关通关（通过）人数：首关 13,510 人 → 第 100 关 <b>161 人</b>（6 期仅 26，中后段留存远好于 6 期）；106 人通完全部 5 个循环关（硬核 endgame）。<b>历期里程碑对比</b>：三期首关 / 30 关人数相近（7 期首关 13,510、5/6 期 13,915/14,927），但<b>越往深走 7 期越拉开——完成 100 关 161 人 ≈ 6 期（26）的 6 倍、亦超 5 期（110）</b>，深层留存的结构性增厚正是本期鲸鱼基数 / ARPPU 抬升的来源。</p>
+<div class="panel"><div class="sub">普通关 1–100 · 各关通关人数（new_digkeys_over_level 去重）</div><div class="chart-box tall"><canvas id="cFunnel"></canvas></div></div>
+<div class="panel"><div class="sub">历期关卡完成里程碑对比 · 5 期科技节 / 6 期复活节 / 7 期拓荒节(新)<span class="sub">（完成第 N 关去重人数；纵轴对数刻度，使深层差异可见；5/6 期取自历史回归报告权威值，旧模板奖励关穿插故只对齐里程碑点）</span></div><div class="chart-box"><canvas id="cHist"></canvas></div></div>
+<div class="grid2">
+  <div class="panel"><div class="sub">奖励关 R1–R15（is_reward_stage=1）</div><div class="chart-box"><canvas id="cReward"></canvas></div></div>
+  <div class="panel"><div class="sub">循环关 C1–C5（通完 100 关后开放）</div><div class="chart-box"><canvas id="cCycle"></canvas></div></div>
+</div>
+
+<h2>八、排行榜积分 · 头部玩家付费</h2>
+<p class="sub">全服一张排行榜（21127899），按 <b>datain 真实积分</b>（按 cat 加权累计，满分 710）全服排名；前 30 名套装组件、前 100 名勋章、前 3 名专属勋章。</p>
+<div class="grid2">
+  <div class="panel"><div class="sub">真实积分（activity_score）分布 · 人数</div><div class="chart-box"><canvas id="cDist"></canvas></div></div>
+  <div class="panel"><div class="sub">全服积分前 10 名 · 付费（按名次，付费非严格单调）</div><div class="chart-box"><canvas id="cTop10"></canvas></div></div>
+</div>
+<div class="callout bad"><b>积分两极分化：12,373 人（&lt;50 分）是浅层玩家，仅 32 人到 200+ 分、榜首 710 分。前 10 名（按积分）人均付费 $3,988、头号 $9,429、前 10 合计 $39,882。</b><br>
+排行榜头部 = 付费头部——拼全服榜的硬核玩家正是营收主体（分段归因详见第九节②）。</div>
+
+<h2>九、收入创新高的数据归因</h2>
+<p class="sub">本期毛额 $394,510（vs 6 期 +182%），增量几乎全来自 ARPPU（+151%）而非拉新（付费人仅 +12.1%）。新版用一组「把通关深度变成付费」的机制，把头部玩家挖得更深、付得更多。逐条用数据说明：</p>
+
+<div class="callout"><b>① 图鉴收集体系（本期新增）——给鲸鱼加了一条"深挖"主线</b><br>
+新增异星图鉴，集齐 5/15/25/35/40 种触发领奖（装饰材料→成长宝箱→头像框→铭牌→主城特效宝箱）。后段图鉴宝物只在深层关卡掉落，<b>25→35 种是付费断崖</b>：领到 25 种还有 4,347 人、中位 $2.86；到 35 种骤降到 221 人、中位 $1,058、连 P15 都 $535。图鉴把"想集齐"的玩家逼进深层关卡 = 逼成鲸鱼。5/6 期无此系统。</div>
+
+<div class="panel"><div class="sub">图鉴各领奖阶段 · 付费率% 与平均付费（25→35 断崖：付费率冲到 100%）</div><div class="chart-box sm"><canvas id="cAttr1"></canvas></div></div>
+
+<div class="callout"><b>② 排行榜套装 / 勋章竞争——把稀缺荣誉绑在深通关上</b><br>
+排行榜为<b>全服一张大榜</b>（datain 真实名次），前 30 名套装组件、前 100 名勋章、前 3 名专属勋章。头部就是营收：<b>前 3 名（3 人）人均 $6,964（榜首付 $9,429）；前 100 名（套装/勋章覆盖）合计 44% 营收、前 1000 名 95%</b>。冲榜中坚（前 101–1000，900 人）单块 51% 是最大营收来源——套装/勋章把全服玩家卷进深挖竞赛。</div>
+<div class="grid23">
+  <div class="panel"><div class="sub">全服排名分段营收占比</div><div class="chart-box"><canvas id="cRankRev"></canvas></div></div>
+  <div class="panel"><table><thead><tr><th>全服排名分段</th><th>人数</th><th>人均付费</th><th>段营收</th><th>占总营收</th></tr></thead><tbody><tr><td class='lc'>前 3</td><td>3</td><td>$6,964</td><td>20,893</td><td>5%</td></tr><tr><td class='lc'>前 4–30</td><td>27</td><td>$2,455</td><td>66,283</td><td>17%</td></tr><tr><td class='lc'>前 31–100</td><td>70</td><td>$1,261</td><td>88,246</td><td>22%</td></tr><tr><td class='lc'>前 101–1000</td><td>900</td><td>$225</td><td>202,407</td><td>51%</td></tr><tr><td class='lc'>千名外</td><td>12,511</td><td>$1</td><td>16,580</td><td>4%</td></tr></tbody></table></div>
+</div>
+
+<div class="callout"><b>③ 循环关持续领奖——endgame 的可重复付费引擎</b><br>
+打穿 100 关后开放循环关、可重复领奖。149 名玩家累计刷了 <b>5,345 次</b>循环关（人均 36 次、最高 1 人刷 595 次）。这批人正是人均 $1,522、<b>独占全期 58% 营收</b>的超级鲸鱼——循环关把"打穿即结束"变成"持续刷、持续耗锄头、持续充值"。</div>
+
+<div class="panel"><table><thead><tr><th>循环关持续领奖</th><th>玩家数</th><th>累计刷关</th><th>人均刷关</th><th>最高</th><th>人均付费</th><th>占总营收</th></tr></thead>
+<tbody><tr><td class="lc">打穿100关后开放</td><td>149</td><td>5,345</td><td>36 次</td><td>595 次</td><td><b>$1,522</b></td><td><b>58%</b></td></tr></tbody></table></div>
+
+<div class="callout"><b>④ 挂机——与付费<u>强相关</u>（相关性，非因果）</b><br>
+口径：把"进了关卡的玩家"按是否领过挂机离线产出（asset reason_id <code>actv_digkeys_hangup</code>）分两组，分别 join 付费——领过挂机产出 <b>11,738</b> 人付费率 <b>23.7%</b>（人均 $34），进了关卡但从没领挂机的 <b>9,994</b> 人仅 <b>0.1%</b>（人均 $0.01）。<b>注意这是强相关、不是因果</b>：会去领挂机的本就是深度活跃玩家，他们既挂机也付费——挂机更应读作"活跃/留存玩家"的标志（提供回访收菜的钩子），不能解读成"挂机机制本身把路过玩家直接变成了付费"。</div>
+
+<div class="grid2">
+  <div class="panel"><div class="sub">挂机 vs 没挂机 · 付费率（%）</div><div class="chart-box sm"><canvas id="cAttr4"></canvas></div></div>
+  <div class="panel"><div class="sub">挂机 vs 没挂机 · 人均付费（$）</div><div class="chart-box sm"><canvas id="cAttr4b"></canvas></div></div>
+</div>
+
+<div class="callout"><b>⑤ 奖励关穿插 + 逐关加深的付费曲线</b><br>
+普通关之间穿插 15 个奖励关（额外宝物、维持继续推进的动力）；配合成就阶梯（占营收 75%）+ 常规 7（$99.99 可复购、单档全期最高 $62,194）。完成首关 13,511 → 100 关 161 人 → 循环 106 人，每深一层付费档位越高。</div>
+
+<div class="panel"><div class="sub">奖励关 R1–R15 · 通关人数（穿插普通关的进度激励）</div><div class="chart-box sm"><canvas id="cAttr5"></canvas></div></div>
+
+<div class="callout warn"><b>口径诚实声明：</b>消除道具（锄头/炸弹/横向/纵向消除）与提示格子的服务器打点（<code>holedigging_cost*</code> / 2174 段）本期损坏、查无有效数据，<b>无法量化</b>，未纳入（不臆测）；图鉴阶段领奖打点（new_digkeys_collect / 1393）未实装，已用 asset 收集种类数代理；养成兑换（英雄/机甲碎片、扭蛋等）是<b>全游戏通用兑换</b>，无法证明由本次挖孔奖励触发，<b>已剔除、不计入归因</b>（避免蹭关系）。其余维度均走 datain（Trino）实查。</div>
+
+<div class="callout bad"><b>一句话归因：</b>新版几乎没靠拉新（付费人仅 +12.1%），而是用「图鉴收集 + 排行榜荣誉 + 循环关持续领奖 + 挂机留存」把头部玩家挖得更深——而深度在新版被设计成强付费（60 关+ 398 人 = 85% 营收、循环关 149 人 = 58%）。这就是 ARPPU +151%、收入从 6 期 $140,065 跳到 $394,510 的机制。</div>
+
+<h2>结论</h2>
+<div class="panel">
+<b>核心发现</b>
+<ul class="find">
+  <li><b>营收创挖孔系列历史新高 $394,510</b>（毛额口径），vs 6 期复活节 +181.7%、vs 5 期科技节 +90.1%。新模板验证成功。</li>
+  <li><b>增长本质是付费深度而非拉新</b>：付费人数仅 +12.1%，ARPPU +151.2%。新增的 $99.99 成就阶梯 + 可复购常规锚点是直接抓手。</li>
+  <li><b>深度留存显著改善</b>：完成 100 关 161 人（6 期 26 人），循环关 endgame 有 106 人通完，新模板中后段难度曲线比 6 期"中段断崖"健康得多。</li>
+</ul>
+<b>风险与关注</b>
+<ul class="find">
+  <li class="bad"><b>营收高度集中于超R（72.4% / 222 人）</b>，稳定性系于少数鲸鱼；建议持续监测超R 跨节日复购，并补充中R（$10–100）转化设计以分散结构。</li>
+  <li class="warn"><b>流失集中在中段而非首关</b>：9,032 人止步 30 关以内、仅 398 人（占通关 2.9%）打到 60 关以上；中段（30–60 关）难度曲线与激励是后续提深的重点。</li>
+</ul>
+</div>
+
+<footer>口径：收入 = <code>ods_user_order</code> 毛额（对齐 wiki 历史口径，<code>dl_user_order</code> 净额会低 ~5%），挖孔礼包 2013600001~100（启用 23 个），<code>timestamps</code> 精确过滤 UTC 2026-05-26 00:00 ~ 06-02 00:00；关卡 = <code>new_digkeys_in/over_level</code> 按 user 去重。5/6 期同口径重算 = wiki 公布值（$207,535 / $140,065）。生成于 2026-06-02。</footer>
+</div>
+
+<script>
+const C={accent:'#2563eb',good:'#16a34a',warn:'#d97706',bad:'#dc2626',pop:'#7c3aed',mute:'#94a3b8'};
+const dr5=[38368.0, 37146.0, 29410.0, 17875.0, 24943.0, 29367.0, 30426.0],dr6=[26199.0, 19606.0, 17783.0, 16388.0, 15570.0, 19899.0, 24620.0],dr7=[115151.0, 55295.0, 39064.0, 52346.0, 41804.0, 29446.0, 61403.0];
+const rlLab=["小R (<$10)", "中R ($10–100)", "大R ($100–500)", "超R ($500+)"],rlVal=[6126.0, 29096.0, 73601.0, 285686.0];
+const iapLab=["常规7", "成就1 (关1)", "成就10 (关45)", "成就8 (关35)", "成就11 (关50)", "成就9 (关40)", "成就7 (关30)", "成就12 (关60)", "成就13 (关70)", "成就14 (关80)", "成就15 (关85)", "成就6 (关25)", "成就5 (关20)", "常规6", "成就4 (关15)", "存钱罐", "成就3 (关10)", "常规5", "常规4", "常规1", "成就2 (关5)", "常规3", "常规2"],iapRev=[62193.78, 39396.06, 29197.08, 27697.23, 24997.5, 24597.54, 24495.1, 21297.87, 19598.04, 18998.1, 16798.32, 16146.77, 15332.33, 12547.49, 9360.63, 7292.61, 5518.94, 5317.34, 3856.14, 2895.75, 2772.07, 2385.22, 1817.92],iapColor=["#d97706", "#2563eb", "#2563eb", "#2563eb", "#2563eb", "#2563eb", "#2563eb", "#2563eb", "#2563eb", "#2563eb", "#2563eb", "#2563eb", "#2563eb", "#d97706", "#2563eb", "#7c3aed", "#2563eb", "#d97706", "#d97706", "#d97706", "#2563eb", "#d97706", "#d97706"];
+const normal=[{"lv": 1, "in": 21731, "over": 13510}, {"lv": 2, "in": 13510, "over": 13234}, {"lv": 3, "in": 13234, "over": 12994}, {"lv": 4, "in": 12994, "over": 12817}, {"lv": 5, "in": 12806, "over": 12436}, {"lv": 6, "in": 12427, "over": 11856}, {"lv": 7, "in": 11850, "over": 10261}, {"lv": 8, "in": 10260, "over": 8671}, {"lv": 9, "in": 8671, "over": 8450}, {"lv": 10, "in": 8450, "over": 8244}, {"lv": 11, "in": 8243, "over": 8060}, {"lv": 12, "in": 8060, "over": 7891}, {"lv": 13, "in": 7890, "over": 7839}, {"lv": 14, "in": 7839, "over": 7768}, {"lv": 15, "in": 7768, "over": 7680}, {"lv": 16, "in": 7680, "over": 7564}, {"lv": 17, "in": 7564, "over": 7422}, {"lv": 18, "in": 7421, "over": 7130}, {"lv": 19, "in": 7130, "over": 7021}, {"lv": 20, "in": 7021, "over": 6950}, {"lv": 21, "in": 6950, "over": 6884}, {"lv": 22, "in": 6884, "over": 6701}, {"lv": 23, "in": 6701, "over": 6452}, {"lv": 24, "in": 6450, "over": 6226}, {"lv": 25, "in": 6226, "over": 6082}, {"lv": 26, "in": 6082, "over": 5851}, {"lv": 27, "in": 5850, "over": 5471}, {"lv": 28, "in": 5471, "over": 5135}, {"lv": 29, "in": 5135, "over": 4810}, {"lv": 30, "in": 4810, "over": 4478}, {"lv": 31, "in": 4471, "over": 4091}, {"lv": 32, "in": 4073, "over": 3784}, {"lv": 33, "in": 3772, "over": 3458}, {"lv": 34, "in": 3449, "over": 3130}, {"lv": 35, "in": 3130, "over": 2784}, {"lv": 36, "in": 2784, "over": 2470}, {"lv": 37, "in": 2462, "over": 2183}, {"lv": 38, "in": 2171, "over": 2023}, {"lv": 39, "in": 2015, "over": 1733}, {"lv": 40, "in": 1728, "over": 1574}, {"lv": 41, "in": 1574, "over": 1463}, {"lv": 42, "in": 1463, "over": 1355}, {"lv": 43, "in": 1355, "over": 1229}, {"lv": 44, "in": 1226, "over": 1106}, {"lv": 45, "in": 1104, "over": 1033}, {"lv": 46, "in": 1033, "over": 934}, {"lv": 47, "in": 931, "over": 857}, {"lv": 48, "in": 857, "over": 793}, {"lv": 49, "in": 793, "over": 770}, {"lv": 50, "in": 769, "over": 687}, {"lv": 51, "in": 687, "over": 648}, {"lv": 52, "in": 648, "over": 613}, {"lv": 53, "in": 613, "over": 572}, {"lv": 54, "in": 572, "over": 523}, {"lv": 55, "in": 523, "over": 503}, {"lv": 56, "in": 503, "over": 477}, {"lv": 57, "in": 476, "over": 446}, {"lv": 58, "in": 446, "over": 424}, {"lv": 59, "in": 424, "over": 410}, {"lv": 60, "in": 410, "over": 397}, {"lv": 61, "in": 397, "over": 393}, {"lv": 62, "in": 393, "over": 384}, {"lv": 63, "in": 383, "over": 369}, {"lv": 64, "in": 369, "over": 352}, {"lv": 65, "in": 352, "over": 337}, {"lv": 66, "in": 337, "over": 327}, {"lv": 67, "in": 327, "over": 306}, {"lv": 68, "in": 306, "over": 289}, {"lv": 69, "in": 289, "over": 273}, {"lv": 70, "in": 273, "over": 252}, {"lv": 71, "in": 252, "over": 251}, {"lv": 72, "in": 251, "over": 250}, {"lv": 73, "in": 250, "over": 250}, {"lv": 74, "in": 250, "over": 250}, {"lv": 75, "in": 250, "over": 250}, {"lv": 76, "in": 250, "over": 249}, {"lv": 77, "in": 249, "over": 245}, {"lv": 78, "in": 245, "over": 244}, {"lv": 79, "in": 244, "over": 242}, {"lv": 80, "in": 242, "over": 240}, {"lv": 81, "in": 240, "over": 236}, {"lv": 82, "in": 236, "over": 234}, {"lv": 83, "in": 234, "over": 230}, {"lv": 84, "in": 230, "over": 226}, {"lv": 85, "in": 226, "over": 219}, {"lv": 86, "in": 219, "over": 214}, {"lv": 87, "in": 214, "over": 213}, {"lv": 88, "in": 213, "over": 206}, {"lv": 89, "in": 206, "over": 202}, {"lv": 90, "in": 202, "over": 199}, {"lv": 91, "in": 199, "over": 195}, {"lv": 92, "in": 195, "over": 194}, {"lv": 93, "in": 194, "over": 191}, {"lv": 94, "in": 191, "over": 185}, {"lv": 95, "in": 185, "over": 185}, {"lv": 96, "in": 185, "over": 181}, {"lv": 97, "in": 181, "over": 180}, {"lv": 98, "in": 180, "over": 171}, {"lv": 99, "in": 171, "over": 167}, {"lv": 100, "in": 167, "over": 161}],reward=[{"lv": -1, "in": 11747, "over": 11720}, {"lv": -2, "in": 7972, "over": 7970}, {"lv": -3, "in": 7118, "over": 7117}, {"lv": -4, "in": 6139, "over": 6136}, {"lv": -5, "in": 4003, "over": 3957}, {"lv": -6, "in": 2124, "over": 2091}, {"lv": -7, "in": 1075, "over": 1067}, {"lv": -8, "in": 673, "over": 672}, {"lv": -9, "in": 439, "over": 438}, {"lv": -10, "in": 361, "over": 360}, {"lv": -11, "in": 252, "over": 252}, {"lv": -12, "in": 246, "over": 246}, {"lv": -13, "in": 226, "over": 226}, {"lv": -14, "in": 200, "over": 200}, {"lv": -15, "in": 179, "over": 179}],cycle=[{"lv": 9995, "in": 162, "over": 149}, {"lv": 9996, "in": 149, "over": 127}, {"lv": 9997, "in": 127, "over": 118}, {"lv": 9998, "in": 118, "over": 106}, {"lv": 9999, "in": 106, "over": 106}];
+const funTopL=["活动服在线", "触达 (活动入口点击)", "通关人数", "付费"],funTopV=[24433, 14647, 13511, 2791];
+const modLab=["挖掘", "挂机", "收集", "礼包", "成就", "奖励", "探测仪", "存钱罐", "装扮", "排行榜", "开始探测"],modVal=[13485, 11830, 11740, 11536, 11446, 7570, 7425, 7158, 6979, 6630, 3305];
+const depSeg=["1–9 关", "10–29 关", "30–59 关", "60–99 关", "完成 100 关", "循环关 (打穿100后)"],depAvg=[0.0, 0.29, 13.82, 409.47, 1036.73, 1522.17],depRev=[16.0, 1076.0, 56403.0, 96634.0, 13477.0, 226804.0];
+const distLab=["1–19 分", "20–49 分", "50–119 分", "120–199 分", "200–399 分", "400+ 分"],distVal=[6321, 6052, 1032, 74, 30, 2],top10=[9429.0, 8432.0, 3033.0, 2883.0, 2933.0, 2843.0, 2833.0, 2533.0, 2533.0, 2433.0];
+const cdxLab=["收集5", "收集15", "收集25", "收集35", "集齐40"],cdxMed=[0, 0, 2.86, 1057.96, 1159.79],cdxMean=[30.76, 49.63, 90.41, 1220.44, 1583.75],cstageRate=[21.8, 34.8, 57.5, 100.0, 100.0];
+const rankLab=["前 3", "前 4–30", "前 31–100", "前 101–1000", "千名外"],rankRev=[5.0, 17.0, 22.0, 51.0, 4.0];
+const afkRate=[23.7, 0.1],afkMean=[33.6, 0.01];
+const rwfLab=["R1", "R2", "R3", "R4", "R5", "R6", "R7", "R8", "R9", "R10", "R11", "R12", "R13", "R14", "R15"],rwfOver=[11720, 7970, 7117, 6136, 3957, 2091, 1067, 672, 438, 360, 252, 246, 226, 200, 179];
+const histLab=["完成首关", "完成30关", "完成60关", "完成100关"],histP5=[13915, 5952, 616, 110],histP6=[14927, 5854, 241, 26],histP7=[13510, 4478, 397, 161];
+
+new Chart(cPeriod,{type:'bar',data:{labels:['5期·科技节','6期·复活节','7期·拓荒节(新)'],
+ datasets:[{label:'总营收 ($)',data:[207535,140065,394510],backgroundColor:[C.mute,C.mute,C.accent]}]},
+ options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,title:{display:true,text:'USD'}}}}});
+
+new Chart(cDaily,{type:'line',data:{labels:['D1','D2','D3','D4','D5','D6','D7'],
+ datasets:[
+  {label:'7期·拓荒节(新)',data:dr7,borderColor:C.accent,backgroundColor:'rgba(37,99,235,.10)',fill:true,tension:.25,borderWidth:3,pointRadius:3},
+  {label:'6期·复活节',data:dr6,borderColor:C.warn,fill:false,tension:.25,borderWidth:1.5,pointRadius:2,borderDash:[5,4]},
+  {label:'5期·科技节',data:dr5,borderColor:C.mute,fill:false,tension:.25,borderWidth:1.5,pointRadius:2,borderDash:[5,4]}
+ ]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+ plugins:{legend:{position:'top'}},scales:{y:{beginAtZero:true,title:{display:true,text:'日营收 USD'}}}}});
+
+new Chart(cFunnelTop,{type:'bar',data:{labels:funTopL,datasets:[{label:'去重人数',data:funTopV,
+ backgroundColor:['#94a3b8','#2563eb','#16a34a','#dc2626']}]},
+ options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true}}}});
+
+new Chart(cModules,{type:'bar',data:{labels:modLab,datasets:[{label:'去重人数',data:modVal,backgroundColor:'#2563eb'}]},
+ options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,title:{display:true,text:'去重人数'}}}}});
+
+new Chart(cDepth,{type:'bar',data:{labels:depSeg,datasets:[
+  {label:'人均付费 ($)',data:depAvg,backgroundColor:'#dc2626',yAxisID:'y',order:2},
+  {label:'段营收 ($)',data:depRev,type:'line',borderColor:'#2563eb',backgroundColor:'#2563eb',borderWidth:3,yAxisID:'y1',tension:.2,pointRadius:4,pointHoverRadius:6,pointHitRadius:12,order:1}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top'}},
+ scales:{y:{beginAtZero:true,title:{display:true,text:'人均付费 USD'}},y1:{position:'right',beginAtZero:true,grid:{display:false},title:{display:true,text:'段营收 USD'}},x:{ticks:{font:{size:10}}}}}});
+
+new Chart(cDist,{type:'bar',data:{labels:distLab,datasets:[{label:'人数',data:distVal,backgroundColor:'#2563eb'}]},
+ options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,title:{display:true,text:'玩家数'}}}}});
+
+new Chart(cTop10,{type:'bar',data:{labels:top10.map((v,i)=>'第'+(i+1)+'名'),datasets:[{label:'付费 ($)',data:top10,backgroundColor:'#dc2626'}]},
+ options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,title:{display:true,text:'付费 USD'}}}}});
+
+new Chart(cRewardPay,{type:'bar',data:{labels:cdxLab,datasets:[
+  {label:'中位数 ($)',data:cdxMed,backgroundColor:'#2563eb'},
+  {label:'均值 ($)',data:cdxMean,type:'line',borderColor:'#dc2626',backgroundColor:'#dc2626',tension:.2,pointRadius:4}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top'}},
+ scales:{y:{beginAtZero:true,title:{display:true,text:'付费 USD'}}}}});
+
+new Chart(cRankRev,{type:'bar',data:{labels:rankLab,datasets:[{label:'占总营收 %',data:rankRev,backgroundColor:['#dc2626','#d97706','#94a3b8','#cbd5e1','#e5e7eb']}]},
+ options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,title:{display:true,text:'占总营收 %'}}}}});
+
+new Chart(cAttr1,{type:'bar',data:{labels:cdxLab,datasets:[
+  {label:'付费率 %',data:cstageRate,backgroundColor:'rgba(96,165,250,0.5)',yAxisID:'y',order:2},
+  {label:'平均付费 ($)',data:cdxMean,type:'line',borderColor:'#dc2626',backgroundColor:'#dc2626',yAxisID:'y1',tension:.2,pointRadius:5,borderWidth:3,order:0}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top'},tooltip:{mode:'index',intersect:false}},interaction:{mode:'index',intersect:false},
+ scales:{y:{beginAtZero:true,max:100,title:{display:true,text:'付费率 %'}},y1:{position:'right',beginAtZero:true,grid:{display:false},title:{display:true,text:'平均付费 $'}}}}});
+new Chart(cAttr4,{type:'bar',data:{labels:['领过挂机产出','进关卡未领'],datasets:[{label:'付费率 %',data:afkRate,backgroundColor:['#16a34a','#cbd5e1']}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,title:{display:true,text:'付费率 %'}}}}});
+new Chart(cAttr4b,{type:'bar',data:{labels:['领过挂机产出','进关卡未领'],datasets:[{label:'人均付费 $',data:afkMean,backgroundColor:['#16a34a','#cbd5e1']}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,title:{display:true,text:'人均付费 $'}}}}});
+new Chart(cAttr5,{type:'bar',data:{labels:rwfLab,datasets:[{label:'通关人数',data:rwfOver,backgroundColor:'#7c3aed'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,title:{display:true,text:'通关人数'}}}}});
+
+new Chart(cRlevel,{type:'doughnut',data:{labels:rlLab,datasets:[{data:rlVal,backgroundColor:['#cbd5e1','#60a5fa','#d97706','#dc2626']}]},
+ options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right'}}}});
+
+new Chart(cIap,{type:'bar',data:{labels:iapLab,datasets:[{label:'营收 ($)',data:iapRev,backgroundColor:iapColor}]},
+ options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+ scales:{y:{beginAtZero:true,title:{display:true,text:'USD'}},x:{ticks:{autoSkip:false,maxRotation:60,minRotation:45,font:{size:9}}}}}});
+
+new Chart(cFunnel,{type:'line',data:{labels:normal.map(r=>r.lv),
+ datasets:[
+  {label:'通关人数 (over_level)',data:normal.map(r=>r.over),borderColor:C.good,backgroundColor:'rgba(22,163,74,.10)',fill:true,tension:.15,pointRadius:0}
+ ]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+ plugins:{legend:{position:'top'}},scales:{y:{beginAtZero:true,title:{display:true,text:'玩家数'}},x:{title:{display:true,text:'关卡'},ticks:{maxTicksLimit:20}}}}});
+
+new Chart(cHist,{type:'line',data:{labels:histLab,datasets:[
+  {label:'5期·科技节',data:histP5,borderColor:'#94a3b8',backgroundColor:'#94a3b8',tension:.2,pointRadius:4,borderWidth:2},
+  {label:'6期·复活节',data:histP6,borderColor:'#f59e0b',backgroundColor:'#f59e0b',tension:.2,pointRadius:4,borderWidth:2},
+  {label:'7期·拓荒节(新)',data:histP7,borderColor:'#dc2626',backgroundColor:'#dc2626',tension:.2,pointRadius:6,borderWidth:3}
+]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+ plugins:{legend:{position:'top'},tooltip:{callbacks:{label:function(x){return x.dataset.label+': '+x.parsed.y.toLocaleString()+' 人';}}}},
+ scales:{y:{type:'logarithmic',title:{display:true,text:'完成人数（对数轴）'}}}}});
+
+new Chart(cReward,{type:'bar',data:{labels:reward.map(r=>'R'+(-r.lv)),
+ datasets:[{label:'到达',data:reward.map(r=>r.in),backgroundColor:C.pop},{label:'通过',data:reward.map(r=>r.over),backgroundColor:'#c4b5fd'}]},
+ options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top'}},scales:{y:{beginAtZero:true}}}});
+
+new Chart(cCycle,{type:'bar',data:{labels:cycle.map(r=>'C'+(r.lv-9994)),
+ datasets:[{label:'到达',data:cycle.map(r=>r.in),backgroundColor:C.warn},{label:'通过',data:cycle.map(r=>r.over),backgroundColor:'#fbbf24'}]},
+ options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top'}},scales:{y:{beginAtZero:true}}}});
+</script></body></html>
