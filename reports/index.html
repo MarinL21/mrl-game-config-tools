@@ -208,14 +208,25 @@ DATA.forEach((g, gi) => {
   nav.appendChild(group);
 });
 
+function resolveSrc(file){
+  // 经 htmlpreview.github.io 代理打开时，iframe 的相对路径会解析到错误域，
+  // 这里把子报告也拼成 htmlpreview 绝对地址（仓库路径从当前 URL 推导，不写死）。
+  if (location.hostname === "htmlpreview.github.io") {
+    const wrapped = decodeURIComponent(location.search.slice(1)); // index.html 的 github blob 地址
+    const dir = wrapped.replace(/\/[^\/]*$/, "/");                // .../reports/
+    return "https://htmlpreview.github.io/?" + dir + file;
+  }
+  return file + "?_t=" + Date.now();  // 本地/Pages：相对路径 + 缓存破坏，始终载入最新版
+}
+
 function select(id, fromClick){
   const r = byId[id];
   if (!r) return;
   // ensure containing group is open
-  viewer.setAttribute("src", r.file + "?_t=" + Date.now());  // 缓存破坏：始终载入磁盘最新版
+  viewer.setAttribute("src", resolveSrc(r.file));
   tbTitle.innerHTML = `<span class="pip" style="background:${r.color}"></span>${r.title}`;
   tbSub.textContent = r.sub || r.meta || "";
-  openBtn.setAttribute("href", r.file);
+  openBtn.setAttribute("href", resolveSrc(r.file));
   document.querySelectorAll(".item").forEach(el =>
     el.classList.toggle("active", el.dataset.id === id));
   const activeEl = document.querySelector(`.item[data-id="${id}"]`);
@@ -229,8 +240,8 @@ function select(id, fromClick){
 document.getElementById("toggle").addEventListener("click", () =>
   document.body.classList.toggle("collapsed"));
 document.getElementById("reloadBtn").addEventListener("click", () => {
-  const cur = (viewer.getAttribute("src") || "").split("?")[0];
-  viewer.setAttribute("src", cur + "?_t=" + Date.now());
+  const active = document.querySelector(".item.active");
+  if (active) viewer.setAttribute("src", resolveSrc(byId[active.dataset.id].file));
 });
 
 // initial: hash deep-link or first report
