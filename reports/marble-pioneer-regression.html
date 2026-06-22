@@ -1,0 +1,182 @@
+<!DOCTYPE html><html lang="zh"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>拓荒节弹珠GACHA数据回归</title>
+<script src="./chart.min.js"></script>
+<style>
+:root{--bg:#f6f8fb;--card:#fff;--ink:#1f2b3a;--mut:#6b7a8d;--line:#e6ecf3;--accent:#3b7dd8;--accent2:#16a085;--gold:#e0a82e;--red:#d96459;--pur:#8e6fc4;}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.6 -apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,sans-serif;padding:32px 26px 60px}
+.wrap{max-width:1180px;margin:0 auto}h1{font-size:25px;margin:0 0 4px}.sub{color:var(--mut);font-size:13px;margin-bottom:22px}
+.callout{background:linear-gradient(110deg,#eaf3ff,#f3fbf7);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:12px;padding:16px 20px;margin:0 0 20px}
+.callout b{color:#205aa8}.callout.warn{background:linear-gradient(110deg,#fff6e9,#fdfaf2);border-left-color:var(--gold)}.callout.warn b{color:#a9791a}
+.alert-strong{background:linear-gradient(110deg,#fdeef0,#fff5f6);border:1px solid #f3c6cc;border-left:4px solid var(--red);border-radius:12px;padding:13px 18px;margin:0 0 20px;font-size:13px;line-height:1.7;color:#3a4757}.alert-strong b{color:#b5384a}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:26px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;box-shadow:0 1px 2px rgba(20,40,80,.03)}
+.kpi .v{font-size:23px;font-weight:700}.kpi .l{color:var(--mut);font-size:12px;margin-top:3px}.kpi .d{font-size:11.5px;margin-top:6px;font-weight:600}
+.up{color:var(--accent2)}.down{color:var(--red)}.flat{color:var(--mut)}
+.sec{font-size:16px;font-weight:700;margin:30px 0 12px;padding-left:10px;border-left:3px solid var(--accent)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px 8px;box-shadow:0 1px 2px rgba(20,40,80,.03);margin-bottom:20px}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:8px 9px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+th:first-child,td:first-child{text-align:left}thead th{color:var(--mut);font-weight:600;font-size:12px;border-bottom:2px solid var(--line)}
+tbody tr:last-child td{border-bottom:none}tr.hl{background:#eef5ff}tr.hl td{font-weight:700}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}.chart-box{position:relative;height:300px}
+.note{color:var(--mut);font-size:12px;margin:2px 2px 12px}.caveats{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:6px 22px}
+.caveats li{margin:11px 0;color:#3a4757}.foot{color:var(--mut);font-size:12px;margin-top:26px;text-align:center}
+@media(max-width:900px){.kpis{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}}
+</style></head><body><div class="wrap">
+<h1>拓荒节 · 弹珠 GACHA 数据回归</h1><div class="sub">升级版新弹珠首期（主 GACHA 21127806）· UTC 活动期 2026-05-19~05-25（7 天）· 海外(fo) · 对比 周年庆/万圣/圣诞/科技 4 期旧弹珠 · 营收口径已修正并复核</div>
+
+<div class="callout">
+拓荒升级版新弹珠营收 <b>$184,896</b>，在 5 期里<b>居中</b>——低于周年庆峰值（$393,020，周年大促 + DAU 2.00M），高于科技节（$126,371）。<b>不是营收暴涨</b>，价值在变现效率：
+相比上一期同结构的科技节，营收 <b>+46%</b>、付费人 1,170→<b>1,530</b>、付费转化 6.9%→<b>9.4%（5 期最高）</b>，
+且在 <b>DAU 少 28%</b> 的前提下完成——<b>rev/DAU 翻倍</b>（$0.087→$0.177，×2.0），逼近周年庆峰值（$0.197）。拉动来自新增的<b>奖励关 + 高级兑换商店</b>。
+</div>
+
+<div class="kpis">
+<div class="kpi"><div class="v">$184,896</div><div class="l">弹珠活动总营收</div><div class="d up">▲ 科技 +46% / ▼ 周年庆峰值</div></div>
+<div class="kpi"><div class="v">9.4%</div><div class="l">进入→付费转化</div><div class="d up">▲ 5 期最高（科技 6.9%）</div></div>
+<div class="kpi"><div class="v">$0.177</div><div class="l">rev/DAU（人均活跃产出）</div><div class="d up">▲ 科技 ×2.0，近周年庆 $0.197</div></div>
+<div class="kpi"><div class="v">$121</div><div class="l">ARPPU（活动内）</div><div class="d flat">居中（周年庆 $219）</div></div>
+<div class="kpi"><div class="v">1,530</div><div class="l">付费人数</div><div class="d up">▲ 科技 1,170</div></div>
+<div class="kpi"><div class="v">16,199</div><div class="l">进入人数</div><div class="d down">▼ 5 期最低（随 DAU 下滑）</div></div>
+<div class="kpi"><div class="v">1.05M</div><div class="l">期间均值 DAU</div><div class="d down">▼ 较周年庆 2.00M −48%</div></div>
+<div class="kpi"><div class="v">23.8M</div><div class="l">高级兑换券产出（新机制）</div><div class="d up">旧弹珠为 0</div></div>
+</div>
+
+<div class="sec">营收与效率 — 5 期横向（口径已修正）</div>
+<div class="card"><div style="overflow-x:auto"><table><thead><tr>
+<th>节日（弹珠期）</th><th>窗口</th><th>天</th><th>进入人</th><th>付费人</th><th>转化</th><th>总营收</th><th>随机GACHA</th><th>GACHA礼包</th><th>每日/聚宝盆</th><th>ARPPU</th><th>rev/DAU</th>
+</tr></thead><tbody>
+<tr><td>周年庆25</td><td>08-20~08-28</td><td>9</td><td>23,820</td><td>1,796</td><td>7.5%</td><td>$393,020</td><td>$143,736</td><td>$249,284</td><td>—</td><td>$219</td><td>$0.197</td></tr>
+<tr><td>万圣节</td><td>10-26~11-01</td><td>7</td><td>20,960</td><td>1,246</td><td>5.9%</td><td>$155,816</td><td>$90,070</td><td>$65,746</td><td>—</td><td>$125</td><td>$0.089</td></tr>
+<tr><td>圣诞节</td><td>12-12~12-25</td><td>14</td><td>21,999</td><td>1,515</td><td>6.9%</td><td>$144,974</td><td>$89,050</td><td>$52,141</td><td>$3,783</td><td>$96</td><td>$0.085</td></tr>
+<tr><td>科技节</td><td>03-13~03-22</td><td>10</td><td>16,984</td><td>1,170</td><td>6.9%</td><td>$126,371</td><td>$69,038</td><td>$43,466</td><td>$13,867</td><td>$108</td><td>$0.087</td></tr>
+<tr class="hl"><td>拓荒节 ★</td><td>05-19~05-25</td><td>7</td><td>16,199</td><td>1,530</td><td>9.4%</td><td>$184,896</td><td>$91,238</td><td>$75,614</td><td>$18,044</td><td>$121</td><td>$0.177</td></tr>
+</tbody></table></div>
+<div class="note">营收＝全部「弹珠」名礼包（随机GACHA $19.99-99.99 + GACHA礼包 $4.99-99.99 + 科技/拓荒每日 + 圣诞聚宝盆），按售卖日期归属。rev/DAU＝总营收 / 期间均值 DAU（dl_active_user_d，单游戏 P2）。<b>窗口/天为严格 UTC 活动期</b>（按弹珠礼包首/末购买时间戳剔QA定，对齐 UTC 午夜）；数仓 partition_date 为 UTC+8，营收按分区统计已涵盖完整活动（含跨界尾日），故"天"修正不影响营收。</div>
+</div>
+
+<div class="grid2">
+<div><div class="sec">各期总营收（按礼包档）+ rev/DAU</div><div class="card"><div class="chart-box"><canvas id="cRev"></canvas></div>
+<div class="note">周年庆绝对值最高（DAU 2.0M 撑起）；拓荒总量居中，但 rev/DAU 反弹至 $0.18，是万圣/圣诞/科技平台期（~$0.085）的 2 倍。</div></div></div>
+<div><div class="sec">付费转化 + 付费人数</div><div class="card"><div class="chart-box"><canvas id="cConv"></canvas></div>
+<div class="note">拓荒进入→付费转化 9.4% 为 5 期最高；升级版把更高比例的进入者转成付费。</div></div></div>
+</div>
+
+<div class="grid2">
+<div><div class="sec">拓荒逐日营收与付费人</div><div class="card"><div class="chart-box"><canvas id="cPio"></canvas></div>
+<div class="note">非前置高峰型：营收/付费人随活动推进走高（D1 314 → D7 840 人），符合「攒币—升级—复购」节奏。</div></div></div>
+<div><div class="sec">拓荒礼包营收拆解（Top）</div><div class="card"><div class="chart-box"><canvas id="cPack"></canvas></div>
+<div class="note">$99.99「升级版弹珠GACHA礼包」(…258) 单档 $53.9k 居首且可复购（555 单/99 人）。</div></div></div>
+</div>
+
+<div class="sec">升级版新增内容（奖励关 + 高级兑换商店）对收入的影响</div>
+<div class="callout warn">
+升级版新弹珠新增的<b>奖励关</b>（产出福利球 111111017）与<b>高级兑换商店</b>（消耗高级兑换券 111111018 兑 5 大奖＝主城套装）<b>是全新机制</b>——这两种高级货币在周年庆/圣诞/科技旧弹珠产出/消耗均为 <b>0</b>，拓荒首现。二者非 IAP（直接营收 $0），但造出老弹珠没有的「高价值追求线」：<b>抽奖→奖励关产高级券→高级商店兑主城套装</b>。
+按是否接触这条线分群：<b>接触新内容的 35% 抽奖玩家贡献了 99.5% 营收、付费率 30.6%</b>；仅普通抽奖玩家付费率只有 0.6%。这解释了拓荒为何在 DAU 更低时仍能把转化/人均产出顶上去——升级礼包是进入这条高级闭环的快速通道。
+</div>
+<div class="grid2">
+<div><div class="card"><div class="chart-box"><canvas id="cNew"></canvas></div>
+<div class="note">高级兑换券（高级商店）与福利球（奖励关）的产出量：旧弹珠三期全为 0，升级版拓荒首现。</div></div></div>
+<div><div class="card"><div class="chart-box"><canvas id="cSeg"></canvas></div>
+<div class="note">A 组（接触新内容）占抽奖 35%，却占营收 99.5%；付费率 30.6% vs B 组 0.6%。</div></div></div>
+</div>
+<div class="card"><div style="overflow-x:auto"><table><thead><tr><th>新内容经济指标</th><th>旧弹珠（周年庆/圣诞/科技）</th><th>拓荒升级版</th></tr></thead>
+<tbody><tr><td>高级兑换券产出（奖励关/抽奖）</td><td>0（无此机制）</td><td>23,824,297（4,833 人）</td></tr><tr><td>高级兑换券消耗（高级兑换商店）</td><td>0</td><td>22,996,404（3,809 人兑换）</td></tr><tr><td>福利球产出（奖励关）</td><td>0</td><td>2,112,900（4,833 人）</td></tr><tr><td>高级兑换券来源</td><td>—</td><td>抽奖产出 93% / 升级礼包发放 6.5%</td></tr><tr class='hl'><td>高级 vs 普通商店消耗</td><td>仅普通商店</td><td>高级 22,996,404（3,809人）｜普通 243,892,910（6,459人）</td></tr></tbody></table></div></div>
+
+
+<div class="sec">弹珠「高级追求线」· 设计价 vs 实际值 数据回归</div>
+<div class="callout warn">
+<b>链路（数值框架）</b>：普通弹珠 <b>50 个（设计 $30）</b> → 福利关 → 得 50 福利弹珠 → 打出 <b>500 券/次</b> → 高级商店兑换。<b>设计面值：1 弹珠 $0.6、1 券 $0.1</b>。
+<br><b>实际 vs 设计（系统 money-in 口径）</b>：拓荒 marble 真实营收 <b>$184,896</b> ÷ 高级券总产出 <b>23,824,297</b> = <b>实际 1 券仅 $0.0078（设计 $0.1 的 8%，便宜 12.9×）</b>；实际 1 弹珠 $0.068（设计 $0.6 的 11%）。<b>因为礼包 bundle 海量弹珠 + refuel 回收 + 奖励关/排行榜免费券</b>，真实每券投入远低于设计面值——<b>券被严重「通胀」了</b>。
+<br><b>但鲸鱼口径接近设计</b>：兑 S 级（限购 1）共 <b>38 人全付费、人均花 $1,479 ≈ 设计 $1,500</b>（整体钱包）；但分摊到 S 级本身（按其 realized $/券）仅 <b>$729（设计的 49%）</b>——因为这批人的券约一半来自免费/refuel。<b>越便宜的奖、兑换者越靠免费券薅</b>（B 级实际仅设计的 7%）。
+<br><b>去向</b>：68% 高级券换回弹珠币<b>冲榜</b>（榜分=弹珠消耗，总榜1800币/每日400币），仅 12% 兑 5 大奖。
+</div>
+<div class="kpis">
+<div class="kpi"><div class="v">$0.0078 / 券</div><div class="l">实际 1 券（系统 money-in）</div><div class="d down">设计 $0.1 的 8% · 便宜 12.9×</div></div>
+<div class="kpi"><div class="v">$0.068 / 弹珠</div><div class="l">实际 1 弹珠</div><div class="d down">设计 $0.6 的 11%</div></div>
+<div class="kpi"><div class="v">$729</div><div class="l">S 级实际成本（分摊·设计 $1,500）</div><div class="d down">仅设计 49% · 鲸鱼人均总花 $1,479</div></div>
+<div class="kpi"><div class="v">68%</div><div class="l">高级券回流弹珠币(冲榜)</div><div class="d down">仅 12% 兑 5 大奖</div></div>
+</div>
+<div class="card"><div style="overflow-x:auto"><table><thead>
+<tr><th>大奖（主城套装，限购 1）</th><th>券价</th><th>设计价($)</th><th>实测兑换人数</th><th>兑换者人均总花费($)</th><th>实际 $/券</th><th>该奖实际成本($)</th><th>占设计%</th></tr></thead>
+<tbody><tr class='hl'><td>S级·主城皮肤(科技高级25)</td><td>15,000 券</td><td><b>$1,500</b></td><td>38 人</td><td>$1,479</td><td>$0.0486</td><td>$729</td><td>49%</td></tr><tr><td>A级·主城特效</td><td>5,000 券</td><td><b>$500</b></td><td>160 人</td><td>$377</td><td>$0.0190</td><td>$95</td><td>19%</td></tr><tr><td>A级·主城翅膀</td><td>5,000 券</td><td><b>$500</b></td><td>48 人</td><td>$874</td><td>$0.0336</td><td>$168</td><td>34%</td></tr><tr><td>A级·主城炮弹</td><td>5,000 券</td><td><b>$500</b></td><td>26 人</td><td>$1,138</td><td>$0.0382</td><td>$191</td><td>38%</td></tr><tr><td>B级·主城皮肤(科技25)</td><td>2,000 券</td><td><b>$200</b></td><td>511 人</td><td>$96</td><td>$0.0071</td><td>$14</td><td>7%</td></tr></tbody></table></div>
+<div class="note"><b>设计价</b>=券价×$0.1（框架§三按品质定价）。<b>实际 $/券</b>=该奖兑换者期内 marble 实付 ÷ 他们获得的高级券（鲸鱼券含免费/refuel 故 < 设计 $0.1）。<b>该奖实际成本</b>=实际$/券 × 券价（分摊口径）。「人均总花费」=兑换者全部 marble 实付（含其它消费，故 > 单奖成本）；S 级 $1,479 与设计 $1,500 吻合。<b>5 大奖均为 2025 科技节主城套装·返场 1 年前排行榜奖励</b>（S=高级皮肤 / A=主城特效·主城翅膀·主城炮弹 / B=初级皮肤）。reward id 由兑换数据反查（11119xxx·限购1，现网换档深海）。</div></div>
+<div class="alert-strong"><b>🐋 套装集齐党（S 级 + 3 个 A 级全换）= 仅 10 人</b>：集齐整套设计价 $3,000（30,000 券）。这批人 <b>marble 人均花 $2,324</b>（券通胀故低于设计）；但<b>整个拓荒节人均花 $6,919</b>（区间 $1,627–$28,318）——<b>marble 只占他们节日钱包的 34%</b>。他们是横跨全节日的超级鲸鱼，弹珠套装只是其消费的一小块。</div>
+<div class="grid2">
+<div><div class="sec" style="font-size:14px">高级券去向（券量·逐槽精算）</div><div class="card"><div class="chart-box"><canvas id="cSink"></canvas></div>
+<div class="note">逐槽精算覆盖实际消耗 103%（已补绿色保底卡包 + 修正碎片）；弹珠 refuel 远超大奖——券被烧回抽奖冲榜。</div></div></div>
+<div><div class="sec" style="font-size:14px">高级商店价目表（设计价 $0.1/券）</div><div class="card"><div style="overflow-x:auto"><table><thead>
+<tr><th>商品</th><th>券价</th><th>设计价($)</th><th>限购/人</th></tr></thead><tbody><tr><td>S 级 主城套装皮肤（返场）</td><td>15,000 券</td><td>$1,500</td><td>1</td></tr><tr><td>A 级 特效（返场）</td><td>5,000 券</td><td>$500</td><td>1</td></tr><tr><td>A 级 组件 ①（返场）</td><td>5,000 券</td><td>$500</td><td>1</td></tr><tr><td>A 级 组件 ②（返场）</td><td>5,000 券</td><td>$500</td><td>1</td></tr><tr><td>B 级 主城套装初级皮肤</td><td>2,000 券</td><td>$200</td><td>1</td></tr><tr><td>阶段自选箱</td><td>1,000 券</td><td>$100</td><td>5</td></tr><tr><td>普通弹珠 ×10</td><td>100 券</td><td>$10</td><td>100</td></tr><tr><td>万能红碎(橙)</td><td>56 券</td><td>$5.60</td><td>200</td></tr><tr><td>红色英雄材料</td><td>28 券</td><td>$2.80</td><td>10</td></tr><tr><td>1 高级券 → 5 普通券</td><td>1 券</td><td>$0.10</td><td>9999</td></tr></tbody></table></div>
+<div class="note">设计价=券价×<b>$0.1/券</b>；高级商店=返场 1 年前排行榜奖励、按品质定价。实际成本见上方 cohort 表（普遍为设计的 7–49%）。券价为复用 shell（拓荒＝深海）。</div></div></div>
+</div>
+
+
+<div class="sec">参与与抽奖 — 5 期横向</div>
+<div class="card"><div style="overflow-x:auto"><table><thead><tr>
+<th>节日</th><th>进入人</th><th>抽奖人</th><th>进入→抽</th><th>抽奖次数</th><th>弹珠币消耗</th><th>币/次</th><th>期间均DAU</th>
+</tr></thead><tbody>
+<tr><td>周年庆25</td><td>23,820</td><td>21,374</td><td>90%</td><td>391,811</td><td>1,394,727</td><td>3.6</td><td>2.00M</td></tr>
+<tr><td>万圣节</td><td>20,960</td><td>18,796</td><td>90%</td><td>270,745</td><td>889,059</td><td>3.3</td><td>1.74M</td></tr>
+<tr><td>圣诞节</td><td>21,999</td><td>18,910</td><td>86%</td><td>494,924</td><td>1,542,119</td><td>3.1</td><td>1.70M</td></tr>
+<tr><td>科技节</td><td>16,984</td><td>14,756</td><td>87%</td><td>274,102</td><td>769,347</td><td>2.8</td><td>1.46M</td></tr>
+<tr class="hl"><td>拓荒节 ★</td><td>16,199</td><td>13,784</td><td>85%</td><td>625,935</td><td>2,725,570</td><td>4.4</td><td>1.05M</td></tr>
+</tbody></table></div>
+<div class="note">抽奖人/消耗＝弹珠币(11112649) marble_gacha 口径；横比抽奖热度以「抽奖次数(消耗事件)」为准（升级版每次耗币更多：拓荒 4.3 vs 科技 2.8 币/次）。</div>
+</div>
+
+<div class="foot">数据源：Datain Trino v1041（dl_user_order / dl_user_asset_reason_detail_d / ods_user_click / dl_active_user_d）· 生成 2026-06-17 · 营收口径经修正与复核</div>
+</div>
+
+<script>
+const D = {"rows": [{"name": "周年庆", "label": "周年庆25", "win": "08-20~08-28", "days": 9, "entry": 23820, "drawers": 21374, "coins": 1394727, "use_times": 391811, "dau": 1996844, "payers": 1796, "rev": 393019.63, "rev_random": 143735.61, "rev_gacha": 249284.02, "rev_daily": 0.0, "rev_other": 0.0, "conv": 7.54, "arppu": 218.8, "rev_dau": 0.1968, "rev_per_day": 43669, "cpe": 3.6}, {"name": "万圣", "label": "万圣节", "win": "10-26~11-01", "days": 7, "entry": 20960, "drawers": 18796, "coins": 889059, "use_times": 270745, "dau": 1742694, "payers": 1246, "rev": 155815.78, "rev_random": 90069.98, "rev_gacha": 65745.8, "rev_daily": 0.0, "rev_other": 0.0, "conv": 5.94, "arppu": 125.1, "rev_dau": 0.0894, "rev_per_day": 22259, "cpe": 3.3}, {"name": "圣诞", "label": "圣诞节", "win": "12-12~12-25", "days": 14, "entry": 21999, "drawers": 18910, "coins": 1542119, "use_times": 494924, "dau": 1699934, "payers": 1515, "rev": 144974.16, "rev_random": 89050.22, "rev_gacha": 52140.57, "rev_daily": 0.0, "rev_other": 3783.37, "conv": 6.89, "arppu": 95.7, "rev_dau": 0.0853, "rev_per_day": 10355, "cpe": 3.1}, {"name": "科技", "label": "科技节", "win": "03-13~03-22", "days": 10, "entry": 16984, "drawers": 14756, "coins": 769347, "use_times": 274102, "dau": 1456742, "payers": 1170, "rev": 126370.69, "rev_random": 69037.71, "rev_gacha": 43466.44, "rev_daily": 13866.54, "rev_other": 0.0, "conv": 6.89, "arppu": 108.0, "rev_dau": 0.0867, "rev_per_day": 12637, "cpe": 2.8}, {"name": "拓荒", "label": "拓荒节 ★", "win": "05-19~05-25", "days": 7, "entry": 16199, "drawers": 13784, "coins": 2725570, "use_times": 625935, "dau": 1046766, "payers": 1530, "rev": 184896.24, "rev_random": 91238.5, "rev_gacha": 75614.11, "rev_daily": 18043.63, "rev_other": 0.0, "conv": 9.45, "arppu": 120.8, "rev_dau": 0.1766, "rev_per_day": 26414, "cpe": 4.4}], "order": ["周年庆", "万圣", "圣诞", "科技", "拓荒"], "label": {"周年庆": "周年庆25", "万圣": "万圣节", "圣诞": "圣诞节", "科技": "科技节", "拓荒": "拓荒节 ★"}, "pio_daily": {"labels": ["05-19", "05-20", "05-21", "05-22", "05-23", "05-24", "05-25", "05-26"], "rev": [15531.49, 28972.3, 25048.5, 21732.73, 24239.12, 25350.28, 25915.78, 18106.04], "payers": [218, 340, 548, 543, 589, 651, 726, 286]}, "perpk": [{"iap": "2013511258", "price": 99.99, "buyers": 99, "orders": 555, "rev": 53863.39, "kind": "升级礼包"}, {"iap": "2013511251", "price": 19.99, "buyers": 840, "orders": 1758, "rev": 34220.7, "kind": "升级礼包"}, {"iap": "2013511253", "price": 99.99, "buyers": 144, "orders": 300, "rev": 28909.03, "kind": "升级礼包"}, {"iap": "2013511252", "price": 49.99, "buyers": 289, "orders": 581, "rev": 28108.77, "kind": "升级礼包"}, {"iap": "2013511256", "price": 19.99, "buyers": 180, "orders": 355, "rev": 6917.45, "kind": "升级礼包"}, {"iap": "2013511255", "price": 9.99, "buyers": 300, "orders": 543, "rev": 5271.98, "kind": "升级礼包"}, {"iap": "2013511257", "price": 49.99, "buyers": 62, "orders": 109, "rev": 5222.12, "kind": "升级礼包"}, {"iap": "2013511254", "price": 4.99, "buyers": 412, "orders": 895, "rev": 4339.17, "kind": "升级礼包"}, {"iap": "2013511088", "price": 4.99, "buyers": 817, "orders": 817, "rev": 3956.12, "kind": "每日礼包"}, {"iap": "2013511089", "price": 4.99, "buyers": 766, "orders": 766, "rev": 3709.61, "kind": "每日礼包"}, {"iap": "2013511090", "price": 4.99, "buyers": 752, "orders": 752, "rev": 3638.29, "kind": "每日礼包"}, {"iap": "2013511091", "price": 4.99, "buyers": 708, "orders": 708, "rev": 3430.57, "kind": "每日礼包"}, {"iap": "2013511092", "price": 4.99, "buyers": 683, "orders": 683, "rev": 3309.04, "kind": "每日礼包"}], "seg": {"A_drawers": 4833, "B_drawers": 8951, "A_payers": 1477, "B_payers": 53, "A_rev": 183913.0, "B_rev": 983.0, "A_payrate": 30.6, "B_payrate": 0.6, "A_share": 99.5, "dr_share_A": 35.1}, "nc_order": ["周年庆", "圣诞", "科技", "拓荒"], "adv_add": [0, 0, 0, 23824297], "ball_add": [0, 0, 0, 2112900], "sink": {"labels": ["弹珠币 refuel", "5 大奖(主城套装)", "万能碎片", "回兑普通券(1→5)", "阶段自选箱", "绿色保底卡包", "红色英雄材料"], "vals": [15662700, 2762000, 2425472, 1072912, 928000, 656900, 145320]}};
+const C={ink:'#1f2b3a',mut:'#6b7a8d',line:'#e6ecf3',accent:'#3b7dd8',accent2:'#16a085',gold:'#e0a82e',red:'#d96459',pur:'#8e6fc4'};
+Chart.defaults.font.family='-apple-system,"PingFang SC","Microsoft YaHei",sans-serif';Chart.defaults.color=C.mut;Chart.defaults.font.size=12;
+const labels=D.order.map(n=>D.label[n]);
+
+new Chart(cRev,{data:{labels,datasets:[
+ {type:'bar',label:'随机GACHA$',data:D.rows.map(r=>r.rev_random),backgroundColor:C.accent,stack:'s',borderRadius:3},
+ {type:'bar',label:'GACHA礼包$',data:D.rows.map(r=>r.rev_gacha),backgroundColor:C.gold,stack:'s',borderRadius:3},
+ {type:'bar',label:'每日/聚宝盆$',data:D.rows.map(r=>r.rev_daily+r.rev_other),backgroundColor:C.accent2,stack:'s',borderRadius:3},
+ {type:'line',label:'rev/DAU$',data:D.rows.map(r=>r.rev_dau),yAxisID:'y1',borderColor:C.red,backgroundColor:C.red,tension:.3,pointRadius:4,borderWidth:2},
+]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+ scales:{y:{stacked:true,title:{display:true,text:'营收 $'},grid:{color:C.line},ticks:{callback:v=>'$'+(v/1000)+'k'}},
+ y1:{position:'right',title:{display:true,text:'rev/DAU $'},grid:{drawOnChartArea:false}},x:{grid:{display:false}}},
+ plugins:{legend:{position:'top'},tooltip:{callbacks:{label:c=>c.dataset.label+': '+(c.dataset.type=='line'?'$'+c.parsed.y.toFixed(3):'$'+c.parsed.y.toLocaleString())}}}}});
+
+new Chart(cConv,{data:{labels,datasets:[
+ {type:'bar',label:'付费人',data:D.rows.map(r=>r.payers),backgroundColor:C.accent2,borderRadius:3},
+ {type:'line',label:'付费转化%',data:D.rows.map(r=>r.conv),yAxisID:'y1',borderColor:C.red,backgroundColor:C.red,tension:.3,pointRadius:4,borderWidth:2},
+]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+ scales:{y:{title:{display:true,text:'付费人'},grid:{color:C.line}},y1:{position:'right',title:{display:true,text:'转化 %'},grid:{drawOnChartArea:false},ticks:{callback:v=>v+'%'}},x:{grid:{display:false}}},
+ plugins:{legend:{position:'top'},tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.parsed.y+(c.dataset.type=='line'?'%':'')}}}}});
+
+new Chart(cPio,{data:{labels:D.pio_daily.labels,datasets:[
+ {type:'bar',label:'营收$',data:D.pio_daily.rev,backgroundColor:C.accent,borderRadius:3},
+ {type:'line',label:'付费人',data:D.pio_daily.payers,yAxisID:'y1',borderColor:C.gold,backgroundColor:C.gold,tension:.3,pointRadius:4,borderWidth:2},
+]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+ scales:{y:{title:{display:true,text:'营收 $'},grid:{color:C.line}},y1:{position:'right',title:{display:true,text:'付费人'},grid:{drawOnChartArea:false}},x:{grid:{display:false}}},
+ plugins:{legend:{position:'top'},tooltip:{callbacks:{label:c=>c.dataset.label+': '+(c.dataset.label[0]=='营'?'$':'')+c.parsed.y.toLocaleString()}}}}});
+
+const pk=D.perpk;
+new Chart(cPack,{type:'bar',data:{labels:pk.map(p=>'$'+p.price+(p.kind=='升级礼包'?' 升级':' 每日')+' ·'+p.iap.slice(-3)),
+ datasets:[{label:'营收$',data:pk.map(p=>p.rev),backgroundColor:pk.map(p=>p.kind=='升级礼包'?C.gold:C.accent2),borderRadius:3}]},
+ options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{x:{title:{display:true,text:'营收 $'},grid:{color:C.line}},y:{grid:{display:false},ticks:{font:{size:10}}}},
+ plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+c.parsed.x.toLocaleString()+'  ('+pk[c.dataIndex].buyers+'人/'+pk[c.dataIndex].orders+'单)'}}}}});
+
+new Chart(cNew,{type:'bar',data:{labels:D.nc_order,datasets:[
+ {label:'高级兑换券产出(高级商店)',data:D.adv_add.map(v=>v/1e6),backgroundColor:C.gold,borderRadius:3},
+ {label:'福利球产出(奖励关)',data:D.ball_add.map(v=>v/1e6),backgroundColor:C.pur,borderRadius:3},
+]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{title:{display:true,text:'产出量 (百万)'},grid:{color:C.line},ticks:{callback:v=>v+'M'}},x:{grid:{display:false}}},
+ plugins:{legend:{position:'top'},tooltip:{callbacks:{label:c=>c.dataset.label+': '+(c.parsed.y==0?'0 (无此机制)':c.parsed.y.toFixed(1)+'M')}}}}});
+
+const sv=D.seg;
+new Chart(cSeg,{type:'bar',data:{labels:['抽奖人数','活动营收'],datasets:[
+ {label:'A 接触新内容(高级券/奖励关)',data:[sv.dr_share_A,sv.A_share],backgroundColor:C.accent,borderRadius:3,stack:'s'},
+ {label:'B 仅普通抽奖',data:[100-sv.dr_share_A,100-sv.A_share],backgroundColor:'#cdd8e4',borderRadius:3,stack:'s'},
+]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{x:{stacked:true,max:100,title:{display:true,text:'占比 %'},grid:{color:C.line},ticks:{callback:v=>v+'%'}},y:{stacked:true,grid:{display:false}}},
+ plugins:{legend:{position:'top'},tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.parsed.x.toFixed(1)+'%'}}}}});
+const sk=D.sink, skTot=sk.vals.reduce((a,b)=>a+b,0);
+new Chart(cSink,{type:'doughnut',data:{labels:sk.labels,datasets:[{data:sk.vals,
+ backgroundColor:[C.red,C.gold,C.pur,C.accent,C.accent2,'#cdd8e4','#b5651d'],borderColor:'#fff',borderWidth:2}]},
+ options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{boxWidth:11,font:{size:11}}},
+ tooltip:{callbacks:{label:c=>c.label+': '+(c.parsed/1e6).toFixed(2)+'M 券 ('+(c.parsed/skTot*100).toFixed(1)+'%)'}}}}});
+</script></body></html>
