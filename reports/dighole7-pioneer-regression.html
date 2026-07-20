@@ -50,11 +50,10 @@ footer{color:var(--mute);font-size:12px;margin:22px 0 8px;border-top:1px solid v
 
 <h2>核心 KPI</h2>
 <p class="sub">营收创挖孔系列新高，涨幅几乎全部来自付费深度（ARPPU），而非付费人数扩张。</p>
-<div class="kpis">
+<div class="kpis" style="grid-template-columns:repeat(3,1fr)">
   <div class="kpi"><div class="lab">活动总收入</div><div class="val">$394,510</div><div class="sub good">史上最高 · vs 6期 +181.7%</div></div>
   <div class="kpi"><div class="lab">付费人数</div><div class="val">2,791</div><div class="sub good">vs 6期 +12.1%</div></div>
   <div class="kpi"><div class="lab">ARPPU</div><div class="val">$141.35</div><div class="sub good">vs 6期 +151.2%</div></div>
-  <div class="kpi"><div class="lab">全节日营收占比</div><div class="val">36.1%</div><div class="sub good">拓荒节单活动 No.1 · 全节日付费第一</div></div>
 </div>
 <div class="kpis">
   <div class="kpi"><div class="lab">活动服在线玩家</div><div class="val">24,433</div><div class="sub">166 个活动服 · 触达率分母</div></div>
@@ -101,17 +100,18 @@ footer{color:var(--mute);font-size:12px;margin:22px 0 8px;border-top:1px solid v
 </div>
 <p class="sub">注：① 普通/特殊地形探索（normal/special）按钮本期 0 点击；② 图鉴阶段奖励完成（new_digkeys_collect / 1393）event/asset/activity 三表均查空，疑未落点或改名，本期暂缺。</p>
 
-<h2>四、通关纵深 × 付费（深度 = 鲸鱼）</h2>
-<p class="sub">付费随最深通关关卡<b>指数级</b>跃升——这是超R 高度集中的根因，也验证了新模板「深挖才付费」的设计。</p>
+<h2>四、通关纵深 × 付费 × 自选箱换铲（10 关一段对照）</h2>
+<p class="sub">同一批玩家按<b>最深通关</b>切成 10 关一段，把「人均付费」和「人均换铲箱子」放在一起对照——每一段坑有多深、免费铲供给吃了多少，一眼可见。付费随深度<b>指数级</b>跃升，换铲箱数同步爬升，到 71 关后双双进入鲸鱼区。</p>
 <div class="grid23">
-  <div class="panel"><div class="sub">各通关深度段 · 人均付费（美元）</div><div class="chart-box"><canvas id="cDepth"></canvas></div></div>
+  <div class="panel"><div class="sub">各深度段 · 人均付费（红柱，左轴 $）vs 人均换铲箱子（绿线，右轴）</div><div class="chart-box"><canvas id="cDepth"></canvas></div></div>
   <div class="callout bad"><b>打到 60 关以上的 398 人（占通关玩家 2.9%）贡献 $336,915 = 全期 85% 营收；其中循环关 149 人独占 57%（人均 $1,522）。</b><br>
-  30 关以下 9,032 人几乎零付费；30–59 关人均 $13.8（走量层）；60 关以上人均 $400–1,500（鲸鱼层）。<b>留存玩家打到中后段才是营收主体</b>——拉付费 = 拉通关深度。</div>
+  对照人均箱子看「坑深」：41–50 关（人均 $25 / 84 箱）是免费铲还顶得住的最后一段；51 关起付费陡增（$112→$269→$382→$540→$876→$1,522），而人均箱子在 ~300 处<b>封顶</b>（箱子获取有上限）——<b>后段的坑完全靠付费铲填</b>，71 关后每深 10 关人均付费抬 $150–650，箱子只多 10–30 个。</div>
 </div>
 <div class="panel"><table>
-  <thead><tr><th>最深通关</th><th>玩家</th><th>付费人（率）</th><th>人均付费</th><th>段营收</th><th>占总营收</th></tr></thead>
-  <tbody><tr><td class='lc'>1–9 关</td><td>5,266</td><td>16（0%）</td><td>$0.00</td><td>16</td><td>0.0%</td></tr><tr><td class='lc'>10–29 关</td><td>3,766</td><td>246（7%）</td><td>$0.29</td><td>1,076</td><td>0.3%</td></tr><tr><td class='lc'>30–59 关</td><td>4,081</td><td>2,130（52%）</td><td>$13.82</td><td>56,403</td><td>14.3%</td></tr><tr><td class='lc'>60–99 关</td><td>236</td><td>236（100%）</td><td>$409.47</td><td>96,634</td><td>24.5%</td></tr><tr><td class='lc'>完成 100 关</td><td>13</td><td>13（100%）</td><td>$1,036.73</td><td>13,477</td><td>3.4%</td></tr><tr><td class='lc'>循环关 (打穿100后)</td><td>149</td><td>149（100%）</td><td>$1,522.17</td><td>226,804</td><td>57.5%</td></tr></tbody>
+  <thead><tr><th>最深通关</th><th>玩家</th><th>付费人（率）</th><th>人均付费</th><th>段营收</th><th>占总营收</th><th>换铲玩家（率）</th><th>人均箱子</th></tr></thead>
+  <tbody><tr><td class='lc'>未通关</td><td>3</td><td>0（0%）</td><td><b>$0.00</b></td><td>0</td><td>0.0%</td><td>3（100%）</td><td><b>6.7</b></td></tr><tr><td class='lc'>1–10 关</td><td>5,450</td><td>23（0%）</td><td><b>$0.01</b></td><td>30</td><td>0.0%</td><td>296（5%）</td><td><b>0.2</b></td></tr><tr><td class='lc'>11–20 关</td><td>1,176</td><td>40（3%）</td><td><b>$0.21</b></td><td>250</td><td>0.1%</td><td>715（61%）</td><td><b>6.9</b></td></tr><tr><td class='lc'>21–30 关</td><td>2,793</td><td>258（9%）</td><td><b>$0.37</b></td><td>1,047</td><td>0.3%</td><td>2,689（96%）</td><td><b>28</b></td></tr><tr><td class='lc'>31–40 关</td><td>2,628</td><td>1,089（41%）</td><td><b>$3.05</b></td><td>8,022</td><td>2.0%</td><td>2,621（100%）</td><td><b>44</b></td></tr><tr><td class='lc'>41–50 关</td><td>815</td><td>732（90%）</td><td><b>$24.96</b></td><td>20,340</td><td>5.2%</td><td>813（100%）</td><td><b>84</b></td></tr><tr><td class='lc'>51–60 关</td><td>255</td><td>254（100%）</td><td><b>$112.30</b></td><td>28,636</td><td>7.3%</td><td>254（100%）</td><td><b>109</b></td></tr><tr><td class='lc'>61–70 关</td><td>142</td><td>142（100%）</td><td><b>$268.54</b></td><td>38,132</td><td>9.7%</td><td>142（100%）</td><td><b>144</b></td></tr><tr><td class='lc'>71–80 关</td><td>15</td><td>15（100%）</td><td><b>$382.14</b></td><td>5,732</td><td>1.5%</td><td>15（100%）</td><td><b>222</b></td></tr><tr><td class='lc'>81–90 关</td><td>41</td><td>41（100%）</td><td><b>$540.03</b></td><td>22,141</td><td>5.6%</td><td>41（100%）</td><td><b>272</b></td></tr><tr><td class='lc'>91–99 关</td><td>34</td><td>34（100%）</td><td><b>$876.40</b></td><td>29,798</td><td>7.6%</td><td>33（97%）</td><td><b>285</b></td></tr><tr><td class='lc'>完成 100 关</td><td>13</td><td>13（100%）</td><td><b>$1,036.73</b></td><td>13,477</td><td>3.4%</td><td>13（100%）</td><td><b>300</b></td></tr><tr><td class='lc'>循环关 (打穿100后)</td><td>149</td><td>149（100%）</td><td><b>$1,522.17</b></td><td>226,804</td><td>57.5%</td><td>148（99%）</td><td><b>296</b></td></tr></tbody>
 </table></div>
+<p class="sub">箱子口径：2026拓荒节自选宝箱（111110325，5 选 1）活动期共开 <b>493,618</b> 个，其中 <b>390,593 箱（79.1%）换成了新挖孔道具·月球铲</b>（每箱 5 把，共 1,952,965 把、7,783 人）；其余选项：漫游骰子(大富翁) 73,164 箱（14.8%）、纪念钻头(BP经验) 18,189 箱（3.7%）、弹珠(GACHA抽奖) 11,672 箱（2.4%）、推币机夺宝币 0 箱。上表只计换月球铲的箱子，消耗/产出按同一 event_id 精确配对（覆盖 100%）；「人均箱子」= 段内全部玩家平均（含未换铲者），与「人均付费」同分母可直接对照。</p>
 <h3 style="font-size:15px;font-weight:700;margin:20px 0 8px">图鉴领奖阶段（收集 5/15/25/35/40 种）× 付费分布</h3>
 <p class="sub">图鉴每集齐 5/15/25/35/40 种触发一档领奖。付费高度偏态，<b>看中位数与分位数</b>不只均值。</p>
 <div class="panel"><table>
@@ -179,7 +179,7 @@ footer{color:var(--mute);font-size:12px;margin:22px 0 8px;border-top:1px solid v
 <div class="callout bad"><b>积分两极分化：12,373 人（&lt;50 分）是浅层玩家，仅 32 人到 200+ 分、榜首 710 分。前 10 名（按积分）人均付费 $3,988、头号 $9,429、前 10 合计 $39,882。</b><br>
 排行榜头部 = 付费头部——拼全服榜的硬核玩家正是营收主体（分段归因详见第九节②）。</div>
 
-<h2>九、收入创新高的数据归因</h2>
+<h2>九、收入创新高的数据归因（为什么）</h2>
 <p class="sub">本期毛额 $394,510（vs 6 期 +182%），增量几乎全来自 ARPPU（+151%）而非拉新（付费人仅 +12.1%）。新版用一组「把通关深度变成付费」的机制，把头部玩家挖得更深、付得更多。逐条用数据说明：</p>
 
 <div class="callout"><b>① 图鉴收集体系（本期新增）——给鲸鱼加了一条"深挖"主线</b><br>
@@ -243,7 +243,7 @@ const iapLab=["常规7", "成就1 (关1)", "成就10 (关45)", "成就8 (关35)"
 const normal=[{"lv": 1, "in": 21731, "over": 13510}, {"lv": 2, "in": 13510, "over": 13234}, {"lv": 3, "in": 13234, "over": 12994}, {"lv": 4, "in": 12994, "over": 12817}, {"lv": 5, "in": 12806, "over": 12436}, {"lv": 6, "in": 12427, "over": 11856}, {"lv": 7, "in": 11850, "over": 10261}, {"lv": 8, "in": 10260, "over": 8671}, {"lv": 9, "in": 8671, "over": 8450}, {"lv": 10, "in": 8450, "over": 8244}, {"lv": 11, "in": 8243, "over": 8060}, {"lv": 12, "in": 8060, "over": 7891}, {"lv": 13, "in": 7890, "over": 7839}, {"lv": 14, "in": 7839, "over": 7768}, {"lv": 15, "in": 7768, "over": 7680}, {"lv": 16, "in": 7680, "over": 7564}, {"lv": 17, "in": 7564, "over": 7422}, {"lv": 18, "in": 7421, "over": 7130}, {"lv": 19, "in": 7130, "over": 7021}, {"lv": 20, "in": 7021, "over": 6950}, {"lv": 21, "in": 6950, "over": 6884}, {"lv": 22, "in": 6884, "over": 6701}, {"lv": 23, "in": 6701, "over": 6452}, {"lv": 24, "in": 6450, "over": 6226}, {"lv": 25, "in": 6226, "over": 6082}, {"lv": 26, "in": 6082, "over": 5851}, {"lv": 27, "in": 5850, "over": 5471}, {"lv": 28, "in": 5471, "over": 5135}, {"lv": 29, "in": 5135, "over": 4810}, {"lv": 30, "in": 4810, "over": 4478}, {"lv": 31, "in": 4471, "over": 4091}, {"lv": 32, "in": 4073, "over": 3784}, {"lv": 33, "in": 3772, "over": 3458}, {"lv": 34, "in": 3449, "over": 3130}, {"lv": 35, "in": 3130, "over": 2784}, {"lv": 36, "in": 2784, "over": 2470}, {"lv": 37, "in": 2462, "over": 2183}, {"lv": 38, "in": 2171, "over": 2023}, {"lv": 39, "in": 2015, "over": 1733}, {"lv": 40, "in": 1728, "over": 1574}, {"lv": 41, "in": 1574, "over": 1463}, {"lv": 42, "in": 1463, "over": 1355}, {"lv": 43, "in": 1355, "over": 1229}, {"lv": 44, "in": 1226, "over": 1106}, {"lv": 45, "in": 1104, "over": 1033}, {"lv": 46, "in": 1033, "over": 934}, {"lv": 47, "in": 931, "over": 857}, {"lv": 48, "in": 857, "over": 793}, {"lv": 49, "in": 793, "over": 770}, {"lv": 50, "in": 769, "over": 687}, {"lv": 51, "in": 687, "over": 648}, {"lv": 52, "in": 648, "over": 613}, {"lv": 53, "in": 613, "over": 572}, {"lv": 54, "in": 572, "over": 523}, {"lv": 55, "in": 523, "over": 503}, {"lv": 56, "in": 503, "over": 477}, {"lv": 57, "in": 476, "over": 446}, {"lv": 58, "in": 446, "over": 424}, {"lv": 59, "in": 424, "over": 410}, {"lv": 60, "in": 410, "over": 397}, {"lv": 61, "in": 397, "over": 393}, {"lv": 62, "in": 393, "over": 384}, {"lv": 63, "in": 383, "over": 369}, {"lv": 64, "in": 369, "over": 352}, {"lv": 65, "in": 352, "over": 337}, {"lv": 66, "in": 337, "over": 327}, {"lv": 67, "in": 327, "over": 306}, {"lv": 68, "in": 306, "over": 289}, {"lv": 69, "in": 289, "over": 273}, {"lv": 70, "in": 273, "over": 252}, {"lv": 71, "in": 252, "over": 251}, {"lv": 72, "in": 251, "over": 250}, {"lv": 73, "in": 250, "over": 250}, {"lv": 74, "in": 250, "over": 250}, {"lv": 75, "in": 250, "over": 250}, {"lv": 76, "in": 250, "over": 249}, {"lv": 77, "in": 249, "over": 245}, {"lv": 78, "in": 245, "over": 244}, {"lv": 79, "in": 244, "over": 242}, {"lv": 80, "in": 242, "over": 240}, {"lv": 81, "in": 240, "over": 236}, {"lv": 82, "in": 236, "over": 234}, {"lv": 83, "in": 234, "over": 230}, {"lv": 84, "in": 230, "over": 226}, {"lv": 85, "in": 226, "over": 219}, {"lv": 86, "in": 219, "over": 214}, {"lv": 87, "in": 214, "over": 213}, {"lv": 88, "in": 213, "over": 206}, {"lv": 89, "in": 206, "over": 202}, {"lv": 90, "in": 202, "over": 199}, {"lv": 91, "in": 199, "over": 195}, {"lv": 92, "in": 195, "over": 194}, {"lv": 93, "in": 194, "over": 191}, {"lv": 94, "in": 191, "over": 185}, {"lv": 95, "in": 185, "over": 185}, {"lv": 96, "in": 185, "over": 181}, {"lv": 97, "in": 181, "over": 180}, {"lv": 98, "in": 180, "over": 171}, {"lv": 99, "in": 171, "over": 167}, {"lv": 100, "in": 167, "over": 161}],reward=[{"lv": -1, "in": 11747, "over": 11720}, {"lv": -2, "in": 7972, "over": 7970}, {"lv": -3, "in": 7118, "over": 7117}, {"lv": -4, "in": 6139, "over": 6136}, {"lv": -5, "in": 4003, "over": 3957}, {"lv": -6, "in": 2124, "over": 2091}, {"lv": -7, "in": 1075, "over": 1067}, {"lv": -8, "in": 673, "over": 672}, {"lv": -9, "in": 439, "over": 438}, {"lv": -10, "in": 361, "over": 360}, {"lv": -11, "in": 252, "over": 252}, {"lv": -12, "in": 246, "over": 246}, {"lv": -13, "in": 226, "over": 226}, {"lv": -14, "in": 200, "over": 200}, {"lv": -15, "in": 179, "over": 179}],cycle=[{"lv": 9995, "in": 162, "over": 149}, {"lv": 9996, "in": 149, "over": 127}, {"lv": 9997, "in": 127, "over": 118}, {"lv": 9998, "in": 118, "over": 106}, {"lv": 9999, "in": 106, "over": 106}];
 const funTopL=["活动服在线", "触达 (活动入口点击)", "通关人数", "付费"],funTopV=[24433, 14647, 13511, 2791];
 const modLab=["挖掘", "挂机", "收集", "礼包", "成就", "奖励", "探测仪", "存钱罐", "装扮", "排行榜", "开始探测"],modVal=[13485, 11830, 11740, 11536, 11446, 7570, 7425, 7158, 6979, 6630, 3305];
-const depSeg=["1–9 关", "10–29 关", "30–59 关", "60–99 关", "完成 100 关", "循环关 (打穿100后)"],depAvg=[0.0, 0.29, 13.82, 409.47, 1036.73, 1522.17],depRev=[16.0, 1076.0, 56403.0, 96634.0, 13477.0, 226804.0];
+const bandLab=["1–10 关", "11–20 关", "21–30 关", "31–40 关", "41–50 关", "51–60 关", "61–70 关", "71–80 关", "81–90 关", "91–99 关", "完成 100 关", "循环关 (打穿100后)"],bandPay=[0.01, 0.21, 0.37, 3.05, 24.96, 112.3, 268.54, 382.14, 540.03, 876.4, 1036.73, 1522.17],bandBox=[0.2, 6.9, 27.6, 43.9, 84.2, 109.2, 143.7, 222.2, 272.0, 285.4, 300.0, 295.6];
 const distLab=["1–19 分", "20–49 分", "50–119 分", "120–199 分", "200–399 分", "400+ 分"],distVal=[6321, 6052, 1032, 74, 30, 2],top10=[9429.0, 8432.0, 3033.0, 2883.0, 2933.0, 2843.0, 2833.0, 2533.0, 2533.0, 2433.0];
 const cdxLab=["收集5", "收集15", "收集25", "收集35", "集齐40"],cdxMed=[0, 0, 2.86, 1057.96, 1159.79],cdxMean=[30.76, 49.63, 90.41, 1220.44, 1583.75],cstageRate=[21.8, 34.8, 57.5, 100.0, 100.0];
 const rankLab=["前 3", "前 4–30", "前 31–100", "前 101–1000", "千名外"],rankRev=[5.0, 17.0, 22.0, 51.0, 4.0];
@@ -270,11 +270,11 @@ new Chart(cFunnelTop,{type:'bar',data:{labels:funTopL,datasets:[{label:'去重�
 new Chart(cModules,{type:'bar',data:{labels:modLab,datasets:[{label:'去重人数',data:modVal,backgroundColor:'#2563eb'}]},
  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,title:{display:true,text:'去重人数'}}}}});
 
-new Chart(cDepth,{type:'bar',data:{labels:depSeg,datasets:[
-  {label:'人均付费 ($)',data:depAvg,backgroundColor:'#dc2626',yAxisID:'y',order:2},
-  {label:'段营收 ($)',data:depRev,type:'line',borderColor:'#2563eb',backgroundColor:'#2563eb',borderWidth:3,yAxisID:'y1',tension:.2,pointRadius:4,pointHoverRadius:6,pointHitRadius:12,order:1}
+new Chart(cDepth,{type:'bar',data:{labels:bandLab,datasets:[
+  {label:'人均付费 ($)',data:bandPay,backgroundColor:'#dc2626',yAxisID:'y',order:2},
+  {label:'人均换铲箱子',data:bandBox,type:'line',borderColor:'#16a34a',backgroundColor:'#16a34a',yAxisID:'y1',tension:.2,pointRadius:3,clip:false,order:1}
 ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top'}},
- scales:{y:{beginAtZero:true,title:{display:true,text:'人均付费 USD'}},y1:{position:'right',beginAtZero:true,grid:{display:false},title:{display:true,text:'段营收 USD'}},x:{ticks:{font:{size:10}}}}}});
+ scales:{y:{beginAtZero:true,title:{display:true,text:'人均付费 USD'}},y1:{position:'right',beginAtZero:true,max:Math.ceil(Math.max(...bandBox)*1.08/50)*50,grid:{display:false},title:{display:true,text:'人均箱子（个）'}},x:{ticks:{font:{size:10}}}}}});
 
 new Chart(cDist,{type:'bar',data:{labels:distLab,datasets:[{label:'人数',data:distVal,backgroundColor:'#2563eb'}]},
  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,title:{display:true,text:'玩家数'}}}}});
@@ -283,10 +283,10 @@ new Chart(cTop10,{type:'bar',data:{labels:top10.map((v,i)=>'第'+(i+1)+'名'),da
  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,title:{display:true,text:'付费 USD'}}}}});
 
 new Chart(cRewardPay,{type:'bar',data:{labels:cdxLab,datasets:[
-  {label:'中位数 ($)',data:cdxMed,backgroundColor:'#2563eb'},
-  {label:'均值 ($)',data:cdxMean,type:'line',borderColor:'#dc2626',backgroundColor:'#dc2626',tension:.2,pointRadius:4}
+  {label:'中位数 ($)',data:cdxMed,backgroundColor:'#2563eb',order:2},
+  {label:'均值 ($)',data:cdxMean,type:'line',borderColor:'#dc2626',backgroundColor:'#dc2626',tension:.2,pointRadius:4,clip:false,order:1}
 ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top'}},
- scales:{y:{beginAtZero:true,title:{display:true,text:'付费 USD'}}}}});
+ scales:{y:{beginAtZero:true,max:Math.ceil(Math.max(...cdxMean)*1.08/200)*200,title:{display:true,text:'付费 USD'}}}}});
 
 new Chart(cRankRev,{type:'bar',data:{labels:rankLab,datasets:[{label:'占总营收 %',data:rankRev,backgroundColor:['#dc2626','#d97706','#94a3b8','#cbd5e1','#e5e7eb']}]},
  options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,title:{display:true,text:'占总营收 %'}}}}});
@@ -295,7 +295,7 @@ new Chart(cAttr1,{type:'bar',data:{labels:cdxLab,datasets:[
   {label:'付费率 %',data:cstageRate,backgroundColor:'rgba(96,165,250,0.5)',yAxisID:'y',order:2},
   {label:'平均付费 ($)',data:cdxMean,type:'line',borderColor:'#dc2626',backgroundColor:'#dc2626',yAxisID:'y1',tension:.2,pointRadius:5,borderWidth:3,order:0}
 ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top'},tooltip:{mode:'index',intersect:false}},interaction:{mode:'index',intersect:false},
- scales:{y:{beginAtZero:true,max:100,title:{display:true,text:'付费率 %'}},y1:{position:'right',beginAtZero:true,grid:{display:false},title:{display:true,text:'平均付费 $'}}}}});
+ scales:{y:{beginAtZero:true,max:100,title:{display:true,text:'付费率 %'}},y1:{position:'right',beginAtZero:true,max:Math.ceil(Math.max(...cdxMean)*1.08/200)*200,grid:{display:false},title:{display:true,text:'平均付费 $'}}}}});
 new Chart(cAttr4,{type:'bar',data:{labels:['领过挂机产出','进关卡未领'],datasets:[{label:'付费率 %',data:afkRate,backgroundColor:['#16a34a','#cbd5e1']}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,title:{display:true,text:'付费率 %'}}}}});
 new Chart(cAttr4b,{type:'bar',data:{labels:['领过挂机产出','进关卡未领'],datasets:[{label:'人均付费 $',data:afkMean,backgroundColor:['#16a34a','#cbd5e1']}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,title:{display:true,text:'人均付费 $'}}}}});
 new Chart(cAttr5,{type:'bar',data:{labels:rwfLab,datasets:[{label:'通关人数',data:rwfOver,backgroundColor:'#7c3aed'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,title:{display:true,text:'通关人数'}}}}});
