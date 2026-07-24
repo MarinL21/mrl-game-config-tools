@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>《猩球对决》节日卡牌 RPG 策划案 v1.4</title>
+<style>
+  :root {
+    --accent: #00A0E9; --accent-d: #007BB8; --ink: #0C1A2B;
+    --dark: #25334A; --body: #4A5462; --muted: #8A94A2;
+    --line: #E7ECF2; --card: #F7F9FC; --card-bl: #EEF7FD;
+    --red: #E03C31; --red-bg: #FDF0EE; --gold: #C8961E;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; color: var(--body);
+         background: #FFFFFF; line-height: 1.75; font-size: 15px; }
+  .wrap { max-width: 1060px; margin: 0 auto; padding: 0 28px 90px; }
+
+  .hero { background: var(--ink); color: #fff; padding: 0; margin-bottom: 46px; }
+  .hero-inner { max-width: 1060px; margin: 0 auto; padding: 42px 28px 34px; }
+  .kicker { color: #3ED0F5; font-size: 13px; font-weight: 700; letter-spacing: 3px; }
+  h1 { font-size: 34px; color: #fff; margin: 10px 0 6px; letter-spacing: 1px; }
+  .hero .sub { color: #A9B8C7; font-size: 15px; }
+  .meta { margin-top: 18px; font-size: 12.5px; color: #7C8CA0; }
+  .meta b { color: #BECDDB; font-weight: 600; }
+  .hero-img { width: 100%; display: block; }
+  .hero-cap { text-align: center; color: var(--muted); font-size: 12px; padding: 8px 0 0; }
+
+  section { margin-bottom: 58px; }
+  h2 { font-size: 23px; color: var(--dark); border-left: 5px solid var(--accent);
+       padding-left: 14px; margin-bottom: 6px; letter-spacing: .5px; }
+  h2 .no { color: var(--accent-d); font-family: Arial; margin-right: 6px; }
+  .h2sub { color: var(--muted); font-size: 13px; margin: 0 0 18px 19px; }
+  h3 { font-size: 16.5px; color: var(--dark); margin: 26px 0 10px; }
+  h3::before { content: "▎"; color: var(--accent); }
+  p { margin-bottom: 10px; }
+  b, strong { color: var(--dark); }
+  .hl { color: var(--accent-d); font-weight: 700; }
+  .rd { color: var(--red); font-weight: 700; }
+
+  .box { background: var(--card); border: 1px solid var(--line); border-radius: 10px;
+         padding: 18px 22px; margin: 14px 0; }
+  .box.blue { background: var(--card-bl); border-color: #BFE3F7; }
+  .box.warn { background: var(--red-bg); border-color: #F2C7C2; }
+  .onesent { font-size: 16.5px; color: var(--dark); font-weight: 600; }
+  table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 13.5px; }
+  th { background: var(--ink); color: #fff; padding: 9px 12px; text-align: left;
+       font-weight: 600; white-space: nowrap; }
+  td { padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  tr:nth-child(even) td { background: #FAFCFE; }
+  td b { color: var(--dark); }
+  ul { margin: 6px 0 12px 22px; }
+  li { margin-bottom: 7px; }
+  figure { margin: 20px 0 26px; }
+  figure img { width: 100%; border-radius: 10px; border: 1px solid var(--line);
+               box-shadow: 0 6px 22px rgba(26,44,66,.10); display: block; }
+  figure.half { display: inline-block; width: 48.7%; vertical-align: top; }
+  figure.half + figure.half { margin-left: 2%; }
+  figcaption { font-size: 12.5px; color: var(--muted); margin-top: 9px; text-align: center; }
+  figcaption b { color: var(--accent-d); }
+  .conclusion { background: var(--ink); color: #fff; border-radius: 10px; padding: 16px 24px;
+                font-size: 15.5px; font-weight: 600; margin: 18px 0; }
+  .conclusion .rd { color: #FF9B92; }
+  .svgwrap { background: var(--card); border: 1px solid var(--line); border-radius: 10px;
+             padding: 18px 10px; margin: 16px 0; overflow-x: auto; }
+  .toc { columns: 2; font-size: 14px; }
+  .toc a { color: var(--accent-d); text-decoration: none; }
+  .toc li { margin-bottom: 4px; }
+  .fine { font-size: 12.5px; color: var(--muted); }
+  .del { text-decoration: line-through; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="kicker">AGE OF APES · FESTIVAL SUB-GAME PROPOSAL</div>
+    <h1>《猩球对决》节日卡牌 RPG 策划案</h1>
+    <div class="sub">五人小队自由编成（T / N / DPS）× 装备养成 × 全自动站桩互殴 —— <b style="color:#fff">战斗零操作</b>的节日「时间容器」底座</div>
+    <div class="meta"><b>版本</b> v1.6（全卡牌化：英雄卡 + 装备卡一套经济 —— 统一抽奖 / 统一强化 / 碎片合成，活动概念收敛为「卡 + 碎片 + 材料」）｜ <b>作者</b> 刘思毅（P2 运营策划）｜
+      <b>日期</b> 2026-07 ｜ <b>状态</b> 立项论证阶段 ｜ <b>数值说明</b> 本案不含数值设计，数值框架立项评审后单独出</div>
+  </div>
+  <img class="hero-img" src="img/keyvisual.jpg" alt="key visual">
+</div>
+<div class="hero-cap">▲ 题图：AI 概念示意（本案全部配图均为 AI 概念图 / 竞品意象参考，非最终美术）</div>
+
+<div class="wrap">
+
+<!-- ══════════ 目录 ══════════ -->
+<section>
+  <h2><span class="no">00</span>目录</h2>
+  <ul class="toc">
+    <li><a href="#s1">01 一句话定位与立项背景</a></li>
+    <li><a href="#s2">02 玩法总览：核心循环</a></li>
+    <li><a href="#s3">03 英雄系统：获取与等级（唯一的卡）</a></li>
+    <li><a href="#s4">04 装备系统（核心养成线）</a></li>
+    <li><a href="#s5">05 对战：5v5 站桩互殴，零决策</a></li>
+    <li><a href="#s6">06 关卡结构：章节 · 爬塔 · 挂机</a></li>
+    <li><a href="#s7">07 图鉴与节日外显（收集加战力）</a></li>
+    <li><a href="#s8">08 动态卡体系（付费第二曲线）</a></li>
+    <li><a href="#s9">09 排行榜与荣誉</a></li>
+    <li><a href="#s10">10 付费点设计（定版 · 逐期不改）</a></li>
+    <li><a href="#s11">11 每期换档：轮换架构与执行清单</a></li>
+    <li><a href="#s12">12 开发范围与里程碑</a></li>
+    <li><a href="#s13">13 风险与对策</a></li>
+    <li><a href="#s14">14 附：挖孔四要素对照表</a></li>
+  </ul>
+</section>
+
+<!-- ══════════ 01 ══════════ -->
+<section id="s1">
+  <h2><span class="no">01</span>一句话定位与立项背景</h2>
+  <div class="box blue">
+    <div class="onesent">在 P2 节日活动体系内，做一个「卡牌英雄 + 装备养成」的零决策子玩法：
+    英雄与装备全部以卡牌呈现（一套获取 / 强化 / 碎片合成的统一卡牌经济），自由编成五人小队（T / N / DPS 任意组合），装备卡镶上去、强化喂上去把战力堆起来；对战是全自动的 5v5 站桩互殴、纯战力比拼 ——
+    每个节日常驻开启、轮换英雄与卡池，逐步替换衰减的纯抽 GACHA 坑位，并成为节日外显的新投放主阵地；关卡掉落双轨（玩法道具 + P2 主游戏道具），子玩法与 SLG 主成长息息相关。</div>
+  </div>
+  <p class="fine">版本轨迹：v1.1 <span class="del">炉石式卡组决策</span>→零决策 ｜ v1.2 装备去卡化 + 内嵌抽奖 + 付费点定版 ｜
+    v1.3 五人小队 ｜ v1.4 编成自由（战斗零操作）｜ v1.5 掉落双轨与主游戏耦合 ｜ v1.6 全卡牌化（统一抽奖/强化/碎片合成）——
+    卡牌只承担「收藏形态 + 视觉资产」职能，玩家全部投入都在<b>养成与收集层</b>。</p>
+
+  <h3>为什么做（三个被数据验证的判断）</h3>
+  <table>
+    <tr><th style="width:22%">判断</th><th>数据支撑（均出自本人回归报告）</th><th style="width:26%">对本案的含义</th></tr>
+    <tr>
+      <td><b>玩家时间是被验证的富矿</b></td>
+      <td>挖孔七期（活动 UI 点击流会话化实测）：全服累计投入 <b>9,179 小时</b>（保守口径，宽口径 17,880 小时）；
+          人均 38 分钟 / P90 达 100 分钟，<b>3,157 人（21.6%）投入超 1 小时</b>；
+          238 万次挖掘动作、人均活跃 3.46/7 天、38.3% ≥5 天、87% 使用挂机</td>
+      <td>P2 玩家有大量「游戏内可支配时间」，活动玩法是时间的容器，付费是时间投入的副产品</td>
+    </tr>
+    <tr>
+      <td><b>纯抽 GACHA 形式在衰减</b></td>
+      <td>弹珠 GACHA（纯抽）四个投放期：周年庆 $393,020 → 万圣 $155,816 → 圣诞 $144,974 → 科技 $126,371，
+          <b>连降三期、峰值回撤 -68%</b></td>
+      <td>衰减的不是付费意愿，是「纯抽」形式的新鲜感 —— 需要一个玩法型形态来接替坑位</td>
+    </tr>
+    <tr>
+      <td><b>P2 玩家为外显与数值成长付费</b></td>
+      <td>头像框礼包买家渗透 <b>96.3%</b>；挖孔图鉴收集 71.9 万件宝物、图鉴断崖处付费中位数 $2.86 → $1,058；
+          挖孔 ARPPU +151% 全部来自「推进路径上的付费点」</td>
+      <td>收集 + 战力成长是 SLG 玩家最熟悉的两种付费动机 —— 本案把两者做成同一条线</td>
+    </tr>
+  </table>
+
+  <h3>关键实证：时长 × 付费是一条阶梯（挖孔七期实测）</h3>
+  <table>
+    <tr><th>活动内投入时长</th><th>&lt;10 分钟</th><th>10~30 分钟</th><th>30~60 分钟</th><th>1~2 小时</th><th>2~5 小时</th><th>5 小时+</th></tr>
+    <tr><td><b>玩家数</b></td><td>5,837</td><td>3,360</td><td>2,231</td><td>2,067</td><td>1,037</td><td>53</td></tr>
+    <tr><td><b>付费率</b></td><td>0.3%</td><td>5.0%</td><td><b>23.2%</b></td><td><span class="rd">53.2%</span></td><td><span class="rd">80.2%</span></td><td><span class="rd">90.6%</span></td></tr>
+  </table>
+  <div class="box blue">
+    <b>付费玩家人均在活动里投入 107 分钟（中位 92），零付费玩家 22 分钟（中位 11）—— 相差 4.8 倍。</b>
+    每上一个时长台阶，付费率翻倍以上（0.3% → 90.6%）。时长与付费互为因果（付费买锄头也会拉长时长），
+    但设计含义只有一个：<span class="hl">能装下玩家时间的玩法，就是付费发生的地方</span>。
+    本案的一切设计（互殴闯关 / 装备强化 / 图鉴收集 / 挂机）都在为「装下更多时间」服务。
+    <span class="fine">（口径：活动全套 UI 点击流按相邻间隔 ≤60s 会话化累计，跨 UTC 2026-05-26 ~ 06-01；付费=购买挖孔 IAP 2013600001-100）</span>
+  </div>
+
+  <h3>为什么是「卡牌形态 + 零决策」</h3>
+  <ul>
+    <li><b>战斗零操作 = 零门槛：</b>SLG 玩家的日常就是比战力 —— 战斗全自动、编队有一键推荐（想动脑的有编成空间，不想动的不强迫），
+        <span class="hl">堆战力、点开打、看结果</span>，和主玩法的心智完全同构；碎片时间一场 15 秒；</li>
+    <li><b>收集即本体：</b>英雄卡、装备卡与节日外显全部进图鉴，收集直接加战力（见 §07）——玩家只需要理解「卡」一个概念，获取 / 强化 / 合成 / 收集全线统一；挖孔归因四要素中最强的「图鉴收集」在全卡牌形态下天然成立，且有了数值意义；</li>
+    <li><b>美术成本极低：</b>卡面 = 单张静态插画，AI 生图管线（60 张/批）为此而生；</li>
+    <li><b>程序成本更低（较 v1.0 再砍一截）：</b><span class="del">卡牌规则引擎、手牌/费用/关键词系统</span>全部不要了 ——
+        只剩<span class="hl">战力计算 + 互殴演出 + 养成框架</span>，零战斗动画、零实时同步；</li>
+    <li><b>付费上限更高：</b>静态卡免费获取养大盘，<span class="rd">动态卡 / 签名卡直售</span>（炉石黄金卡、Marvel Snap 变体卡先例）
+        + 装备强化材料这条经典 ARPPU 线（挖孔已验证）。</li>
+  </ul>
+  <div class="conclusion">定位一句话：不是卡牌对战游戏，是「披着收藏卡外壳的战力养成闯关」——
+    玩家时间从这里进来，外显与付费从这里出去。</div>
+</section>
+
+<!-- ══════════ 02 ══════════ -->
+<section id="s2">
+  <h2><span class="no">02</span>玩法总览：核心循环</h2>
+  <div class="h2sub">一场 10 秒的自动互殴，套在「闯关 → 掉装备 → 穿戴强化 → 战力提升 → 更深关卡」的循环里</div>
+
+  <div class="svgwrap">
+  <svg viewBox="0 0 1000 330" width="100%" font-family="PingFang SC, Microsoft YaHei" >
+    <defs>
+      <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+        <path d="M0,0 L10,5 L0,10 z" fill="#00A0E9"/>
+      </marker>
+      <marker id="arg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+        <path d="M0,0 L10,5 L0,10 z" fill="#8A94A2"/>
+      </marker>
+    </defs>
+    <rect x="8" y="8" width="984" height="252" rx="14" fill="none" stroke="#BFE3F7" stroke-width="2" stroke-dasharray="7 5"/>
+    <text x="30" y="34" font-size="13" fill="#007BB8" font-weight="700">节日轮换层：每节日更换 —— 新英雄卡 · 新装备卡池 · 新关卡/BOSS 主题 · 新外显套装（卡背/卡面/头像框） · 新 BP</text>
+
+    <g font-size="14" font-weight="700" text-anchor="middle">
+      <rect x="40"  y="70" width="160" height="76" rx="10" fill="#EEF7FD" stroke="#00A0E9" stroke-width="1.6"/>
+      <text x="120" y="96" fill="#25334A">组五人小队</text>
+      <text x="120" y="116" font-size="11.5" font-weight="400" fill="#4A5462">T / N / DPS 自由组合</text>
+      <text x="120" y="133" font-size="11.5" font-weight="400" fill="#4A5462">一键最优上阵</text>
+
+      <rect x="240" y="70" width="160" height="76" rx="10" fill="#EEF7FD" stroke="#00A0E9" stroke-width="1.6"/>
+      <text x="320" y="96" fill="#25334A">闯关 · 5v5 互殴</text>
+      <text x="320" y="116" font-size="11.5" font-weight="400" fill="#4A5462">自动战力比拼 · 15 秒/场</text>
+      <text x="320" y="133" font-size="11.5" font-weight="400" fill="#4A5462">消耗行动力</text>
+
+      <rect x="440" y="70" width="160" height="76" rx="10" fill="#EEF7FD" stroke="#00A0E9" stroke-width="1.6"/>
+      <text x="520" y="96" fill="#25334A">掉落</text>
+      <text x="520" y="116" font-size="11.5" font-weight="400" fill="#4A5462">装备卡 · 碎片 · 抽奖币</text>
+      <text x="520" y="133" font-size="11.5" font-weight="400" fill="#4A5462">+ P2 主游戏道具</text>
+
+      <rect x="640" y="70" width="160" height="76" rx="10" fill="#EEF7FD" stroke="#00A0E9" stroke-width="1.6"/>
+      <text x="720" y="96" fill="#25334A">养成变强</text>
+      <text x="720" y="116" font-size="11.5" font-weight="400" fill="#4A5462">卡牌强化 · 碎片合成</text>
+      <text x="720" y="133" font-size="11.5" font-weight="400" fill="#4A5462">图鉴点亮 · 战力上涨</text>
+
+      <rect x="840" y="70" width="130" height="76" rx="10" fill="#FDF0EE" stroke="#E03C31" stroke-width="1.6"/>
+      <text x="905" y="96" fill="#E03C31">更深关卡</text>
+      <text x="905" y="116" font-size="11.5" font-weight="400" fill="#4A5462">精英 / BOSS</text>
+      <text x="905" y="133" font-size="11.5" font-weight="400" fill="#4A5462">无尽爬塔</text>
+    </g>
+    <g stroke="#00A0E9" stroke-width="2.2" fill="none">
+      <line x1="200" y1="108" x2="236" y2="108" marker-end="url(#ar)"/>
+      <line x1="400" y1="108" x2="436" y2="108" marker-end="url(#ar)"/>
+      <line x1="600" y1="108" x2="636" y2="108" marker-end="url(#ar)"/>
+      <line x1="800" y1="108" x2="836" y2="108" marker-end="url(#ar)"/>
+    </g>
+    <path d="M 905 146 L 905 196 L 320 196 L 320 150" stroke="#8A94A2" stroke-width="2" fill="none" stroke-dasharray="6 4" marker-end="url(#arg)"/>
+    <text x="612" y="188" font-size="12.5" fill="#8A94A2" text-anchor="middle" font-weight="600">循环：战力更高 → 打更深的关 → 掉更好的装备（循环关持续领奖）</text>
+
+    <rect x="32" y="222" width="176" height="26" rx="13" fill="#EEF7FD" stroke="#00A0E9" stroke-width="1.2"/>
+    <text x="120" y="240" font-size="12" fill="#007BB8" text-anchor="middle" font-weight="700">抽奖币 → 抽卡 → 英雄/装备卡</text>
+    <line x1="120" y1="222" x2="120" y2="152" stroke="#00A0E9" stroke-width="1.8" stroke-dasharray="5 4" marker-end="url(#ar)"/>
+    <rect x="240" y="222" width="160" height="26" rx="13" fill="#FBF3E2"/>
+    <text x="320" y="240" font-size="12" fill="#C8961E" text-anchor="middle" font-weight="700">挂机营地：离线产材料/抽奖币</text>
+    <path d="M 400 235 L 520 235 L 520 150" stroke="#C8961E" stroke-width="1.8" fill="none" stroke-dasharray="5 4"/>
+
+    <g font-size="13" text-anchor="middle">
+      <rect x="250" y="282" width="500" height="36" rx="18" fill="#0C1A2B"/>
+      <text x="500" y="306" fill="#FFFFFF" font-weight="700">终点追求：英雄/装备图鉴 + 节日外显图鉴 + 爬塔榜荣誉 + 动态卡收藏</text>
+    </g>
+    <line x1="720" y1="146" x2="600" y2="282" stroke="#8A94A2" stroke-width="1.4" stroke-dasharray="4 4"/>
+  </svg>
+  </div>
+  <p class="fine">▲ 图 2-1 核心循环（自绘示意）。黄色为挂机支线（四要素之「挂机留存」），红色节点为坑深所在（四要素之「循环关持续领奖」）。</p>
+
+  <h3>一局怎么玩（15 秒版本）</h3>
+  <ul>
+    <li>首次进入活动即送<b>基础五人队</b>（1T + 1N + 3DPS 每职业保底，<b>零门槛直接能打</b>）；</li>
+    <li>点关卡 → <b>5v5 站桩互殴全自动</b>：T 顶在最前扛伤、奶妈自动奶血最低的、三个 DPS 集火对面前排 —— 卡牌冲撞、伤害与治疗飘字、血条起落，约 15 秒出结果；</li>
+    <li>胜负基本由<b>队伍总战力</b>决定（战力差大时直接"碾压"快速演出）—— 战斗内没有手牌、没有操作；玩家唯一的表达是赛前怎么组队；</li>
+    <li>赢 → 掉装备卡 / 碎片 / 材料 / 抽奖币 + <b>P2 主游戏道具</b>（双轨掉落）；输 → 明确提示差多少战力 + 三个提升入口（换更强英雄 / 强化卡牌 / 收集图鉴）。</li>
+  </ul>
+</section>
+
+<!-- ══════════ 03 ══════════ -->
+<section id="s3">
+  <h2><span class="no">03</span>英雄系统：获取与等级（唯一的卡）</h2>
+  <div class="h2sub">英雄卡：小队的核心资产 —— T / N / DPS 三职能 · 五人自由编成；首入即送 / 玩出来 / 抽出来三条通道；等级驱动卡面进阶</div>
+
+  <h3>职业与编成：三职能，五个位，怎么组是玩家的自由</h3>
+  <table>
+    <tr><th style="width:14%">职能</th><th style="width:20%">站位（系统自动）</th><th style="width:38%">写死的行为规则</th><th>数值偏向</th></tr>
+    <tr><td><b>坦克 T</b></td><td>自动排在最前</td><td>用身体挡枪 —— 敌方攻击永远打「存活的最前位」，T 就是队伍的墙</td><td>生命 / 防御成长高</td></tr>
+    <tr><td><b>治疗 N</b></td><td>自动排在最后</td><td>每回合治疗己方血量比例最低者，不参与输出</td><td>治疗力成长高</td></tr>
+    <tr><td><b>输出 DPS</b></td><td>自动排在中间</td><td>攻击敌方「存活的最前位」—— 先啃掉对面前排，经典集火</td><td>攻击成长高</td></tr>
+  </table>
+  <ul>
+    <li><b>自由编成：</b>5 个上阵位，<b>任意职业组合</b> —— 5 DPS 速攻、2T2N1D 龟壳、标准 1T1N3DPS 都随玩家；站位由系统按 T → DPS → N 自动排序（同职能按战力排），<b>战斗内依然零操作</b>；</li>
+    <li><b>一键推荐：</b>不想动脑的玩家点一下 —— 系统按拥有英雄自动组推荐队（默认标准构成 / 战力最优），编队决策<b>可选而不强迫</b>；</li>
+    <li><b>策略自然涌现（不需要克制表）：</b>多 T = 更耐久、多 N = 更能拖、多 DPS = 抢先手清场 —— 三种倾向全部由生命 / 治疗 / 攻击三条属性自然导出，数值上没有任何新增复杂度。</li>
+  </ul>
+
+  <div class="svgwrap">
+  <svg viewBox="0 0 1000 274" width="100%" font-family="PingFang SC, Microsoft YaHei">
+    <text x="20" y="26" font-size="14" fill="#25334A" font-weight="700">三个典型流派 · 方块顺序即自动站位（T 最前 → DPS → N 最后）</text>
+    <!-- 图例 -->
+    <g font-size="12" font-weight="700">
+      <rect x="560" y="10" width="20" height="20" rx="5" fill="#3B82C4"/><text x="586" y="25" fill="#4A5462">T 坦克</text>
+      <rect x="650" y="10" width="20" height="20" rx="5" fill="#D9534F"/><text x="676" y="25" fill="#4A5462">DPS 输出</text>
+      <rect x="756" y="10" width="20" height="20" rx="5" fill="#3FA65C"/><text x="782" y="25" fill="#4A5462">N 治疗</text>
+    </g>
+    <!-- 行生成 -->
+    <g font-size="13.5" font-weight="700">
+      <!-- 标准队 T D D D N -->
+      <text x="20" y="82" fill="#25334A">标准队</text>
+      <g font-size="16" fill="#FFFFFF" text-anchor="middle" font-weight="700">
+        <rect x="130" y="52" width="52" height="52" rx="9" fill="#3B82C4"/><text x="156" y="85">T</text>
+        <rect x="196" y="52" width="52" height="52" rx="9" fill="#D9534F"/><text x="222" y="85">D</text>
+        <rect x="262" y="52" width="52" height="52" rx="9" fill="#D9534F"/><text x="288" y="85">D</text>
+        <rect x="328" y="52" width="52" height="52" rx="9" fill="#D9534F"/><text x="354" y="85">D</text>
+        <rect x="394" y="52" width="52" height="52" rx="9" fill="#3FA65C"/><text x="420" y="85">N</text>
+      </g>
+      <text x="480" y="76" font-size="12.5" font-weight="600" fill="#4A5462">攻守平衡 · 主线通用</text>
+      <text x="480" y="95" font-size="11.5" font-weight="400" fill="#8A94A2">一键推荐的默认答案</text>
+
+      <!-- 龟壳队 T T D N N -->
+      <text x="20" y="164" fill="#25334A">龟壳队</text>
+      <g font-size="16" fill="#FFFFFF" text-anchor="middle" font-weight="700">
+        <rect x="130" y="134" width="52" height="52" rx="9" fill="#3B82C4"/><text x="156" y="167">T</text>
+        <rect x="196" y="134" width="52" height="52" rx="9" fill="#3B82C4"/><text x="222" y="167">T</text>
+        <rect x="262" y="134" width="52" height="52" rx="9" fill="#D9534F"/><text x="288" y="167">D</text>
+        <rect x="328" y="134" width="52" height="52" rx="9" fill="#3FA65C"/><text x="354" y="167">N</text>
+        <rect x="394" y="134" width="52" height="52" rx="9" fill="#3FA65C"/><text x="420" y="167">N</text>
+      </g>
+      <text x="480" y="158" font-size="12.5" font-weight="600" fill="#4A5462">双墙双奶 · 极限续航</text>
+      <text x="480" y="177" font-size="11.5" font-weight="400" fill="#8A94A2">硬扛高伤 BOSS，磨死对面</text>
+
+      <!-- 速攻队 D D D D D -->
+      <text x="20" y="246" fill="#25334A">速攻队</text>
+      <g font-size="16" fill="#FFFFFF" text-anchor="middle" font-weight="700">
+        <rect x="130" y="216" width="52" height="52" rx="9" fill="#D9534F"/><text x="156" y="249">D</text>
+        <rect x="196" y="216" width="52" height="52" rx="9" fill="#D9534F"/><text x="222" y="249">D</text>
+        <rect x="262" y="216" width="52" height="52" rx="9" fill="#D9534F"/><text x="288" y="249">D</text>
+        <rect x="328" y="216" width="52" height="52" rx="9" fill="#D9534F"/><text x="354" y="249">D</text>
+        <rect x="394" y="216" width="52" height="52" rx="9" fill="#D9534F"/><text x="420" y="249">D</text>
+      </g>
+      <text x="480" y="240" font-size="12.5" font-weight="600" fill="#4A5462">全员输出 · 抢先手清场</text>
+      <text x="480" y="259" font-size="11.5" font-weight="400" fill="#8A94A2">打无 T 脆皮怪队最快，但被高伤 BOSS 克</text>
+    </g>
+    <!-- 右侧注释 -->
+    <g>
+      <rect x="742" y="52" width="238" height="216" rx="10" fill="#EEF7FD" stroke="#BFE3F7"/>
+      <text x="861" y="86" font-size="13" fill="#007BB8" text-anchor="middle" font-weight="700">流派从两条规则里涌现</text>
+      <text x="861" y="116" font-size="11.5" fill="#4A5462" text-anchor="middle">攻击打对方最前位</text>
+      <text x="861" y="138" font-size="11.5" fill="#4A5462" text-anchor="middle">治疗奶己方血最低</text>
+      <text x="861" y="170" font-size="11.5" fill="#4A5462" text-anchor="middle">多 T = 前排更厚（耐久）</text>
+      <text x="861" y="192" font-size="11.5" fill="#4A5462" text-anchor="middle">多 N = 回血更多（续航）</text>
+      <text x="861" y="214" font-size="11.5" fill="#4A5462" text-anchor="middle">多 D = 出手更狠（速攻）</text>
+      <text x="861" y="246" font-size="11.5" fill="#8A94A2" text-anchor="middle">无克制表 · 纯属性涌现</text>
+    </g>
+  </svg>
+  </div>
+  <p class="fine">▲ 图 3-1 编成流派示意（自绘）。站位规则：同一行从左到右即战场从前到后。</p>
+
+  <table>
+    <tr><th style="width:18%">典型流派</th><th style="width:22%">构成</th><th>适合场景（关卡表可反向设计）</th></tr>
+    <tr><td><b>标准队</b></td><td>1T + 1N + 3DPS</td><td>攻守平衡，主线通用 —— 一键推荐的默认答案</td></tr>
+    <tr><td><b>龟壳队</b></td><td>2T + 2N + 1DPS</td><td>硬扛高伤 BOSS，靠续航磨死对面</td></tr>
+    <tr><td><b>速攻队</b></td><td>5 DPS</td><td>抢先手清掉对面脆皮前排，打无 T 的怪队最快</td></tr>
+  </table>
+  <p class="fine">编成自由 = 收集动机更立体：想解锁不同流派，就需要储备不同职能的英雄 —— 抽奖与碎片收集的目标从「更强」扩展为「更全」。</p>
+
+  <figure>
+    <img src="img/team_builder.jpg" alt="编队界面概念图">
+    <figcaption><b>图 3-2</b> 编队界面 · AI 概念示意 —— 上方 5 个上阵位（任意职业组合），下方英雄名册（职业徽记 + 战力），右下「一键最优」按钮：不想动脑的一键成队</figcaption>
+  </figure>
+
+  <h3>首发阵容（首入送整队，每职业都有后续收集目标）</h3>
+  <table>
+    <tr><th style="width:12%">职业</th><th style="width:34%">首入即送（基础五人队）</th><th>后续获取示例（玩出来 / 抽出来）</th></tr>
+    <tr><td><b>T</b></td><td>机甲工程猿（重甲机甲，P2 机甲体系联动）</td><td>堡垒银背猿 —— 章节首通解锁</td></tr>
+    <tr><td><b>N</b></td><td>秘能萨满猿（能量科技祭司）</td><td>丛林药师猿 —— 活跃任务碎片兑换</td></tr>
+    <tr><td><b>DPS</b></td><td>狂暴战猿 · 神射猎猿 · 爆破工兵猿</td><td>影刃刺猿 —— 爬塔里程碑；雷炮重猿 —— 本期抽奖限定</td></tr>
+  </table>
+  <p class="fine">注：首发池 9 名（示例命名，美需阶段定稿）；英雄差异只体现在职业行为与成长偏向（数值另定），不引入任何操作决策。每节日新增 1 名限定英雄，职业轮流补强 —— 每期都有明确的收集目标位。</p>
+
+  <figure>
+    <img src="img/hero_roster.jpg" alt="首发阵容概念图">
+    <figcaption><b>图 3-3</b> 首发九英雄阵容 · AI 概念示意 —— 按职能分组：坦克（盾徽）/ 治疗（十字徽）/ 输出（剑徽），每期新增 1 名限定英雄轮流补强</figcaption>
+  </figure>
+
+  <h3>获取：三条通道（结构定死，逐期只换英雄）</h3>
+  <table>
+    <tr><th style="width:20%">通道</th><th style="width:44%">获取方式</th><th>设计意图</th></tr>
+    <tr><td><b>① 首入即送</b></td>
+        <td>首次进入即送<b>基础五人队</b>（1T+1N+3DPS 每职业保底），战力足以通前段主线</td>
+        <td>零门槛转化保护 —— 挖孔 79.3% 零付费参与盘的入口逻辑</td></tr>
+    <tr><td><b>② 玩出来（确定性）</b></td>
+        <td>章节首通解锁第二名英雄；爬塔里程碑与节日活跃任务稳定产<b>英雄碎片</b>，攒够直接兑换</td>
+        <td>零氪与中小 R 的确定性奔头 —— 肝有明确回报，活跃被持续拉住</td></tr>
+    <tr><td><b>③ 抽出来（内嵌英雄抽奖）</b></td>
+        <td>抽奖币抽卡，<b>统一奖池 = 本期限定英雄 / 装备卡 / 卡牌碎片 / 强化材料 / 外显</b>；<b>N 抽保底必得本期限定英雄</b>（概率与保底公示）；抽不到英雄也有装备卡进账，重复卡自动转碎片 —— 双重零废抽</td>
+        <td>惊喜感 + 付费加速；限定英雄的稀缺窗口制造本期目标</td></tr>
+  </table>
+
+  <figure>
+    <img src="img/hero_gacha.jpg" alt="英雄抽奖概念图">
+    <figcaption><b>图 3-4</b> 内嵌抽奖（统一池：英雄卡 + 装备卡） · AI 概念示意 —— 抽奖币双来源（闯关/活跃掉落有封顶 + 礼包补充），保底进度条公示</figcaption>
+  </figure>
+
+  <h3>内嵌抽奖为什么成立（而不是又一个会衰减的纯抽 GACHA）</h3>
+  <ul>
+    <li><b>抽奖有语境：</b>抽出来的英雄马上上阵、进图鉴、加战力 ——「为了用而抽」和「为了抽而抽」的付费质量完全不同（§01 时长×付费阶梯的另一面）；</li>
+    <li><b>免费量守恒：</b>抽奖币在闯关与活跃中稳定掉落但<b>每日/每期封顶</b>（挖孔「免费供给设上限」原则），付费买的是加速与保底冲刺，不破坏获取公平；</li>
+    <li><b>程序近零新增：</b>抽奖 / 保底 / 概率公示直接复用 P2 现成 GACHA 组件（熟基建），策划只配奖池表。</li>
+  </ul>
+
+  <h3>等级：英雄的区分度与视觉成长</h3>
+  <table>
+    <tr><th style="width:18%">机制</th><th>设计</th></tr>
+    <tr><td><b>等级成长</b></td><td>喂养经验材料升级（闯关 / 挂机掉落 + 礼包补充）；等级是英雄强度主轴（曲线另定）</td></tr>
+    <tr><td><b>卡面进阶</b></td><td>等级到段位，卡面框体升阶：素框 → 铜 → 银 → 金 → 钻 —— <b>一眼看出这张卡被养到哪</b>；
+        这是日常层的收藏与炫耀（动态卡是付费层，两层互不冲突、互相铺垫）</td></tr>
+    <tr><td><b>突破</b></td><td>等级段位上限需<b>英雄碎片</b>突破 —— 碎片三来源：重复抽卡自动转化 / 活跃任务 / 定向礼包（§10 P7）</td></tr>
+    <tr><td><b>上阵与全局</b></td><td>上阵英雄吃全量战力；未上阵英雄按等级为全局提供图鉴战力加成 —— 收集与养成永不白费</td></tr>
+  </table>
+
+  <figure>
+    <img src="img/hero_levels.jpg" alt="等级框体进阶概念图">
+    <figcaption><b>图 3-5</b> 等级驱动卡面进阶 · AI 概念示意 —— 同一张英雄卡随等级段位换框：素框 → 铜 → 银 → 金 → 钻，一眼看出养成深度（图中英文稀有度字样为 AI 生成噪声，请忽略：实际语义是等级段位，与稀有度无关）</figcaption>
+  </figure>
+
+  <ul>
+    <li><b>轮换规则：</b>每节日新增 1 名节日主题英雄（本期限定获取，后续期次进常驻池返场）+ 老英雄节日皮肤；</li>
+    <li><b>英雄皮肤（外显）：</b>同一英雄的节日限定卡面变装，进外显图鉴，与 P2 现有节日包装体系同产线。</li>
+  </ul>
+</section>
+
+<!-- ══════════ 04 ══════════ -->
+<section id="s4">
+  <h2><span class="no">04</span>卡牌与装备：一套卡牌经济</h2>
+  <div class="h2sub">英雄卡与装备卡同框同规则 —— 统一抽奖 / 统一强化 / 统一碎片合成；活动概念收敛为「卡 + 碎片 + 材料」</div>
+
+  <figure class="half">
+    <img src="img/card_design.jpg" alt="英雄卡设计概念图">
+    <figcaption><b>图 4-1</b> 英雄卡 · AI 概念示意 —— 立绘占满卡面；角落宝石位承载战力相关属性（示意）</figcaption>
+  </figure>
+  <figure class="half">
+    <img src="img/hero_equip.jpg" alt="装备卡镶嵌概念图">
+    <figcaption><b>图 4-2</b> 装备卡镶嵌 · AI 概念示意 —— 英雄卡居中，装备卡环绕镶嵌成槽位：视觉上「一套卡」就是一个 build</figcaption>
+  </figure>
+
+  <h3>两类卡，一套规则</h3>
+  <table>
+    <tr><th style="width:12%">类型</th><th style="width:26%">作用</th><th style="width:24%">获取</th><th style="width:20%">强化</th><th>碎片</th></tr>
+    <tr><td><b>英雄卡</b></td><td>上阵作战（T / N / DPS 职能），等级驱动卡面框体进阶</td><td>首入即送 / 玩出来 / 统一抽奖</td><td>喂强化材料升级 → 属性 + 换框</td><td>重复转碎片 → 合成新英雄 / 突破段位</td></tr>
+    <tr><td><b>装备卡</b></td><td>镶嵌英雄卡槽位（倾向 4~6 槽）加属性 —— <b>五人上阵 = 养成面 ×5</b></td><td>关卡掉落（主渠道，深关掉好卡）/ 统一抽奖 / 碎片合成</td><td>同一套喂养交互 → 属性 + 卡面特效升阶</td><td>重复转碎片 → 合成 / 升阶</td></tr>
+  </table>
+
+  <h3>统一三机制（活动清晰的来源）</h3>
+  <div class="box blue">
+    ① <b>统一抽奖：</b>一个池同时产出英雄卡与装备卡 —— 英雄是稀有大奖、装备是常规产出，
+    <b>抽不到英雄也有装备卡进账（零废抽）</b>；N 抽保底本期限定英雄，概率与保底公示；<br>
+    ② <b>统一强化：</b>英雄卡与装备卡用同一套喂养交互、同一类强化材料（配比数值另定）——
+    玩家学一次操作，全程通用；<br>
+    ③ <b>统一碎片合成：</b>任何重复卡自动转为该卡碎片；碎片攒够可<b>合成该卡</b>（没抽到也能肝出来的确定性闭环），
+    已拥有的卡碎片用于<b>突破 / 升阶</b> —— 皇室战争、咸鱼之王验证过的经典卡牌经济。
+  </div>
+  <p class="fine">概念收敛：活动内玩家要理解的资源只有三种 ——「卡（英雄/装备）+ 碎片 + 强化材料」，
+  外加行动力与抽奖币两个入口货币；对比传统「英雄+装备+材料+图纸+代币…」的多概念活动，认知负担减半，活动更清晰。</p>
+
+  <figure>
+    <img src="img/card_shards.jpg" alt="碎片合成概念图">
+    <figcaption><b>图 4-3</b> 碎片合成 · AI 概念示意 —— 重复卡分解为碎片，碎片攒满合成新卡 / 突破已有卡</figcaption>
+  </figure>
+
+  <h3>其余规格</h3>
+  <table>
+    <tr><th style="width:18%">维度</th><th>设计</th></tr>
+    <tr><td><b>稀有度</b></td><td>普通 / 稀有 / 史诗 / <span style="background:#FBF3E2;color:#C8961E;border-radius:20px;padding:1px 12px;font-size:12px;font-weight:600">传说</span> 四档（英雄与装备通用）；高稀有度 = 更高基础属性 + 更华丽卡面，是掉落与抽奖池的追求锚点</td></tr>
+    <tr><td><b>换装零决策</b></td><td>「一键穿戴最优」：系统自动镶嵌战力最高的装备卡组合 —— 可以完全不做选择；想抠细节的玩家手动替换（可选，不必要）</td></tr>
+    <tr><td><b>美术形态</b></td><td>英雄卡 = 竖版全幅插画 + 等级框体；装备卡 = 统一卡框 + 道具主体插画 —— 全部走 AI 生图管线批产（60 张/批）+ Top 卡精修，一个节日卡池数日出齐</td></tr>
+  </table>
+</section>
+
+<!-- ══════════ 05 ══════════ -->
+<section id="s5">
+  <h2><span class="no">05</span>对战：5v5 站桩互殴，零决策</h2>
+  <div class="h2sub">经典站桩自动战 —— 战斗不是玩法，是「战力的验收仪式」；开发简单 · 理解简单 · 数值简单</div>
+
+  <figure>
+    <img src="img/battle_squad.jpg" alt="5v5 对战概念图">
+    <figcaption><b>图 5-1</b> 5v5 站桩对战 · AI 概念示意 —— 图为标准编成（1T+1N+3DPS）；实际 5 个上阵位职业组合完全自由，站位系统自动排序</figcaption>
+  </figure>
+
+  <h3>战斗规则说明书（可实现级 —— 数值系数另出，规则一次定死）</h3>
+  <table>
+    <tr><th style="width:16%">规则项</th><th>定义</th></tr>
+    <tr><td><b>编成</b></td><td>玩家自由选 5 名英雄上阵（职业组合不限）；敌方编成由关卡表配置（普通关 3~5 只、精英满编、BOSS = BOSS + 护卫）</td></tr>
+    <tr><td><b>站位</b></td><td>双方各一列：按 T → DPS → N 自动排序，同职能按战力降序 —— 无手动站位</td></tr>
+    <tr><td><b>行动顺序</b></td><td>双方交替、各自从前往后轮流出手（我 1 → 敌 1 → 我 2 → 敌 2 …），阵亡位跳过 —— 完全确定，无速度属性、无随机</td></tr>
+    <tr><td><b>目标规则（全部两条）</b></td><td>攻击类（T / DPS / 怪）：打对方<b>存活的最前位</b>；治疗类（N）：奶己方<b>血量比例最低</b>的存活单位</td></tr>
+    <tr><td><b>结算公式形态</b></td><td>伤害 = 攻击 × 技能系数 − 防御（保底最低伤害）；治疗 = 治疗力 × 系数；<b>无暴击 / 无闪避 / 无属性克制</b>（首期）</td></tr>
+    <tr><td><b>死亡与补位</b></td><td>血量 ≤ 0 置灰退场，后位自动前移补位</td></tr>
+    <tr><td><b>胜负判定</b></td><td>一方全灭即负；达回合上限（防拖局）按双方剩余血量百分比判定</td></tr>
+    <tr><td><b>战力公式形态</b></td><td>单位战力 = 攻击 / 生命 / 防御 / 治疗力的线性加权；队伍战力 = 5 单位之和 + 图鉴全局加成 —— 战前对比展示的就是这个数</td></tr>
+    <tr><td><b>碾压 / 失败</b></td><td>战力差超阈值 → 快进一击全灭 +「碾压」特写；失败 → 显示战力差 + 三个变强入口（换人 / 强化 / 图鉴）</td></tr>
+  </table>
+
+  <div class="box blue">
+    <b>为什么这套对战「经典」且三处简单：</b><br>
+    ① <b>开发简单：</b>一个顺序行动循环 + 两条目标规则（攻击打最前 / 治疗奶最低）= 全部战斗逻辑；无寻路、无技能树、无行为树，敌我共用同一套结算与演出 —— 程序量是「带演出的数值比大小」；<br>
+    ② <b>理解简单：</b>「T 扛、奶奶、DPS 打」—— 三句话教学完毕；编队自由但有一键推荐，想动脑有空间、不想动零门槛；<br>
+    ③ <b>数值简单：</b>只有攻击 / 生命 / 防御 / 治疗力四条属性 + 线性公式；流派差异（耐久 / 续航 / 速攻）从属性自然涌现，<b>不需要克制表</b> —— 平衡只调成长曲线，蒙卡跑通过率定档。
+  </div>
+
+  <div class="box">
+    <p style="margin-bottom:0"><b>PVE 优先、PVP 零成本：</b>首期纯 PVE（敌方编成全配置表驱动）。
+    二期若加 PVP，就是<b>战力擂台</b>：抓取对方五人队数据打一场自动互殴回放 ——
+    依然零决策、零实时同步、零平衡压力（比的就是谁养得好，SLG 玩家最服这个）。</p>
+  </div>
+</section>
+
+<!-- ══════════ 06 ══════════ -->
+<section id="s6">
+  <h2><span class="no">06</span>关卡结构：章节 · 爬塔 · 挂机</h2>
+  <div class="h2sub">复刻挖孔的坑深结构：前段免费养参与，后段无上限出营收 —— 每一关都是一次战力验收</div>
+
+  <figure>
+    <img src="img/level_map.jpg" alt="关卡地图概念图">
+    <figcaption><b>图 6-1</b> 关卡地图 · AI 概念示意 —— 主线沿废土巨塔攀升、每个节点一只怪物卡，塔顶通向无尽爬塔（循环关）</figcaption>
+  </figure>
+
+  <table>
+    <tr><th style="width:18%">层级</th><th>内容</th><th style="width:30%">对应挖孔验证结论</th></tr>
+    <tr><td><b>主线章节</b></td><td>每节日 1 章：普通关 ×N + 精英关 + 章末 BOSS；战力门槛前缓后陡，初始英雄可通前段</td><td>前段免费养参与（挖孔通关 13,511 人的参与盘逻辑）</td></tr>
+    <tr><td><b>无尽爬塔</b></td><td>通关主线解锁；层数无上限、怪物战力递增、每层领奖、里程碑大奖；层数进榜</td><td>「循环关持续领奖」—— 挖孔循环关 149 人贡献 58% 营收的坑深机制平移</td></tr>
+    <tr><td><b>BOSS</b></td><td>高战力门槛 + 更好掉落 + 华丽怪物卡立绘；<b>无机制解题</b>，打不过=战力不够，回去养</td><td>付费点位铺在推进路径上（卡在 BOSS 前是最强的付费触发场景）</td></tr>
+    <tr><td><b>挂机营地</b></td><td>离线积累强化 / 经验材料与抽奖币，<b>每日上限封顶</b>，回来一键领取</td><td>「挂机留存」（挖孔 87% 使用率）+「免费供给设上限」（挖孔换铲箱封顶的边界设计）</td></tr>
+    <tr><td><b>行动力</b></td><td>闯关消耗行动力，免费恢复有节奏上限；行动力不足 = 今日免费额度用完的自然停点</td><td>免费与付费的边界钩子（挖孔 50 关免费边界的结构复刻），付费补充见 §10</td></tr>
+  </table>
+
+  <h3>奖励双轨：每一关都同时喂子玩法与主游戏</h3>
+  <div class="box blue">
+    <b>每次过关的掉落 = 两条轨并行：</b><br>
+    ① <b>玩法道具轨</b>：装备 / 强化与经验材料 / 抽奖币 / 英雄碎片 —— 推动子玩法自身的养成循环；<br>
+    ② <b>SLG 道具轨</b>：资源 / 加速 / 招募等 P2 主游戏通用道具（具体品类与数量走掉落表配置）——
+    让玩家在子玩法里花的每一分钟都对主玩法「有用」。<br><br>
+    <b>先例：</b>挖孔的 13,511 人参与盘正是建立在「掉落对主玩法有用」之上（挖孔掉落即 SLG 道具、终点大奖是主城皮肤）——
+    本作把这条原则<b>制度化</b>：子玩法是节日活动，更是 P2 主成长的一条补给线。<br>
+    <span class="fine">经济安全边界：SLG 道具轨产出按每日 / 每期封顶（挖孔「免费供给设上限」同款原则），总量在数值框架中与主游戏经济统一核定。</span>
+  </div>
+</section>
+
+<!-- ══════════ 07 ══════════ -->
+<section id="s7">
+  <h2><span class="no">07</span>图鉴与节日外显（收集加战力）</h2>
+  <div class="h2sub">收集不只是情怀 —— 图鉴点亮直接加全局战力，中小 R 的收集有了确定性的数值回报</div>
+
+  <figure class="half">
+    <img src="img/codex_album.jpg" alt="图鉴概念图">
+    <figcaption><b>图 7-1</b> 收集图鉴 · AI 概念示意 —— 缺口做灰色剪影 + 收集进度条 + 里程碑宝箱；右页节日外显</figcaption>
+  </figure>
+  <figure class="half">
+    <img src="img/festival_backs.jpg" alt="节日卡背概念图">
+    <figcaption><b>图 7-2</b> 节日主题卡背 · AI 概念示意 —— 深海 / 登月 / 拓荒 / 圣诞，卡背是最轻量的节日外显位</figcaption>
+  </figure>
+
+  <ul>
+    <li><b>三本图鉴：</b>英雄图鉴（含等级/突破徽记）/ 装备图鉴（按节日分册）/ 外显图鉴（卡背 · 卡面皮肤 · 头像框 · 表情联动）——全卡牌体系下，每一张卡都是收藏品；</li>
+    <li><b>收集加战力：</b>英雄/装备图鉴每点亮、养成到位若干张 → 全局战力永久加成；集齐节点（25 / 50 / 80 / 100%）发大奖，
+        终点奖励为本册限定外显 —— <b>缺口可视化</b>（灰色剪影 + 「距下一档还差 N 张」）是收集付费的核心触发器；</li>
+    <li><b>外显双通道：</b>节日外显从「货架直售」升级为「玩出来 + 买出来」——获得有过程、稀缺有叙事；
+        P2 现有节日外显产线（皮肤/头像框/表情）的产物全部可入册复用；</li>
+    <li><b>与挖孔图鉴断崖的衔接：</b>挖孔数据证明图鉴后段追求属于鲸鱼（25→35 种处付费中位数 $2.86 → $1,058）——
+        本作图鉴分册 + 节点化：中小 R 每册前段有确定性奖励与战力回报，鲸鱼在「全收集 + 动态卡」处有无上限追求。</li>
+  </ul>
+</section>
+
+<!-- ══════════ 08 ══════════ -->
+<section id="s8">
+  <h2><span class="no">08</span>动态卡体系（付费第二曲线）</h2>
+  <div class="h2sub">静态卡人人免费玩，动态卡是身份与收藏 —— 已被炉石黄金卡 / Marvel Snap 变体卡验证的成熟形态</div>
+
+  <figure>
+    <img src="img/card_tiers.jpg" alt="卡面三档概念图">
+    <figcaption><b>图 8-1</b> 同一张英雄卡的三档卡面 · AI 概念示意 —— 静态（免费获取）→ 动态（付费直售）→ 签名典藏（限定直售/活动大奖）</figcaption>
+  </figure>
+
+  <table>
+    <tr><th style="width:16%">档位</th><th style="width:28%">形态</th><th style="width:26%">获取</th><th>制作成本</th></tr>
+    <tr><td><b>静态卡</b></td><td>单张插画 + 统一框体</td><td>免费全渠道（闯关/挂机/图鉴/抽奖）</td><td>AI 批产 + 精修</td></tr>
+    <tr><td><b>动态卡</b></td><td>插画动效化：粒子 / 视差 / 局部循环动画，金色框体</td><td><span class="rd">直售</span>（节日限定上架）+ 累充/BP 顶级奖励点缀</td><td>AI 图生视频/动效管线已具备；单卡小时级，可按人气排产</td></tr>
+    <tr><td><b>签名典藏卡</b></td><td>出框全幅插画 + 专属特效 + 序列编号</td><td>限量直售 / 爬塔榜前列 / 全图鉴大奖</td><td>少量高投入，每节日 1~2 张，制造稀缺锚点</td></tr>
+  </table>
+
+  <div class="box blue">
+    <b>为什么相信动态卡卖得动：</b>行业先例 —— 炉石黄金卡/签名卡、Marvel Snap 变体卡经济（变体即营收主体）；
+    自家证据 —— P2 头像框礼包买家渗透 <b>96.3%</b>。动态卡本质是「把外显消费接到玩家最常凝视的资产（自己的主战英雄卡）上」，
+    凝视时长 = 付费意愿。<b>零决策设计反而放大这一点：战前对峙画面就是英雄卡特写位，动态卡每场战斗都在被展示。</b>
+  </div>
+  <p class="fine">注：动态卡为纯外显（不带数值优势）——付费战力走装备/材料线，付费外显走动态卡线，两条曲线互不污染。</p>
+</section>
+
+<!-- ══════════ 09 ══════════ -->
+<section id="s9">
+  <h2><span class="no">09</span>排行榜与荣誉</h2>
+  <div class="h2sub">荣誉不直接卖钱 —— 卖的是冲榜过程中的行动力消耗与装备养成</div>
+  <table>
+    <tr><th style="width:20%">榜单</th><th>规则</th><th style="width:32%">奖励（复用 P2 外显体系）</th></tr>
+    <tr><td><b>爬塔层数榜</b></td><td>无尽爬塔最高层数排名（同层比用时）</td><td>前列：<b>老 GACHA 投放的节日外显整体迁来</b> —— 主城皮肤 / 套装 / 铭牌 + 限定签名卡（复用挖孔排行榜发奖体系）</td></tr>
+    <tr><td><b>战力榜</b></td><td>活动内总战力排名 —— SLG 玩家最熟悉的荣誉语言</td><td>战力称号 + 限定卡背 + 头像框</td></tr>
+    <tr><td><b>图鉴收集榜</b></td><td>本期图鉴点亮进度排名</td><td>限定卡背 + 头像框（收集家身份外显）</td></tr>
+    <tr><td><b>战力擂台（二期）</b></td><td>异步自动互殴回放，纯战力比拼</td><td>赛季外显 + 擂台专属动态卡边框</td></tr>
+  </table>
+  <p><b>设计立场：</b>榜单奖励全部为外显与荣誉，不投数值 —— 冲榜的付费表达发生在「行动力消耗 + 装备强化」上
+  （对应挖孔「榜分与消耗强挂钩」的验证结论），荣誉本身保持不可购买的稀缺性。</p>
+
+  <h3>外显投放迁移：老 GACHA 的奖池，搬进「有过程」的获取位</h3>
+  <table>
+    <tr><th style="width:30%">老 GACHA 时代的外显投放</th><th style="width:32%">在本作的新家</th><th>获取语境</th></tr>
+    <tr><td>主城皮肤 / 套装（抽奖大奖）</td><td><b>爬塔排行榜前列 + 赛季结算</b></td><td>荣誉 —— 打上去的，穿出去有故事</td></tr>
+    <tr><td>头像框</td><td>图鉴集齐节点 + 收集榜</td><td>收集 —— 集出来的</td></tr>
+    <tr><td>行军特效 / 表情</td><td>节日 BP 轨道 + 爬塔里程碑</td><td>长线 —— 肝出来的</td></tr>
+    <tr><td>（新增外显位）卡背 / 卡面皮肤 / 动态卡</td><td>图鉴 + 限时直售</td><td>收藏与身份 —— 付费第二曲线</td></tr>
+  </table>
+  <p class="fine">这就是「事实二」的解药落地：同一批外显资产，从『纯抽奖池』迁进榜单 / 图鉴 / BP 三个有过程的位置 ——
+  获得有故事、稀缺有叙事；抽奖位则由内嵌英雄抽奖（§03，有语境的抽）接棒。</p>
+</section>
+
+<!-- ══════════ 10 ══════════ -->
+<section id="s10">
+  <h2><span class="no">10</span>付费点设计（定版 · 逐期复用不改）</h2>
+  <div class="h2sub">按玩家旅程铺设 —— 每一段推进都踩到付费点（挖孔经验 ②），但入口零付费门槛（转化保护）</div>
+
+  <div class="box warn">
+    <b>定版声明：</b>本章是全案付费点的<b>唯一权威定义</b>。结构定死、逐期不改 ——
+    8 个付费点 + 3 条红线 + 3 个联动位，每一期原样复用；换期只更换「填充内容」
+    （本期英雄 / 装备 / 外显 / 礼包内容物），<b>不新增、不删减、不挪位</b>。
+    结构稳定 = 玩家学习成本一次付清、逐期数据可比、换档只是换表（执行见 §11 换档清单第 4 步）。
+  </div>
+
+  <div class="svgwrap">
+  <svg viewBox="0 0 1000 300" width="100%" font-family="PingFang SC, Microsoft YaHei">
+    <defs>
+      <marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+        <path d="M0,0 L10,5 L0,10 z" fill="#8A94A2"/>
+      </marker>
+    </defs>
+    <text x="20" y="28" font-size="14" fill="#25334A" font-weight="700">玩家旅程</text>
+    <g font-size="13.5" font-weight="700" text-anchor="middle">
+      <rect x="20"  y="44" width="176" height="58" rx="9" fill="#F7F9FC" stroke="#E7ECF2"/>
+      <text x="108" y="68" fill="#25334A">上手期</text>
+      <text x="108" y="88" font-size="11.5" font-weight="400" fill="#4A5462">领英雄卡 · 前段平推</text>
+
+      <rect x="216" y="44" width="176" height="58" rx="9" fill="#F7F9FC" stroke="#E7ECF2"/>
+      <text x="304" y="68" fill="#25334A">推进期</text>
+      <text x="304" y="88" font-size="11.5" font-weight="400" fill="#4A5462">战力门槛 · 行动力见底</text>
+
+      <rect x="412" y="44" width="176" height="58" rx="9" fill="#F7F9FC" stroke="#E7ECF2"/>
+      <text x="500" y="68" fill="#25334A">收集期</text>
+      <text x="500" y="88" font-size="11.5" font-weight="400" fill="#4A5462">图鉴缺口显性化</text>
+
+      <rect x="608" y="44" width="176" height="58" rx="9" fill="#F7F9FC" stroke="#E7ECF2"/>
+      <text x="696" y="68" fill="#25334A">深坑期</text>
+      <text x="696" y="88" font-size="11.5" font-weight="400" fill="#4A5462">无尽爬塔 · 强化曲线</text>
+
+      <rect x="804" y="44" width="176" height="58" rx="9" fill="#F7F9FC" stroke="#E7ECF2"/>
+      <text x="892" y="68" fill="#25334A">荣誉期</text>
+      <text x="892" y="88" font-size="11.5" font-weight="400" fill="#4A5462">冲榜 · 全收集 · 秀</text>
+    </g>
+    <g stroke="#8A94A2" stroke-width="2" fill="none">
+      <line x1="196" y1="73" x2="212" y2="73" marker-end="url(#ar2)"/>
+      <line x1="392" y1="73" x2="408" y2="73" marker-end="url(#ar2)"/>
+      <line x1="588" y1="73" x2="604" y2="73" marker-end="url(#ar2)"/>
+      <line x1="784" y1="73" x2="800" y2="73" marker-end="url(#ar2)"/>
+    </g>
+    <text x="20" y="150" font-size="14" fill="#E03C31" font-weight="700">付费点位</text>
+    <g font-size="12" text-anchor="middle" font-weight="600">
+      <rect x="24"  y="168" width="168" height="30" rx="15" fill="#EFF6EE"/>
+      <text x="108" y="188" fill="#4B7B4E">零付费（转化保护）</text>
+
+      <rect x="220" y="168" width="168" height="30" rx="15" fill="#FDF0EE"/>
+      <text x="304" y="188" fill="#E03C31">P1 行动力包 · P3 强化材料包</text>
+
+      <rect x="416" y="168" width="168" height="30" rx="15" fill="#FDF0EE"/>
+      <text x="500" y="188" fill="#E03C31">P2 抽奖币包 · P7 碎片补齐包</text>
+
+      <rect x="612" y="168" width="168" height="30" rx="15" fill="#FDF0EE"/>
+      <text x="696" y="188" fill="#E03C31">P4 成就阶梯包 · P5 动态卡</text>
+
+      <rect x="808" y="168" width="168" height="30" rx="15" fill="#FDF0EE"/>
+      <text x="892" y="188" fill="#E03C31">P6 节日 BP · 签名典藏卡</text>
+    </g>
+    <g stroke="#E03C31" stroke-width="1.3" stroke-dasharray="4 3">
+      <line x1="304" y1="102" x2="304" y2="168"/>
+      <line x1="500" y1="102" x2="500" y2="168"/>
+      <line x1="696" y1="102" x2="696" y2="168"/>
+      <line x1="892" y1="102" x2="892" y2="168"/>
+    </g>
+    <rect x="24" y="228" width="952" height="46" rx="9" fill="#0C1A2B"/>
+    <text x="500" y="257" font-size="13.5" fill="#FFFFFF" text-anchor="middle" font-weight="600">
+      联动位：抽奖币进节日累充奖励池 · 限时抢购错峰特价抽奖币包 · 省省卡覆盖行动力月卡位 —— 与 P2 既有付费体系互相导流</text>
+  </svg>
+  </div>
+  <p class="fine">▲ 图 10-1 玩家旅程 × 付费点位（自绘示意）。上手期刻意零付费：挖孔 79.3% 零付费参与者证明大参与盘是付费深度的土壤。</p>
+
+  <h3>付费点明细</h3>
+  <table>
+    <tr><th style="width:15%">付费点</th><th style="width:26%">玩家动机（什么时候想买）</th><th style="width:33%">包装形态（P2 落地）</th><th>已验证先例</th></tr>
+    <tr><td><b>P1 行动力补充</b></td><td>今日免费行动力用完、正在兴头上</td><td>常规节日礼包多档位（小额高频），走 2013 节日礼包体系｜<span class="fine">每期只换：内容物与图标主题</span></td><td>挖孔锄头/换铲箱 CD 档逻辑</td></tr>
+    <tr><td><b>P2 抽奖币礼包</b></td><td>想要本期限定英雄 / 差保底几抽</td><td>抽奖币多档礼包 + 节日大包（概率与保底公示）｜<span class="fine">每期只换：限定英雄与奖池</span></td><td>P2 各类 GACHA 币直售形态</td></tr>
+    <tr><td><b>P3 强化材料包</b></td><td>卡在战力门槛 / BOSS 前差一口气</td><td>强化 + 经验材料组合包，档位随章节推进上探 —— <b>本作 ARPPU 主线（五人小队 = 养成面 ×5）</b>｜<span class="fine">每期只换：内容物</span></td><td>挖孔「付费点位铺在推进路径」→ ARPPU +151%</td></tr>
+    <tr><td><b>P4 成就阶梯包</b></td><td>爬塔层数里程碑达成时的奖励感窗口</td><td>成就解锁式礼包，阶梯加密铺设（一次性限购）｜<span class="fine">每期只换：奖励内容，阶梯结构不动</span></td><td>挖孔成就里程碑加密至 15 档的验证</td></tr>
+    <tr><td><b>P5 动态卡直售</b></td><td>主战英雄想要「金色版」、收藏与炫耀</td><td>节日限定上架、明码直售；纯外显零数值｜<span class="fine">每期只换：上架动态卡清单</span></td><td>炉石黄金卡 / Snap 变体卡；自家头像框渗透 96.3%</td></tr>
+    <tr><td><b>P6 节日 BP</b></td><td>确定性的长线回报偏好</td><td>通行证：免费轨 + 付费轨，BP 代币产抽奖币/材料｜<span class="fine">每期只换：主题皮与轨道内容</span></td><td>P2 挂机 BP 壳（21127531）成熟先例</td></tr>
+    <tr><td><b>P7 图鉴冲刺包</b></td><td>图鉴集齐节点差最后几张（且差的是战力）</td><td>卡牌碎片定向包（英雄/装备）/ 外显补齐包，节日末段限时上架（闭档冲刺窗口）｜<span class="fine">每期只换：定向内容</span></td><td>挖孔 D7 末日反弹 +109% 的闭档窗口验证</td></tr>
+    <tr><td><b>P8 签名典藏卡</b></td><td>鲸鱼级收藏与身份表达</td><td>序列编号限量直售 + 全图鉴/榜单大奖并行｜<span class="fine">每期只换：本期签名卡 1~2 张</span></td><td>Snap 高档变体经济；挖孔循环关鲸鱼人均 $1,522 的深度证明</td></tr>
+  </table>
+
+  <div class="box warn">
+    <b>付费设计三条红线：</b>
+    ① 所有英雄与装备可免费获取（「玩出来」通道恒在）—— 付费加速，不付费也能玩全内容；
+    ② 动态卡 / 签名卡纯外显，零数值 —— 战力付费只走装备/材料线，两条曲线不互相污染；
+    ③ 上手期零付费点 —— 大参与盘（挖孔 13,511 通关 / 79.3% 零付费）是付费深度的土壤，先养盘再收割。
+  </div>
+</section>
+
+<!-- ══════════ 11 ══════════ -->
+<section id="s11">
+  <h2><span class="no">11</span>每期换档：轮换架构与执行清单</h2>
+  <div class="h2sub">一次开发、全节日复用 —— 新开一期要做什么，一张清单说清（结构不动，只换内容）</div>
+  <table>
+    <tr><th style="width:24%">每节日更换（策划配置层）</th><th style="width:24%">永久复用（程序框架层）</th><th>配置落地（沿用 P2 活动表体系）</th></tr>
+    <tr>
+      <td>
+        · 节日新英雄 + 英雄皮肤<br>
+        · 装备卡池与材料掉落<br>
+        · 英雄抽奖池（限定英雄 + 权重 + 保底）<br>
+        · 章节关卡 + BOSS 主题皮<br>
+        · 外显套装：卡背/卡面/头像框<br>
+        · 节日 BP 轨道与大奖
+      </td>
+      <td>
+        · 5v5 站桩战斗与演出（两条目标规则）<br>
+        · 关卡/爬塔/挂机框架<br>
+        · 卡牌强化与碎片合成系统<br>
+        · 内嵌抽奖机（GACHA 组件复用）<br>
+        · 图鉴与收集加成框架<br>
+        · 排行榜与结算<br>
+        · <b>§10 付费点结构（定死不改）</b>
+      </td>
+      <td>
+        · 活动壳：2112 主表 + 2111 调度（现行体系）<br>
+        · 新增表：英雄卡表 / 装备卡表 / 关卡表 / 掉落表 / 抽奖池表 / 图鉴表（全表驱动，换档 = 换表）<br>
+        · 付费：2013 礼包 + 2135 + BP + 累充联动（全部现成管线）<br>
+        · 换档 SOP 与自检：复用挖孔换档 + 上线前 9 检查点体系
+      </td>
+    </tr>
+  </table>
+  <h3>每期换档执行清单（新开一期 = 以下 8 步）</h3>
+  <table>
+    <tr><th style="width:6%">步骤</th><th style="width:20%">事项</th><th style="width:44%">要做什么</th><th>产线与工具</th></tr>
+    <tr><td><b>1</b></td><td>主题包装与美需</td><td>定本期新英雄设定与皮肤、关卡/BOSS 主题、外显套装方向及投放位（榜单/图鉴/BP 对号入座）</td><td>节日美需产线（历年范式知识库）</td></tr>
+    <tr><td><b>2</b></td><td>美术批产</td><td>新英雄卡面 + 皮肤卡面、装备/材料图标、外显（卡背/头像框/装饰）、BOSS 立绘</td><td>AI 生图管线批产（60 张/批）+ Top 精修</td></tr>
+    <tr><td><b>3</b></td><td>内容配表</td><td>英雄表（新英雄+返场池）/ 掉落表（玩法道具轨 + SLG 道具轨双配置）/ 关卡与敌方编成 / 爬塔曲线 / 抽奖池（奖池+权重+保底）/ 图鉴册 / BP 轨道</td><td>全表驱动，参考上期表 patch（挖孔换档同款流程）</td></tr>
+    <tr><td><b>4</b></td><td>付费换装</td><td>对照 §10 逐项换「填充内容」：8 付费点礼包内容物（2013/2135）、动态卡上架清单、BP、累充/限抢联动位 —— <b>结构一律不动</b></td><td>§10 定版表 + 现成礼包配置管线</td></tr>
+    <tr><td><b>5</b></td><td>活动壳与调度</td><td>2112 活动行 + 2111 calendar 排期</td><td>现行活动体系</td></tr>
+    <tr><td><b>6</b></td><td>本地化</td><td>英雄名 / 装备名 / 活动文案 18 语</td><td>翻译自动扩散管线</td></tr>
+    <tr><td><b>7</b></td><td>上线自检</td><td>配置检查点全量核查 + QA-vs-分支 diff + Unity 客户端链路实测</td><td>自检清单 + AI 直连 Unity 实测（宴会做菜先例）</td></tr>
+    <tr><td><b>8</b></td><td>上线与复盘</td><td>日报监控；收官回归（参与 / <b>时长</b> / 坑深 / 图鉴 / 付费结构五口径）</td><td>回归管线（挖孔口径 + 本案新增时长口径）</td></tr>
+  </table>
+  <p>换档体量预估为「挖孔级」：第 1~2 步是创意工作，第 3~8 步已全部工具化 —— 正是本人 AI 工作流（配置 skill + 生图管线 + 自检清单 + 回归管线）跑熟的那条链路。</p>
+</section>
+
+<!-- ══════════ 12 ══════════ -->
+<section id="s12">
+  <h2><span class="no">12</span>开发范围与里程碑</h2>
+  <table>
+    <tr><th style="width:14%">角色</th><th>范围（首期）</th><th style="width:32%">明确不做（首期）</th></tr>
+    <tr><td><b>程序</b></td><td>5v5 站桩战斗（顺序行动循环 + 两条目标规则）与演出、自由编队 UI、关卡/爬塔/挂机框架、卡牌强化与碎片合成、装备槽、图鉴系统、内嵌抽奖（复用现有 GACHA 组件，近零新增）</td><td>卡牌规则引擎、实时 PVP、战斗动画系统（互殴演出用卡牌位移+飘字通用方案）</td></tr>
+    <tr><td><b>美术</b></td><td>UI 框架一套、英雄卡面 + 装备卡面插画（AI 批产 + Top 精修，统一框体程序拼装）、BOSS 立绘、节日外显套装</td><td>骨骼动画、技能特效序列帧</td></tr>
+    <tr><td><b>策划（本人）</b></td><td>规则细案与数值框架、全部配置表、卡面美需与 AI 批产、HTML 可玩原型、上线回归</td><td>——</td></tr>
+  </table>
+  <table>
+    <tr><th style="width:18%">节点</th><th>交付</th></tr>
+    <tr><td><b>2026 Q3</b></td><td>立项评审通过；<b>HTML 可玩原型</b>（互殴演出 + 装备强化循环可上手体验）；AI 卡面批产验证（首批 60 张）；数值框架单独出</td></tr>
+    <tr><td><b>2026.10</b></td><td>开发跟进；首期英雄 / 装备卡池 / 关卡 / 外显内容全量配置完成；音效与本地化走现有自动化管线</td></tr>
+    <tr><td><b>2026.11-12</b></td><td><span class="rd">首期压节日档上线</span>；数据回归（沿用挖孔回归口径：参与/坑深/图鉴/付费结构）；快速调优后沉淀为全节日轮换资产</td></tr>
+  </table>
+</section>
+
+<!-- ══════════ 13 ══════════ -->
+<section id="s13">
+  <h2><span class="no">13</span>风险与对策</h2>
+  <table>
+    <tr><th style="width:26%">风险</th><th>对策</th></tr>
+    <tr><td><b>玩法太轻、易腻</b></td><td>节日短周期（7~14 天）天然匹配轻玩法 —— 玩的是「这期收不收得齐、爬多高」，不是玩法新鲜感；收集/爬塔/外显三条目标线轮着给钩子；每节日新英雄新卡池自带新鲜感</td></tr>
+    <tr><td><b>零决策被评「没深度」</b></td><td>这是定位不是缺陷：对标咸鱼之王 / AFK 式「卡牌小队 + 数值养成」的成熟品类；战斗零操作、编队自由 + 一键推荐（决策可选不强迫）；深度在编成流派、养成规划与收集执念，不在操作 —— 与 SLG 主玩法用户画像同构（挖孔 79.3% 零付费重度参与者就是这批人）</td></tr>
+    <tr><td><b>养成曲线数值风险</b></td><td>战力/掉落/强化曲线用蒙卡模拟工具（挖孔模拟器同款方法论）批量跑推进节奏定档；数值框架单独评审</td></tr>
+    <tr><td><b>美术量超预期</b></td><td>卡面 AI 批产已实测（60 张/批）；框体程序拼装避免逐卡排版；动态卡按人气排产（先上主战英雄）</td></tr>
+    <tr><td><b>与现有 GACHA 收入互食</b></td><td>本案定位就是「替换衰减坑位」而非叠加：排期上错峰接替表现最弱的纯抽位，用回归数据决定替换节奏</td></tr>
+    <tr><td><b>程序排期竞争</b></td><td>零规则引擎 / 零动画 / 零实时同步 / 全表驱动 —— 程序量已压到「带演出的数值比大小」级别；一次开发多年复用，ROI 论证见 §01</td></tr>
+  </table>
+</section>
+
+<!-- ══════════ 14 ══════════ -->
+<section id="s14">
+  <h2><span class="no">14</span>附：挖孔四要素对照表</h2>
+  <div class="h2sub">挖孔 $394,510 的机制归因 → 在本作中的落位（答辩/评审用速查）</div>
+  <table>
+    <tr><th style="width:24%">挖孔验证要素</th><th style="width:38%">本作落位</th><th>强化点</th></tr>
+    <tr><td><b>图鉴收集</b><br><span class="fine">71.9 万件宝物 / 断崖处付费中位数 $2.86→$1,058</span></td>
+        <td>英雄 / 装备 / 外显三本图鉴（分册 + 节点奖励 + <b>收集加战力</b>）</td>
+        <td>收集从情怀升级为<b>战力回报</b>；缺口可视化</td></tr>
+    <tr><td><b>排行榜荣誉</b><br><span class="fine">前 100 名覆盖 44% 营收</span></td>
+        <td>爬塔层数榜 / 战力榜 / 图鉴榜 / 战力擂台（二期）</td>
+        <td>荣誉纯外显不可购买；冲榜消耗走行动力与强化</td></tr>
+    <tr><td><b>循环关持续领奖</b><br><span class="fine">循环关 149 人 = 58% 营收、人均 $1,522</span></td>
+        <td>无尽爬塔：层数无上限、每层领奖、里程碑大奖</td>
+        <td>装备强化让「再爬一层」永远有变强路径可买</td></tr>
+    <tr><td><b>挂机留存</b><br><span class="fine">87% 参与者使用、跨天回访</span></td>
+        <td>挂机营地产强化材料/抽奖币，每日封顶</td>
+        <td>封顶设计保「免费供给设上限」的付费边界</td></tr>
+    <tr><td><b>＋ 新增长线</b></td>
+        <td>节日新英雄 + 内嵌英雄抽奖（有语境的抽）· 动态卡/签名卡（付费第二曲线）</td>
+        <td>炉石/Snap 先例 + 自家外显渗透 96.3% 双重背书</td></tr>
+  </table>
+  <div class="conclusion">本案零新发明 —— 每一个机制都有 P2 自己的数据或行业成熟先例背书；
+    创新只发生在<span class="rd">组合方式</span>与<span class="rd">成本结构</span>上。对战零决策不是做少了，是做对了。</div>
+</section>
+
+<p class="fine" style="text-align:center; margin-top:50px">《猩球对决》节日卡牌 RPG 策划案 v1.6 · 刘思毅 · 2026-07 ·
+  配图为 AI 概念示意 / 自绘流程图，非最终美术 · 数值框架另行单独评审</p>
+</div>
+</body>
+</html>

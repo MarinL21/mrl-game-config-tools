@@ -112,3 +112,4 @@ gws_inspect/
 
 # p2-numerical-design 内部分析数据（含 $ 量级深度，财务敏感）
 .agents/skills/p2-numerical-design/data/
+docs/card_rpg_design/img/raw/
