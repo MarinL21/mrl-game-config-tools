@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>活动全集 · 刘思毅</title>
+<style>
+  :root{
+    --ink:#0C1A2B; --dark:#25334A; --body:#4A5462; --muted:#8A94A2;
+    --line:#E7ECF2; --line2:#F0F4F8; --card:#F7F9FC; --cardb:#EEF7FD;
+    --accent:#00A0E9; --accentd:#007BB8;
+    --red:#E03C31; --redbg:#FDF0EE; --gold:#C8961E; --goldbg:#FFF8E8;
+    --green:#1F9D55; --greenbg:#EFFAF3; --purple:#7C5CFF;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:"PingFang SC","Microsoft YaHei",sans-serif;color:var(--body);
+       background:#fff;font-size:14px;line-height:1.65}
+
+  /* ── 顶栏 ── */
+  .top{position:sticky;top:0;z-index:50;background:var(--ink);color:#fff;
+       padding:0 22px;display:flex;align-items:center;gap:18px;height:56px;
+       box-shadow:0 2px 12px rgba(12,26,43,.18)}
+  .top h1{font-size:17px;font-weight:700;letter-spacing:.5px;white-space:nowrap}
+  .top h1 span{color:#3ED0F5;font-size:12px;font-weight:400;margin-left:8px;letter-spacing:2px}
+  .stat{display:flex;gap:14px;font-size:12px;color:#8FA6BC;white-space:nowrap}
+  .stat b{color:#fff;font-family:Arial;font-size:14px}
+  .grow{flex:1}
+  .modes{display:flex;background:rgba(255,255,255,.09);border-radius:7px;padding:3px}
+  .modes button{background:none;border:0;color:#A9B8C7;font-size:12.5px;padding:5px 14px;
+       border-radius:5px;cursor:pointer;font-family:inherit;white-space:nowrap}
+  .modes button.on{background:var(--accent);color:#fff;font-weight:600}
+  .search{position:relative}
+  .search input{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.14);
+       color:#fff;border-radius:7px;padding:7px 12px 7px 30px;font-size:12.5px;width:190px;
+       font-family:inherit;outline:none}
+  .search input::placeholder{color:#7C8CA0}
+  .search input:focus{border-color:var(--accent);background:rgba(255,255,255,.14)}
+  .search::before{content:"🔍";position:absolute;left:9px;top:6px;font-size:11px;opacity:.6}
+
+  /* ── 筛选条 ── */
+  .filters{display:flex;gap:8px;align-items:center;padding:11px 22px;border-bottom:1px solid var(--line);
+       flex-wrap:wrap;background:#FCFDFE;position:sticky;top:56px;z-index:40}
+  .filters .lb{font-size:11.5px;color:var(--muted);margin-right:2px}
+  .chip{border:1px solid var(--line);background:#fff;border-radius:14px;padding:4px 12px;
+       font-size:12px;cursor:pointer;color:var(--body);white-space:nowrap;user-select:none}
+  .chip:hover{border-color:var(--accent);color:var(--accentd)}
+  .chip.on{background:var(--ink);border-color:var(--ink);color:#fff;font-weight:600}
+  .sep{width:1px;height:18px;background:var(--line);margin:0 4px}
+
+  /* ── 展示模式 ── */
+  .wrap{padding:22px}
+  .gsec{margin-bottom:34px}
+  .ghead{display:flex;align-items:baseline;gap:11px;margin-bottom:4px}
+  .ghead .ic{font-size:19px}
+  .ghead h2{font-size:17px;color:var(--dark);font-weight:700}
+  .ghead .n{font-size:12px;color:var(--muted);font-family:Arial}
+  .gdesc{font-size:12.5px;color:var(--muted);margin:0 0 14px 30px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(272px,1fr));gap:14px}
+  .card{border:1px solid var(--line);border-radius:11px;padding:15px 17px;cursor:pointer;
+       background:#fff;transition:.16s;position:relative;overflow:hidden}
+  .card:hover{border-color:var(--accent);box-shadow:0 6px 20px rgba(0,160,233,.13);transform:translateY(-2px)}
+  .card .ic{font-size:22px;line-height:1}
+  .card h3{font-size:14.5px;color:var(--dark);font-weight:700;margin:8px 0 3px}
+  .card .one{font-size:12.5px;color:var(--body);min-height:34px}
+  .card .kv{display:flex;gap:12px;margin-top:11px;padding-top:10px;border-top:1px solid var(--line2)}
+  .card .kv div{flex:1}
+  .card .kv .v{font-size:15px;font-weight:700;color:var(--accentd);font-family:Arial;line-height:1.2}
+  .card .kv .l{font-size:10.5px;color:var(--muted);margin-top:1px}
+  .badges{position:absolute;top:13px;right:13px;display:flex;flex-direction:column;gap:4px;align-items:flex-end}
+  .bg{font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;white-space:nowrap}
+  .bg.live{background:var(--greenbg);color:var(--green)}
+  .bg.pitch{background:var(--cardb);color:var(--accentd)}
+  .bg.dead{background:var(--redbg);color:var(--red)}
+  .bg.wip{background:var(--goldbg);color:var(--gold)}
+  .bg.src{background:#F2F4F7;color:var(--muted);font-weight:400}
+
+  /* ── 工作台模式 ── */
+  table{width:100%;border-collapse:collapse;font-size:12.5px}
+  th{background:var(--ink);color:#fff;padding:8px 11px;text-align:left;font-weight:600;
+     position:sticky;top:106px;z-index:30;white-space:nowrap;font-size:12px}
+  td{padding:7px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+  tbody tr{cursor:pointer}
+  tbody tr:hover td{background:var(--cardb)}
+  td.nm{font-weight:600;color:var(--dark);white-space:nowrap}
+  td.mono{font-family:Arial;font-size:11.5px;color:var(--muted)}
+  .tag{display:inline-block;font-size:10.5px;padding:1px 6px;border-radius:3px;
+       background:#F2F4F7;color:var(--body);margin:0 3px 3px 0;white-space:nowrap}
+
+  /* ── 档案抽屉 ── */
+  .mask{position:fixed;inset:0;background:rgba(12,26,43,.42);z-index:90;opacity:0;
+        pointer-events:none;transition:.2s;backdrop-filter:blur(2px)}
+  .mask.on{opacity:1;pointer-events:auto}
+  .draw{position:fixed;top:0;right:0;bottom:0;width:min(760px,94vw);background:#fff;z-index:95;
+        transform:translateX(100%);transition:transform .24s cubic-bezier(.3,.8,.3,1);
+        overflow-y:auto;box-shadow:-8px 0 34px rgba(12,26,43,.22)}
+  .draw.on{transform:translateX(0)}
+  .dhead{background:var(--ink);color:#fff;padding:20px 26px;position:sticky;top:0;z-index:5}
+  .dhead .ic{font-size:26px}
+  .dhead h2{font-size:20px;color:#fff;margin:6px 0 4px;font-weight:700}
+  .dhead .one{font-size:13px;color:#A9B8C7}
+  .dhead .close{position:absolute;top:18px;right:22px;background:rgba(255,255,255,.12);
+        border:0;color:#fff;width:28px;height:28px;border-radius:6px;cursor:pointer;font-size:15px}
+  .dhead .close:hover{background:rgba(255,255,255,.24)}
+  .dmeta{display:flex;gap:16px;margin-top:12px;font-size:11.5px;color:#8FA6BC;flex-wrap:wrap}
+  .dmeta b{color:#BECDDB;font-weight:600}
+  .dbody{padding:22px 26px 60px}
+  .sec{margin-bottom:26px}
+  .sec>h4{font-size:13px;color:var(--accentd);font-weight:700;letter-spacing:.5px;
+       padding-bottom:6px;border-bottom:2px solid var(--line);margin-bottom:11px}
+  .sec p{font-size:13px;margin-bottom:8px}
+  ol.oi{margin:0 0 0 4px;list-style:none;counter-reset:oi}
+  ol.oi li{position:relative;padding-left:26px;margin-bottom:8px;font-size:13px}
+  ol.oi li::before{counter-increment:oi;content:counter(oi);position:absolute;left:0;top:2px;
+       width:18px;height:18px;border-radius:50%;background:var(--accent);color:#fff;
+       font-size:11px;font-weight:700;text-align:center;line-height:18px}
+  .dcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}
+  .dcard{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:12px 14px}
+  .dcard .v{font-size:19px;font-weight:700;color:var(--accentd);font-family:Arial;line-height:1.2}
+  .dcard .l{font-size:11.5px;color:var(--dark);font-weight:600;margin-top:3px}
+  .dcard .n{font-size:11px;color:var(--muted);margin-top:3px}
+  .dcard .s{font-size:10px;color:#B4BCC6;margin-top:5px;font-family:Arial}
+  ul.plain{margin:0 0 0 18px}
+  ul.plain li{font-size:12.8px;margin-bottom:6px}
+  .warn{background:var(--redbg);border:1px solid #F2C7C2;border-radius:9px;padding:12px 15px}
+  .warn ul{margin:0 0 0 16px}
+  .warn li{font-size:12.5px;margin-bottom:5px;color:#8C2F27}
+  .kvrow{display:flex;gap:10px;font-size:12.8px;padding:7px 0;border-bottom:1px solid var(--line2)}
+  .kvrow .k{width:96px;flex:none;color:var(--muted);font-size:12px}
+  .kvrow .v{flex:1}
+  .links{display:flex;gap:9px;flex-wrap:wrap}
+  .lk{border:1px solid var(--line);border-radius:7px;padding:8px 13px;font-size:12.5px;
+      color:var(--accentd);text-decoration:none;display:inline-flex;gap:6px;align-items:center;
+      background:#fff}
+  .lk:hover{border-color:var(--accent);background:var(--cardb)}
+  .lk.na{color:#B4BCC6;border-style:dashed;cursor:default;background:#FCFDFE}
+  .shots{border:1.5px dashed var(--line);border-radius:9px;padding:26px;text-align:center;
+      color:#B4BCC6;font-size:12.5px;background:#FCFDFE}
+  .empty{color:var(--muted);font-size:12.5px;font-style:normal}
+  .foot{padding:26px 22px;border-top:1px solid var(--line);color:var(--muted);font-size:11.5px}
+  @media(max-width:820px){
+    .top{flex-wrap:wrap;height:auto;padding:10px 14px;gap:10px}
+    .stat{display:none} .filters{top:auto;position:static} th{position:static}
+  }
+</style>
+</head>
+<body>
+
+<div class="top">
+  <h1>活动全集<span>ACTIVITY ATLAS</span></h1>
+  <div class="stat" id="stat"></div>
+  <div class="grow"></div>
+  <div class="modes">
+    <button id="mShow" class="on" onclick="setMode('show')">展示模式</button>
+    <button id="mWork" onclick="setMode('work')">工作台模式</button>
+  </div>
+  <div class="search"><input id="q" placeholder="搜活动 / 玩法 / 表号" oninput="render()"></div>
+</div>
+
+<div class="filters" id="filters"></div>
+<div class="wrap" id="main"></div>
+<div class="foot" id="foot"></div>
+
+<div class="mask" id="mask" onclick="closeDraw()"></div>
+<div class="draw" id="draw"></div>
+
+<script src="data.js"></script>
+<script>
+let MODE='show', F={group:null,status:null,origin:null};
+
+const statusClass = s =>
+  s.includes('推翻') ? 'dead' :
+  s.includes('立项') || s.includes('草案') ? 'pitch' :
+  s.includes('已上线') ? 'live' : 'wip';
+
+const gname = k => (GROUPS.find(g=>g.key===k)||{}).name || k;
+const gicon = k => (GROUPS.find(g=>g.key===k)||{}).icon || '';
+
+function allOrigins(){ return [...new Set(ACTS.map(a=>a.origin))]; }
+function allStatus(){
+  return [...new Set(ACTS.map(a=>statusClass(a.status)))]
+    .map(c=>({c,label:{live:'已上线',pitch:'立项/草案',wip:'配置中',dead:'已推翻'}[c]}));
+}
+
+function match(a){
+  const q=(document.getElementById('q').value||'').trim().toLowerCase();
+  if(F.group && a.group!==F.group) return false;
+  if(F.status && statusClass(a.status)!==F.status) return false;
+  if(F.origin && a.origin!==F.origin) return false;
+  if(!q) return true;
+  const hay=[a.name,a.oneLine,a.background,a.status,a.origin,
+    (a.originality||[]).join(' '), (a.config?.main||[]).join(' '),
+    (a.config?.tables||[]).join(' '), (a.config?.note||''),
+    (a.data||[]).map(d=>d.label+d.value+d.note).join(' '),
+    (a.issues||[]).join(' ')].join(' ').toLowerCase();
+  return hay.includes(q);
+}
+
+function buildFilters(){
+  const f=document.getElementById('filters');
+  let h='<span class="lb">分组</span>';
+  h+=`<span class="chip ${!F.group?'on':''}" onclick="setF('group',null)">全部</span>`;
+  GROUPS.forEach(g=>{
+    const n=ACTS.filter(a=>a.group===g.key).length;
+    h+=`<span class="chip ${F.group===g.key?'on':''}" onclick="setF('group','${g.key}')">${g.icon} ${g.name} <b style="font-family:Arial;font-weight:400;opacity:.6">${n}</b></span>`;
+  });
+  h+='<span class="sep"></span><span class="lb">状态</span>';
+  h+=`<span class="chip ${!F.status?'on':''}" onclick="setF('status',null)">全部</span>`;
+  allStatus().forEach(s=>{
+    h+=`<span class="chip ${F.status===s.c?'on':''}" onclick="setF('status','${s.c}')">${s.label}</span>`;
+  });
+  h+='<span class="sep"></span><span class="lb">来源</span>';
+  h+=`<span class="chip ${!F.origin?'on':''}" onclick="setF('origin',null)">全部</span>`;
+  allOrigins().forEach(o=>{
+    h+=`<span class="chip ${F.origin===o?'on':''}" onclick="setF('origin','${o}')">${o}</span>`;
+  });
+  f.innerHTML=h;
+}
+function setF(k,v){ F[k]=v; buildFilters(); render(); }
+function setMode(m){
+  MODE=m;
+  document.getElementById('mShow').className = m==='show'?'on':'';
+  document.getElementById('mWork').className = m==='work'?'on':'';
+  render();
+}
+
+function render(){
+  const list=ACTS.filter(match);
+  document.getElementById('stat').innerHTML=
+    `<span><b>${list.length}</b> / ${ACTS.length} 活动</span>`+
+    `<span><b>${new Set(list.map(a=>a.group)).size}</b> 组</span>`+
+    `<span><b>${list.filter(a=>statusClass(a.status)==='live').length}</b> 已上线</span>`+
+    `<span><b>${list.filter(a=>(a.data||[]).length).length}</b> 有数据</span>`;
+  document.getElementById('main').innerHTML = MODE==='show'?showHTML(list):workHTML(list);
+  document.getElementById('foot').innerHTML =
+    `数据源：转正答辩 PPT（2025-12-08）· reports/ 17 份回归报告 · 2112 activity_config_qa 全表 2065 行 · docs/ 策划案　｜　`+
+    `增删活动只改 <code>data.js</code> 的 ACTS 数组　｜　没有来源的数值一律留空不编`;
+}
+
+function showHTML(list){
+  if(!list.length) return '<p class="empty">没有匹配的活动。</p>';
+  let h='';
+  GROUPS.forEach(g=>{
+    const items=list.filter(a=>a.group===g.key);
+    if(!items.length) return;
+    h+=`<div class="gsec"><div class="ghead"><span class="ic">${g.icon}</span>
+        <h2>${g.name}</h2><span class="n">${items.length}</span></div>
+        <p class="gdesc">${g.desc}</p><div class="grid">`;
+    items.forEach(a=>{
+      const d=(a.data||[])[0];
+      h+=`<div class="card" onclick="openDraw('${a.id}')">
+        <div class="badges">
+          <span class="bg ${statusClass(a.status)}">${a.status}</span>
+          <span class="bg src">${a.origin}</span>
+        </div>
+        <div class="ic">${a.icon}</div>
+        <h3>${a.name}</h3>
+        <div class="one">${a.oneLine}</div>
+        <div class="kv">
+          ${d?`<div><div class="v" style="font-size:${d.value.length>9?'12.5px':d.value.length>6?'14px':'15px'}">${d.value}</div>
+                <div class="l">${d.label}</div></div>`
+             :`<div><div class="v" style="color:#C6CDD5">—</div><div class="l">暂无回归数据</div></div>`}
+          <div><div class="v" style="font-size:12.5px;color:var(--dark);font-family:inherit">${a.seasons}</div>
+               <div class="l">期数</div></div>
+        </div></div>`;
+    });
+    h+='</div></div>';
+  });
+  return h;
+}
+
+function workHTML(list){
+  if(!list.length) return '<p class="empty">没有匹配的活动。</p>';
+  let h=`<table><thead><tr>
+    <th>活动</th><th>分组</th><th>状态</th><th>来源</th><th>期数</th>
+    <th>主 2112 / 载体</th><th>涉及表</th><th>关键数据</th><th>资产</th></tr></thead><tbody>`;
+  list.forEach(a=>{
+    const tb=(a.config?.tables||[]);
+    const dd=(a.data||[]).map(d=>`${d.label} <b style="color:var(--accentd)">${d.value}</b>`).join('<br>');
+    const as=[a.assets?.report&&'回归',a.assets?.design&&'案子',a.assets?.devspec&&'需求表',
+              a.assets?.skill&&'skill'].filter(Boolean).map(x=>`<span class="tag">${x}</span>`).join('');
+    h+=`<tr onclick="openDraw('${a.id}')">
+      <td class="nm">${a.icon} ${a.name}</td>
+      <td>${gicon(a.group)} ${gname(a.group)}</td>
+      <td><span class="bg ${statusClass(a.status)}">${a.status}</span></td>
+      <td class="mono">${a.origin}</td>
+      <td class="mono">${a.seasons}</td>
+      <td class="mono">${(a.config?.main||[]).join('<br>')}</td>
+      <td>${tb.slice(0,4).map(t=>`<span class="tag">${t}</span>`).join('')}${tb.length>4?`<span class="tag">+${tb.length-4}</span>`:''}</td>
+      <td>${dd||'<span class="empty">—</span>'}</td>
+      <td>${as||'<span class="empty">—</span>'}</td></tr>`;
+  });
+  return h+'</tbody></table>';
+}
+
+function openDraw(id){
+  const a=ACTS.find(x=>x.id===id); if(!a) return;
+  const A=a.assets||{};
+  const lk=(href,label,icon)=> href
+    ? `<a class="lk" href="${href}" target="_blank">${icon} ${label}</a>`
+    : `<span class="lk na">${icon} ${label}（无）</span>`;
+  document.getElementById('draw').innerHTML=`
+    <div class="dhead">
+      <button class="close" onclick="closeDraw()">✕</button>
+      <div class="ic">${a.icon}</div>
+      <h2>${a.name}</h2>
+      <div class="one">${a.oneLine}</div>
+      <div class="dmeta">
+        <span><b>状态</b> ${a.status}</span>
+        <span><b>分组</b> ${gname(a.group)}</span>
+        <span><b>来源</b> ${a.origin}</span>
+        <span><b>首发</b> ${a.firstAt}</span>
+        <span><b>期数</b> ${a.seasons}</span>
+      </div>
+    </div>
+    <div class="dbody">
+      <div class="sec"><h4>为什么做（背景）</h4><p>${a.background}</p></div>
+
+      <div class="sec"><h4>原创点 / 我做的是什么</h4>
+        ${(a.originality||[]).length
+          ? `<ol class="oi">${a.originality.map(x=>`<li>${x}</li>`).join('')}</ol>`
+          : '<p class="empty">待补</p>'}</div>
+
+      <div class="sec"><h4>配置链路</h4>
+        <div class="kvrow"><div class="k">主活动 / 载体</div><div class="v">
+          ${(a.config?.main||['—']).map(m=>`<div>${m}</div>`).join('')}</div></div>
+        <div class="kvrow"><div class="k">涉及配置表</div><div class="v">
+          ${(a.config?.tables||[]).map(t=>`<span class="tag">${t}</span>`).join('')||'—'}</div></div>
+        ${a.config?.note?`<div class="kvrow"><div class="k">要点 / 坑</div><div class="v">${a.config.note}</div></div>`:''}
+      </div>
+
+      <div class="sec"><h4>数据表现</h4>
+        ${(a.data||[]).length
+          ? `<div class="dcards">${a.data.map(d=>`<div class="dcard">
+               <div class="v">${d.value}</div><div class="l">${d.label}</div>
+               <div class="n">${d.note||''}</div>
+               ${d.src?`<div class="s">来源 ${d.src}</div>`:''}</div>`).join('')}</div>`
+          : '<p class="empty">尚无回归数据（或该活动未单独做回归）。</p>'}</div>
+
+      ${(a.issues||[]).length?`<div class="sec"><h4>已知问题 / 待办</h4>
+        <div class="warn"><ul>${a.issues.map(x=>`<li>${x}</li>`).join('')}</ul></div></div>`:''}
+
+      <div class="sec"><h4>关联资产</h4>
+        <div class="links">
+          ${lk(A.report,'回归报告','📊')}
+          ${A.report2?lk(A.report2,'回归报告 2','📊'):''}
+          ${lk(A.design,'策划案','📐')}
+          ${A.devspec?lk(A.devspec,'开发需求表','📋'):''}
+          ${A.skill?`<span class="lk na">🧰 ${A.skill}</span>`:''}
+        </div>
+      </div>
+
+      <div class="sec"><h4>界面截图</h4>
+        <div class="shots">截图位　—　把活动界面图放进 <code>activity_atlas/shots/${a.id}/</code>，
+          再在 data.js 的该活动加 <code>shots:["文件名.png"]</code></div>
+      </div>
+    </div>`;
+  document.getElementById('draw').classList.add('on');
+  document.getElementById('mask').classList.add('on');
+  document.body.style.overflow='hidden';
+  location.hash=a.id;
+}
+function closeDraw(){
+  document.getElementById('draw').classList.remove('on');
+  document.getElementById('mask').classList.remove('on');
+  document.body.style.overflow='';
+  history.replaceState(null,'',location.pathname);
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDraw()});
+
+/* URL 深链：?mode=work&group=minigame&status=live&q=挖孔#dighole */
+const U=new URLSearchParams(location.search);
+if(U.get('mode')==='work') MODE='work';
+['group','status','origin'].forEach(k=>{ if(U.get(k)) F[k]=U.get(k); });
+if(U.get('q')) document.getElementById('q').value=U.get('q');
+document.getElementById('mShow').className = MODE==='show'?'on':'';
+document.getElementById('mWork').className = MODE==='work'?'on':'';
+
+buildFilters(); render();
+if(location.hash){ const id=location.hash.slice(1); if(ACTS.find(a=>a.id===id)) openDraw(id); }
+</script>
+</body>
+</html>
