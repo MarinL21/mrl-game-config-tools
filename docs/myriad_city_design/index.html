@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>《万象主城》主城外观装配层 立项策划案 v2.1</title>
+<title>《万象主城》策划案 v3.0</title>
 <style>
   :root {
     --accent: #00A0E9; --accent-d: #007BB8; --ink: #0C1A2B;
@@ -101,1413 +101,491 @@
      top: 3px; width: 21px; height: 21px; border-radius: 50%; background: var(--accent);
      color: #fff; font-size: 12px; font-weight: 700; text-align: center; line-height: 21px; }
 </style>
+<style>
+  .partcard{display:flex;gap:20px;border:1px solid var(--line);border-radius:12px;
+            padding:18px;margin-bottom:16px;background:#fff}
+  .partcard img{width:236px;height:236px;object-fit:cover;border-radius:10px;
+            border:1px solid var(--line);flex:none;background:var(--card)}
+  .partcard .body{flex:1;min-width:0}
+  .partcard h4{margin:0 0 4px;font-size:16px;color:var(--ink)}
+  .partcard .en{font-size:12px;color:var(--muted);font-family:Arial;margin-bottom:8px}
+  .partcard .meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:9px}
+  .partcard .m{font-size:11.5px;background:var(--card);border:1px solid var(--line);
+            border-radius:5px;padding:2px 9px;color:var(--body)}
+  .partcard .m b{color:var(--ink)}
+  .partcard .m.hi{background:var(--cardb);border-color:#BFE3F7;color:var(--accentd)}
+  .partcard .m.top{background:var(--redbg);border-color:#F2C7C2;color:#B32A20}
+  .partcard .m.free{background:var(--greenbg);border-color:#BEE6CE;color:#147C42}
+  .partcard p{font-size:13.5px;margin:0 0 7px}
+  .partcard .lb{font-size:11.5px;color:var(--accentd);font-weight:700;margin-right:5px}
+  .g4{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:12px 0}
+  .g4 div{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:12px 14px}
+  .g4 .n{font-size:20px;font-weight:700;color:var(--accentd);font-family:Arial}
+  .g4 .l{font-size:11.5px;color:var(--muted);margin-top:2px}
+  .lead{font-size:15px;color:var(--dark);background:var(--cardb);border:1px solid #BFE3F7;
+        border-radius:10px;padding:16px 20px;margin:14px 0;font-weight:600}
+  h2 .no{color:var(--accentd);font-family:Arial;margin-right:6px}
+</style>
 </head>
 <body>
 
 <div class="hero">
   <div class="hero-inner">
-    <div class="kicker">AGE OF APES &middot; MYRIAD CITY PROPOSAL</div>
-    <h1>《万象主城》主城外观装配层</h1>
-    <div class="sub">城基 &rarr; 城市本体 &rarr; 色板 &rarr; 玩家自行装配 &rarr; 部件永久累积 &mdash;&mdash;
-      <b style="color:#fff">把主城外观从「一次性买断」改造成「可持续累积的组合资产」</b></div>
-    <div class="meta"><b>版本</b> v2.1｜ <b>作者</b> 刘思毅（运营策划）｜ <b>日期</b> 2026-08-20 ｜
-      <b>状态</b> 立项论证阶段 ｜ <b>数值说明</b> 本案不含数值设计，数值框架立项评审通过后单独出 ｜
-      <b>配图说明</b> 结构图为自绘示意，概念图为 AI 生成，均非最终美术</div>
+    <div class="kicker">AGE OF APES &middot; 万象主城</div>
+    <h1>主城从「一整座卖」改成「拆两段卖」</h1>
+    <div class="sub">底座（城基）+ 城市本体 两段拼装，各出几款自由组合、各自换色 &mdash;&mdash;
+      <b style="color:#fff">本体是付费大头</b></div>
+    <div class="meta"><b>版本</b> v3.0（重写版）｜ <b>作者</b> 刘思毅（运营策划）｜ <b>日期</b> 2026-08-20 ｜
+      <b>状态</b> 设计与美需已定版，等三项拍板 ｜
+      <b>配图说明</b> 概念图为 AI 生成，表达造型方向，非最终美术</div>
   </div>
-  <img class="hero-img" src="img/keyvisual.jpg" alt="key visual">
 </div>
-<div class="hero-cap">▲ 题图：AI 概念示意 —— 一座主城由「城基 + 城市本体」两段装配而成，两段之间的发光接缝即挂载点（本案全部概念图均为 AI 生成，仅表达方向，非最终美术）</div>
 
 <div class="wrap">
 
-<section>
-  <h2><span class="no">00</span>目录</h2>
-  <ul class="toc">
-    <li><a href="#s1">01 一句话定位与立项背景</a></li>
-    <li><a href="#s2">02 现状诊断（配置表实证）</a></li>
-    <li><a href="#s3">03 核心循环</a></li>
-    <li><a href="#s4">04 城基 Foundation</a></li>
-    <li><a href="#s5">05 城市本体与槽位取舍</a></li>
-    <li><a href="#s6">06 色板 Colorway</a></li>
-    <li><a href="#s7">07 璀璨态 Radiant</a></li>
-    <li><a href="#s8">08 收藏度 Collection</a></li>
-    <li><a href="#s9">09 预设方案与编辑推荐</a></li>
-    <li><a href="#s10">10 发放挂载表</a></li>
-    <li><a href="#s11">11 付费点设计</a></li>
-    <li><a href="#s12">12 玩家分层体验（非R &rarr; 超R）</a></li>
-    <li><a href="#s13">13 每期换档与包装轮换</a></li>
-    <li><a href="#s14">14 立项论证</a></li>
-    <li><a href="#s15">15 风险与对策</a></li>
-    <li><a href="#s16">16 开发范围与里程碑</a></li>
-  </ul>
-</section>
-
-<!-- ══════════ 01 ══════════ -->
 <section id="s1">
-  <h2><span class="no">01</span>一句话定位与立项背景</h2>
-  <div class="h2sub">Positioning &amp; Background</div>
+  <h2><span class="no">01</span>这是什么</h2>
+  <div class="lead">主城拆成 <span class="hl">底座（城基）</span> + <span class="hl">城市本体</span> 两段，
+    各出好几款，玩家随便配、还能各自换色。本体是视觉主体也是付费大头，底座、城辉、色板是辅助。</div>
 
-  <div class="box blue">
-    <div class="onesent">《万象主城》是主城外观的<span class="hl">装配层</span>：玩家买到的不再是一整座城，
-      而是<span class="hl">城基 + 城市本体</span>两个主体，外加<span class="hl">城辉 / 色板</span>两个附属维度 &rarr;
-      自己装配出主城 &rarr; 部件永久保留并累积收藏度；
-      <span class="hl">而城基与本体各只有 1 个槽、款数却每期都在增加 —— 想换个样子，就得再拥有一款。</span></div>
-  </div>
-
-  <h3>1.1　它对标的是「模块化外观」这个已被验证十年的范式</h3>
-  <p>外观品类做到最深的形态不是「一套一套地卖皮肤」，而是<b>把一套皮肤拆成若干可独立购买、可自由组合、永不过期的部件</b>。
-    这个范式在《堡垒之夜》的衣柜（Locker）体系上跑了近十年：角色皮 / 背饰 / 镐 / 滑翔伞四个槽位固定不变，
-    内容每期换，玩家自己搭配。它成立的原因不是画得好看，而是一条结构性质：
-    <b>第 N 期的新件会给前 N-1 期的旧件重新赋予价值</b>，所以旧的付费不会因为新内容上线而贬值。</p>
+  <figure class="art">
+    <img src="img/combo.jpg" alt="同一本体装在三款底座上">
+    <figcaption>同一款城市本体装在三款不同底座上 —— 上半段完全一样，只换下半段。<b>这就是全部机制。</b></figcaption>
+  </figure>
 
   <table class="tight">
-    <tr><th style="width:20%">范式位置</th><th style="width:38%">《堡垒之夜》衣柜</th><th>本案《万象主城》</th></tr>
-    <tr><td><b>售卖单位</b></td><td>单件（皮 / 背饰 / 镐 / 滑翔伞）独立售卖</td><td><b>单件（城基 / 城市本体 / 城辉 / 色板）独立售卖</b></td></tr>
-    <tr><td><b>组合权</b></td><td>槽位固定，玩家自由搭配</td><td><b>3 槽固定（城基 1 + 本体 1 + 城辉 1），玩家自由搭配</b></td></tr>
-    <tr><td><b>旧件是否过期</b></td><td>永不过期，永久留在衣柜</td><td><b>永久保留，且额外计入收藏度</b></td></tr>
-    <tr><td><b>新内容对旧件</b></td><td>新件给旧件增加搭法</td><td><b>同；且新色板可直接施加到全部旧件上</b></td></tr>
-    <tr><td><b>展示载体</b></td><td>角色（对局中被他人看见）</td><td><b>主城（自己每天必看 + 被侦查 / 被攻打 / 联盟来访时被看见）</b></td></tr>
-    <tr><td><b>本案独有的起点</b></td><td>—</td><td class="gr"><b>不是从零起步：项目已有 124 张主城皮肤存量资产，
-      可整体接入这一层（见 <a href="#s14" style="color:var(--accent-d)">§14.1</a>）</b></td></tr>
+    <tr><th style="width:15%">部件</th><th style="width:10%">槽位</th><th style="width:14%">定位</th>
+        <th>决定什么</th></tr>
+    <tr><td><b>城基</b></td><td>1 个，不可空</td><td>辅助付费</td>
+      <td>这座城<b>站在什么上面</b> —— 体量、轮廓基调、占地</td></tr>
+    <tr><td class="gr"><b>城市本体 ★</b></td><td>1 个，不可空<br>同时只穿 1 款</td><td class="gr"><b>主力付费</b></td>
+      <td>这座城<b>是什么</b> —— 题材、叙事、辨识度。玩家在主城和世界地图上第一眼看到的是它</td></tr>
+    <tr><td><b>城辉</b></td><td>1 个，可空</td><td>低单价</td><td>环绕整城的特效层，不是实体件</td></tr>
+    <tr><td><b>色板</b></td><td>不占槽</td><td>最低单价<br>长尾复购</td>
+      <td>施加在某一款城基或某一款本体上的配色，<b>绑定部件不是全局染料</b></td></tr>
   </table>
-  <p class="fine">⚠ 这里做的是<b>结构类比</b>（售卖单位与组合关系），不是玩法类比。本案不引入任何对局玩法。</p>
+  <p class="fine">装配槽<b>永久固定 3 个</b>，不随期数增加。首期 4 款本体抢这 1 个槽 —— 想换个样子就得再拥有一款，
+    这是「多买一件」有意义的前提；加槽就等于让已有部件同时上身，取舍消失，后续的款就没人买了。</p>
+</section>
 
-  <div class="conclusion">一句话：<span class="gd">现在卖的是「一整座城」，卖完就到顶；本案卖的是「装配一座城的零件」，
-    零件越多，每一件的价值越大。</span></div>
+<section id="s2">
+  <h2><span class="no">02</span>为什么做</h2>
+  <p class="fine">数据源：1312 city_skin / 1388 city_suit_module / 1389 city_suit 三表逐行实测。</p>
+  <table class="tight">
+    <tr><th style="width:6%">#</th><th style="width:22%">现在的问题</th><th style="width:34%">实测依据</th><th>后果</th></tr>
+    <tr><td>①</td><td><b>集齐即终点</b></td><td>7 套主城套装全是「2 皮肤 + 2 挂件 + 1 特效 = 5 件 → 送最终形态」，无一例外</td>
+      <td>一期最多 5 个可售单位，第 6 次付费无处可去</td></tr>
+    <tr><td>②</td><td><b>玩家零选择权</b></td><td>1389 的 <code>A_ARR_items</code> 是策划填死的固定 id 数组</td>
+      <td>只有「集齐 / 没集齐」两种状态，「我的主城」不成立</td></tr>
+    <tr><td>③</td><td><b>换新即弃旧</b></td><td>1312 共 124 张皮肤，同时只能穿 1 张；套装之间无跨期互通</td>
+      <td>旧付费随新内容上线归零，玩家知道这事，反过来压当期购买</td></tr>
+    <tr><td>④</td><td><b>换色引擎闲置</b></td><td><code>A_INT_dyeing_skin</code> 已上线，2024 圣诞做到过「一皮四色」，但<b>2026 全年新增 0 行</b></td>
+      <td>一整个维度没进投放</td></tr>
+  </table>
+  <div class="conclusion">瓶颈不是件数不够，是<span class="gd">新内容只对新内容有价值</span> ——
+    每一期都在从零起跑。拆两段之后，这期的新本体能装往期所有底座，这期的新色板能刷往期所有部件。</div>
+</section>
 
-  <h3>1.2　立项背景</h3>
-  <p class="fine">以下为 1312 city_skin / 1388 city_suit_module / 1389 city_suit 三表<b>逐行实测</b>（2026-08-17 拉取），
-    可复核；营收类数字口径见 <a href="#s2" style="color:var(--accent-d)">§2.3</a> 与下方口径纪律。</p>
+<section id="s3">
+  <h2><span class="no">03</span>系统规则</h2>
 
-  <div class="kpi">
-    <div><div class="n">124</div><div class="l">主城皮肤存量<br>1312 全表行数</div></div>
-    <div><div class="n">7</div><div class="l">主城套装总数<br>2025 科技节至今，每套固定 5 件</div></div>
-    <div><div class="n" style="color:var(--red)">0</div><div class="l">2026 年新增染色配置<br>引擎已上线，22 行存量全是 2024-2025</div></div>
-    <div><div class="n" style="color:var(--green)">96.3%</div><div class="l">头像框持有率<br>外显品类的项目内实证</div></div>
-    <div><div class="n" style="color:var(--red)">20 / 22</div><div class="l">活动族已过峰<br>现有付费点开采到顶</div></div>
+  <h3>3.1　装配</h3>
+  <p>3 个槽：城基 ×1（不可空）、本体 ×1（不可空）、城辉 ×1（可空）。任一城基可配任一本体，不做组合限制。</p>
+  <p>切换装配<b>零成本、无冷却、不消耗道具</b>；未拥有的件可试穿预览，试穿态不可保存。
+    满意的搭配可存进「预设方案」一键切换，<b>初始 2 个槽免费</b>，第 3 槽起解锁。</p>
+
+  <h3>3.2　换色</h3>
+  <p>色板绑定到<b>具体某一款部件</b>，不是全局染料。每款部件出厂自带 1 个默认色（随件获得、不单卖），
+    另配可购色板。城基与本体<b>各自独立换色</b>，互不影响。</p>
+  <p class="fine">配置上走 1312 的 <code>A_INT_dyeing_skin</code> 指向母部件 —— 引擎已支持，这部分不用开发。
+    不做通用染料的理由：任意颜色刷任意模型必然出现难看的组合，而这个系统的门面就是好看；
+    且通用染料买一次就够，绑定色板则每款部件各自是商品。</p>
+
+  <h3>3.3　璀璨态</h3>
+  <p>城基槽的件 <b>且</b> 本体槽的件 <b>且</b> 城辉槽的件，三者<b>同时</b>达到当期稀有度门槛 → 主城进入璀璨态
+    （额外全局光效 + 城池名特效 + 铭牌标记）。实时判定，装上即触发、卸下即消失。</p>
+  <p><b>门槛跟随当期最高稀有度，每期重定</b> —— 所以每上一期，璀璨态就重新变成要追的东西，不会封顶。
+    达成过的期次永久记在铭牌上（如「四周年·璀璨」），后续期次不剥夺。</p>
+  <table class="tight">
+    <tr><th style="width:16%">槽</th><th style="width:24%">首期门槛件</th><th style="width:16%">稀有度</th><th>走哪条货架</th></tr>
+    <tr><td>城基</td><td><b>B3 苔垣遗基</b></td><td>当期城基最高</td><td>累充高档位</td></tr>
+    <tr><td>本体</td><td class="gr"><b>C4 熔心方尖 ★</b></td><td>当期最高</td><td>节日 GACHA 主推</td></tr>
+    <tr><td>城辉</td><td><b>A1 环星光带</b></td><td>高</td><td>节日 BP 付费轨顶奖</td></tr>
+  </table>
+  <p class="fine">三件<b>故意分散在三条不同货架</b>，不做单一礼包一键达成 —— 一键达成会让璀璨态退化成一个 SKU，
+    与「璀璨态不可直购」这条红线冲突。当期礼包最多打包其中两件。
+    免费通路产出的件稀有度不够，零氪玩家当期达不成璀璨态，这是外观差距不是功能差距。</p>
+
+  <h3>3.4　收藏度</h3>
+  <p>按玩家<b>已拥有</b>的全部部件累计，<b>持有即计分，与是否装上无关</b>，永不清零。回报是段位徽记 + 图鉴完成度。</p>
+  <p class="fine">这条是专门解决问题 ③ 的：玩家知道「买了下期就穿不上」会压当期购买，
+    持有即计分把这个抑制从机制上取消 —— 买了不用也不算白买。图鉴按类型分四册，未拥有显示暗色剪影不隐藏。</p>
+</section>
+
+<section id="s4">
+  <h2><span class="no">04</span>首期内容设计</h2>
+  <div class="h2sub">3 城基 + 4 城市本体 + 1 城辉 + 9 个可购色板 = 18 个可售单位</div>
+
+  <h3>4.1　城基 3 款（顶面一律留空，只做下半段）</h3>
+
+  <div class="partcard">
+    <img src="img/p_b1.jpg" alt="锈铁台">
+    <div class="body">
+      <h4>B1　锈铁台</h4><div class="en">Rust Yard</div>
+      <div class="meta"><span class="m">稀有度 <b>低</b></span>
+        <span class="m free">走免费轨（签到 / BP 免费轨）</span>
+        <span class="m">默认色 <b>锈铁原色</b></span>
+        <span class="m">可购色板 <b>熔橙钛灰 / 曜石霓虹</b></span></div>
+      <p><span class="lb">造型</span>废土工业风方形平台，锈蚀钢板一层层焊叠，边缘堆油桶、外挂粗管道、挂铁梯。
+        侧面开一个小熔炉口，透暖橙光。</p>
+      <p><span class="lb">文案</span>锈铁台 —— 锈钢焊就的地基，风沙压不弯</p>
+      <p><span class="lb">为什么它走免费</span>零氪玩家也得能换掉默认底座，否则这个系统对他们就只是一排锁。</p>
+    </div>
   </div>
+
+  <div class="partcard">
+    <img src="img/p_b2.jpg" alt="磐甲基">
+    <div class="body">
+      <h4>B2　磐甲基</h4><div class="en">Bulwark Base</div>
+      <div class="meta"><span class="m">稀有度 <b>中</b></span>
+        <span class="m">累充档位奖励</span>
+        <span class="m">默认色 <b>军绿装甲</b></span>
+        <span class="m">可购色板 <b>极地冰蓝 / 沙暴迷彩</b></span></div>
+      <p><span class="lb">造型</span>军事装甲风平台，厚装甲板层叠拼接、棱角硬。四角挂小炮台，侧面装探照灯、侧壁贴履带结构，
+        正面留一个金属徽记位。</p>
+      <p><span class="lb">动态</span>探照灯缓慢左右扫，扫过时地面有一道亮痕。</p>
+      <p><span class="lb">文案</span>磐甲基 —— 装甲层层锁死，炮火撼不动</p>
+    </div>
+  </div>
+
+  <div class="partcard">
+    <img src="img/p_b3.jpg" alt="苔垣遗基">
+    <div class="body">
+      <h4>B3　苔垣遗基</h4><div class="en">Mossveil Ruin</div>
+      <div class="meta"><span class="m hi">当期城基最高</span>
+        <span class="m top">璀璨态门槛件</span>
+        <span class="m">累充高档位</span>
+        <span class="m">默认色 <b>苔石灰绿</b></span>
+        <span class="m">可购色板 <b>翡翠夜光 / 赭石晨曦</b></span></div>
+      <p><span class="lb">造型</span>丛林遗迹风石砌台基，大块条石砌成、缝里长苔藓爬藤蔓。侧面一个拱门洞，
+        门楣有一圈抽象几何浮雕纹。石缝里嵌青蓝晶簇，一簇簇从底部往上长。</p>
+      <p><span class="lb">动态</span>晶簇呼吸式明暗，藤蔓叶片极轻微风摆。</p>
+      <p><span class="lb">文案</span>苔垣遗基 —— 藤蔓爬满旧墙，矿脉仍在发光</p>
+    </div>
+  </div>
+
+  <h3>4.2　城市本体 4 款（底面一律平切，4 款抢 1 个槽 ★主力付费点）</h3>
+
+  <div class="partcard">
+    <img src="img/p_c1.jpg" alt="铁工巨械">
+    <div class="body">
+      <h4>C1　铁工巨械</h4><div class="en">Ironworks Rig</div>
+      <div class="meta"><span class="m">稀有度 <b>低</b></span>
+        <span class="m free">走 BP 免费轨</span>
+        <span class="m">默认色 <b>工业铁灰</b></span>
+        <span class="m">可购色板 <b>钴蓝铬银</b></span></div>
+      <p><span class="lb">造型</span>机械巨构，两三条起重吊臂伸出去（一条挂吊钩和货箱），城体外壳挂满外露齿轮、
+        传动轴、蒸汽管，顶上立一个圆柱水塔。整体是「一座还在开工的工厂」。</p>
+      <p><span class="lb">动态</span>吊臂缓慢摆动，大齿轮持续转，蒸汽管每隔几秒喷一次白汽。</p>
+      <p><span class="lb">文案</span>铁工巨械 —— 吊臂昼夜不歇，齿轮咬住整座城</p>
+    </div>
+  </div>
+
+  <div class="partcard">
+    <img src="img/p_c2.jpg" alt="赤翼星舰">
+    <div class="body">
+      <h4>C2　赤翼星舰</h4><div class="en">Crimson Ark</div>
+      <div class="meta"><span class="m">稀有度 <b>中</b></span>
+        <span class="m">节日 GACHA 奖池</span>
+        <span class="m">默认色 <b>赤翼绯红</b></span>
+        <span class="m">可购色板 <b>绯红鎏金</b></span></div>
+      <p><span class="lb">造型</span>一艘坠落星舰被改造成城 —— 舰首朝上斜插，舰体开窗开门变成居所，
+        两侧机翼张开当瞭望台、翼面搭木栈道和帐篷（有人住进去的痕迹）。正面一块大舷窗透青光。</p>
+      <p><span class="lb">动态</span>舷窗青光呼吸，翼尖航行灯闪烁，舰体某处漏出细烟。</p>
+      <p><span class="lb">文案</span>赤翼星舰 —— 坠落的舰身翻身成城，机翼仍在张</p>
+    </div>
+  </div>
+
+  <div class="partcard">
+    <img src="img/p_c3.jpg" alt="猿王座">
+    <div class="body">
+      <h4>C3　猿王座</h4><div class="en">Ape Throne</div>
+      <div class="meta"><span class="m">稀有度 <b>高</b></span>
+        <span class="m">节日 GACHA 高档位</span>
+        <span class="m">默认色 <b>石灰岩白</b></span>
+        <span class="m">可购色板 <b>黑金帝威</b></span></div>
+      <p><span class="lb">造型</span>要塞高塔，塔身有盘旋而上的外挂阶梯和垛口。塔顶一个金饰王座，
+        猿王坐镇其上、手握长柄战锤，坐姿要稳、有压迫感。塔身镶金色纹饰和青色灯槽。</p>
+      <p><span class="lb">动态</span>猿王极轻微的呼吸起伏，斗篷／旗布随风摆；塔身青灯槽缓慢流光。</p>
+      <p><span class="lb">备选</span>若「活体猿王」在主城场景里太抢戏，改做<b>巨型猿王石像坐王座</b>的雕塑版，其余不变。</p>
+      <p><span class="lb">文案</span>猿王座 —— 塔顶有猿王坐镇，锤落风起</p>
+    </div>
+  </div>
+
+  <div class="partcard">
+    <img src="img/p_c4.jpg" alt="熔心方尖">
+    <div class="body">
+      <h4>C4　熔心方尖 ★</h4><div class="en">Molten Obelisk</div>
+      <div class="meta"><span class="m top"><b>当期最高稀有度</b></span>
+        <span class="m top">璀璨态门槛件</span>
+        <span class="m">节日 GACHA 主推位</span>
+        <span class="m">默认色 <b>熔心橙</b></span>
+        <span class="m top"><b>不出可购色板</b></span></div>
+      <p><span class="lb">造型</span>黑曜石方尖碑，四棱锥往上收、通体裂开不规则纹路，裂缝深处流动熔岩、光从里往外渗。
+        碑体底部一圈熔岩岩基（岩浆已凝壳、缝里还亮）。碑顶悬浮一颗熔核，不接触碑体。</p>
+      <p><span class="lb">动态</span>熔核缓慢自转并上下微浮，裂缝熔光沿裂纹流动，碑面有热浪扰动，底部持续升余烬。</p>
+      <p><span class="lb">为什么不出购色</span>最高稀有度不做配色分流 —— 它是当期璀璨态门槛件，
+        唯一性本身就是卖点，多出几个色反而摊薄。</p>
+      <p><span class="lb">文案</span>熔心方尖 —— 熔核封在碑里，裂缝透出光</p>
+    </div>
+  </div>
+
+  <h3>4.3　城辉 1 款</h3>
+  <div class="partcard">
+    <img src="img/p_a1.jpg" alt="环星光带">
+    <div class="body">
+      <h4>A1　环星光带</h4><div class="en">Orbit Veil</div>
+      <div class="meta"><span class="m">稀有度 <b>高</b></span>
+        <span class="m top">璀璨态门槛件</span>
+        <span class="m">节日 BP 付费轨顶奖</span>
+        <span class="m">首期不出购色</span></div>
+      <p><span class="lb">表现</span>一道光带从城体腰部升起、绕整座城水平铺开成一个略倾斜的环 ——
+        内层青色实心光带、外层裹一层金色细碎光尘，两层反向缓慢旋转。光带经过城体时<b>从建筑背后穿过、
+        正面转半透明</b>。城基周围持续有橙金余烬往上飘，飘到光带高度被卷进环里带走一圈再消散。</p>
+      <p><span class="lb">为什么首期只做 1 款</span>城辉是四类里美术单价最高、复用性最差的（特效资源没法靠换材质派生变体）。
+        首期投 1 款验证一件事：玩家愿不愿意为纯特效单独付费。通过再决定第二期加几款、要不要开购色；
+        不通过就降级成其它品类的附赠，不再单独立项。</p>
+      <p><span class="lb">文案</span>环星光带 —— 一道光绕城不落，余烬随风上</p>
+    </div>
+  </div>
+
+  <h3>4.4　可购色板 9 个</h3>
+  <figure class="art">
+    <img src="img/colorway.jpg" alt="配色对照">
+    <figcaption>配色机制：<b>形体完全一样，只换涂装</b> —— 这是色板成本远低于新做一款本体的原因。
+      图内三组色名恰好就是首期的熔橙钛灰 / 极地冰蓝 / 曜石霓虹（AI 概念图）</figcaption>
+  </figure>
+  <table class="tight">
+    <tr><th style="width:16%">母件</th><th style="width:18%">默认色（随件获得）</th>
+        <th style="width:26%">可购色板</th><th>色感</th></tr>
+    <tr class="grp"><td colspan="4">城基（每款 2 个可购色）</td></tr>
+    <tr><td>B1 锈铁台</td><td>锈铁原色</td><td><b>熔橙钛灰</b> ｜ <b>曜石霓虹</b></td>
+      <td>橙锈配冷灰金属 ｜ 纯黑底 + 品红霓虹描边</td></tr>
+    <tr><td>B2 磐甲基</td><td>军绿装甲</td><td><b>极地冰蓝</b> ｜ <b>沙暴迷彩</b></td>
+      <td>白装甲 + 冰蓝灯带 ｜ 土黄砂砾三色迷彩</td></tr>
+    <tr><td>B3 苔垣遗基</td><td>苔石灰绿</td><td><b>翡翠夜光</b> ｜ <b>赭石晨曦</b></td>
+      <td>深绿石材 + 荧绿矿脉 ｜ 暖赭红 + 晨光金</td></tr>
+    <tr class="grp"><td colspan="4">城市本体（每款 1 个可购色）</td></tr>
+    <tr><td>C1 铁工巨械</td><td>工业铁灰</td><td><b>钴蓝铬银</b></td><td>钴蓝主色 + 抛光铬银构件</td></tr>
+    <tr><td>C2 赤翼星舰</td><td>赤翼绯红</td><td><b>绯红鎏金</b></td><td>绯红舰体 + 鎏金边饰</td></tr>
+    <tr><td>C3 猿王座</td><td>石灰岩白</td><td><b>黑金帝威</b></td><td>黑曜石座 + 金纹雕饰</td></tr>
+    <tr><td class="rd">C4 熔心方尖</td><td>熔心橙</td><td class="rd"><b>不出购色</b></td><td>门槛件保唯一性</td></tr>
+  </table>
+</section>
+
+<section id="s5">
+  <h2><span class="no">05</span>美需</h2>
+  <div class="h2sub">完整 brief 在节日文案主表新 tab
+    <a href="https://docs.google.com/spreadsheets/d/1pPlo0ccRBmlQj9OFWnGXhQg1wLiihfQfSxEsoKA0hLA/edit#gid=1448671010"
+       style="color:var(--accentd)" target="_blank">新系统-万象主城（首期）</a>
+    —— 10 行 × 每行 2-5 条参考图链接</div>
 
   <div class="box warn">
-    <h4>口径纪律（本案自我约束）</h4>
-    <p class="fine">① <b>本案只引用两类数据</b>：配置表结构清点（1312 / 1388 / 1389 逐行实测，任何人可复核）；
-      以及已对齐团队官方回归报告的大盘 / 节日营收（毛额 + 真实档期 + 剔异常单，校验偏差 &le;1.70%）。
-      ② <b>本案不引用「主城外观品类」的专项营收数字</b> —— 该品类尚未做过独立回归，用未校验的数字论证等于送靶子；
-      品类营收回归已列入 <a href="#s16" style="color:var(--accent-d)">§16.3</a> 待办。
-      ③ <b>不使用任何「参与度 / 时长 &rarr; 付费」的因果论证</b>：付费本身会拉长参与，因果双向，不能倒推。
-      付费理由在 <a href="#s14" style="color:var(--accent-d)">§14.3</a> 用具体消费场景独立论证。
-      ④ <b>「组合数」与「可售单位数」是两个口径，全文不混用</b>：组合数只用来描述体验感知，
-      付费深度一律只看可售单位数（见 <a href="#s11" style="color:var(--accent-d)">§11.3</a>）。</p>
-  </div>
-
-  <h3>1.3　它是什么 / 不是什么</h3>
-  <table class="tight">
-    <tr><th style="width:50%">它是</th><th>它不是</th></tr>
-    <tr>
-      <td>已有主城外观品类之上的一层<b>装配与累积结构</b></td>
-      <td>不是一个新玩法 —— 没有关卡、没有战斗、没有新规则引擎</td>
-    </tr>
-    <tr>
-      <td>常驻系统，跨节日永久存在，每期只换内容</td>
-      <td>不是某一个节日活动，不占节日主题位</td>
-    </tr>
-    <tr>
-      <td>节日主城套装的<b>承接层</b> —— 节日套装照做不减，做完接进来继续有用</td>
-      <td class="rd">不是节日主城套装的替代品（见 <a href="#s14" style="color:var(--accent-d)">§14.1</a>）</td>
-    </tr>
-    <tr>
-      <td>纯外显 + 收藏向</td>
-      <td>不改变任何战斗力可达性（数值口径见 <a href="#s8" style="color:var(--accent-d)">§8.3</a>）</td>
-    </tr>
-  </table>
-
-  <h3>1.4　为什么是现在能做</h3>
-  <p>三个条件同时具备：</p>
-  <ol class="rl">
-    <li><b>换色能力已经在引擎里，且正闲置着。</b>1312 的 <code>A_INT_dyeing_skin</code> 字段已上线并跑过真实内容
-      （2024 圣诞高级皮肤做到过「一皮四色」），但 2026 年新增使用为 <b>0</b>。换色这一整个维度不需要新造轮子。</li>
-    <li><b>装配槽的雏形已经在表结构里。</b>1389 的 <code>A_ARR_items</code> 本来就是<b>定长 5 槽数组</b>
-      —— 2026 拓荒节因为没有侧挂件，那一位直接填了 <code>0</code> 占位。从「槽位填死 id」到「槽位可选玩家拥有件」
-      是同一结构的扩展，不是推倒重来（见 <a href="#s16" style="color:var(--accent-d)">§16.1</a>）。</li>
-    <li><b>这是靠内容广度取胜的形态。</b>一个部件 = 一个模型 + N 个配色变体，没有动画逻辑、没有实时同步、没有新规则引擎。
-      产能溢出时，正确的投法就是投这种<b>单件不复杂、总量可以很大</b>的内容型资产。</li>
-  </ol>
-
-  <figure class="svgwrap">
-    <svg width="1000" height="252" viewBox="0 0 1000 252" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <marker id="a1b" markerWidth="12" markerHeight="12" refX="8" refY="4" orient="auto">
-          <path d="M0,0 L9,4 L0,8 Z" fill="#00A0E9"/></marker>
-      </defs>
-      <g font-size="13" font-weight="700" text-anchor="middle">
-        <!-- 左：现状 -->
-        <rect x="18" y="30" width="404" height="200" rx="10" fill="#fff" stroke="#E7ECF2"/>
-        <text x="220" y="54" fill="#8A94A2" font-size="12" font-weight="700" letter-spacing="1">现状　一套一套地卖（加法）</text>
-        <rect x="40" y="70" width="70" height="42" rx="9" fill="#25334A"/>
-        <text x="75" y="88" fill="#fff" font-size="11.5">初级皮</text><text x="75" y="103" fill="#B7C4D2" font-size="10" font-weight="400">固定</text>
-        <rect x="118" y="70" width="70" height="42" rx="9" fill="#25334A"/>
-        <text x="153" y="88" fill="#fff" font-size="11.5">高级皮</text><text x="153" y="103" fill="#B7C4D2" font-size="10" font-weight="400">固定</text>
-        <rect x="196" y="70" width="70" height="42" rx="9" fill="#25334A"/>
-        <text x="231" y="88" fill="#fff" font-size="11.5">组件1</text><text x="231" y="103" fill="#B7C4D2" font-size="10" font-weight="400">固定</text>
-        <rect x="274" y="70" width="70" height="42" rx="9" fill="#25334A"/>
-        <text x="309" y="88" fill="#fff" font-size="11.5">组件2</text><text x="309" y="103" fill="#B7C4D2" font-size="10" font-weight="400">固定</text>
-        <rect x="352" y="70" width="52" height="42" rx="9" fill="#25334A"/>
-        <text x="378" y="88" fill="#fff" font-size="11.5">特效</text><text x="378" y="103" fill="#B7C4D2" font-size="10" font-weight="400">固定</text>
-        <text x="220" y="140" fill="#4A5462" font-size="12" font-weight="400">5 件集齐 &rarr; 自动解锁最终形态</text>
-        <rect x="128" y="152" width="184" height="38" rx="9" fill="#0C1A2B"/>
-        <text x="220" y="176" fill="#FF9B92" font-size="12.5">消费终点 · 下期归零</text>
-        <text x="220" y="212" fill="#8A94A2" font-size="11.5" font-weight="400">深度 = 5 件，且与前后各期互不相干</text>
-
-        <!-- 中间箭头 -->
-        <line x1="432" y1="130" x2="486" y2="130" stroke="#00A0E9" stroke-width="3" marker-end="url(#a1b)"/>
-
-        <!-- 右：本案 -->
-        <rect x="500" y="30" width="482" height="200" rx="10" fill="#fff" stroke="#BFE3F7"/>
-        <text x="741" y="54" fill="#007BB8" font-size="12" font-weight="700" letter-spacing="1">本案　拆成两个主体 + 两个附属维度（乘法）</text>
-        <rect x="512" y="70" width="130" height="46" rx="9" fill="#007BB8"/>
-        <text x="577" y="89" fill="#fff">城基 Foundation</text><text x="577" y="105" fill="#CDEBFA" font-size="10.5" font-weight="400">M 款抢 1 个槽</text>
-        <text x="656" y="97" fill="#007BB8" font-size="17" font-weight="700">×</text>
-        <rect x="670" y="66" width="146" height="54" rx="9" fill="#00A0E9"/>
-        <text x="743" y="85" fill="#fff">城市本体 Body</text><text x="743" y="101" fill="#EAF7FE" font-size="10.5" font-weight="400">N 款抢 1 个槽</text>
-        <text x="743" y="114" fill="#FFD277" font-size="10" font-weight="700">★ 主力付费点</text>
-        <text x="828" y="97" fill="#007BB8" font-size="17" font-weight="700">×</text>
-        <rect x="842" y="70" width="118" height="46" rx="9" fill="#C8961E"/>
-        <text x="901" y="89" fill="#fff">色板 Colorway</text><text x="901" y="105" fill="#FFF2D4" font-size="10.5" font-weight="400">两个主体各自换色</text>
-        <text x="741" y="140" fill="#4A5462" font-size="12" font-weight="400">部件永久保留 &rarr; 累积收藏度 &rarr; 城基 / 本体 / 城辉 三件同时达标 = 璀璨态</text>
-        <rect x="620" y="152" width="242" height="38" rx="9" fill="#0C1A2B"/>
-        <text x="741" y="176" fill="#FFD277" font-size="12.5">新件给全部旧件增加搭法</text>
-        <text x="741" y="212" fill="#007BB8" font-size="11.5" font-weight="400">深度随体系规模增长，不随单期封顶</text>
-      </g>
-    </svg>
-    <figcaption><b>图 1-1</b>　结构对照：现状是「集齐 5 件即终点」的加法，本案是「城基 × 本体 × 配色」的乘法。城基与本体各只有 1 个槽，款数越多、取舍越贵</figcaption>
-  </figure>
-</section>
-
-<!-- ══════════ 02 ══════════ -->
-<section id="s2">
-  <h2><span class="no">02</span>现状诊断</h2>
-  <div class="h2sub">Diagnosis &mdash; 数据源：1312 city_skin / 1388 city_suit_module / 1389 city_suit 三表逐行实测（2026-08-17）</div>
-
-  <h3>2.1　全景清点</h3>
-  <p class="fine">⚠ 口径区分：本节清点的是<b>主城外观品类的配置存量</b>；<a href="#s2" style="color:var(--accent-d)">§2.3</a>
-    第四条引用的是<b>全项目活动族的营收趋势</b>。两者用途不同，不可混用。</p>
-
-  <table class="tight">
-    <tr><th style="width:16%">表</th><th style="width:22%">承载什么</th><th style="width:12%">存量</th><th>结构特征</th></tr>
-    <tr><td><b>1312</b> city_skin</td><td>主城皮肤本体（城堡模型）</td><td>124 行</td>
-      <td>品质分布 q3=57 / q4=37 / <b>q5=18</b> / q2=7 / q0=5。q5 即现有最高档，行内注释已在用「璀璨」一词</td></tr>
-    <tr><td><b>1388</b> city_suit_module</td><td>套装挂载件（侧挂 / 顶挂 / 特效）</td><td>20 行</td>
-      <td><code>C_INT_type</code> 仅 1 / 2 / 3 三值，对应两个实体位 + 一个特效位</td></tr>
-    <tr><td><b>1389</b> city_suit</td><td>套装定义（哪几件算一套）</td><td>7 套</td>
-      <td><code>A_ARR_items</code> <b>定长 5 槽</b>，<code>A_INT_suit</code> 指向集齐后的最终形态</td></tr>
-  </table>
-
-  <p>七套主城套装（2025 科技节、2025 深海节、2025 周年庆、2025 星球、2026 战地、2026 拓荒节、2026 周年庆）
-    <b>结构完全一致</b>：两张皮肤 + 两个实体挂件 + 一个特效 = 5 件，集齐触发最终形态。
-    2026 拓荒节因为美术只给了「巨龙 + 特效」两件，第 4 槽直接填了 <code>0</code> 占位 —— 这个占位恰好说明
-    <b>槽位结构是死的，内容是可缺的</b>。</p>
-
-  <figure class="svgwrap">
-    <svg width="1000" height="238" viewBox="0 0 1000 238" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <marker id="a2b" markerWidth="10" markerHeight="10" refX="7" refY="3.4" orient="auto">
-          <path d="M0,0 L7.5,3.4 L0,6.8 Z" fill="#00A0E9"/></marker>
-      </defs>
-      <g font-size="12.5" font-weight="700" text-anchor="middle">
-        <text x="500" y="26" fill="#8A94A2" font-size="12" letter-spacing="1">1389 city_suit &nbsp;·&nbsp; A_ARR_items 定长 5 槽（以 2026 拓荒节 13891006 为例）</text>
-        <g>
-          <rect x="70" y="44" width="150" height="56" rx="9" fill="#25334A"/>
-          <text x="145" y="66" fill="#fff" font-size="12">槽 1　初级皮肤</text>
-          <text x="145" y="85" fill="#B7C4D2" font-size="10.5" font-weight="400">13121113　策划填死</text>
-
-          <rect x="238" y="44" width="150" height="56" rx="9" fill="#25334A"/>
-          <text x="313" y="66" fill="#fff" font-size="12">槽 2　高级皮肤</text>
-          <text x="313" y="85" fill="#B7C4D2" font-size="10.5" font-weight="400">13121114　策划填死</text>
-
-          <rect x="406" y="44" width="150" height="56" rx="9" fill="#25334A"/>
-          <text x="481" y="66" fill="#fff" font-size="12">槽 3　实体件</text>
-          <text x="481" y="85" fill="#B7C4D2" font-size="10.5" font-weight="400">13881016　策划填死</text>
-
-          <rect x="574" y="44" width="150" height="56" rx="9" fill="#FDF0EE" stroke="#F2C7C2" stroke-dasharray="5 4"/>
-          <text x="649" y="66" fill="#B32A20" font-size="12">槽 4　实体件</text>
-          <text x="649" y="85" fill="#B32A20" font-size="10.5" font-weight="400">填 0 &mdash; 这期没这件</text>
-
-          <rect x="742" y="44" width="150" height="56" rx="9" fill="#25334A"/>
-          <text x="817" y="66" fill="#fff" font-size="12">槽 5　特效</text>
-          <text x="817" y="85" fill="#B7C4D2" font-size="10.5" font-weight="400">13881017　策划填死</text>
-        </g>
-        <path d="M481,108 L481,132" stroke="#00A0E9" stroke-width="2.2" fill="none" marker-end="url(#a2b)"/>
-        <rect x="330" y="136" width="302" height="44" rx="9" fill="#0C1A2B"/>
-        <text x="481" y="163" fill="#fff" font-size="12.5">A_INT_suit &rarr; 13121115　最终形态自动解锁</text>
-        <text x="500" y="205" fill="#B32A20" font-size="12.5" font-weight="700">槽位是存在的 —— 但每一格只能是那一个 id，玩家没有任何选择权</text>
-        <text x="500" y="225" fill="#8A94A2" font-size="11.5" font-weight="400">本案要改的就是这一点：把「填死的 id」换成「玩家拥有的同类件里任选」</text>
-      </g>
-    </svg>
-    <figcaption><b>图 2-1</b>　现有套装的槽位解剖：结构已是槽位化的，缺的是「选择权」这一步</figcaption>
-  </figure>
-
-  <h3>2.2　现状已经有什么 —— 但缺的是什么</h3>
-  <p>自定义能力<b>是有的，但它停在资源层，没有走到装配层</b>。三条特征：</p>
-  <ol class="rl">
-    <li><b>点对点。</b><code>A_INT_dyeing_skin</code> 让「一张皮肤拥有几个配色」成立（2024 圣诞高级皮肤做到 1 母 3 色），
-      但配色<b>只属于那一张皮肤</b>，换一张皮肤，色就作废。</li>
-    <li><b>单向。</b>1389 的 items 是策划填死的数组，玩家在这里只有「集齐 / 未集齐」两种状态，没有「选哪个」这一步。</li>
-    <li><b>只触发一次。</b>集齐那一刻自动切成最终形态，是整条链路上唯一的一次交互；之后主城状态就固定了，
-      直到下一期换一整套。</li>
-  </ol>
-
-  <h3>2.3　四个结构上限</h3>
-  <table class="tight">
-    <tr><th style="width:5%">#</th><th style="width:24%">上限</th><th style="width:34%">实测依据</th><th>后果</th></tr>
-    <tr><td><b>①</b></td><td><b>加法收集，集齐即终点</b></td>
-      <td>7 套套装全部是「5 件 &rarr; suit」结构，无一例外</td>
-      <td>一期最多 5 个可售单位，第 6 次付费无处可去</td></tr>
-    <tr><td><b>②</b></td><td><b>玩家零选择权</b></td>
-      <td>1389 <code>A_ARR_items</code> 为固定 id 数组</td>
-      <td>「我的主城」这件事不成立，外显缺少个体表达</td></tr>
-    <tr><td><b>③</b></td><td><b>换新即弃旧</b></td>
-      <td>1312 中 124 张皮肤，同时只能穿 1 张；套装无跨期互通</td>
-      <td>旧付费随新内容上线而贬值，反过来抑制复购</td></tr>
-    <tr><td><b>④</b></td><td><b>已有能力闲置</b></td>
-      <td>dyeing 22 行全部是 2024-2025，2026 新增 0；
-        多档 <code>skin_level</code> 全表只有默认皮肤和火箭皮肤 2 行在用</td>
-      <td>一整个乘法维度没有进入投放</td></tr>
-  </table>
-
-  <p>把这四条放在大盘背景里看：项目上半年 <b>20 / 22 个活动族已过峰</b>，且覆盖全部付费点类型
-    —— 消耗型、随机型、外显型都在跌。恰恰因为<b>各族衰减的原因各不相同、结果却一致向下</b>，
-    这说明问题不在某一期的执行，而在<b>现有付费点的结构已经开采到顶</b>。主城外观是其中受结构限制最明显的一类：
-    它的存量资产最大（124 张），复用率却最低（同时只能穿 1 张）。</p>
-
-  <div class="conclusion">诊断结论：主城外观的瓶颈<span class="gd">不是件数不够，是新内容只对新内容有价值</span>
-    —— 每一期都在从零起跑。</div>
-</section>
-
-<!-- ══════════ 03 ══════════ -->
-<section id="s3">
-  <h2><span class="no">03</span>核心循环</h2>
-  <div class="h2sub">Core Loop</div>
-
-  <figure class="svgwrap">
-    <svg width="1000" height="356" viewBox="0 0 1000 356" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <marker id="a3b" markerWidth="9" markerHeight="9" refX="7" refY="3.2" orient="auto">
-          <path d="M0,0 L7,3.2 L0,6.4 Z" fill="#00A0E9"/></marker>
-        <marker id="a3g" markerWidth="9" markerHeight="9" refX="7" refY="3.2" orient="auto">
-          <path d="M0,0 L7,3.2 L0,6.4 Z" fill="#C8961E"/></marker>
-      </defs>
-      <g font-size="13" font-weight="700" text-anchor="middle">
-        <rect x="36" y="52" width="172" height="62" rx="9" fill="#0C1A2B"/>
-        <text x="122" y="78" fill="#fff">① 获取部件</text>
-        <text x="122" y="97" fill="#8FD4F0" font-size="11" font-weight="400">付费货架 / 活动免费产出</text>
-
-        <rect x="264" y="52" width="172" height="62" rx="9" fill="#007BB8"/>
-        <text x="350" y="78" fill="#fff">② 装配主城</text>
-        <text x="350" y="97" fill="#CDEBFA" font-size="11" font-weight="400">3 槽取舍 + 上色</text>
-
-        <rect x="492" y="52" width="172" height="62" rx="9" fill="#00A0E9"/>
-        <text x="578" y="78" fill="#fff">③ 被看见</text>
-        <text x="578" y="97" fill="#EAF7FE" font-size="11" font-weight="400">自己每日 / 侦查 / 联盟来访</text>
-
-        <rect x="720" y="52" width="172" height="62" rx="9" fill="#25334A"/>
-        <text x="806" y="78" fill="#fff">④ 收藏度累积</text>
-        <text x="806" y="97" fill="#B7C4D2" font-size="11" font-weight="400">持有即计分，永不清零</text>
-      </g>
-      <g stroke="#00A0E9" stroke-width="2.2" fill="none" marker-end="url(#a3b)">
-        <path d="M208,83 L256,83"/><path d="M436,83 L484,83"/><path d="M664,83 L712,83"/>
-      </g>
-      <!-- 回流：收藏度 → 获取部件 -->
-      <g stroke="#C8961E" stroke-width="2.2" fill="none" marker-end="url(#a3g)">
-        <path d="M806,114 L806,146 L122,146 L122,120"/>
-      </g>
-      <rect x="360" y="130" width="290" height="4" fill="#F7F9FC"/>
-      <text x="505" y="140" fill="#96690A" font-size="11" font-weight="700" text-anchor="middle">收藏度进度条露出缺口 &rarr; 回到货架补件</text>
-
-      <!-- 支线容器 -->
-      <rect x="36" y="176" width="856" height="152" rx="10" fill="#fff" stroke="#E7ECF2"/>
-      <text x="60" y="199" fill="#8A94A2" font-size="11.5" font-weight="700" letter-spacing="1" text-anchor="start">支线　三条，都回流到「② 装配」</text>
-
-      <g font-size="12.5" font-weight="700" text-anchor="middle">
-        <rect x="66" y="212" width="176" height="54" rx="9" fill="#C8961E"/>
-        <text x="154" y="234" fill="#fff" font-size="12.5">色板：给旧件换色</text>
-        <text x="154" y="252" fill="#FFF2D4" font-size="10.5" font-weight="400">不新增件，改变已有件</text>
-
-        <rect x="290" y="212" width="176" height="54" rx="9" fill="#C8961E"/>
-        <text x="378" y="234" fill="#fff" font-size="12.5">预设方案：存多套搭配</text>
-        <text x="378" y="252" fill="#FFF2D4" font-size="10.5" font-weight="400">让存量件被反复用上</text>
-
-        <rect x="514" y="212" width="176" height="54" rx="9" fill="#C8961E"/>
-        <text x="602" y="234" fill="#fff" font-size="12.5">璀璨态：三件达标</text>
-        <text x="602" y="252" fill="#FFF2D4" font-size="10.5" font-weight="400">门槛跟随当期，不封顶</text>
-
-        <rect x="738" y="212" width="132" height="54" rx="9" fill="#0C1A2B"/>
-        <text x="804" y="234" fill="#fff" font-size="12.5">回到 ② 装配</text>
-        <text x="804" y="252" fill="#8FD4F0" font-size="10.5" font-weight="400">主环重新跑一遍</text>
-      </g>
-      <g stroke="#C8961E" stroke-width="1.8" fill="none" marker-end="url(#a3g)">
-        <path d="M242,239 L284,239"/><path d="M466,239 L508,239"/><path d="M690,239 L732,239"/>
-      </g>
-      <text x="464" y="300" fill="#4A5462" font-size="11.5" font-weight="400" text-anchor="middle">
-        三条支线共用同一批部件 —— 玩家不需要为了走支线再买一套新东西，这是「旧件不贬值」的机制实现</text>
-      <text x="464" y="318" fill="#8A94A2" font-size="11" font-weight="400" text-anchor="middle">
-        免费玩家在 ①②③④ 上完整闭环，只是件数少、换色少（见下方要点 2）</text>
-    </svg>
-    <figcaption><b>图 3-1</b>　核心循环：主环四步（获取 &rarr; 装配 &rarr; 被看见 &rarr; 累积）+ 三条回流到装配的支线</figcaption>
-  </figure>
-
-  <div class="box blue">
-    <h4>循环的四个设计要点</h4>
+    <h4>四条通用硬约束（比单款造型重要，美术开工前必须先定）</h4>
+    <p class="fine">万象主城是常驻系统，部件要跨期互相搭配：这期的本体要能装往期所有底座，这期的色板要能刷往期所有部件。
+      下面四条一旦定死就不能改 —— <b>事后改等于已产的全部部件重做</b>。</p>
     <ol class="rl">
-      <li><b>「被看见」是第三步，不是副产品。</b>外观系统能不能长期卖，取决于展示场景够不够多。
-        主城的展示面天然有三层：自己每天必看、被侦查时呈现给对手、联盟成员来访。
-        这一步不需要新做功能，是现有场景直接承载的。</li>
-      <li><b>免费玩家的循环必须自闭合。</b>每期至少 1 款城基或本体、至少 1 个色板走免费活动产出
-        （具体挂载位见 <a href="#s10" style="color:var(--accent-d)">§10</a>）。免费玩家跑的是同一个四步环，
-        只是槽里的件少、可换的色少 —— <b>不是被拦在环外，是环内密度低</b>。这条不成立的话，第三天就断流。</li>
-      <li><b>没有「废件」。</b>任何一件城基 / 本体 / 城辉 / 色板，即使玩家当前没装上，也在收藏度里持续计分
-        （<a href="#s8" style="color:var(--accent-d)">§8</a>）。这是外观品类能长期卖下去的结构前提：
-        <b>买了不用，也不算白买。</b></li>
-      <li><b>装配是随时可改的，不是一次性消费。</b>切换搭配零成本、无冷却、不消耗任何道具。
-        只有这样，「多拥有一件」才等于「多一批可玩的搭法」，付费的边际价值才不衰减。</li>
+      <li><b>底座顶面必须留净空区。</b>三款底座的顶面挂载点坐标、朝向、可承载直径<b>全项目一套值</b>，
+        顶面中心不许有凸起结构（本体会插进去）。</li>
+      <li><b>本体底面必须平切。</b>接口尺寸上限、重心位置、包围盒上限统一，
+        底部<b>不要长出悬浮岛式的参差结构</b>（首轮出图 AI 就长过，被驳回重出）。</li>
+      <li><b>材质槽命名必须统一。</b>色板靠材质槽做批量替换（如 <code>body_main / body_trim / glow_a</code>），
+        命名不统一就只能逐款手配，<b>后续每期 8 个色板的产能直接卡死</b>。</li>
+      <li><b>城辉不许遮挡本体的识别轮廓。</b>本体是付费大头，特效盖住等于削弱玩家刚买的东西 ——
+        光带必须从建筑背后穿过、正面转半透明。</li>
     </ol>
-  </div>
-</section>
-
-<!-- ══════════ 04 ══════════ -->
-<section id="s4">
-  <h2><span class="no">04</span>城基 Foundation</h2>
-  <div class="h2sub">轴一 &mdash; 城体本身，1 槽</div>
-
-  <h3>4.1　规则</h3>
-  <table class="tight">
-    <tr><th style="width:20%">项</th><th>定义</th></tr>
-    <tr><td><b>是什么</b></td><td>主城的城体模型本身，决定整座城的轮廓、体量与建筑语言</td></tr>
-    <tr><td><b>槽位</b></td><td><b>1 个，不可空</b>。未拥有任何城基时使用默认城基（免费，全服可用）</td></tr>
-    <tr><td><b>顶部接口</b></td><td>每款城基顶部带<b>统一规格的挂载点</b>，可承载任意一款城市本体（这是全案的硬前提，见 <a href="#s15" style="color:var(--accent-d)">§15</a>）</td></tr>
-    <tr><td><b>配色</b></td><td>出厂 1 个默认色 + N 个可购色，走 1312 <code>A_INT_dyeing_skin</code> 分组（<a href="#s6" style="color:var(--accent-d)">§6</a>）</td></tr>
-    <tr><td><b>首期供给</b></td><td><b>3 款</b>，每款 3 色（默认 + 2 购色）</td></tr>
-  </table>
-
-  <h4>为什么城基槽是 1 个且不可空</h4>
-  <p>城基就是城堡模型本身，游戏里必然要显示一座城 —— 它不像挂件那样可以「什么都不挂」。
-    保留一款免费默认城基，同时保证了两件事：<b>零氪玩家的主城不是残缺的</b>；
-    以及城基这一轴对所有人默认开放，付费买的是「换一种轮廓」而不是「让主城显示出来」。</p>
-
-  <h4>为什么首期只给 3 款</h4>
-  <p>城基决定挂载点规格 —— 它是全案唯一一个「一旦定错、全部已产部件重做」的环节。
-    首期控制在 3 款，是为了在挂载点规范上留出一次修正机会 —— 3 款跑通之后再批量扩产，
-    比一次铺 8 款然后发现规格要改要稳。</p>
-
-  <h3>4.2　首期 3 款设计（定版）</h3>
-  <p>三款覆盖三种建筑语言，稀有度从低到中。<b>B1 走免费通路</b>，保证零氪玩家也能换掉默认城基。</p>
-  <table class="tight">
-    <tr><th style="width:7%">编号</th><th style="width:14%">名称</th><th style="width:13%">英文</th>
-        <th>题材与造型</th><th style="width:12%">稀有度</th><th style="width:22%">配色（默认 + 可购）</th></tr>
-    <tr><td><b>B1</b></td><td><b>锈铁台</b></td><td>Rust Yard</td>
-      <td>废土工业：锈蚀钢板拼接的平台，边缘堆油桶、外挂管道与铁梯</td>
-      <td>低 <span class="tag t-out">免费轨</span></td>
-      <td>锈铁原色 ＋ <b>熔橙钛灰</b> / <b>曜石霓虹</b></td></tr>
-    <tr><td><b>B2</b></td><td><b>磐甲基</b></td><td>Bulwark Base</td>
-      <td>装甲军事：厚装甲板层叠，侧面履带与探照灯，棱角硬朗</td>
-      <td>中</td>
-      <td>军绿装甲 ＋ <b>极地冰蓝</b> / <b>沙暴迷彩</b></td></tr>
-    <tr><td><b>B3</b></td><td><b>苔垣遗基</b></td><td>Mossveil Ruin</td>
-      <td>丛林遗迹：石砌台基被藤蔓覆盖，缝隙里透出发光矿脉</td>
-      <td class="gr">中（当期城基最高）</td>
-      <td>苔石灰绿 ＋ <b>翡翠夜光</b> / <b>赭石晨曦</b></td></tr>
-  </table>
-  <p class="fine">命名按包装范式「{材质或地貌} + {台 / 基}」，二至四字。三款的<b>顶面净空区域尺寸一致</b>，
-    这是任一本体都能装上去的前提（<a href="#s5" style="color:var(--accent-d)">§5.2</a>）。</p>
-
-  <figure class="art">
-    <img src="img/bases.jpg" alt="城基三款">
-    <figcaption><b>图 4-1</b>　首期三款城基：锈铁台 / 磐甲基 / 苔垣遗基。<b>顶面一律留空</b>
-      —— 城基只做下半段，上面装什么由玩家选（AI 概念图，非最终美术）</figcaption>
-  </figure>
-</section>
-
-<!-- ══════════ 05 ══════════ -->
-<section id="s5">
-  <h2><span class="no">05</span>城市本体与槽位取舍</h2>
-  <div class="h2sub">主体二 &mdash; 视觉主体，也是主力付费点，1 槽</div>
-
-  <h3>5.1　规则</h3>
-  <table class="tight">
-    <tr><th style="width:20%">项</th><th>定义</th></tr>
-    <tr><td><b>城市本体是什么</b></td><td>站在城基上的整座城体上半段，决定这座城<b>是什么</b> —— 题材、叙事、辨识度</td></tr>
-    <tr><td><b>本体槽位</b></td><td><b>1 个，不可空</b>。同时只能装备 1 款</td></tr>
-    <tr><td><b>定位</b></td><td class="gr"><b>★ 主力付费点。</b>视觉占比 &ge; 城基 —— 玩家在主城场景与世界地图上第一眼看到的是它</td></tr>
-    <tr><td><b>城辉是什么</b></td><td>环绕整座主城的特效层，不是实体件</td></tr>
-    <tr><td><b>城辉槽位</b></td><td><b>1 个，可空</b>。与城基、本体互不占位</td></tr>
-    <tr><td><b>配色</b></td><td>本体每款默认 + 1 购色（当期最高稀有度那款仅默认色）；城辉首期不出购色（理由见下）</td></tr>
-    <tr><td><b>首期供给</b></td><td>城市本体 <b>4 款</b> + 城辉 <b>1 款</b>　&mdash;&mdash;　<b>4 款本体抢 1 个槽</b></td></tr>
-  </table>
-
-  <h4>为什么本体是一个整体，不做多件拼装</h4>
-  <p>本体不拆成「主楼 + 副楼 + 塔」的多件组合。两个理由：<b>①</b> 拼装会把「任意组合都不违和」的风险
-    全部压到美术身上，而组合数一旦爆炸，美术无法逐组校验；<b>②</b> 主力付费点的边界会被拼装模糊掉
-    —— 玩家说不清自己买的是「一座城」还是「半座城」，定价也就立不住。</p>
-
-  <div class="box blue">
-    <h4>核心设计：槽位数必须小于件数</h4>
-    <p>首期给 4 款城市本体，却只有 <b>1 个</b>本体槽 —— <b>这是故意的，也是整个自定义体验的支点</b>。</p>
-    <p>如果本体能同时穿好几款，玩家买齐后全插上就结束了，那还是「集齐即终点」的老结构。
-      1 个槽对 4 款，才会产生三件事：<b>①</b> 玩家必须选，<b>选择本身就是表达</b>；
-      <b>②</b> 第 4 款不会因为「已经插满了」而失去购买理由 —— 它是用来<b>换着穿</b>的；
-      <b>③</b> 后续每期的新本体，都在跟<b>全部存量本体</b>竞争同一个槽，
-      所以<b>老件不会因为新件上线而作废，只是这一次没被选中</b>。</p>
-    <p class="fine">⚠ 由此派生一条运营纪律：<b>槽位数量永久固定为 3（城基 1 + 本体 1 + 城辉 1），不随期数增加</b>。
-      加槽等于稀释取舍，是这个体系唯一不可逆的破坏性改动。</p>
+    <p class="fine">⚠ 这四条的<b>具体数值请美术在首期开工前给出</b>，配置与后续所有期都按这套值走。</p>
   </div>
 
-  <h4>为什么城辉首期只给 1 款、且不出购色</h4>
-  <p>城辉是四类部件里美术单价最高、复用性最差的一类（特效资源无法像模型那样靠换材质派生变体）。
-    首期只投 1 款，用来验证一件事：<b>玩家愿不愿意为「罩在城外面那一层光」单独付费</b>。
-    验证通过再决定第二期加几款、要不要开购色；不通过则城辉降级为其它品类的附赠，不再单独立项供给。</p>
-
-  <h3>5.2　组合空间怎么来的</h3>
-  <figure class="svgwrap">
-    <svg width="1000" height="300" viewBox="0 0 1000 300" xmlns="http://www.w3.org/2000/svg">
-      <g font-size="12.5" font-weight="700" text-anchor="middle">
-        <text x="500" y="26" fill="#8A94A2" font-size="12" letter-spacing="1">首期组合空间的构成（算法可复核）</text>
-
-        <rect x="40" y="46" width="250" height="150" rx="10" fill="#fff" stroke="#BFE3F7"/>
-        <text x="165" y="70" fill="#007BB8" font-size="12.5">城基槽 ×1（不可空）</text>
-        <rect x="66" y="84" width="198" height="34" rx="8" fill="#007BB8"/>
-        <text x="165" y="106" fill="#fff" font-size="11.5">3 款 × 3 色</text>
-        <text x="165" y="146" fill="#25334A" font-size="26" font-weight="700" font-family="Arial">9</text>
-        <text x="165" y="172" fill="#8A94A2" font-size="11" font-weight="400">种城基状态</text>
-
-        <text x="316" y="130" fill="#007BB8" font-size="22" font-weight="700">×</text>
-
-        <rect x="342" y="46" width="316" height="150" rx="10" fill="#fff" stroke="#00A0E9" stroke-width="2"/>
-        <text x="500" y="70" fill="#007BB8" font-size="12.5">城市本体槽 ×1（不可空）★ 主力付费</text>
-        <rect x="368" y="84" width="264" height="34" rx="8" fill="#00A0E9"/>
-        <text x="500" y="106" fill="#fff" font-size="11.5">4 款，同时只能穿 1 款</text>
-        <text x="500" y="138" fill="#4A5462" font-size="11" font-weight="400">3 款 ×（默认+1购色）+ 最高稀有度 1 款仅默认色</text>
-        <text x="500" y="164" fill="#25334A" font-size="26" font-weight="700" font-family="Arial">7</text>
-        <text x="500" y="184" fill="#8A94A2" font-size="11" font-weight="400">种本体状态</text>
-
-        <text x="684" y="130" fill="#007BB8" font-size="22" font-weight="700">×</text>
-
-        <rect x="710" y="46" width="250" height="150" rx="10" fill="#fff" stroke="#BFE3F7"/>
-        <text x="835" y="70" fill="#007BB8" font-size="12.5">城辉槽 ×1（可空）</text>
-        <rect x="736" y="84" width="198" height="34" rx="8" fill="#C8961E"/>
-        <text x="835" y="106" fill="#fff" font-size="11.5">1 款，挂 或 不挂</text>
-        <text x="835" y="146" fill="#25334A" font-size="26" font-weight="700" font-family="Arial">2</text>
-        <text x="835" y="172" fill="#8A94A2" font-size="11" font-weight="400">种城辉状态</text>
-
-        <rect x="330" y="216" width="340" height="46" rx="9" fill="#0C1A2B"/>
-        <text x="500" y="245" fill="#fff" font-size="14">9 × 7 × 2 = <tspan fill="#FFD277" font-size="17">126</tspan> 种主城呈现</text>
-        <text x="500" y="284" fill="#B32A20" font-size="11.5" font-weight="700">⚠ 126 是体验口径，不是付费深度 —— 付费深度只看可售单位数（§11.3）</text>
-      </g>
-    </svg>
-    <figcaption><b>图 5-1</b>　首期组合空间 126 种的推导。城基与本体各只有 1 个槽 —— 组合数不靠「多穿几件」堆，靠「款数 × 配色」堆</figcaption>
-  </figure>
-
-  <h3>5.3　首期 4 款设计（定版）</h3>
-  <p>四款覆盖低→最高四档稀有度，<b>4 款抢 1 个槽</b>。C1 走 BP 免费轨；C4 是当期璀璨态门槛件、
-    <b>仅默认色不出购色</b> —— 最高稀有度不做配色分流，保证它的唯一性。</p>
+  <h3>5.1　每款的避坑项（美需表里逐款展开，这里只列最容易踩的）</h3>
   <table class="tight">
-    <tr><th style="width:7%">编号</th><th style="width:14%">名称</th><th style="width:13%">英文</th>
-        <th>题材与造型</th><th style="width:14%">稀有度</th><th style="width:19%">配色（默认 + 可购）</th></tr>
-    <tr><td><b>C1</b></td><td><b>铁工巨械</b></td><td>Ironworks Rig</td>
-      <td>机械巨构：起重臂 + 外露齿轮 + 蒸汽塔，工业感最重</td>
-      <td>低 <span class="tag t-out">BP 免费轨</span></td>
-      <td>工业铁灰 ＋ <b>钴蓝铬银</b></td></tr>
-    <tr><td><b>C2</b></td><td><b>赤翼星舰</b></td><td>Crimson Ark</td>
-      <td>坠落星舰改造成城，两侧机翼张开成瞭望台，舰首朝上</td>
-      <td>中</td>
-      <td>赤翼绯红 ＋ <b>绯红鎏金</b></td></tr>
-    <tr><td><b>C3</b></td><td><b>猿王座</b></td><td>Ape Throne</td>
-      <td>要塞高塔，塔顶猿王持锤踞守王座，塔身盘旋阶梯与金饰</td>
-      <td>高</td>
-      <td>石灰岩白 ＋ <b>黑金帝威</b></td></tr>
-    <tr><td><b>C4</b></td><td class="gr"><b>熔心方尖 ★</b></td><td>Molten Obelisk</td>
-      <td>熔岩方尖碑，外壳黑曜、内核裂缝透出流动熔光，顶端悬浮熔核</td>
-      <td class="rd"><b>最高（当期门槛件）</b></td>
-      <td class="rd"><b>仅默认「熔心橙」</b></td></tr>
-  </table>
-  <p class="fine">命名按包装范式「四字主题词」，沿用现有节日道具文案惯例（赤翼星舰 · 摇滚猿王）。
-    四款的<b>底面接口尺寸与重心位置一致</b>，任一款都能装到任一城基上（<a href="#s5" style="color:var(--accent-d)">§5.2</a>）。</p>
-
-  <h3>5.4　外观与界面示意</h3>
-  <figure class="art">
-    <img src="img/crowns.jpg" alt="城市本体四款">
-    <figcaption><b>图 5-2</b>　首期四款城市本体：铁工巨械 / 赤翼星舰 / 猿王座 / 熔心方尖。
-      <b>底部一律平切、不带底座</b> —— 本体只做上半段（AI 概念图，非最终美术）。
-      ⚠ 图中骷髅徽记与旗标为生成噪声，实际纹章按 P2 美术规范另定</figcaption>
-  </figure>
-  <figure class="art">
-    <img src="img/aura.jpg" alt="城辉">
-    <figcaption><b>图 5-3</b>　首期城辉「<b>环星光带</b>」Orbit Veil：一条青金光带水平环绕整城 + 上升余烬粒子。
-      <b>不遮挡本体识别轮廓</b>（AI 概念图，非最终美术）</figcaption>
-  </figure>
-  <figure class="art">
-    <img src="img/ui_editor.jpg" alt="装配界面">
-    <figcaption><b>图 5-4</b>　装配界面示意（横屏：左预览、右操作面板）：3 个槽 = 城基 1 / 本体 1 / 城辉 1，
-      城辉槽可空；底部为色板切换条（AI 概念图）。
-      ⚠ 图中把本体画成了字面意义的「皇冠」，且槽位数与本案不符（本案 3 槽），以 <a href="#s5" style="color:var(--accent-d)">§5.1</a> 为准</figcaption>
-  </figure>
-
-  <figure class="art">
-    <img src="img/combo.jpg" alt="同一本体装在三款城基上">
-    <figcaption><b>图 5-5</b>　可互换性验证：<b>同一款「赤翼星舰」分别装在三款城基上</b>，上半段完全一致、
-      只有下半段不同。首期 3 × 4 = 12 种组合必须全部可用且不穿模，这是换档流程里那道试装闸门要保的东西
-      （<a href="#s13" style="color:var(--accent-d)">§13.2</a>，AI 概念图）。
-      ⚠ 图中 A / B / C 徽章与骷髅翼纹为生成噪声，与配置编号无关</figcaption>
-  </figure>
-</section>
-
-<!-- ══════════ 06 ══════════ -->
-<section id="s6">
-  <h2><span class="no">06</span>色板 Colorway</h2>
-  <div class="h2sub">轴三 &mdash; 施加在部件上的配色，独立商品</div>
-
-  <h3>6.1　规则</h3>
-  <table class="tight">
-    <tr><th style="width:20%">项</th><th>定义</th></tr>
-    <tr><td><b>是什么</b></td><td>施加在某一款城基或某一款城市本体上的配色方案。<b>色板绑定部件，不是全局染料</b></td></tr>
-    <tr><td><b>获得后</b></td><td>永久拥有，可随时在该部件的色板条上切换，切换零成本</td></tr>
-    <tr><td><b>默认色</b></td><td>每款部件出厂自带 1 个默认色，随部件一起获得，不单独售卖</td></tr>
-    <tr><td><b>配置实现</b></td><td>1312 <code>A_INT_dyeing_skin</code> 指向母部件 id，同组即同一部件的不同配色 —— <b>引擎已支持</b></td></tr>
-    <tr><td><b>首期供给</b></td><td>城基 3 款 × 2 购色 + 本体 3 款 × 1 购色 = <b>9 个可购色板</b>（最高稀有度那款本体仅默认色）</td></tr>
+    <tr><th style="width:16%">部件</th><th>避坑</th></tr>
+    <tr><td>B1 锈铁台</td><td>不要做成完整的房子或碉堡（它只是垫在下面的一层）· 细节不要堆到顶面中心 · 不用猿族图腾</td></tr>
+    <tr><td>B2 磐甲基</td><td>不要做成坦克或载具（撞科技节 2026 方向）· 不要霓虹 KTV 风 · 徽记不要做成真实国家或军队标志</td></tr>
+    <tr><td>B3 苔垣遗基</td><td>不要做成寺庙或祭坛（避宗教符号）· 晶簇不要做成宝石堆 · 不要热带海岛感，是内陆废墟</td></tr>
+    <tr><td>C1 铁工巨械</td><td>不要做成钻井平台或采矿车 · 齿轮要有咬合关系不能是贴图 · 管线不要盖住城体轮廓</td></tr>
+    <tr><td>C2 赤翼星舰</td><td>不要做成完整能飞的飞船（是坠毁后改造，要有破损和加建痕迹）· 不要做成现实具体机型</td></tr>
+    <tr><td>C3 猿王座</td><td>不要做成宗教神像或供奉台 · 猿王不要卡通萌系（这款是身份象征要威严）· 战锤不要挡住塔体</td></tr>
+    <tr><td>C4 熔心方尖</td><td>不要做成火山（是人造碑体不是自然地貌）· 熔核不要做成宝石或能量罐 · 裂缝光要有流动方向不能是均匀发光贴图</td></tr>
+    <tr><td>A1 环星光带</td><td>不要做成土星环那样的宽扁盘 · 不要满屏粒子（会糊掉城体）· 不要闪频过快（主城是常驻界面会累眼）</td></tr>
+    <tr><td>色板通用</td><td>同一部件的两个色板色感不要撞车 · 霓虹类只保留一条主霓虹线，不要整体发光</td></tr>
   </table>
 
   <div class="box gold">
-    <h4>为什么色板是四类部件里最要紧的一类（尽管单价最低）</h4>
-    <p>色板是唯一一个<b>可售单位数随体系规模线性增长</b>的品类。城基和本体每期能出几款受美术产能硬约束，
-      但色板是材质变体 —— 第 6 期出的一个色板，作用对象是<b>前 5 期累积下来的全部部件</b>。</p>
-    <p>它同时承担两个职能：<b>中低 R 的入口</b>（不用买新模型也能让主城变样）和<b>高 R 的长尾复购</b>
-      （已经拥有全部部件的玩家，唯一还能买的东西）。这两类需求在现有的「一套一套卖」结构里都无处安放。</p>
-  </div>
-
-  <h4>为什么色板绑定部件，而不做成通用染料</h4>
-  <p>通用染料（一瓶红色染料可以刷任何部件）看起来更慷慨，但它有两个问题：
-    <b>①</b> 美术不可控 —— 任意颜色刷到任意模型上必然出现难看的组合，而这个体系的门面就是「好看」；
-    <b>②</b> 付费深度反而更浅 —— 通用染料买一次就够了，绑定色板则是每款部件各自的商品。
-    绑定式配色也正好是引擎现有 <code>dyeing_skin</code> 的实现方式，不需要改结构。</p>
-
-  <h3>6.2　首期 9 个可购色板（定版）</h3>
-  <p>命名按包装范式「双色词组」。<b>可购色板 9 个 = 城基 3 款 × 2 + 本体 3 款 × 1</b>；
-    最高稀有度的熔心方尖不出购色。</p>
-  <table class="tight">
-    <tr><th style="width:12%">母件</th><th style="width:16%">默认色（随件获得）</th>
-        <th style="width:34%">可购色板</th><th>色感描述</th></tr>
-    <tr class="grp"><td colspan="4">城基（每款 2 个可购色）</td></tr>
-    <tr><td><b>B1 锈铁台</b></td><td>锈铁原色</td>
-      <td><b>熔橙钛灰</b> ｜ <b>曜石霓虹</b></td>
-      <td>熔橙钛灰＝橙锈配冷灰金属；曜石霓虹＝纯黑底 + 品红霓虹描边</td></tr>
-    <tr><td><b>B2 磐甲基</b></td><td>军绿装甲</td>
-      <td><b>极地冰蓝</b> ｜ <b>沙暴迷彩</b></td>
-      <td>极地冰蓝＝白装甲 + 冰蓝灯带；沙暴迷彩＝土黄砂砾三色迷彩</td></tr>
-    <tr><td><b>B3 苔垣遗基</b></td><td>苔石灰绿</td>
-      <td><b>翡翠夜光</b> ｜ <b>赭石晨曦</b></td>
-      <td>翡翠夜光＝深绿石材 + 荧绿矿脉；赭石晨曦＝暖赭红 + 晨光金</td></tr>
-    <tr class="grp"><td colspan="4">城市本体（每款 1 个可购色）</td></tr>
-    <tr><td><b>C1 铁工巨械</b></td><td>工业铁灰</td><td><b>钴蓝铬银</b></td>
-      <td>钴蓝主色 + 抛光铬银构件</td></tr>
-    <tr><td><b>C2 赤翼星舰</b></td><td>赤翼绯红</td><td><b>绯红鎏金</b></td>
-      <td>绯红舰体 + 鎏金边饰，节庆感最强</td></tr>
-    <tr><td><b>C3 猿王座</b></td><td>石灰岩白</td><td><b>黑金帝威</b></td>
-      <td>黑曜石座 + 金纹雕饰</td></tr>
-    <tr><td class="rd"><b>C4 熔心方尖</b></td><td>熔心橙</td>
-      <td class="rd"><b>不出购色</b></td><td>门槛件保持唯一性，不做配色分流</td></tr>
-  </table>
-  <p class="fine">⚠ 色板靠<b>材质槽命名规范</b>做批量替换（见 <a href="#s16" style="color:var(--accent-d)">§16.1</a>）。
-    命名不统一就只能逐款手配，色板产能会被卡死 —— 这是首期美需必须带上的一条。</p>
-
-  <h3>6.3　外观示意</h3>
-  <figure class="art">
-    <img src="img/colorway.jpg" alt="同一本体三种配色">
-    <figcaption><b>图 6-1</b>　配色机制示意：<b>形体完全相同，只有涂装不同</b> ——
-      这是色板成本远低于新做一款本体的原因。图内三组色名恰好对应首期的
-      <b>熔橙钛灰 / 极地冰蓝 / 曜石霓虹</b>（AI 概念图，非最终美术）。
-      ⚠ 该图演示的是配色机制本身，画面里的造型不特指某一款部件</figcaption>
-  </figure>
-</section>
-
-<!-- ══════════ 07 ══════════ -->
-<section id="s7">
-  <h2><span class="no">07</span>璀璨态 Radiant</h2>
-  <div class="h2sub">最高状态 &mdash; 城基 / 本体 / 城辉 三件同时达标才触发</div>
-
-  <h3>7.1　规则</h3>
-  <div class="box blue">
-    <div class="onesent">璀璨态的判定：城基槽的部件 <span class="hl">且</span> 本体槽的部件
-      <span class="hl">且</span> 城辉槽的部件，三者<span class="hl">同时</span>达到当期规定的稀有度门槛
-      &rarr; 主城进入璀璨态（额外全局光效 + 城池名特效 + 主城铭牌标记）。</div>
-  </div>
-  <p class="fine">⚠ 判定条件逐字生效：<b>三个槽都要有件、且都要达标</b>。城基槽与本体槽不可空，
-    所以实际的失败点只有一个 —— <b>城辉槽空着，或城辉稀有度不够</b>。</p>
-
-  <table class="tight">
-    <tr><th style="width:22%">项</th><th>定义</th></tr>
-    <tr><td><b>触发方式</b></td><td>装配状态实时判定，装上即触发，卸下即消失 —— <b>不是一次性解锁</b></td></tr>
-    <tr><td><b>当期门槛</b></td><td>门槛稀有度<b>跟随当期最高稀有度浮动</b>，每期随新内容重新定义</td></tr>
-    <tr><td><b>历史成就</b></td><td>达成过的期次<b>永久记录在铭牌上</b>（如「四周年·璀璨」），不会被后续期次剥夺</td></tr>
-    <tr><td><b>可否直购</b></td><td class="rd"><b>不可</b>。璀璨态本身不是商品，只能由三件装配达标产生（红线，见 <a href="#s11" style="color:var(--accent-d)">§11.2</a>）</td></tr>
-  </table>
-
-  <h4>为什么「璀璨」必须是状态，不能是单品</h4>
-  <p>现在 1312 里 <code>A_INT_skin_quality=5</code> 就是璀璨档，已有 18 张，且已经出现具名的
-    「圣诞节璀璨皮肤 2025」「新挖孔二期璀璨主城皮肤」。如果本案继续把璀璨做成「更高级的一张皮肤」，
-    结果只会是<b>再加一档品质、再通胀一次</b> —— 第三期就得发明比璀璨更高的词。</p>
-  <p>做成状态则完全不同：门槛跟着当期浮动，<b>每上一期，璀璨态就重新变成需要追的东西</b>，
-    而它消耗的是三个槽上的既有内容，不需要新造一个稀有度档位。这是这个体系里唯一一个「永不封顶」的追求点，
-    也是它跟现有 <code>quality=5</code> 的关系：<b>现有的 18 张璀璨皮肤按稀有度归入城基池，
-    「璀璨态」这个词升格为装配结果的名字，两者不冲突</b>。</p>
-
-  <h3>7.2　首期门槛落在哪三件</h3>
-  <table class="tight">
-    <tr><th style="width:16%">槽</th><th style="width:22%">门槛件</th><th style="width:14%">稀有度</th><th>获取</th></tr>
-    <tr><td>城基槽</td><td><b>B3 苔垣遗基</b></td><td>当期城基最高</td><td>D3 累充档位奖励</td></tr>
-    <tr><td>本体槽</td><td class="gr"><b>C4 熔心方尖 ★</b></td><td>当期最高</td><td>D2 节日 GACHA 主推</td></tr>
-    <tr><td>城辉槽</td><td><b>A1 环星光带</b></td><td>高</td><td>D5 节日 BP 付费轨顶奖</td></tr>
-  </table>
-  <p class="fine">三件分散在三条不同货架上（累充 / GACHA / BP），<b>不做单一礼包一键达成</b>
-    —— 一键达成会让璀璨态退化成一个 SKU，与 <a href="#s11" style="color:var(--accent-d)">§11.2</a>
-    「璀璨态不可直购」这条红线冲突。P6 当期礼包只打包<b>其中两件</b>，第三件仍需玩家自己走货架。</p>
-  <p class="fine">免费通路产出的 B1 / C1 稀有度不够，<b>零氪玩家当期无法达成璀璨态</b>
-    —— 这是外观差距，不是功能差距（<a href="#s12" style="color:var(--accent-d)">§12.1</a>）。</p>
-
-  <h3>7.3　外观示意</h3>
-  <figure class="art">
-    <img src="img/radiant.jpg" alt="璀璨态">
-    <figcaption><b>图 7-1</b>　璀璨态示意：<b>苔垣遗基 + 熔心方尖 + 环星光带</b>三件齐备时的额外全局光效（AI 概念图）。
-      三件在图中一眼可辨：底部苔石台基 = 苔垣遗基，中段熔岩尖碑 = 熔心方尖，环绕双光环 = 环星光带；
-      冲天金光柱是璀璨态<b>额外叠加</b>的光效，不属于任何一件部件</figcaption>
-  </figure>
-</section>
-
-<!-- ══════════ 08 ══════════ -->
-<section id="s8">
-  <h2><span class="no">08</span>收藏度 Collection</h2>
-  <div class="h2sub">让老资产不再沉没的机制</div>
-
-  <h3>8.1　规则</h3>
-  <table class="tight">
-    <tr><th style="width:22%">项</th><th>定义</th></tr>
-    <tr><td><b>计分对象</b></td><td>玩家<b>拥有</b>的全部城基 / 城市本体 / 城辉 / 色板。<b>持有即计分，与是否装上无关</b></td></tr>
-    <tr><td><b>分值来源</b></td><td>按部件稀有度给固定分，运营在配置里写死；<b>不做玩家行为的函数</b></td></tr>
-    <tr><td><b>回报形式</b></td><td>收藏度段位（外显徽记 + 图鉴完成度）<span class="tag t-out">已定</span>；
-      是否附带属性 buff <span class="tag t-cap">待定，见 8.3</span></td></tr>
-    <tr><td><b>是否清零</b></td><td class="gr"><b>永不清零，跨期跨赛季累积</b></td></tr>
-  </table>
-
-  <h4>它解决的是哪一条上限</h4>
-  <p>解决 <a href="#s2" style="color:var(--accent-d)">§2.3</a> 的第 ③ 条「换新即弃旧」。
-    现在的结构里，玩家买了上一期套装、这一期换上新的，上一期就彻底沉没 ——
-    而玩家是知道这件事的，所以它反过来在<b>抑制当期的购买决策</b>。
-    收藏度把「买了不用」重新定义成「买了仍在计分」，从机制上取消了这个抑制。</p>
-  <p>它还顺带解决一个运营侧的老问题：<b>某一期主题玩家不喜欢怎么办</b>。
-    现在的答案是「那就这期不买」；有收藏度之后，答案变成「即使不打算穿，买了也在往段位上走」。</p>
-
-  <figure class="svgwrap">
-    <svg width="1000" height="270" viewBox="0 0 1000 270" xmlns="http://www.w3.org/2000/svg">
-      <g font-size="12" font-weight="700">
-        <text x="500" y="24" fill="#8A94A2" font-size="12" letter-spacing="1" text-anchor="middle">玩家已付费资产的有效价值：六期对照（示意，非实测数据）</text>
-        <!-- 坐标 -->
-        <line x1="70" y1="210" x2="940" y2="210" stroke="#CDD7E2" stroke-width="1.5"/>
-        <line x1="70" y1="52" x2="70" y2="210" stroke="#CDD7E2" stroke-width="1.5"/>
-        <text x="52" y="60" fill="#8A94A2" font-size="10.5" font-weight="400" text-anchor="end">高</text>
-        <text x="52" y="208" fill="#8A94A2" font-size="10.5" font-weight="400" text-anchor="end">0</text>
-
-        <!-- 现状锯齿 -->
-        <path d="M70,196 L180,150 L180,196 L250,196 L320,150 L320,196 L390,196 L460,150 L460,196 L530,196 L600,150 L600,196 L670,196 L740,150 L740,196 L810,196 L880,150 L880,196"
-              fill="none" stroke="#E03C31" stroke-width="2.4"/>
-        <text x="890" y="186" fill="#E03C31" font-size="11" font-weight="700">现状</text>
-        <text x="890" y="200" fill="#E03C31" font-size="10" font-weight="400">每期归零</text>
-
-        <!-- 本案阶梯 -->
-        <path d="M70,196 L180,196 L180,172 L320,172 L320,148 L460,148 L460,122 L600,122 L600,94 L740,94 L740,66 L880,66"
-              fill="none" stroke="#1F9D55" stroke-width="2.6"/>
-        <text x="890" y="60" fill="#1F9D55" font-size="11" font-weight="700">本案</text>
-        <text x="890" y="74" fill="#1F9D55" font-size="10" font-weight="400">阶梯累积</text>
-
-        <g fill="#8A94A2" font-size="10.5" font-weight="400" text-anchor="middle">
-          <text x="125" y="228">第 1 期</text><text x="250" y="228">第 2 期</text><text x="390" y="228">第 3 期</text>
-          <text x="530" y="228">第 4 期</text><text x="670" y="228">第 5 期</text><text x="810" y="228">第 6 期</text>
-        </g>
-        <text x="500" y="256" fill="#4A5462" font-size="11.5" font-weight="400" text-anchor="middle">
-          红线：买过的套装在下一期上线时失去展示价值，回落到 0 ｜ 绿线：部件永久可搭配 + 持续计收藏度，只增不减</text>
-      </g>
-    </svg>
-    <figcaption><b>图 8-1</b>　资产有效价值对照（结构示意图，纵轴为「玩家已付费资产当前仍有用的比例」，非实测营收数据）</figcaption>
-  </figure>
-
-  <h3>8.2　图鉴与段位</h3>
-  <figure class="art">
-    <img src="img/ui_collection.jpg" alt="收藏图鉴界面">
-    <figcaption><b>图 8-2</b>　收藏图鉴界面示意：已拥有为彩色卡、未拥有为暗色剪影，顶部为收藏度总分（COLLECTION SCORE）与完成度进度条（AI 概念图）。
-      ⚠ 图中卡片名（COMMAND CENTER / TURRET 等）为生成噪声，实际图鉴收录的是城基 / 本体 / 城辉 / 色板四册</figcaption>
-  </figure>
-  <p>图鉴按类型分册（城基册 / 本体册 / 城辉册 / 色板册），未拥有的部件显示暗色剪影而非隐藏
-    —— 剪影本身是购买动机的一部分。分册完成度单独计，避免某一轴的缺口把总进度条永远压在低位。</p>
-
-  <h3>8.3　数值口径（本版待定）</h3>
-  <div class="box warn">
-    <h4>待定项：收藏度是否附带属性 buff</h4>
-    <p class="fine">现有 1388 每个套装组件带 <code>buff 12117009 val 200-300</code>，1389 套装另给 <code>12117006 val 1000</code>。
-      本案首期 8 件（3 城基 + 4 城市本体 + 1 城辉）若照抄这个口径，玩家把 3 槽插满即可拿到接近一整套现役套装的数值，
-      <b>首期尚在可控范围，但第三期部件数破 20 之后必须有结论</b>。</p>
-    <p class="fine">本版建议（待评审拍板）：<b>单件不再带属性 buff，属性全部收口到收藏度</b>，
-      并对收藏度 &rarr; buff 做递减曲线 + 硬上限。这样部件数量可以无限扩，而数值影响封顶。
-      <code>citybeauty</code>（市容度）保留在单件上不变 —— 它本来就是外显向指标。
-      <b>此项不阻塞首期结构设计，但必须在首期配置落表前定版。</b></p>
+    <h4>一个题材冲突，提前说清</h4>
+    <p class="fine">主城套装的循环档期是 <b>3 月科技节</b>和 <b>11 月感恩节</b>。科技节历年方向已用满
+      废土工具 / 废土工业 / 摩登都市 / 星际飞船 / 军事机甲，且避坑项明确写了 <b>❌ 猿族元素</b>（科技节起去猿族化）。</p>
+    <p class="fine">本案首期是<b>废土工业 + 装甲军事 + 丛林遗迹</b>的中性题材，且 C3 用了猿王 ——
+      <b>与科技节撞方向、也和它的去猿族化冲突</b>。处理方式：万象主城是常驻系统、不是节日套装循环，
+      首期题材<b>刻意做中性</b>当底子（往期不下架、要跨期通用，题材越中性越耐配），
+      <b>节日主题留给后续每期新增的那 1-2 款</b>。所以美需没挂节日 tab，走「临时需求」那类独立 tab
+      （主表已有先例：临时需求-世界杯装饰物）。</p>
   </div>
 </section>
 
-<!-- ══════════ 09 ══════════ -->
-<section id="s9">
-  <h2><span class="no">09</span>预设方案与编辑推荐</h2>
-  <div class="h2sub">让存量部件被反复用上</div>
+<section id="s6">
+  <h2><span class="no">06</span>付费结构</h2>
 
-  <h3>9.1　预设方案槽</h3>
+  <h3>6.1　付费点</h3>
   <table class="tight">
-    <tr><th style="width:22%">项</th><th>定义</th></tr>
-    <tr><td><b>是什么</b></td><td>把当前 4 个槽的装配状态（含配色）整体存档，一键切换</td></tr>
-    <tr><td><b>初始额度</b></td><td><b>2 个槽免费</b>，全体玩家默认拥有</td></tr>
-    <tr><td><b>扩展</b></td><td>第 3 槽起付费或活动解锁，全年上限 6 槽</td></tr>
-    <tr><td><b>切换成本</b></td><td>零 —— 无消耗、无冷却</td></tr>
-  </table>
-  <p>预设方案是这个体系里<b>单价最低但最能强化「我有很多件」价值感</b>的付费点。
-    它本身不提供任何新外观，卖的是<b>让已拥有的部件同时在线</b>。
-    只有 1 套搭配时，玩家买第 5 件本体是没有意义的；有 4 套预设时，第 5 件立刻有位置放。</p>
-
-  <h3>9.2　编辑推荐搭配</h3>
-  <p>每期官方出 2-3 套推荐组合，配主题名与一键套用按钮。它同时是<b>防丑底线</b>和<b>运营抓手</b>：</p>
-
-  <figure class="svgwrap">
-    <svg width="1000" height="236" viewBox="0 0 1000 236" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <marker id="a9g" markerWidth="9" markerHeight="9" refX="7" refY="3.2" orient="auto">
-          <path d="M0,0 L7,3.2 L0,6.4 Z" fill="#C8961E"/></marker>
-      </defs>
-      <g font-size="12.5" font-weight="700" text-anchor="middle">
-        <text x="500" y="24" fill="#8A94A2" font-size="12" letter-spacing="1">编辑推荐搭配的配方：1 件新品 + 2 件旧品</text>
-
-        <rect x="60" y="46" width="180" height="56" rx="9" fill="#00A0E9"/>
-        <text x="150" y="68" fill="#fff">本期新本体</text>
-        <text x="150" y="87" fill="#EAF7FE" font-size="10.5" font-weight="400">当期主推，需购买</text>
-
-        <rect x="60" y="118" width="180" height="46" rx="9" fill="#25334A"/>
-        <text x="150" y="140" fill="#fff" font-size="12">第 2 期的城基</text>
-        <text x="150" y="156" fill="#B7C4D2" font-size="10.5" font-weight="400">老玩家多半已有</text>
-
-        <rect x="60" y="176" width="180" height="46" rx="9" fill="#C8961E"/>
-        <text x="150" y="198" fill="#fff" font-size="12">第 4 期的色板</text>
-        <text x="150" y="214" fill="#FFF2D4" font-size="10.5" font-weight="400">老玩家多半已有</text>
-
-        <g stroke="#C8961E" stroke-width="1.8" fill="none" marker-end="url(#a9g)">
-          <path d="M240,74 L300,74 L300,132 L336,132"/>
-          <path d="M240,141 L336,141"/>
-          <path d="M240,199 L300,199 L300,150 L336,150"/>
-        </g>
-
-        <rect x="342" y="106" width="200" height="72" rx="10" fill="#0C1A2B"/>
-        <text x="442" y="134" fill="#fff" font-size="13">「废土霓虹」推荐搭配</text>
-        <text x="442" y="155" fill="#FFD277" font-size="11" font-weight="400">一键套用</text>
-
-        <g stroke="#C8961E" stroke-width="1.8" fill="none" marker-end="url(#a9g)">
-          <path d="M542,142 L596,142"/>
-        </g>
-
-        <rect x="602" y="60" width="338" height="52" rx="9" fill="#fff" stroke="#EBD9A8"/>
-        <text x="771" y="82" fill="#96690A" font-size="12">对老玩家：两件旧品被重新看见</text>
-        <text x="771" y="99" fill="#8A94A2" font-size="10.5" font-weight="400">买一件新品即可拼出整套新观感 &rarr; 补票理由</text>
-
-        <rect x="602" y="122" width="338" height="52" rx="9" fill="#fff" stroke="#BFE3F7"/>
-        <text x="771" y="144" fill="#007BB8" font-size="12">对新玩家：一次看清三件怎么配</text>
-        <text x="771" y="161" fill="#8A94A2" font-size="10.5" font-weight="400">降低上手门槛，同时暴露自己缺哪两件</text>
-
-        <text x="771" y="200" fill="#4A5462" font-size="11.5" font-weight="400">推荐搭配里<tspan font-weight="700">故意只放一件新品</tspan> ——
-          这是把新内容变成老资产购买理由的机制手段</text>
-      </g>
-    </svg>
-    <figcaption><b>图 9-1</b>　编辑推荐搭配的构成配方：每套推荐固定「1 件当期新品 + 2 件往期旧品」</figcaption>
-  </figure>
-
-  <p class="fine">⚠ 推荐搭配<b>不提供任何数值或折扣优势</b>，纯粹是展示与引导。它一旦带上收益，
-    就会退化成「官方指定最优解」，反过来杀掉自定义。</p>
-</section>
-
-<!-- ══════════ 10 ══════════ -->
-<section id="s10">
-  <h2><span class="no">10</span>发放挂载表</h2>
-  <div class="h2sub">Distribution &mdash; 每一类部件从哪些货架出来</div>
-
-  <p>本案<b>不新建任何发放玩法</b>。全部部件走现有货架，按下表挂载。这张表穷举了全部发放通路，
-    用来回答一个具体问题：<b>某一期的某一件，玩家在哪里拿得到</b>。</p>
-
-  <table class="tight">
-    <tr><th style="width:7%">通路</th><th style="width:20%">货架</th><th style="width:22%">发什么</th><th style="width:14%">面向</th><th>说明</th></tr>
-    <tr class="grp"><td colspan="5">付费通路</td></tr>
-    <tr><td>D1</td><td>万象主城常驻商店</td><td>城基 / 本体 / 城辉 / 色板 单件直购</td><td>全层级</td>
-      <td>常驻不下架，往期部件永久可补票 <span class="tag t-out">长尾</span></td></tr>
-    <tr><td>D2</td><td>节日 GACHA（弹珠 / 砸金蛋 / 老虎机）</td><td>当期主推城市本体 + 城基</td><td>中 R 以上</td>
-      <td>沿用现有节日 GACHA 坑位，只换奖池内容 <span class="tag t-add">已有位</span></td></tr>
-    <tr><td>D3</td><td>累充（个人 / 服务器 / 联盟）</td><td>当期城基 + 色板</td><td>中 R 以上</td>
-      <td>累充档位奖励，沿用现有三件套结构 <span class="tag t-add">已有位</span></td></tr>
-    <tr><td>D4</td><td>限时抢购 / 省省卡</td><td>色板 + 预设方案槽</td><td>小 R</td>
-      <td>低单价高频位，色板正好匹配 <span class="tag t-add">已有位</span></td></tr>
-    <tr><td>D5</td><td>节日 BP</td><td>付费轨：当期城辉</td><td>小 R ~ 中 R</td>
-      <td>城辉单价高、款数少，适合做 BP 顶奖 <span class="tag t-add">已有位</span></td></tr>
-    <tr class="grp"><td colspan="5">免费通路（保证零氪闭环）</td></tr>
-    <tr><td>D6</td><td>节日签到 / 每日任务</td><td><b>每期至少 1 个色板</b></td><td>非 R</td>
-      <td>零氪玩家的换色入口 <span class="tag t-out">免费保底</span></td></tr>
-    <tr><td>D7</td><td>节日 BP 免费轨</td><td><b>每期至少 1 款城基或本体</b></td><td>非 R</td>
-      <td>零氪玩家每期至少新增 1 件可装配部件 <span class="tag t-out">免费保底</span></td></tr>
-    <tr><td>D8</td><td>活动积分兑换商店</td><td>往期部件（错峰回归）</td><td>非 R ~ 小 R</td>
-      <td>用免费积分补往期缺口，同时给往期内容第二次生命 <span class="tag t-out">长尾</span></td></tr>
-    <tr class="grp"><td colspan="5">存量接入通路</td></tr>
-    <tr><td>D9</td><td>历史主城套装转译</td><td>7 套旧套装 &rarr; 收藏度 + 整套预设</td><td>老付费玩家</td>
-      <td>一次性接入，边界见 <a href="#s14" style="color:var(--accent-d)">§14.1</a> <span class="tag t-cap">有边界</span></td></tr>
+    <tr><th style="width:6%">编号</th><th style="width:14%">卖什么</th><th>玩家在什么情形下会买</th><th style="width:20%">货架</th></tr>
+    <tr><td>P1</td><td>城基</td>
+      <td>买了新本体，发现装在自己那款旧底座上比例不搭 → 补一款底座</td><td>累充 / 常驻商店</td></tr>
+    <tr><td class="gr"><b>P2</b></td><td class="gr"><b>城市本体 ★</b></td>
+      <td class="gr"><b>本体槽只有 1 个，本期新款比手上任一款都更想穿 → 买来替换，旧的进预设备用</b></td>
+      <td>节日 GACHA / 常驻商店</td></tr>
+    <tr><td>P3</td><td>城辉</td><td>城基和本体都够门槛了，城辉槽空着 → 差这一件进不了璀璨态</td><td>节日 BP 付费轨</td></tr>
+    <tr><td>P4</td><td>色板</td><td>本期新色能同时刷手上 3 款旧底座 → 一次低单价购买改变三套搭配</td><td>限时抢购 / 省省卡</td></tr>
+    <tr><td>P5</td><td>预设方案槽</td><td>手上 5 款本体但只有 2 套预设，换风格每次都要拆装 → 买第 3 槽</td><td>限时抢购</td></tr>
+    <tr><td>P6</td><td>当期礼包</td><td>想一次拿到当期璀璨态门槛所需的件（最多打包两件）</td><td>节日 GACHA / 签到</td></tr>
   </table>
 
-  <figure class="svgwrap">
-    <svg width="1000" height="244" viewBox="0 0 1000 244" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <marker id="a10b" markerWidth="9" markerHeight="9" refX="7" refY="3.2" orient="auto">
-          <path d="M0,0 L7,3.2 L0,6.4 Z" fill="#00A0E9"/></marker>
-        <marker id="a10g" markerWidth="9" markerHeight="9" refX="7" refY="3.2" orient="auto">
-          <path d="M0,0 L7,3.2 L0,6.4 Z" fill="#1F9D55"/></marker>
-        <marker id="a10d" markerWidth="9" markerHeight="9" refX="7" refY="3.2" orient="auto">
-          <path d="M0,0 L7,3.2 L0,6.4 Z" fill="#25334A"/></marker>
-      </defs>
-      <g font-size="12" font-weight="700" text-anchor="middle">
-        <text x="500" y="24" fill="#8A94A2" font-size="12" letter-spacing="1">三条通路汇入同一个部件仓库 —— 本案不新建任何发放玩法</text>
-
-        <rect x="46" y="44" width="228" height="52" rx="9" fill="#007BB8"/>
-        <text x="160" y="66" fill="#fff">付费通路 D1-D5</text>
-        <text x="160" y="84" fill="#CDEBFA" font-size="10.5" font-weight="400">常驻商店 / GACHA / 累充 / 限抢 / BP</text>
-
-        <rect x="46" y="108" width="228" height="52" rx="9" fill="#1F9D55"/>
-        <text x="160" y="130" fill="#fff">免费通路 D6-D8</text>
-        <text x="160" y="148" fill="#D9F2E3" font-size="10.5" font-weight="400">签到 / BP 免费轨 / 积分兑换</text>
-
-        <rect x="46" y="172" width="228" height="52" rx="9" fill="#25334A"/>
-        <text x="160" y="194" fill="#fff">存量接入 D9</text>
-        <text x="160" y="212" fill="#B7C4D2" font-size="10.5" font-weight="400">7 套历史主城套装</text>
-
-        <g fill="none" stroke-width="2">
-          <path d="M274,70 L340,70 L340,124 L392,124" stroke="#007BB8" marker-end="url(#a10b)"/>
-          <path d="M274,134 L392,134" stroke="#1F9D55" marker-end="url(#a10g)"/>
-          <path d="M274,198 L340,198 L340,144 L392,144" stroke="#25334A" marker-end="url(#a10d)"/>
-        </g>
-
-        <rect x="398" y="102" width="196" height="64" rx="10" fill="#0C1A2B"/>
-        <text x="496" y="128" fill="#fff" font-size="13">玩家部件仓库</text>
-        <text x="496" y="148" fill="#8FD4F0" font-size="10.5" font-weight="400">永久保留 · 全部计收藏度</text>
-
-        <g fill="none" stroke="#00A0E9" stroke-width="2" marker-end="url(#a10b)">
-          <path d="M594,134 L626,134 L626,106 L654,106"/>
-          <path d="M594,134 L626,134 L626,170 L654,170"/>
-        </g>
-
-        <rect x="660" y="80" width="286" height="52" rx="9" fill="#00A0E9"/>
-        <text x="803" y="102" fill="#fff">装配（3 槽）</text>
-        <text x="803" y="120" fill="#EAF7FE" font-size="10.5" font-weight="400">城基 1 + 本体 1 + 城辉 1</text>
-
-        <rect x="660" y="144" width="286" height="52" rx="9" fill="#C8961E"/>
-        <text x="803" y="166" fill="#fff">收藏度段位</text>
-        <text x="803" y="184" fill="#FFF2D4" font-size="10.5" font-weight="400">持有即计分，不装也算</text>
-      </g>
-    </svg>
-    <figcaption><b>图 10-1</b>　发放通路总览：三条通路（付费 / 免费 / 存量接入）汇入同一个部件仓库，
-      仓库同时供给「装配」与「收藏度」两个出口</figcaption>
-  </figure>
-
-  <div class="box green">
-    <h4>这张表想说明的一件事</h4>
-    <p>D1-D9 里，<b>只有 D1（常驻商店）是新建的货架</b>，其余全部挂在现有坑位上，每期只换商品内容。
-      这意味着这个系统上线后，运营侧的换档动作是「往已有货架换一批新商品」，
-      而不是「每期新开一个活动」—— 详见 <a href="#s13" style="color:var(--accent-d)">§13</a>。</p>
+  <h3>6.2　一期能卖多少</h3>
+  <div class="g4">
+    <div><div class="n" style="color:var(--red)">5</div><div class="l">现在一套节日套装<br>2 皮肤 + 3 挂件</div></div>
+    <div><div class="n" style="color:var(--green)">18</div><div class="l">本案首期<br>3+4+1 件 + 9 色板 + 1 槽</div></div>
+    <div><div class="n">3.6×</div><div class="l">首期倍数</div></div>
+    <div><div class="n">86 / 30</div><div class="l">全年 6 期对照<br>约 2.9×</div></div>
   </div>
-</section>
-
-<!-- ══════════ 11 ══════════ -->
-<section id="s11">
-  <h2><span class="no">11</span>付费点设计</h2>
-  <div class="h2sub">Monetization</div>
-
-  <h3>11.1　付费点清单</h3>
-  <table class="tight">
-    <tr><th style="width:6%">编号</th><th style="width:15%">付费点</th><th>卖什么 / 消费场景</th>
-        <th style="width:15%">类型</th><th style="width:15%">每期是否只换内容</th></tr>
-    <tr><td><b>P1</b></td><td>城基</td>
-      <td>换掉整座城站在什么上面。<b>场景</b>：玩家买了新本体，发现装在自己那款旧城基上比例不搭 &rarr; 补一款城基（辅助付费点，单价低于本体）</td>
-      <td>外显 · 资产型</td><td class="gr">只换内容</td></tr>
-    <tr><td><b>P2</b></td><td class="gr"><b>城市本体 ★</b></td>
-      <td><b>主力付费点。</b>换掉整座城「是什么」。<b>场景</b>：本体槽只有 1 个，本期新款比手上任一款都更想穿 &rarr; 买来替换，旧的进预设备用</td>
-      <td>外显 · 资产型</td><td class="gr">只换内容</td></tr>
-    <tr><td><b>P3</b></td><td>城辉</td>
-      <td>加一层氛围特效。<b>场景</b>：差城辉这一件就能触发璀璨态</td>
-      <td>外显 · 资产型</td><td class="gr">只换内容</td></tr>
-    <tr><td><b>P4</b></td><td>色板</td>
-      <td>不换模型，只换涂装。<b>场景</b>：本期新色能同时刷到手上 3 款旧城基上 &rarr; 一次购买改变三套搭配</td>
-      <td>外显 · 资产型</td><td class="gr">只换内容</td></tr>
-    <tr><td><b>P5</b></td><td>预设方案槽</td>
-      <td>让已有部件同时在线。<b>场景</b>：手上 5 款本体但只有 2 套预设，每次换搭配都要拆 &rarr; 买第 3 槽</td>
-      <td>功能 · 一次性</td><td>不换（永久商品）</td></tr>
-    <tr><td><b>P6</b></td><td>当期部件礼包</td>
-      <td>当期全部新部件打包。<b>场景</b>：想直接拿到当期璀璨态门槛所需的三件</td>
-      <td>外显 · 打包</td><td class="gr">只换内容</td></tr>
-  </table>
+  <p class="fine">真正的差别不在倍数：现在模式第 6 期的 5 件只卖给想要第 6 期主题的人；
+    本案第 6 期的 8 个新色板，作用对象是<b>前 5 期累积下来的 13 款底座 + 14 款本体的全部持有者</b>。
+    色板是唯一一个可售单位数随体系规模线性增长的品类。</p>
 
   <div class="box warn">
     <h4>红线（定版，逐期不改）</h4>
     <ol>
-      <li><b>璀璨态不可直购。</b>它只能由城基 / 本体 / 城辉三件同时达标产生，任何货架不得直接出售「璀璨态」本身。</li>
-      <li><b>装配槽位永久固定为 3 个</b>（城基 1 + 本体 1 + 城辉 1），不随期数增加，不作为付费点。
-        加槽 = 稀释取舍 = 摧毁这个体系的核心（见 <a href="#s5" style="color:var(--accent-d)">§5.1</a>）。</li>
-      <li><b>收藏度不可直购。</b>只能通过实际拥有部件累积，不出售「收藏点数」。</li>
-      <li><b>不设外观付费墙。</b>默认城基免费且永久可用，零氪玩家的主城不残缺；
-        每期免费通路保底 1 件部件 + 1 个色板（<a href="#s10" style="color:var(--accent-d)">§10</a> D6/D7）。</li>
-      <li><b>往期部件永不绝版下架。</b>常驻商店保留全部往期部件（D1），
-        避免「错过即永久失去」造成的老玩家流失，也让收藏度目标始终可达。</li>
+      <li><b>璀璨态不可直购</b> —— 只能由三件装配达标产生，任何货架不得直接出售。</li>
+      <li><b>装配槽永久 3 个</b>，不随期数增加、不作为付费点。</li>
+      <li><b>收藏度不可直购</b> —— 不出售收藏点数。</li>
+      <li><b>不设外观付费墙</b> —— 默认底座免费永久；每期免费通路保底 1 件部件 + 1 个色板。</li>
+      <li><b>往期部件永不下架</b> —— 否则收藏度目标不可达、新玩家图鉴永远缺口。</li>
     </ol>
   </div>
-
-  <h3>11.2　联动投放位</h3>
-  <p>色板与预设槽单价低、无主题绑定，是天然的公共货架商品，接现有三个位：
-    <b>累充</b>（作为低档位赠品拉动首档转化）、<b>限时抢购</b>（低单价高频位）、
-    <b>省省卡</b>（每日领取位可放色板）。城基 / 本体 / 城辉走节日 GACHA 与 BP，与当期主题绑定。</p>
-
-  <h3>11.3　深度测算</h3>
-  <p class="fine">⚠ 本节只用<b>可售单位数</b>这一个口径。组合数（<a href="#s5" style="color:var(--accent-d)">§5.2</a> 的 126）
-    描述的是体验感知，不参与深度测算。</p>
-
-  <table class="tight">
-    <tr><th style="width:26%">口径</th><th style="width:22%">现有节日套装（单期）</th><th>本案《万象主城》（首期）</th></tr>
-    <tr><td><b>可售单位数</b></td><td>5（2 皮肤 + 3 组件）</td>
-      <td><b>18</b> = 3 城基 + 4 城市本体 + 1 城辉 + 9 色板 + 1 预设槽</td></tr>
-    <tr><td><b>倍数</b></td><td>—</td><td class="gr"><b>3.6×</b></td></tr>
-    <tr><td><b>对存量资产的作用</b></td><td>无 —— 与往期互不相干</td><td>9 个色板全部可施于往期部件</td></tr>
-    <tr><td><b>集齐之后</b></td><td>消费终点</td><td>璀璨态 + 收藏度继续累积</td></tr>
-  </table>
-
-  <p>按一年 6 期推算（首期 18，后续每期 2 城基 + 2 本体 + 1 城辉 + 8 色板 = 13，全年另加 3 个付费预设槽）：</p>
-
-  <table class="tight">
-    <tr><th style="width:26%">全年口径</th><th style="width:22%">现有模式</th><th>本案</th></tr>
-    <tr><td><b>全年可售单位数</b></td><td>30（6 期 × 5）</td><td><b>86</b>（13 城基 + 14 城市本体 + 6 城辉 + 49 色板 + 4 预设槽）</td></tr>
-    <tr><td><b>倍数</b></td><td>—</td><td class="gr"><b>2.9×</b></td></tr>
-    <tr><td><b>年末仍在架</b></td><td>5 件（前 5 期已沉没）</td><td><b>全部 86 个单位</b>（往期不下架，D1 常驻）</td></tr>
-    <tr><td><b>第 6 期新品的作用面</b></td><td>只卖给想要第 6 期主题的人</td><td><b>8 个新色板作用于 13 款城基 + 14 款本体的全部持有者</b></td></tr>
-  </table>
-
-  <div class="conclusion">2.9× 只是表面。真正的差别在最后一行：<span class="gd">现有模式的第 6 期在跟自己的前 5 期抢玩家，
-    本案的第 6 期在给自己的前 5 期加价值。</span></div>
-
-  <figure class="svgwrap">
-    <svg width="1000" height="248" viewBox="0 0 1000 248" xmlns="http://www.w3.org/2000/svg">
-      <g font-size="12.5" font-weight="700" text-anchor="middle">
-        <text x="500" y="24" fill="#8A94A2" font-size="12" letter-spacing="1">四类付费点在项目里的位置 —— 本案补的是「外显 · 资产型」这一格</text>
-
-        <rect x="40" y="46" width="222" height="150" rx="10" fill="#fff" stroke="#E7ECF2"/>
-        <text x="151" y="72" fill="#25334A" font-size="13">消耗型</text>
-        <text x="151" y="96" fill="#8A94A2" font-size="11" font-weight="400">锄头 / 行动力 / 材料</text>
-        <text x="151" y="126" fill="#4A5462" font-size="11" font-weight="400">买了就没了</text>
-        <text x="151" y="168" fill="#E03C31" font-size="11.5">跨期留存：无</text>
-
-        <rect x="272" y="46" width="222" height="150" rx="10" fill="#fff" stroke="#E7ECF2"/>
-        <text x="383" y="72" fill="#25334A" font-size="13">随机型</text>
-        <text x="383" y="96" fill="#8A94A2" font-size="11" font-weight="400">GACHA / 抽奖 / 转盘</text>
-        <text x="383" y="126" fill="#4A5462" font-size="11" font-weight="400">买的是次数</text>
-        <text x="383" y="168" fill="#E03C31" font-size="11.5">跨期留存：无</text>
-
-        <rect x="504" y="46" width="222" height="150" rx="10" fill="#fff" stroke="#E7ECF2"/>
-        <text x="615" y="72" fill="#25334A" font-size="13">外显 · 买断型</text>
-        <text x="615" y="96" fill="#8A94A2" font-size="11" font-weight="400">现有主城套装 / 头像框</text>
-        <text x="615" y="126" fill="#4A5462" font-size="11" font-weight="400">买了永久有，但下期就不穿了</text>
-        <text x="615" y="168" fill="#C8961E" font-size="11.5">跨期留存：有资产无价值</text>
-
-        <rect x="736" y="46" width="224" height="150" rx="10" fill="#EEF7FD" stroke="#00A0E9" stroke-width="2"/>
-        <text x="848" y="72" fill="#007BB8" font-size="13">外显 · 资产型</text>
-        <text x="848" y="96" fill="#007BB8" font-size="11" font-weight="400">本案：城基 / 本体 / 色板</text>
-        <text x="848" y="120" fill="#4A5462" font-size="11" font-weight="400">买了永久有，且被后续</text>
-        <text x="848" y="136" fill="#4A5462" font-size="11" font-weight="400">新内容持续赋予新用途</text>
-        <text x="848" y="168" fill="#1F9D55" font-size="11.5">跨期留存：资产持续增值</text>
-
-        <text x="500" y="226" fill="#4A5462" font-size="11.5" font-weight="400">
-          前三格项目里都已经有了，且 <tspan font-weight="700">20/22 族已过峰</tspan>；
-          第四格是<tspan font-weight="700" fill="#007BB8">从未有过的一类</tspan>，不与前三格争同一份预算</text>
-      </g>
-    </svg>
-    <figcaption><b>图 11-1</b>　付费点类型定位：本案不是在既有三类里再加一个活动，而是补第四类</figcaption>
-  </figure>
 </section>
 
-<!-- ══════════ 12 ══════════ -->
-<section id="s12">
-  <h2><span class="no">12</span>玩家分层体验</h2>
-  <div class="h2sub">Player Segments &mdash; 非 R &rarr; 超 R</div>
-
-  <div class="box blue">
-    <div class="onesent">设计铁律：<span class="hl">全部功能对全部层级开放，付费只改外观丰富度，不改任何可达性。</span>
-      这是一个纯外显系统 —— 它不产生战力差距，也就不存在「被付费玩家挤出」这件事。</div>
-  </div>
-
+<section id="s7">
+  <h2><span class="no">07</span>发放货架</h2>
+  <p>本系统<b>不新建任何发放玩法</b>。除 D1 外全部挂现有坑位，每期只换商品内容。</p>
   <table class="tight">
-    <tr><th style="width:11%">层级</th><th style="width:30%">他在这个系统里追什么</th><th style="width:30%">0 氪路径</th><th>付费位</th></tr>
-    <tr><td><b>非 R</b></td><td>主城不再是全服一个样，有「我的样子」</td>
-      <td>默认城基 + 每期免费 1 件部件（D7）+ 每期免费 1 个色板（D6）+ 积分兑换往期部件（D8）</td>
-      <td>—</td></tr>
-    <tr><td><b>小 R</b></td><td>低成本改变观感</td>
-      <td>同上，且免费部件与付费部件<b>可自由混搭</b></td><td>P4 色板 · P5 预设槽（限抢 / 省省卡位）</td></tr>
-    <tr><td><b>中 R</b></td><td>换轮廓、换主题，凑当期一套</td>
-      <td>免费部件可作为当期搭配的一半</td><td>P1 城基 · P2 本体（GACHA / 累充位）</td></tr>
-    <tr><td><b>大 R</b></td><td>当期璀璨态 —— 有时效的身份标识</td>
-      <td>—</td><td>P3 城辉 · P6 当期礼包（BP 顶奖 / GACHA）</td></tr>
-    <tr><td><b>超 R</b></td><td>收藏度段位 + 全图鉴，跨期唯一性</td>
-      <td>—</td><td>P1-P6 全线 + 往期补票（D1 常驻商店）</td></tr>
+    <tr><th style="width:7%">通路</th><th style="width:24%">货架</th><th style="width:30%">发什么</th><th>说明</th></tr>
+    <tr class="grp"><td colspan="4">付费</td></tr>
+    <tr><td>D1</td><td><b>万象主城常驻商店</b></td><td>四类部件单件直购</td>
+      <td class="rd"><b>唯一新建的货架</b>；往期部件永久在架可补票</td></tr>
+    <tr><td>D2</td><td>节日 GACHA</td><td>当期主推本体（主力）</td><td>沿用现有 GACHA 坑位，只换奖池</td></tr>
+    <tr><td>D3</td><td>累充（个人/服务器/联盟）</td><td>当期城基 + 色板</td><td>沿用现有三件套结构</td></tr>
+    <tr><td>D4</td><td>限时抢购 / 省省卡</td><td>色板 + 预设方案槽</td><td>低单价高频位</td></tr>
+    <tr><td>D5</td><td>节日 BP 付费轨</td><td>当期城辉</td><td>款数少单价高，适合顶奖</td></tr>
+    <tr class="grp"><td colspan="4">免费（零氪闭环保底）</td></tr>
+    <tr><td>D6</td><td>签到 / 每日任务</td><td class="gr"><b>每期至少 1 个色板</b></td><td>零氪的换色入口</td></tr>
+    <tr><td>D7</td><td>节日 BP 免费轨</td><td class="gr"><b>每期至少 1 款城基或本体</b></td><td>零氪每期至少新增 1 件可装配部件</td></tr>
+    <tr><td>D8</td><td>活动积分兑换商店</td><td>往期部件错峰回归</td><td>给往期内容第二次生命</td></tr>
+    <tr class="grp"><td colspan="4">存量接入</td></tr>
+    <tr><td>D9</td><td>历史主城套装转译</td><td>7 套旧套装 → 收藏度 + 整套预设</td><td>边界见 §09 第 3 条</td></tr>
+  </table>
+  <p class="fine"><b>免费件与付费件在装配上完全等价</b> —— 不做「免费件不能进某槽」「免费件不计收藏度」这类限制，
+    唯一差别是稀有度较低、因而通常达不成璀璨态。</p>
+</section>
+
+<section id="s8">
+  <h2><span class="no">08</span>开发要做什么</h2>
+  <table class="tight">
+    <tr><th style="width:26%">项</th><th style="width:14%">性质</th><th>说明</th></tr>
+    <tr><td><b>1389 槽位化改造</b></td><td class="rd">新做（主项）</td>
+      <td>从「<code>A_ARR_items</code> 固定 id 数组」改成「槽位 + 玩家从已拥有的同类件里任选」。
+        表结构<b>本来就是定长槽位数组</b>（拓荒节没侧挂件就填 0 占位），改的是取值来源与客户端装配逻辑</td></tr>
+    <tr><td><b>预设方案存档与切换</b></td><td class="rd">新做</td><td>N 组装配状态（3 槽 + 各槽配色）服务端存取</td></tr>
+    <tr><td><b>收藏度统计与结算</b></td><td class="rd">新做</td><td>按持有部件计分 + 段位 + 图鉴四册进度</td></tr>
+    <tr><td><b>换色交互归组</b></td><td>改造</td>
+      <td>现有实现是「每个配色一条独立 1312 行 + 一个独立道具」，UI 上要按 <code>dyeing_skin</code>
+        归组成「同一部件的色板条」，而不是并列成多张皮肤</td></tr>
+    <tr><td><b>璀璨态判定</b></td><td>新做（轻）</td><td>装配状态实时判定三槽稀有度门槛，触发全局光效</td></tr>
+    <tr><td>换色引擎</td><td class="gr">已有</td><td>1312 <code>A_INT_dyeing_skin</code> 已上线并跑过真实内容，不用开发</td></tr>
+    <tr><td>部件表结构</td><td class="gr">已有</td><td>1312 / 1388 / 1389 / 1511 / 1512 沿用；1388 的 <code>C_INT_type</code> 需扩位</td></tr>
+    <tr><td>发放货架</td><td class="gr">已有</td><td>D2-D9 全挂现有坑位，仅 D1 常驻商店新建</td></tr>
   </table>
 
-  <h3>12.1　0 氪可达性三条保证</h3>
+  <h3>8.1　需要开发先确认的四件事</h3>
   <ol class="rl">
-    <li><b>免费路径始终存在。</b>默认城基免费永久，且每期免费通路保底产出 1 件部件 + 1 个色板。
-      零氪玩家的四步循环（<a href="#s3" style="color:var(--accent-d)">§3</a>）是完整的。</li>
-    <li><b>免费产出按「一年可攒出一套完整搭配」标定。</b>即 6 期后零氪玩家应持有
-      &ge;1 款非默认城基、&ge;2 款本体、&ge;6 个色板 —— 足够填满城基槽与本体槽，并有得换。</li>
-    <li><b>免费件与付费件在装配上完全等价。</b>没有「免费件不能进某个槽」「免费件不计收藏度」这类限制。
-      唯一的差别是免费件的稀有度较低，因而<b>通常不满足璀璨态门槛</b> —— 这是外观差距，不是功能差距。</li>
+    <li><b>主体本体落哪张表。</b>1312 承载的是「一整座城」，1388 承载的是「挂件」，而本体是「上半段城体」，
+      性质介于两者之间 —— 走哪张表决定模型挂载与换色的实现方式。</li>
+    <li><b>装配状态能否同步给其他玩家客户端。</b>主城外观要在四个场景生效（自己主城 / 世界地图 /
+      被侦查 / 联盟来访），不能只存本地。</li>
+    <li><b>世界地图上大量主城同屏时城辉的降级策略。</b>如果世界地图一律不显示特效，
+      城辉就只有自己能看到，付费理由减半 —— 这条决定城辉值不值得做。</li>
+    <li><b>「占两槽的不可拆组合」在装配逻辑上怎么表达</b>（历史套装接入用）。</li>
   </ol>
-
-  <h3>12.2　竞争隔离</h3>
-  <figure class="svgwrap">
-    <svg width="1000" height="286" viewBox="0 0 1000 286" xmlns="http://www.w3.org/2000/svg">
-      <g font-size="12" font-weight="700">
-        <text x="500" y="24" fill="#8A94A2" font-size="12" letter-spacing="1" text-anchor="middle">五层泳道与付费点分布 —— 各层追的东西不同，互不挤压</text>
-
-        <!-- 泳道 -->
-        <g>
-          <rect x="96" y="40" width="844" height="40" rx="7" fill="#F7F9FC" stroke="#E7ECF2"/>
-          <rect x="96" y="86" width="844" height="40" rx="7" fill="#F7F9FC" stroke="#E7ECF2"/>
-          <rect x="96" y="132" width="844" height="40" rx="7" fill="#F7F9FC" stroke="#E7ECF2"/>
-          <rect x="96" y="178" width="844" height="40" rx="7" fill="#F7F9FC" stroke="#E7ECF2"/>
-          <rect x="96" y="224" width="844" height="40" rx="7" fill="#F7F9FC" stroke="#E7ECF2"/>
-        </g>
-        <g text-anchor="end" fill="#25334A" font-size="12.5">
-          <text x="86" y="65">非 R</text><text x="86" y="111">小 R</text><text x="86" y="157">中 R</text>
-          <text x="86" y="203">大 R</text><text x="86" y="249">超 R</text>
-        </g>
-
-        <!-- 追求点 -->
-        <g font-size="11" font-weight="400" fill="#4A5462">
-          <text x="116" y="65">有「我的样子」</text>
-          <text x="116" y="111">低成本改观感</text>
-          <text x="116" y="157">凑当期一套</text>
-          <text x="116" y="203">当期璀璨态</text>
-          <text x="116" y="249">收藏度段位 · 全图鉴</text>
-        </g>
-
-        <!-- 付费点圆点 -->
-        <g font-size="10.5" font-weight="700" text-anchor="middle">
-          <circle cx="470" cy="60" r="13" fill="#1F9D55"/><text x="470" y="64" fill="#fff">免费</text>
-          <circle cx="560" cy="60" r="13" fill="#1F9D55"/><text x="560" y="64" fill="#fff">D6</text>
-          <circle cx="650" cy="60" r="13" fill="#1F9D55"/><text x="650" y="64" fill="#fff">D7</text>
-          <circle cx="740" cy="60" r="13" fill="#1F9D55"/><text x="740" y="64" fill="#fff">D8</text>
-
-          <circle cx="470" cy="106" r="13" fill="#C8961E"/><text x="470" y="110" fill="#fff">P4</text>
-          <circle cx="560" cy="106" r="13" fill="#C8961E"/><text x="560" y="110" fill="#fff">P5</text>
-
-          <circle cx="470" cy="152" r="13" fill="#00A0E9"/><text x="470" y="156" fill="#fff">P1</text>
-          <circle cx="560" cy="152" r="13" fill="#00A0E9"/><text x="560" y="156" fill="#fff">P2</text>
-          <circle cx="650" cy="152" r="13" fill="#C8961E"/><text x="650" y="156" fill="#fff">P4</text>
-
-          <circle cx="470" cy="198" r="13" fill="#007BB8"/><text x="470" y="202" fill="#fff">P3</text>
-          <circle cx="560" cy="198" r="13" fill="#007BB8"/><text x="560" y="202" fill="#fff">P6</text>
-          <circle cx="650" cy="198" r="13" fill="#00A0E9"/><text x="650" y="202" fill="#fff">P2</text>
-
-          <circle cx="470" cy="244" r="13" fill="#0C1A2B"/><text x="470" y="248" fill="#fff">P1</text>
-          <circle cx="516" cy="244" r="13" fill="#0C1A2B"/><text x="516" y="248" fill="#fff">P2</text>
-          <circle cx="562" cy="244" r="13" fill="#0C1A2B"/><text x="562" y="248" fill="#fff">P3</text>
-          <circle cx="608" cy="244" r="13" fill="#0C1A2B"/><text x="608" y="248" fill="#fff">P4</text>
-          <circle cx="654" cy="244" r="13" fill="#0C1A2B"/><text x="654" y="248" fill="#fff">P5</text>
-          <circle cx="700" cy="244" r="13" fill="#0C1A2B"/><text x="700" y="248" fill="#fff">P6</text>
-          <circle cx="760" cy="244" r="13" fill="#25334A"/><text x="760" y="248" fill="#fff">D1</text>
-        </g>
-
-        <text x="500" y="278" fill="#4A5462" font-size="11.5" font-weight="400" text-anchor="middle">
-          非 R 比的是「有没有自己的样子」，超 R 比的是「收藏度段位」——
-          <tspan font-weight="700">两者不在同一个赛道上，因此不构成挤压</tspan></text>
-      </g>
-    </svg>
-    <figcaption><b>图 12-1</b>　五层泳道与付费点分布（绿=免费通路，金=低单价，蓝=主力，深色=全线）</figcaption>
-  </figure>
 </section>
 
-<!-- ══════════ 13 ══════════ -->
-<section id="s13">
-  <h2><span class="no">13</span>每期换档与包装轮换</h2>
-  <div class="h2sub">Seasonal Rotation &mdash; 证明它是可持续坑位而非一次性投入</div>
-
-  <h3>13.1　什么变、什么不变</h3>
+<section id="s9">
+  <h2><span class="no">09</span>要拍板的</h2>
   <table class="tight">
-    <tr><th style="width:18%">层</th><th style="width:28%">每期变</th><th>永久不变（= 开发一次）</th></tr>
+    <tr><th style="width:5%">#</th><th style="width:20%">要定什么</th><th style="width:34%">不定的后果</th>
+        <th style="width:24%">我的建议</th><th>什么时候必须定</th></tr>
+    <tr><td><b>1</b></td><td><b>属性 buff 怎么算</b></td>
+      <td>现有 1388 每个挂件带 buff 200-300、1389 套装另给 1000。首期 8 件还扛得住，
+        <b>第三期部件破 20 之后按现口径叠加会打崩数值</b></td>
+      <td>单件不再带属性 buff，全部收口到<b>收藏度</b>做递减曲线 + 硬上限；
+        <code>citybeauty</code> 保留在单件上（本来就是外显指标）</td>
+      <td class="rd"><b>首期配表前</b></td></tr>
+    <tr><td><b>2</b></td><td><b>挂载点规范什么时候定</b></td>
+      <td>底座顶面接口尺寸不统一 → 新本体装不上往期底座 → 「新件配旧件」这条立论直接不成立，
+        系统退化成一期一套。<b>事后改等于已产部件全部重做</b></td>
+      <td>首期美术开工前定死，写进美需模板；换档流程固定一道闸门：
+        新本体 × 全部往期底座逐一试装，不通过不上线</td>
+      <td class="rd"><b>美术开工前</b></td></tr>
+    <tr><td><b>3</b></td><td><b>老玩家那 7 套旧套装怎么接</b></td>
+      <td>不接的话，已买 7 套旧套装的老付费玩家在新系统里资产完全用不上，等于背刺</td>
+      <td>整套接入部件池、<b>占两槽的不可拆组合</b>，可随时切换、全部计收藏度。
+        <b>但拆不出件混搭</b>（旧模型没统一挂载点，拆开必然错位穿模）—— 这条边界要跟玩家讲清</td>
+      <td>M1（评审通过后 2 周）</td></tr>
+    <tr><td><b>4</b></td><td><b>首期跟哪个档期上线</b></td>
+      <td>决定美术排期与美需 tab 归位；也决定当期璀璨态门槛件的题材是否要跟节日走</td>
+      <td>避开 3 月科技节（撞方向 + 去猿族化冲突，见 §05）。
+        题材已做中性，跟哪期上线都不违和，你定档期我改 tab 名</td>
+      <td>尽快（美术排期要用）</td></tr>
+  </table>
+</section>
+
+<section id="s10">
+  <h2><span class="no">10</span>每期换档怎么跑</h2>
+  <table class="tight">
+    <tr><th style="width:18%">层</th><th style="width:22%">每期变</th><th>永久不变（= 开发一次）</th></tr>
     <tr><td><b>结构 / 规则</b></td><td class="gr">不变</td>
-      <td>3 个装配槽 · 四类部件定义 · 璀璨态判定逻辑 · 收藏度算法 · 预设方案 · 图鉴分册</td></tr>
-    <tr><td><b>货架</b></td><td class="gr">不变</td><td>D1-D9 九条通路的挂载位置固定，只换商品内容</td></tr>
-    <tr><td><b>内容 / 美术</b></td><td>全换</td><td>—</td></tr>
+      <td>3 个装配槽 · 四类部件定义 · 璀璨态判定 · 收藏度算法 · 预设方案 · 图鉴四册 · D1-D9 货架位</td></tr>
+    <tr><td><b>内容 / 美术</b></td><td>全换（每期 2 城基 + 2 本体 + 1 城辉 + 8 色板）</td><td>—</td></tr>
     <tr><td><b>璀璨态门槛</b></td><td>每期重定</td><td>判定方式不变（三件同时达当期门槛）</td></tr>
   </table>
-
-  <figure class="svgwrap">
-    <svg width="1000" height="230" viewBox="0 0 1000 230" xmlns="http://www.w3.org/2000/svg">
-      <g font-size="12" font-weight="700" text-anchor="middle">
-        <rect x="40" y="40" width="920" height="62" rx="10" fill="#0C1A2B"/>
-        <text x="500" y="66" fill="#fff" font-size="13">结构层 &nbsp;·&nbsp; 开发一次，永久不动</text>
-        <text x="500" y="88" fill="#8FD4F0" font-size="11" font-weight="400">
-          3 槽装配　｜　四类部件定义　｜　璀璨态判定　｜　收藏度算法　｜　预设方案　｜　图鉴分册　｜　D1-D9 货架位</text>
-
-        <text x="500" y="126" fill="#8A94A2" font-size="11" font-weight="400">↑ 不变　｜　每期换 ↓</text>
-
-        <g>
-          <rect x="40" y="140" width="176" height="62" rx="9" fill="#007BB8"/>
-          <text x="128" y="164" fill="#fff" font-size="12">第 N 期</text>
-          <text x="128" y="182" fill="#CDEBFA" font-size="10.5" font-weight="400">2 城基 2 本体 1 城辉 8 色</text>
-
-          <rect x="228" y="140" width="176" height="62" rx="9" fill="#007BB8"/>
-          <text x="316" y="164" fill="#fff" font-size="12">第 N+1 期</text>
-          <text x="316" y="182" fill="#CDEBFA" font-size="10.5" font-weight="400">2 城基 2 本体 1 城辉 8 色</text>
-
-          <rect x="416" y="140" width="176" height="62" rx="9" fill="#007BB8"/>
-          <text x="504" y="164" fill="#fff" font-size="12">第 N+2 期</text>
-          <text x="504" y="182" fill="#CDEBFA" font-size="10.5" font-weight="400">2 城基 2 本体 1 城辉 8 色</text>
-
-          <rect x="604" y="140" width="176" height="62" rx="9" fill="#007BB8"/>
-          <text x="692" y="164" fill="#fff" font-size="12">第 N+3 期</text>
-          <text x="692" y="182" fill="#CDEBFA" font-size="10.5" font-weight="400">2 城基 2 本体 1 城辉 8 色</text>
-
-          <rect x="792" y="140" width="168" height="62" rx="9" fill="#C8961E"/>
-          <text x="876" y="164" fill="#fff" font-size="12">往期全部在架</text>
-          <text x="876" y="182" fill="#FFF2D4" font-size="10.5" font-weight="400">D1 常驻，永不绝版</text>
-        </g>
-      </g>
-    </svg>
-    <figcaption><b>图 13-1</b>　结构层开发一次、内容层每期轮换；往期内容不下架，持续留在常驻商店</figcaption>
-  </figure>
-
-  <h3>13.2　换档执行清单（8 步）</h3>
+  <h3>换档五步</h3>
   <ol class="rl">
-    <li><b>美需</b> —— 按当期节日主题出城基 / 本体 / 城辉 / 色板的美需，
-      <b>必须附挂载点规格</b>（这是与现有主城皮肤美需最大的差别）</li>
+    <li><b>美需</b> —— 按当期节日主题出新部件美需，<b>必须附挂载点规格</b>（这是与现有主城皮肤美需最大的差别）</li>
     <li><b>美术批产</b> —— 模型 2+2+1，色板 8 个材质变体</li>
-    <li><b>内容配表</b> —— 1312 新增城基行（含 <code>dyeing_skin</code> 分组）、1388 新增本体 / 城辉行、
-      1511 资源登记、1512 特效路径</li>
-    <li><b>付费换装</b> —— D1 常驻商店上架新品；D2-D5 各货架换商品</li>
-    <li><b>免费保底</b> —— D6 签到色板、D7 BP 免费轨部件挂上，核对「1 件 + 1 色」保底达成</li>
-    <li><b>本地化</b> —— 部件名 + 描述 + 当期璀璨态铭牌名，18 语扩散</li>
-    <li><b>自检 + 实测</b> —— 挂载点穿模检查（新本体 × 全部往期城基逐一试装）、
-      色板在各城基上的表现、璀璨态触发判定</li>
-    <li><b>上线回归</b> —— 部件持有率 / 装配率 / 预设槽使用数 / 收藏度分布 / 各货架营收</li>
+    <li><b>配表</b> —— 1312 新增城基/本体行（含 dyeing 分组）、1388 新增城辉行、1511 资源、1512 特效路径</li>
+    <li><b>挂货架</b> —— D1 上新品；D2-D5 换商品；<b>核对 D6/D7 免费保底「1 件 + 1 色」达成</b></li>
+    <li><b>试装闸门 + 上线回归</b> —— 新本体 × 全部往期底座逐一试装；上线后看持有率 / 装配率 / 预设槽使用 / 收藏度分布 / 各货架营收</li>
   </ol>
-  <p class="fine">⚠ 第 7 步是本系统特有的、且工作量随期数增长的一步：新本体必须与<b>全部往期城基</b>逐一试装。
-    这是「跨期通用」这条设计的必然代价，必须在换档流程里固定为一道闸门，不能省。</p>
-
-  <h3>13.3　包装：命名范式与主题轮换</h3>
-  <table class="tight">
-    <tr><th style="width:18%">层级</th><th style="width:26%">命名范式</th><th>示例</th></tr>
-    <tr><td><b>系统名</b></td><td>固定不变</td><td>万象主城 / MYRIAD CITY</td></tr>
-    <tr><td><b>轴名</b></td><td>固定不变</td><td>城基 Foundation ｜ 城市本体 ｜ 城辉 Aura ｜ 色板 Colorway</td></tr>
-    <tr><td><b>部件名</b></td><td>四字主题词，沿用现有节日道具文案范式</td><td>赤翼星舰 · 摇滚猿王 · 熔橙钛灰</td></tr>
-    <tr><td><b>当期璀璨态名</b></td><td>「{节日}·璀璨」</td><td>四周年·璀璨 ｜ 深海·璀璨</td></tr>
-    <tr><td><b>色板名</b></td><td>双色词组</td><td>熔橙钛灰 · 极地冰蓝 · 曜石霓虹</td></tr>
-  </table>
-  <p class="fine">⚠ 命名待办：「万象」与英文 MYRIAD 需在 1011 总表查重后定版；
-    现有 <code>quality=5</code> 档位在配置注释里已在用「璀璨」一词，本案将其升格为装配状态名，
-    需同步更新配置注释口径，避免与历史「璀璨皮肤」命名混淆（见 <a href="#s16" style="color:var(--accent-d)">§16.3</a>）。</p>
+  <p class="fine">⚠ 第 5 步的试装工作量<b>随期数增长</b>（第 N 期要试装 N 组以上），不能省 ——
+    省掉的那一组就是玩家买了装不上的那一组。</p>
 </section>
 
-<!-- ══════════ 14 ══════════ -->
-<section id="s14">
-  <h2><span class="no">14</span>立项论证</h2>
-  <div class="h2sub">The Case &mdash; 增量 / 为什么玩 / 为什么花钱 / 可行性</div>
-
-  <h3>14.1　增量在哪 —— 它不替代节日主城套装，而是给节日套装装上后续价值</h3>
-  <p>这一节要正面回答评审最可能问的一句话：<b>做了这个，节日主城套装还做不做？会不会自己吃自己？</b></p>
-
-  <div class="box green">
-    <h4>答案：节日主城套装一件不减，照做；做完接进这一层继续有用</h4>
-    <p>两者的分工是清晰的：<b>节日主城套装绑定当期节日主题</b>，走节日货架，是节日包装不可替代的一部分；
-      <b>万象主城是常驻的装配层</b>，不占节日主题位。节日套装做完之后，它的皮肤与组件<b>接入</b>万象主城的部件池
-      —— 也就是说，玩家买节日套装，同时获得了万象主城里的可搭配资产与收藏度。</p>
-    <p><b>节日套装的价值因此上升而不是下降</b>：现在买完就沉没，接入之后买完还能跨期搭配、还在计收藏度。
-      这是本案的增量论证核心 —— 它<b>提高的是现有付费点的留存价值</b>，不是从现有付费点里分流预算。</p>
-  </div>
-
-  <div class="box warn">
-    <h4>接入的边界（诚实说明，不夸大）</h4>
-    <p class="fine">现有 7 套主城套装的初级 / 高级皮肤是<b>一整座城的完整模型</b>，物理上拆不出「底座」与「顶部挂点」，
-      它们的挂件位置也是按各自模型定死的。因此存量接入（D9）只能做到这一步：</p>
-    <p class="fine">✅ <b>可以</b>：整套接入部件池，作为一个<b>不可拆的城基预设</b>可随时切换；全部计入收藏度。<br>
-      ⛔ <b>做不到</b>：把旧套装的组件拆下来挂到新城基上（挂点规格不同，必然错位穿模）。</p>
-    <p class="fine">这条边界不影响立论：老玩家的资产从「下一期就归零」变成「永久可切换 + 永久计分」，
-      这已经是从 0 到 1；<b>拆件混搭只对新做的、遵循统一挂点规范的部件开放</b>。</p>
-  </div>
-
-  <p>除此之外的增量还有两条：</p>
-  <ol class="rl">
-    <li><b>补的是一类从未有过的付费点类型。</b>项目现有三类付费点 —— 消耗型（锄头 / 行动力）、
-      随机型（GACHA）、外显买断型（套装 / 头像框），<b>20/22 族已过峰</b>。
-      本案是第四类：<b>外显 · 资产型</b> —— 买了永久有，且被后续每一期新内容持续赋予新用途
-      （见 <a href="#s11" style="color:var(--accent-d)">图 11-1</a>）。类型上的新，才是真增量。</li>
-    <li><b>新增一个常驻投放品类进全渠道。</b>色板是单价低、无主题绑定、可无限扩产的商品，
-      可以直接进累充 / 限抢 / 省省卡等公共货架 —— 这类货架长期缺少「低单价且玩家真的想要」的填充物。</li>
-  </ol>
-
-  <h3>14.2　玩家为什么玩</h3>
-  <p><b>这个系统不需要先证明「好玩」。</b>它不新增任何玩法行为 ——
-    玩家已经在看自己的主城、已经在换主城皮肤、已经在买套装。本案改变的是这些行为的<b>结构</b>，不是引入新行为。</p>
-  <p>项目内部对外显品类的接受度有直接实证：<b>头像框持有率 96.3%</b>。
-    这个数字说明外显消费在本项目不是小众偏好，而是接近全民的行为 —— 且头像框只是一个头像外圈，
-    展示面远小于整座主城。</p>
-  <p>再叠加主城这个载体本身的特性：<b>它是 SLG 里唯一一个玩家每天必看、且他人也会看到的自有空间</b>
-    （自己每次进游戏、被侦查时、联盟成员来访时）。表达的价值与被看见的频次成正比，
-    主城是全项目展示面最大的一块。</p>
-
-  <h3>14.3　玩家为什么花钱</h3>
-  <p>不用「因为好看」这种说不清的理由。三个具体消费场景，都是玩家会在装配界面里真实遇到的：</p>
-  <table class="tight">
-    <tr><th style="width:26%">场景</th><th>触发链路</th></tr>
-    <tr><td><b>比例不搭</b></td>
-      <td>抽到本期新本体 &rarr; 装到手上那款旧城基上，体量对不上不好看 &rarr; <b>补一款城基</b>（P1）</td></tr>
-    <tr><td><b>差一件到璀璨</b></td>
-      <td>城基和本体都够门槛，城辉槽空着 &rarr; 主城差一步进不了当期璀璨态 &rarr; <b>买城辉</b>（P3）</td></tr>
-    <tr><td><b>一次买改三套</b></td>
-      <td>本期新色板能刷到手上 3 款旧城基 &rarr; 一次低单价购买改变三套已有搭配 &rarr; <b>买色板</b>（P4）</td></tr>
-    <tr><td><b>拆不过来</b></td>
-      <td>手上 5 件本体但只有 2 套预设，想换风格每次都要拆装 &rarr; <b>买预设槽</b>（P5）</td></tr>
-  </table>
-  <p>四个场景有一个共同点：<b>它们都是被「已有资产」触发的，而不是被「新内容上线」触发的</b>。
-    这正是资产型付费与买断型付费的区别 —— 买断型的付费动机随内容周期起落，
-    资产型的付费动机随资产规模增长。</p>
-
-  <h3>14.4　可行性</h3>
-  <p class="fine">换色维度的引擎已支持（<code>dyeing_skin</code> 已上线并跑过真实内容），
-    槽位结构在 1389 里已是定长数组形态。真正需要新做的是「槽位可选」「预设存档」「收藏度结算」三项，
-    范围见 <a href="#s16" style="color:var(--accent-d)">§16.1</a>。这是一个内容量大、单件不复杂的形态，
-    适合把产能投在内容广度上。</p>
-</section>
-
-<!-- ══════════ 15 ══════════ -->
-<section id="s15">
-  <h2><span class="no">15</span>风险与对策</h2>
-  <div class="h2sub">Risks</div>
-
-  <table class="tight">
-    <tr><th style="width:22%">风险</th><th style="width:32%">为什么会发生</th><th>对策（机制层）</th></tr>
-    <tr><td><b>① 挂载点规格没定死，跨期通用失效</b>
-      <span class="tag t-save">致命</span></td>
-      <td>美术按各期主题自由发挥模型体量，新本体装到旧城基上错位 / 穿模。
-        一旦发生，「老件配新件」这条立论直接不成立，整个体系退化成一期一套</td>
-      <td><b>首期开工前定死统一挂载点规范</b>（socket 位置 + 包围盒上限 + 材质槽命名），
-        写进美需模板；换档流程第 7 步固定为闸门：<b>新本体 × 全部往期城基逐一试装</b>，
-        不通过不上线（<a href="#s13" style="color:var(--accent-d)">§13.2</a>）</td></tr>
-    <tr><td><b>② 部件数量增长导致数值失衡</b>
-      <span class="tag t-cap">需封顶</span></td>
-      <td>现有 1388 每件带 buff 200-300、1389 套装另给 1000。部件数从 7 涨到 50+ 后按现口径叠加会打崩数值</td>
-      <td>属性收口到收藏度 + 递减曲线 + 硬上限，单件不再带属性 buff；
-        <code>citybeauty</code> 保留（本就是外显指标）。
-        <b>首期落表前必须定版</b>（<a href="#s8" style="color:var(--accent-d)">§8.3</a>）</td></tr>
-    <tr><td><b>③ 任意组合必然出现难看的搭配</b>
-      <span class="tag t-add">可控</span></td>
-      <td>自由组合是这个体系的价值来源，也必然带来审美下限。
-        <b>不能靠限制组合来解决 —— 限制组合等于杀掉设计本身</b></td>
-      <td>三道防线：挂载点 + 包围盒硬约束（不穿模）；每期编辑推荐搭配给出「一定好看」的解
-        （<a href="#s9" style="color:var(--accent-d)">§9.2</a>）；色板绑定部件而非通用染料
-        （<a href="#s6" style="color:var(--accent-d)">§6.1</a>），避免任意配色</td></tr>
-    <tr><td><b>④ 吃掉节日主城套装的营收</b>
-      <span class="tag t-cap">需隔离</span></td>
-      <td>两者都是主城外观，玩家预算有限，可能只买其一</td>
-      <td>主题位隔离：节日套装绑当期节日主题走节日货架，万象主城部件走常驻商店与公共货架；
-        且节日套装接入部件池后<b>购买价值上升</b>而非被分流（<a href="#s14" style="color:var(--accent-d)">§14.1</a>）。
-        上线后按 <a href="#s16" style="color:var(--accent-d)">§16.2</a> M4 做双品类营收对照回归验证</td></tr>
-    <tr><td><b>⑤ 免费玩家断流</b>
-      <span class="tag t-out">已保底</span></td>
-      <td>纯外显系统若免费产出不足，零氪玩家进来看一眼发现全要钱，第三天就不再打开</td>
-      <td>默认城基免费永久；每期免费通路硬保底 1 件部件 + 1 个色板（D6/D7）；
-        免费件与付费件装配完全等价；往期部件可用免费积分兑换（D8）</td></tr>
-    <tr><td><b>⑥ 首期铺太满，后续无货</b>
-      <span class="tag t-add">可控</span></td>
-      <td>首期为了效果一次投 8 款城基，后面每期只能挤出 1 款，玩家感知为「越做越少」</td>
-      <td>首期刻意控制在 3 城基 + 4 城市本体 + 1 城辉；且首期规模小也为挂载点规范留了一次修正机会
-        （<a href="#s4" style="color:var(--accent-d)">§4.1</a>）</td></tr>
-    <tr><td><b>⑦ 老付费玩家觉得被背刺</b>
-      <span class="tag t-cap">需处理</span></td>
-      <td>已买 7 套旧套装的玩家，看到新体系里自己的资产用不上</td>
-      <td>D9 存量接入：旧套装整套进部件池 + 全部计收藏度，边界已在
-        <a href="#s14" style="color:var(--accent-d)">§14.1</a> 明确说明，不做超出能力的承诺</td></tr>
-  </table>
-</section>
-
-<!-- ══════════ 16 ══════════ -->
-<section id="s16">
-  <h2><span class="no">16</span>开发范围与里程碑</h2>
-  <div class="h2sub">Scope &amp; Milestones</div>
-
-  <h3>16.1　开发范围</h3>
-  <table class="tight">
-    <tr><th style="width:30%">项</th><th style="width:16%">性质</th><th>说明</th></tr>
-    <tr><td><b>1389 槽位化改造</b></td><td class="rd">新做（主项）</td>
-      <td>从「<code>A_ARR_items</code> 固定 id 数组」改为「槽位 + 玩家从已拥有同类件中任选」。
-        表结构本身已是定长槽位数组，改的是取值来源与客户端装配逻辑</td></tr>
-    <tr><td><b>预设方案存档与切换</b></td><td class="rd">新做</td>
-      <td>N 组装配状态（含配色）的存取，服务端存档</td></tr>
-    <tr><td><b>收藏度统计与结算</b></td><td class="rd">新做</td>
-      <td>按持有部件计分 + 段位 + 图鉴分册进度</td></tr>
-    <tr><td><b>换色交互归组</b></td><td>改造</td>
-      <td>现有实现里每个染色是一条独立 1312 行、独立道具；
-        需在 UI 上按 <code>dyeing_skin</code> 分组显示为「同一部件的色板条」，而非并列的几张皮肤</td></tr>
-    <tr><td><b>璀璨态判定</b></td><td>新做（轻）</td>
-      <td>装配状态实时判定三个槽的稀有度门槛，触发全局光效</td></tr>
-    <tr><td><b>换色引擎</b></td><td class="gr">已有</td>
-      <td>1312 <code>A_INT_dyeing_skin</code> 已上线并跑过真实内容，无需开发</td></tr>
-    <tr><td><b>部件表结构</b></td><td class="gr">已有</td>
-      <td>1312 / 1388 / 1389 / 1511 / 1512 沿用，1388 <code>C_INT_type</code> 需扩位</td></tr>
-    <tr><td><b>发放货架</b></td><td class="gr">已有</td>
-      <td>D2-D9 全部挂现有坑位；仅 D1 常驻商店为新建货架</td></tr>
-  </table>
-
-  <h3>16.2　里程碑</h3>
-  <table class="tight">
-    <tr><th style="width:10%">节点</th><th style="width:22%">交付</th><th>内容</th></tr>
-    <tr><td><b>M1</b></td><td>立项评审通过后 + 2 周</td>
-      <td>挂载点规范定版（美术侧）· 数值口径定版（<a href="#s8" style="color:var(--accent-d)">§8.3</a> 待定项结论）· 数值框架单独出案</td></tr>
-    <tr><td><b>M2</b></td><td>+ 6 周</td>
-      <td>程序四项开发完成 · 首期 3 城基 + 4 城市本体 + 1 城辉 + 9 色板美术批产完成</td></tr>
-    <tr><td><b>M3</b></td><td>+ 9 周</td>
-      <td>配表 + 本地化 + 全量试装自检 · D1 常驻商店与 D2-D8 货架挂载 · Unity 实测</td></tr>
-    <tr><td><b>M4</b></td><td>+ 11 周（随当期节日上线）</td>
-      <td>首期上线 · 上线回归：持有率 / 装配率 / 预设槽使用 / 收藏度分布 / <b>与节日套装的双品类营收对照</b></td></tr>
-  </table>
-
-  <h3>16.3　本案未含 / 待办</h3>
-  <ul>
-    <li><b>数值框架</b> —— 部件稀有度分档、收藏度分值与曲线、各货架定价，立项通过后单独出（走数值设计流程）</li>
-    <li><b>属性 buff 口径</b> —— <a href="#s8" style="color:var(--accent-d)">§8.3</a> 待定项，M1 前必须定版</li>
-    <li><b>正式美需</b> —— 含挂载点规格的美需模板，M1 交付</li>
-    <li><b>主城外观品类营收回归</b> —— 本案按口径纪律未引用该品类营收数字；
-      建议在立项评审前后补做一次专项回归，作为定价与规模的依据</li>
-    <li><b>命名查重</b> —— 「万象」中文与 MYRIAD 英文需过 1011 总表查重；
-      「璀璨」由 <code>quality=5</code> 档位名升格为装配状态名，需同步更新配置注释口径</li>
-    <li><b>可玩原型</b> —— 装配界面的交互原型（拖拽 / 试装 / 色板切换手感）</li>
-  </ul>
-
-  <p class="fine" style="margin-top:22px;border-top:1px solid var(--line);padding-top:14px">
-    <b>版本说明</b> ｜ <b>v2.0（2026-08-18）机制定版修正</b>：v1.0 把「展示物」错做成了顶部小挂件（2 个挂件槽），
-    与实际构想不符。本版改为 <b>两个主体 + 两个附属</b> —— 城基 ×1（辅助付费）+ <b>城市本体 ×1（★主力付费点）</b>
-    + 城辉 ×1（可空），城基与本体各自独立换色，装配槽共 <b>3 个</b>。
-    首期 3 城基 + 4 本体 + 1 城辉 + 9 色板 = <b>18 个可售单位</b>（v1.0 记为 17）；组合数 126（v1.0 记为 342）。
-    璀璨态仍为装配状态非单品；收藏度持有即计分；属性 buff 口径继续挂起待定
-    （<a href="#s8" style="color:var(--accent-d)">§8.3</a>）。
-    配套开发需求表见 <code>J_万象主城</code>（三页签 + 14 张交互图，横屏）。<br>
-    <b>v2.1（2026-08-20）内容设计定版</b>：补首期 <b>3 款城基 + 4 款城市本体 + 1 款城辉 + 9 个可购色板</b>
-    的具体设计（名称 / 英文 / 题材造型 / 稀有度 / 配色，见 <a href="#s4" style="color:var(--accent-d)">§4.2</a>
-    <a href="#s5" style="color:var(--accent-d)">§5.3</a> <a href="#s6" style="color:var(--accent-d)">§6.2</a>），
-    明确当期璀璨态门槛落在 <b>苔垣遗基 + 熔心方尖 + 环星光带</b> 三件（<a href="#s7" style="color:var(--accent-d)">§7.2</a>）；
-    按定版设计重跑 6 张概念图，新增图 5-5 可互换性验证。</p>
-</section>
+<p class="fine" style="margin-top:34px;padding-top:16px;border-top:1px solid var(--line)">
+  <b>版本</b> v3.0（2026-08-20）重写版。v1.0 是 16 章模板案（论证套话过多，已归档
+  <code>_archive_16chap.html</code>）；v2 是一页纸（<a href="onepager.html" style="color:var(--accentd)">onepager.html</a>，
+  30 秒版，留着给别人快速看）。本版以<b>首期设计与美需</b>为主体，砍掉核心循环 / 分层体验 / 立项论证 /
+  风险对策四章模板内容，只保留能直接拿去对齐的部分。<br>
+  <b>配套</b>：开发需求表 <code>J_万象主城</code>（三页签 + 14 张横屏交互图）·
+  美需 <a href="https://docs.google.com/spreadsheets/d/1pPlo0ccRBmlQj9OFWnGXhQg1wLiihfQfSxEsoKA0hLA/edit#gid=1448671010"
+  style="color:var(--accentd)" target="_blank">新系统-万象主城（首期）</a>
+</p>
 
 </div>
 </body>
