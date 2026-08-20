@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>《万象主城》策划案 v3.0</title>
+<title>《万象主城》策划案 v4.0</title>
 <style>
   :root {
     --accent: #00A0E9; --accent-d: #007BB8; --ink: #0C1A2B;
@@ -135,8 +135,8 @@
     <h1>主城从「一整座卖」改成「拆两段卖」</h1>
     <div class="sub">底座（城基）+ 城市本体 两段拼装，各出几款自由组合、各自换色 &mdash;&mdash;
       <b style="color:#fff">本体是付费大头</b></div>
-    <div class="meta"><b>版本</b> v3.0（重写版）｜ <b>作者</b> 刘思毅（运营策划）｜ <b>日期</b> 2026-08-20 ｜
-      <b>状态</b> 设计与美需已定版，等三项拍板 ｜
+    <div class="meta"><b>版本</b> v4.0｜ <b>作者</b> 刘思毅（运营策划）｜ <b>日期</b> 2026-08-20 ｜
+      <b>状态</b> 同品质口径已改，等本体方向拍板 ｜
       <b>配图说明</b> 概念图为 AI 生成，表达造型方向，非最终美术</div>
   </div>
 </div>
@@ -164,6 +164,15 @@
     <tr><td><b>色板</b></td><td>不占槽</td><td>最低单价<br>长尾复购</td>
       <td>施加在某一款城基或某一款本体上的配色，<b>绑定部件不是全局染料</b></td></tr>
   </table>
+  <div class="box warn" style="margin:14px 0">
+    <h4>一条基础口径：所有城基、所有本体都是同品质</h4>
+    <p class="fine"><b>不分好坏、没有稀有度阶梯</b>，每一款都要能独立撑起一座城，统一出帅出炫。
+      区分四款本体靠的是<b>题材</b>（机械巨兽 / 天体异象 / 巨型武器 / 图腾面具）而不是稀有度 ——
+      所以四款的完成度、细节量、光效投入必须持平。</p>
+    <p class="fine">由此派生三条：<b>①</b> 璀璨态门槛不能靠稀有度定（改法见 §3.3）；
+      <b>②</b> 免费与付费的区分靠<b>款数配额</b>不靠品质（见 §07）；
+      <b>③</b> 定价按部件类型定、<b>同类同价</b>，玩家纯凭喜好选（见 §6.2）。</p>
+  </div>
   <p class="fine">装配槽<b>永久固定 3 个</b>，不随期数增加。首期 4 款本体抢这 1 个槽 —— 想换个样子就得再拥有一款，
     这是「多买一件」有意义的前提；加槽就等于让已有部件同时上身，取舍消失，后续的款就没人买了。</p>
 </section>
@@ -202,19 +211,24 @@
     且通用染料买一次就够，绑定色板则每款部件各自是商品。</p>
 
   <h3>3.3　璀璨态</h3>
-  <p>城基槽的件 <b>且</b> 本体槽的件 <b>且</b> 城辉槽的件，三者<b>同时</b>达到当期稀有度门槛 → 主城进入璀璨态
+  <p><b>判定：三个槽都装满 + 城辉必须是当期上新的那款</b> → 主城进入璀璨态
     （额外全局光效 + 城池名特效 + 铭牌标记）。实时判定，装上即触发、卸下即消失。</p>
-  <p><b>门槛跟随当期最高稀有度，每期重定</b> —— 所以每上一期，璀璨态就重新变成要追的东西，不会封顶。
-    达成过的期次永久记在铭牌上（如「四周年·璀璨」），后续期次不剥夺。</p>
+  <p class="fine">⚠ 原先的判定是「三槽都达到当期最高稀有度」，同品质之后这个判定失效了。
+    改用<b>城辉当门槛</b>的理由：城辉是四类部件里<b>款数最少、单价最高</b>的一类（首期只 1 款），
+    用它当闸门最自然；每期换新城辉，璀璨态就每期都要重新凑，照样永不封顶。
+    城基槽和本体槽不可空，所以实际的失败点只有一个 —— <b>城辉槽空着，或城辉不是当期款</b>。</p>
+  <p>达成过的期次永久记在铭牌上（如「四周年·璀璨」），后续期次不剥夺。当期标记与历史记录分开显示。</p>
   <table class="tight">
-    <tr><th style="width:16%">槽</th><th style="width:24%">首期门槛件</th><th style="width:16%">稀有度</th><th>走哪条货架</th></tr>
-    <tr><td>城基</td><td><b>B3 苔垣遗基</b></td><td>当期城基最高</td><td>累充高档位</td></tr>
-    <tr><td>本体</td><td class="gr"><b>C4 熔心方尖 ★</b></td><td>当期最高</td><td>节日 GACHA 主推</td></tr>
-    <tr><td>城辉</td><td><b>A1 环星光带</b></td><td>高</td><td>节日 BP 付费轨顶奖</td></tr>
+    <tr><th style="width:16%">槽</th><th style="width:26%">首期要装什么</th><th>说明</th></tr>
+    <tr><td>城基</td><td>三款任一</td><td>不可空，装了就算 —— 三款同品质，装哪款都不影响判定</td></tr>
+    <tr><td>本体</td><td>四款任一</td><td>不可空，装了就算</td></tr>
+    <tr><td class="gr"><b>城辉</b></td><td class="gr"><b>A1 环星光带（当期款）</b></td>
+      <td class="gr"><b>唯一的门槛 —— 必须是当期上新的城辉</b>。往期城辉不满足当期璀璨态</td></tr>
   </table>
-  <p class="fine">三件<b>故意分散在三条不同货架</b>，不做单一礼包一键达成 —— 一键达成会让璀璨态退化成一个 SKU，
-    与「璀璨态不可直购」这条红线冲突。当期礼包最多打包其中两件。
-    免费通路产出的件稀有度不够，零氪玩家当期达不成璀璨态，这是外观差距不是功能差距。</p>
+  <p class="fine">城辉走 BP 付费轨顶奖，<b>不做单一礼包一键达成</b> —— 一键达成会让璀璨态退化成一个 SKU，
+    与「璀璨态不可直购」这条红线冲突。<br>
+    零氪玩家能拿到城基和本体（每期免费轨保底 1 款），但拿不到当期城辉，
+    所以<b>当期达不成璀璨态</b> —— 这是外观差距不是功能差距，他的城照样是完整的一座城。</p>
 
   <h3>3.4　收藏度</h3>
   <p>按玩家<b>已拥有</b>的全部部件累计，<b>持有即计分，与是否装上无关</b>，永不清零。回报是段位徽记 + 图鉴完成度。</p>
@@ -224,171 +238,213 @@
 
 <section id="s4">
   <h2><span class="no">04</span>首期内容设计</h2>
-  <div class="h2sub">3 城基 + 4 城市本体 + 1 城辉 + 9 个可购色板 = 18 个可售单位</div>
+  <div class="h2sub">3 城基 + 4 城市本体 + 1 城辉 + 10 个可购色板 = 19 个可售单位　｜　全部同品质，不分好坏</div>
 
-  <h3>4.1　城基 3 款（顶面一律留空，只做下半段）</h3>
+  <h3>4.1　城基 3 款 —— 三种托举方式（顶面一律留空）</h3>
+  <p>本体换成非建筑主体之后，城基的角色就明确了：<b>它是「托举装置」，不该抢本体的戏，但自己也要炫。</b>
+    三款给三种完全不同的托举语言，色相也刻意拉开，摆一起要一眼分得清。</p>
 
   <div class="partcard">
-    <img src="img/p_b1.jpg" alt="锈铁台">
+    <img src="img/v_b1.jpg" alt="浮岩台">
     <div class="body">
-      <h4>B1　锈铁台</h4><div class="en">Rust Yard</div>
-      <div class="meta"><span class="m">稀有度 <b>低</b></span>
-        <span class="m free">走免费轨（签到 / BP 免费轨）</span>
-        <span class="m">默认色 <b>锈铁原色</b></span>
+      <h4>B1　浮岩台</h4><div class="en">Drift Crag　·　托举方式 = 反重力</div>
+      <div class="meta"><span class="m hi">同品质</span>
+        <span class="m">默认色 <b>玄岩灰</b></span>
         <span class="m">可购色板 <b>熔橙钛灰 / 曜石霓虹</b></span></div>
-      <p><span class="lb">造型</span>废土工业风方形平台，锈蚀钢板一层层焊叠，边缘堆油桶、外挂粗管道、挂铁梯。
-        侧面开一个小熔炉口，透暖橙光。</p>
-      <p><span class="lb">文案</span>锈铁台 —— 锈钢焊就的地基，风沙压不弯</p>
-      <p><span class="lb">为什么它走免费</span>零氪玩家也得能换掉默认底座，否则这个系统对他们就只是一排锁。</p>
+      <p><span class="lb">造型</span>一块被削平的破碎岩台悬浮在空中，底面参差（像从山体上掰下来的）。
+        底部四角各一个能量喷口，向下喷青蓝推力流、周围空气有热浪扰动。四周若干碎石绕着主体缓慢小幅浮动。</p>
+      <p><span class="lb">颜色</span>深灰玄武岩为主 + <b>青蓝</b>推力光 + 少量金色矿脉。</p>
+      <p><span class="lb">动态</span>碎石绕行、喷口推力流脉动、岩台极轻微上下起伏。</p>
+      <p><span class="lb">避坑</span>不要做成飞行器底盘；喷口不要做成火箭尾焰（要「托举」不要「起飞」）。</p>
+      <p><span class="lb">文案</span>浮岩台 —— 碎岩离地悬停，底下四道推力</p>
     </div>
   </div>
 
   <div class="partcard">
-    <img src="img/p_b2.jpg" alt="磐甲基">
+    <img src="img/v_b2.jpg" alt="巨轮台">
     <div class="body">
-      <h4>B2　磐甲基</h4><div class="en">Bulwark Base</div>
-      <div class="meta"><span class="m">稀有度 <b>中</b></span>
-        <span class="m">累充档位奖励</span>
-        <span class="m">默认色 <b>军绿装甲</b></span>
+      <h4>B2　巨轮台</h4><div class="en">Gearwheel Deck　·　托举方式 = 齿轮</div>
+      <div class="meta"><span class="m hi">同品质</span>
+        <span class="m">默认色 <b>黄铜锈青</b></span>
         <span class="m">可购色板 <b>极地冰蓝 / 沙暴迷彩</b></span></div>
-      <p><span class="lb">造型</span>军事装甲风平台，厚装甲板层叠拼接、棱角硬。四角挂小炮台，侧面装探照灯、侧壁贴履带结构，
-        正面留一个金属徽记位。</p>
-      <p><span class="lb">动态</span>探照灯缓慢左右扫，扫过时地面有一道亮痕。</p>
-      <p><span class="lb">文案</span>磐甲基 —— 装甲层层锁死，炮火撼不动</p>
+      <p><span class="lb">造型</span>一整个巨型齿轮平放当平台，齿牙朝外、齿间卡着小建筑货箱栈道（有人在齿缝里搭了住处）。
+        中心是巨大轴心，带黄铜盖板和铆钉。侧面能看到两三个咬合的小齿轮也在转。</p>
+      <p><span class="lb">颜色</span><b>黄铜</b>齿身 + 锈青氧化面 + 青色灯槽。</p>
+      <p><span class="lb">动态</span>主齿轮极缓慢转（一圈很久），小齿轮快些，咬合处有金属火花；齿缝里的灯随转动进出阴影。</p>
+      <p><span class="lb">避坑</span>不要做成钟表机构（要重工业）；齿牙要有磨损缺口；轴心与甲板要有明确的「不随轮转」分离感。</p>
+      <p><span class="lb">文案</span>巨轮台 —— 整座城压在齿上，轮转不停</p>
     </div>
   </div>
 
   <div class="partcard">
-    <img src="img/p_b3.jpg" alt="苔垣遗基">
+    <img src="img/v_b3.jpg" alt="晶簇台">
     <div class="body">
-      <h4>B3　苔垣遗基</h4><div class="en">Mossveil Ruin</div>
-      <div class="meta"><span class="m hi">当期城基最高</span>
-        <span class="m top">璀璨态门槛件</span>
-        <span class="m">累充高档位</span>
-        <span class="m">默认色 <b>苔石灰绿</b></span>
+      <h4>B3　晶簇台</h4><div class="en">Geode Rise　·　托举方式 = 晶体生长</div>
+      <div class="meta"><span class="m hi">同品质</span>
+        <span class="m">默认色 <b>霜紫</b></span>
         <span class="m">可购色板 <b>翡翠夜光 / 赭石晨曦</b></span></div>
-      <p><span class="lb">造型</span>丛林遗迹风石砌台基，大块条石砌成、缝里长苔藓爬藤蔓。侧面一个拱门洞，
-        门楣有一圈抽象几何浮雕纹。石缝里嵌青蓝晶簇，一簇簇从底部往上长。</p>
-      <p><span class="lb">动态</span>晶簇呼吸式明暗，藤蔓叶片极轻微风摆。</p>
-      <p><span class="lb">文案</span>苔垣遗基 —— 藤蔓爬满旧墙，矿脉仍在发光</p>
+      <p><span class="lb">造型</span>一丛巨大晶簇从地面斜刺而出，几根最粗的晶柱顶端磨平、共同托起一块平台。
+        晶体半透明、内部有流动光；晶柱之间架金属桁架和吊索把平台固定（人为加固的痕迹），
+        平台边缘垂下藤蔓状能量导线把晶体的光引上去。</p>
+      <p><span class="lb">颜色</span>冷<b>紫</b>晶体 + 深灰金属桁架 + 青白内光。
+        ⚠ 与 B1 的青蓝、B2 的黄铜<b>刻意拉开色相</b>，三款摆一起要一眼分清。</p>
+      <p><span class="lb">动态</span>晶体内部光缓慢流动，光沿导线往上爬，晶体边缘偶尔迸小光屑。</p>
+      <p><span class="lb">避坑</span>不要做成宝石堆或水晶洞（那是收集品语言）；晶体不要太规整；桁架是加固不是脚手架。</p>
+      <p><span class="lb">文案</span>晶簇台 —— 晶体从地里长出，托住整座城</p>
     </div>
   </div>
 
-  <h3>4.2　城市本体 4 款（底面一律平切，4 款抢 1 个槽 ★主力付费点）</h3>
+  <h3>4.2　城市本体 4 款 —— 四个题材方向各取一款（底面一律平切，4 款抢 1 个槽 ★主力付费点）</h3>
+  <p>同品质、不分好坏，<b>用题材区分不用稀有度区分</b>。四款分别来自四个方向，视觉区分度拉到最大 ——
+    玩家一眼分得清，不会觉得「这四个不都差不多」。首期就把四个方向的市场反应验证掉，
+    哪个方向卖得好、后续每期往那个方向加投。</p>
 
   <div class="partcard">
-    <img src="img/p_c1.jpg" alt="铁工巨械">
+    <img src="img/v_c1.jpg" alt="钢拳巨猿">
     <div class="body">
-      <h4>C1　铁工巨械</h4><div class="en">Ironworks Rig</div>
-      <div class="meta"><span class="m">稀有度 <b>低</b></span>
-        <span class="m free">走 BP 免费轨</span>
-        <span class="m">默认色 <b>工业铁灰</b></span>
+      <h4>C1　钢拳巨猿</h4><div class="en">Iron Fist Ape　·　题材 = 机械巨兽</div>
+      <div class="meta"><span class="m hi">同品质</span>
+        <span class="m">默认色 <b>玄铁黑</b></span>
+        <span class="m">可购色板 <b>赤铜战纹</b></span></div>
+      <p><span class="lb">造型</span>机械巨猿上半身从城体里破出来 —— 胸腔以上在城外、腰以下埋进城中。
+        一只巨大金属拳撑在城沿上（承重姿态，看得出它在把自己撑起来），另一手臂垂在身侧。
+        头部是装甲面罩式猿脸、双眼发青光；肩背外露液压杆和管线，关节能看到活塞。
+        城体被顶裂，裂口边缘有加固钢梁和栈道，能看到有人在钢梁上活动。</p>
+      <p><span class="lb">颜色</span>哑光<b>黑</b>装甲 + 金色边饰 + 青色眼光与核心光。</p>
+      <p><span class="lb">动态</span>胸腔核心呼吸式明暗，液压杆随呼吸微幅伸缩，管线偶尔排一小股白汽，眼光缓慢扫视。</p>
+      <p><span class="lb">避坑</span>不要做成高达或人形机甲（要野兽体态和重量感）；不要卡通萌系；不做毛发（纯机械）；
+        拳头要有压塌城沿的受力痕迹，不能只是「放在上面」。</p>
+      <p><span class="lb">文案</span>钢拳巨猿 —— 铁拳撑地，半身破城而出</p>
+    </div>
+  </div>
+
+  <div class="partcard">
+    <img src="img/v_c2.jpg" alt="噬光漏斗">
+    <div class="body">
+      <h4>C2　噬光漏斗</h4><div class="en">Lightless Maw　·　题材 = 天体异象</div>
+      <div class="meta"><span class="m hi">同品质</span>
+        <span class="m">默认色 <b>虚空紫</b></span>
+        <span class="m">可购色板 <b>银白逆光</b></span></div>
+      <p><span class="lb">造型</span>一个巨大倒锥形空洞悬立在城顶上方（锥尖朝下、几乎触到城体最高处）。
+        锥体本身是「没有光的地方」—— 不是黑色材质，是把周围的光都吸弯了：
+        附近建筑边缘、灯光、粒子都朝锥心方向拉出弧形拖影。锥口周围一圈碎石与光屑在旋转。
+        城体保持完整、灯火通明，与上方的「无光」形成强对比。</p>
+      <p><span class="lb">颜色</span>城体暖<b>橙</b>灯火 + 锥体近黑 + 边缘<b>紫罗兰</b>折光。</p>
+      <p><span class="lb">动态</span>拖影持续朝锥心流动，锥口碎石环缓慢旋转，偶尔一道光被整条吸进去瞬间消失。</p>
+      <p><span class="lb">避坑</span>⚠ 体量要控制 —— 锥体不能大到盖住整个城（城体必须清晰可辨，玩家要认得出这是自己的城）；
+        不要做成龙卷风或沙暴（那是气象不是天体）；锥体里不放任何具象物件。</p>
+      <p><span class="lb">文案</span>噬光漏斗 —— 倒锥立在城顶，光都被弯着走</p>
+    </div>
+  </div>
+
+  <div class="partcard">
+    <img src="img/v_c3.jpg" alt="雷霆炮台">
+    <div class="body">
+      <h4>C3　雷霆炮台</h4><div class="en">Thunder Bastion　·　题材 = 巨型武器</div>
+      <div class="meta"><span class="m hi">同品质</span>
+        <span class="m">默认色 <b>军械灰</b></span>
         <span class="m">可购色板 <b>钴蓝铬银</b></span></div>
-      <p><span class="lb">造型</span>机械巨构，两三条起重吊臂伸出去（一条挂吊钩和货箱），城体外壳挂满外露齿轮、
-        传动轴、蒸汽管，顶上立一个圆柱水塔。整体是「一座还在开工的工厂」。</p>
-      <p><span class="lb">动态</span>吊臂缓慢摆动，大齿轮持续转，蒸汽管每隔几秒喷一次白汽。</p>
-      <p><span class="lb">文案</span>铁工巨械 —— 吊臂昼夜不歇，齿轮咬住整座城</p>
+      <p><span class="lb">造型</span>多联装巨炮（三到四根炮管并列）架在城顶，炮口高高朝天仰起。
+        炮座是厚重旋转基座，<b>基座外壳就是城</b> —— 住舱、瞭望台、绞盘、弹药升降机都挂在炮座外围。
+        粗大弹链从城体下方绕上来、盘绕炮身好几圈再送进供弹口，弹壳有人腰那么粗。炮管有散热鳍和猿族纹章。</p>
+      <p><span class="lb">颜色</span>深<b>灰</b>炮身 + 黄铜弹链 + 青色蓄能光 + 橙色警示条。</p>
+      <p><span class="lb">动态</span>炮座极缓慢水平旋转（像在搜索目标），散热鳍开合排热，弹链缓慢送进；
+        偶尔一次蓄能 —— 炮管内壁亮青光、震动，<b>但不开火</b>（避免与战斗表现混淆）。</p>
+      <p><span class="lb">避坑</span>不要做成坦克或自行火炮（要固定炮台，不能有履带车体）；不真的开火；
+        <b>弹链一定要粗到夸张</b>（这是这款的辨识度来源）；炮管不要多到像风琴。</p>
+      <p><span class="lb">文案</span>雷霆炮台 —— 炮口朝天，弹链绕城三圈</p>
     </div>
   </div>
 
   <div class="partcard">
-    <img src="img/p_c2.jpg" alt="赤翼星舰">
+    <img src="img/v_c4.jpg" alt="猿王巨面">
     <div class="body">
-      <h4>C2　赤翼星舰</h4><div class="en">Crimson Ark</div>
-      <div class="meta"><span class="m">稀有度 <b>中</b></span>
-        <span class="m">节日 GACHA 奖池</span>
-        <span class="m">默认色 <b>赤翼绯红</b></span>
-        <span class="m">可购色板 <b>绯红鎏金</b></span></div>
-      <p><span class="lb">造型</span>一艘坠落星舰被改造成城 —— 舰首朝上斜插，舰体开窗开门变成居所，
-        两侧机翼张开当瞭望台、翼面搭木栈道和帐篷（有人住进去的痕迹）。正面一块大舷窗透青光。</p>
-      <p><span class="lb">动态</span>舷窗青光呼吸，翼尖航行灯闪烁，舰体某处漏出细烟。</p>
-      <p><span class="lb">文案</span>赤翼星舰 —— 坠落的舰身翻身成城，机翼仍在张</p>
-    </div>
-  </div>
-
-  <div class="partcard">
-    <img src="img/p_c3.jpg" alt="猿王座">
-    <div class="body">
-      <h4>C3　猿王座</h4><div class="en">Ape Throne</div>
-      <div class="meta"><span class="m">稀有度 <b>高</b></span>
-        <span class="m">节日 GACHA 高档位</span>
-        <span class="m">默认色 <b>石灰岩白</b></span>
+      <h4>C4　猿王巨面</h4><div class="en">Ape Sovereign Mask　·　题材 = 图腾面具</div>
+      <div class="meta"><span class="m hi">同品质</span>
+        <span class="m">默认色 <b>苍岩白</b></span>
         <span class="m">可购色板 <b>黑金帝威</b></span></div>
-      <p><span class="lb">造型</span>要塞高塔，塔身有盘旋而上的外挂阶梯和垛口。塔顶一个金饰王座，
-        猿王坐镇其上、手握长柄战锤，坐姿要稳、有压迫感。塔身镶金色纹饰和青色灯槽。</p>
-      <p><span class="lb">动态</span>猿王极轻微的呼吸起伏，斗篷／旗布随风摆；塔身青灯槽缓慢流光。</p>
-      <p><span class="lb">备选</span>若「活体猿王」在主城场景里太抢戏，改做<b>巨型猿王石像坐王座</b>的雕塑版，其余不变。</p>
-      <p><span class="lb">文案</span>猿王座 —— 塔顶有猿王坐镇，锤落风起</p>
+      <p><span class="lb">造型</span>一张巨型石雕猿面构成城的正立面 —— 额、眉骨、鼻梁、獠牙都是巨石雕成，
+        眉骨上方叠着城垛和瞭望台。双眼是两个巨大圆形灯窗、透出青光（眼后是有人活动的厅室，能看到剪影）。
+        张开的嘴就是<b>城门</b>，门内有台阶通向深处、门齿是打磨过的巨石。
+        石面有部落风几何刻纹和金箔嵌线，局部有苔痕和风化。</p>
+      <p><span class="lb">颜色</span>浅灰<b>岩石</b> + <b>金箔</b>刻纹 + 青色眼光。</p>
+      <p><span class="lb">动态</span>眼窗光缓慢明暗（像呼吸），门内有火光晃动和人影经过；石屑偶尔从眉骨落下。</p>
+      <p><span class="lb">避坑</span>⚠ 不要做成宗教神像或祭坛（只做部落图腾）；表情要威严不要凶恶狰狞；
+        不要做成头盔或面具道具的放大版 —— 它是「山体被雕成脸」的量级；獠牙不要过长挡住城门通行感。</p>
+      <p><span class="lb">文案</span>猿王巨面 —— 石面镇在城前，双目彻夜不闭</p>
     </div>
   </div>
 
-  <div class="partcard">
-    <img src="img/p_c4.jpg" alt="熔心方尖">
-    <div class="body">
-      <h4>C4　熔心方尖 ★</h4><div class="en">Molten Obelisk</div>
-      <div class="meta"><span class="m top"><b>当期最高稀有度</b></span>
-        <span class="m top">璀璨态门槛件</span>
-        <span class="m">节日 GACHA 主推位</span>
-        <span class="m">默认色 <b>熔心橙</b></span>
-        <span class="m top"><b>不出可购色板</b></span></div>
-      <p><span class="lb">造型</span>黑曜石方尖碑，四棱锥往上收、通体裂开不规则纹路，裂缝深处流动熔岩、光从里往外渗。
-        碑体底部一圈熔岩岩基（岩浆已凝壳、缝里还亮）。碑顶悬浮一颗熔核，不接触碑体。</p>
-      <p><span class="lb">动态</span>熔核缓慢自转并上下微浮，裂缝熔光沿裂纹流动，碑面有热浪扰动，底部持续升余烬。</p>
-      <p><span class="lb">为什么不出购色</span>最高稀有度不做配色分流 —— 它是当期璀璨态门槛件，
-        唯一性本身就是卖点，多出几个色反而摊薄。</p>
-      <p><span class="lb">文案</span>熔心方尖 —— 熔核封在碑里，裂缝透出光</p>
-    </div>
-  </div>
-
-  <h3>4.3　城辉 1 款</h3>
+  <h3>4.3　城辉 1 款 —— 同时是璀璨态的唯一门槛</h3>
   <div class="partcard">
     <img src="img/p_a1.jpg" alt="环星光带">
     <div class="body">
-      <h4>A1　环星光带</h4><div class="en">Orbit Veil</div>
-      <div class="meta"><span class="m">稀有度 <b>高</b></span>
-        <span class="m top">璀璨态门槛件</span>
+      <h4>A1　环星光带</h4><div class="en">Orbit Veil　·　纯特效层，不是实体件</div>
+      <div class="meta"><span class="m top">璀璨态门槛件</span>
         <span class="m">节日 BP 付费轨顶奖</span>
         <span class="m">首期不出购色</span></div>
       <p><span class="lb">表现</span>一道光带从城体腰部升起、绕整座城水平铺开成一个略倾斜的环 ——
-        内层青色实心光带、外层裹一层金色细碎光尘，两层反向缓慢旋转。光带经过城体时<b>从建筑背后穿过、
-        正面转半透明</b>。城基周围持续有橙金余烬往上飘，飘到光带高度被卷进环里带走一圈再消散。</p>
-      <p><span class="lb">为什么首期只做 1 款</span>城辉是四类里美术单价最高、复用性最差的（特效资源没法靠换材质派生变体）。
-        首期投 1 款验证一件事：玩家愿不愿意为纯特效单独付费。通过再决定第二期加几款、要不要开购色；
-        不通过就降级成其它品类的附赠，不再单独立项。</p>
+        内层青色实心光带、外层裹一层金色细碎光尘，两层<b>反向</b>缓慢旋转。
+        光带经过城体时<b>从建筑背后穿过、正面转半透明</b>。城基周围持续有橙金余烬往上飘，
+        飘到光带高度被卷进环里带走一圈再消散。</p>
+      <p><span class="lb">颜色</span>青色主光带 + 金色光尘 + 橙金余烬。</p>
+      <p><span class="lb">硬约束</span>光带<b>绝不允许盖住本体的识别轮廓</b> —— 本体是付费大头，
+        特效盖住它等于削弱玩家刚买的东西。</p>
+      <p><span class="lb">避坑</span>不要做成土星环那样的宽扁盘；不要满屏粒子（会糊掉城体）；
+        不要闪频过快（主城是常驻界面会累眼）。</p>
       <p><span class="lb">文案</span>环星光带 —— 一道光绕城不落，余烬随风上</p>
     </div>
   </div>
 
-  <h3>4.4　可购色板 9 个</h3>
+  <h3>4.4　可购色板 10 个 —— 同品质后每款配色数拉平</h3>
   <figure class="art">
     <img src="img/colorway.jpg" alt="配色对照">
-    <figcaption>配色机制：<b>形体完全一样，只换涂装</b> —— 这是色板成本远低于新做一款本体的原因。
-      图内三组色名恰好就是首期的熔橙钛灰 / 极地冰蓝 / 曜石霓虹（AI 概念图）</figcaption>
+    <figcaption>配色机制：<b>形体完全一样，只换涂装</b> —— 这是色板成本远低于新做一款本体的原因（AI 概念图）</figcaption>
   </figure>
   <table class="tight">
-    <tr><th style="width:16%">母件</th><th style="width:18%">默认色（随件获得）</th>
+    <tr><th style="width:16%">母件</th><th style="width:16%">默认色</th>
         <th style="width:26%">可购色板</th><th>色感</th></tr>
     <tr class="grp"><td colspan="4">城基（每款 2 个可购色）</td></tr>
-    <tr><td>B1 锈铁台</td><td>锈铁原色</td><td><b>熔橙钛灰</b> ｜ <b>曜石霓虹</b></td>
+    <tr><td>B1 浮岩台</td><td>玄岩灰</td><td><b>熔橙钛灰</b> ｜ <b>曜石霓虹</b></td>
       <td>橙锈配冷灰金属 ｜ 纯黑底 + 品红霓虹描边</td></tr>
-    <tr><td>B2 磐甲基</td><td>军绿装甲</td><td><b>极地冰蓝</b> ｜ <b>沙暴迷彩</b></td>
+    <tr><td>B2 巨轮台</td><td>黄铜锈青</td><td><b>极地冰蓝</b> ｜ <b>沙暴迷彩</b></td>
       <td>白装甲 + 冰蓝灯带 ｜ 土黄砂砾三色迷彩</td></tr>
-    <tr><td>B3 苔垣遗基</td><td>苔石灰绿</td><td><b>翡翠夜光</b> ｜ <b>赭石晨曦</b></td>
-      <td>深绿石材 + 荧绿矿脉 ｜ 暖赭红 + 晨光金</td></tr>
-    <tr class="grp"><td colspan="4">城市本体（每款 1 个可购色）</td></tr>
-    <tr><td>C1 铁工巨械</td><td>工业铁灰</td><td><b>钴蓝铬银</b></td><td>钴蓝主色 + 抛光铬银构件</td></tr>
-    <tr><td>C2 赤翼星舰</td><td>赤翼绯红</td><td><b>绯红鎏金</b></td><td>绯红舰体 + 鎏金边饰</td></tr>
-    <tr><td>C3 猿王座</td><td>石灰岩白</td><td><b>黑金帝威</b></td><td>黑曜石座 + 金纹雕饰</td></tr>
-    <tr><td class="rd">C4 熔心方尖</td><td>熔心橙</td><td class="rd"><b>不出购色</b></td><td>门槛件保唯一性</td></tr>
+    <tr><td>B3 晶簇台</td><td>霜紫</td><td><b>翡翠夜光</b> ｜ <b>赭石晨曦</b></td>
+      <td>深绿晶体 + 荧绿内光 ｜ 暖赭红 + 晨光金</td></tr>
+    <tr class="grp"><td colspan="4">城市本体（每款 1 个可购色，四款一视同仁）</td></tr>
+    <tr><td>C1 钢拳巨猿</td><td>玄铁黑</td><td><b>赤铜战纹</b></td><td>赤铜装甲 + 黑色战纹</td></tr>
+    <tr><td>C2 噬光漏斗</td><td>虚空紫</td><td><b>银白逆光</b></td>
+      <td>银白城体 + 冷白折光。⚠ 只作用于城体，锥体的「无光」不参与换色</td></tr>
+    <tr><td>C3 雷霆炮台</td><td>军械灰</td><td><b>钴蓝铬银</b></td><td>钴蓝炮身 + 抛光铬银构件</td></tr>
+    <tr><td>C4 猿王巨面</td><td>苍岩白</td><td><b>黑金帝威</b></td><td>黑曜石面 + 金纹刻线</td></tr>
   </table>
+  <p class="fine">⚠ 原先「最高稀有度那款不出购色」的规则<b>已作废</b> —— 同品质之后四款本体一视同仁，都出 1 个购色。
+    可购色板 = 城基 3×2 + 本体 4×1 = <b>10 个</b>。</p>
 </section>
 
 <section id="s5">
   <h2><span class="no">05</span>美需</h2>
   <div class="h2sub">完整 brief 在节日文案主表新 tab
-    <a href="https://docs.google.com/spreadsheets/d/1pPlo0ccRBmlQj9OFWnGXhQg1wLiihfQfSxEsoKA0hLA/edit#gid=1448671010"
+    <a href="https://docs.google.com/spreadsheets/d/1pPlo0ccRBmlQj9OFWnGXhQg1wLiihfQfSxEsoKA0hLA/edit#gid=1540426825"
        style="color:var(--accentd)" target="_blank">新系统-万象主城（首期）</a>
     —— 10 行 × 每行 2-5 条参考图链接</div>
+
+  <div class="box blue">
+    <h4>颜色这块怎么给美术讲（每款都要讲到这四层）</h4>
+    <table class="tight" style="margin:8px 0 0">
+      <tr><th style="width:16%">层</th><th style="width:30%">要讲什么</th><th>例（B3 晶簇台）</th></tr>
+      <tr><td><b>默认色名</b></td><td>四字色名，随部件一起获得、不单卖</td><td>霜紫</td></tr>
+      <tr><td><b>主色 + 辅色 + 光色</b></td><td>三段拆开写，不要只给一个笼统色</td>
+        <td>冷紫晶体（主）+ 深灰金属桁架（辅）+ 青白内光（光）</td></tr>
+      <tr><td><b>与同组其它款的色相关系</b></td>
+        <td>同品质的几款摆一起要一眼分清，色相必须刻意拉开</td>
+        <td>与 B1 的青蓝、B2 的黄铜<b>刻意拉开色相</b></td></tr>
+      <tr><td><b>可购色板的色感</b></td><td>每个色板一句话，说清「哪块换成什么」</td>
+        <td>翡翠夜光＝深绿晶体 + 荧绿内光　｜　赭石晨曦＝暖赭红 + 晨光金</td></tr>
+    </table>
+    <p class="fine">⚠ 只写「深灰色调」这种笼统描述，美术只能猜。
+      <b>主色管大面积、辅色管结构件、光色管发光部位</b>，三段分开给，返工率会低很多。</p>
+  </div>
 
   <div class="box warn">
     <h4>四条通用硬约束（比单款造型重要，美术开工前必须先定）</h4>
@@ -407,28 +463,53 @@
     <p class="fine">⚠ 这四条的<b>具体数值请美术在首期开工前给出</b>，配置与后续所有期都按这套值走。</p>
   </div>
 
-  <h3>5.1　每款的避坑项（美需表里逐款展开，这里只列最容易踩的）</h3>
+  <h3>5.1　每款要交付什么（给美术的清单）</h3>
+  <p>下面是<b>一款部件从美术侧交付的完整清单</b> —— 缺任何一项配置就落不了地。</p>
+  <table class="tight">
+    <tr><th style="width:14%">交付项</th><th style="width:12%">城基</th><th style="width:12%">本体</th>
+        <th style="width:12%">城辉</th><th style="width:12%">色板</th><th>说明 / 落到哪张表</th></tr>
+    <tr><td><b>3D 模型</b></td><td>✓ 每款 1 套</td><td>✓ 每款 1 套</td><td>—</td><td>—</td>
+      <td>按 §5.2 的挂载点 / 平切规格；模型 key 登记进 1511</td></tr>
+    <tr><td><b>材质与贴图</b></td><td>✓</td><td>✓</td><td>—</td><td>✓ 每色 1 套</td>
+      <td><b>材质槽命名必须统一</b>（<code>body_main / body_trim / glow_a</code>），色板按槽名整套替换</td></tr>
+    <tr><td><b>动态 / 特效</b></td><td>✓ 有动态的款</td><td>✓ 每款都要</td><td>✓ 主体就是特效</td><td>—</td>
+      <td>循环型（不是触发型）；城辉 prefab 路径登记进 1512</td></tr>
+    <tr><td><b>道具图标</b></td><td>✓ 每款 1 个</td><td>✓ 每款 1 个</td><td>✓</td><td>✓ 每色 1 个圆点</td>
+      <td>列表 / 商店 / 图鉴用；图标 key 登记进 1511。色板的是配色条上的<b>圆形色点</b></td></tr>
+    <tr><td><b>槽位缩略图</b></td><td>✓</td><td>✓</td><td>✓</td><td>—</td>
+      <td>装配界面三个槽里显示的小图，比道具图标更小更简</td></tr>
+    <tr><td><b>图鉴卡面</b></td><td>✓</td><td>✓</td><td>✓</td><td>✓</td>
+      <td>图鉴四册的卡片图 + <b>未拥有时的暗色剪影版</b>（剪影是购买动机，不能只给彩色版）</td></tr>
+    <tr><td><b>璀璨态叠加光效</b></td><td colspan="4">全系统 1 套（不按款出）</td>
+      <td>三槽装满 + 当期城辉时叠加的全局光效 + 城池名特效 + 铭牌标记</td></tr>
+  </table>
+  <p class="fine">首期合计要交付：<b>7 套模型</b>（3 城基 + 4 本体）+ <b>1 套城辉特效</b> +
+    <b>10 套色板材质</b> + <b>18 个道具图标</b>（8 部件 + 10 色点）+ <b>8 个槽位缩略图</b> +
+    <b>18 张图鉴卡面 × 2 态</b>（彩色 + 剪影）+ <b>1 套璀璨态光效</b>。</p>
+
+  <h3>5.2　每款的避坑项（美需表里逐款展开，这里只列最容易踩的）</h3>
   <table class="tight">
     <tr><th style="width:16%">部件</th><th>避坑</th></tr>
-    <tr><td>B1 锈铁台</td><td>不要做成完整的房子或碉堡（它只是垫在下面的一层）· 细节不要堆到顶面中心 · 不用猿族图腾</td></tr>
-    <tr><td>B2 磐甲基</td><td>不要做成坦克或载具（撞科技节 2026 方向）· 不要霓虹 KTV 风 · 徽记不要做成真实国家或军队标志</td></tr>
-    <tr><td>B3 苔垣遗基</td><td>不要做成寺庙或祭坛（避宗教符号）· 晶簇不要做成宝石堆 · 不要热带海岛感，是内陆废墟</td></tr>
-    <tr><td>C1 铁工巨械</td><td>不要做成钻井平台或采矿车 · 齿轮要有咬合关系不能是贴图 · 管线不要盖住城体轮廓</td></tr>
-    <tr><td>C2 赤翼星舰</td><td>不要做成完整能飞的飞船（是坠毁后改造，要有破损和加建痕迹）· 不要做成现实具体机型</td></tr>
-    <tr><td>C3 猿王座</td><td>不要做成宗教神像或供奉台 · 猿王不要卡通萌系（这款是身份象征要威严）· 战锤不要挡住塔体</td></tr>
-    <tr><td>C4 熔心方尖</td><td>不要做成火山（是人造碑体不是自然地貌）· 熔核不要做成宝石或能量罐 · 裂缝光要有流动方向不能是均匀发光贴图</td></tr>
-    <tr><td>A1 环星光带</td><td>不要做成土星环那样的宽扁盘 · 不要满屏粒子（会糊掉城体）· 不要闪频过快（主城是常驻界面会累眼）</td></tr>
-    <tr><td>色板通用</td><td>同一部件的两个色板色感不要撞车 · 霓虹类只保留一条主霓虹线，不要整体发光</td></tr>
+    <tr><td>B1 浮岩台</td><td>不要做成飞行器底盘 · 喷口不要做成火箭尾焰（要「托举」不要「起飞」）· 碎石不要多到糊住轮廓</td></tr>
+    <tr><td>B2 巨轮台</td><td>不要做成钟表机构（要重工业）· 齿牙要有磨损缺口 · 轴心与甲板要有「不随轮转」的分离感</td></tr>
+    <tr><td>B3 晶簇台</td><td>不要做成宝石堆或水晶洞（那是收集品语言）· 晶体不要太规整 · 桁架是加固不是脚手架</td></tr>
+    <tr><td>C1 钢拳巨猿</td><td>不要做成高达或人形机甲 · 不要卡通萌系 · 不做毛发（纯机械）· 拳头要有压塌城沿的受力痕迹</td></tr>
+    <tr><td>C2 噬光漏斗</td><td><b>体量要控制</b>，锥体不能盖住整个城 · 不要做成龙卷风或沙暴 · 锥体里不放具象物件</td></tr>
+    <tr><td>C3 雷霆炮台</td><td>不要做成坦克或自行火炮（固定炮台，无履带车体）· 不真的开火 · <b>弹链要粗到夸张</b>（辨识度来源）</td></tr>
+    <tr><td>C4 猿王巨面</td><td>不要做成宗教神像或祭坛 · 表情威严不凶恶狰狞 · 不是面具道具放大版（是山体被雕成脸的量级）</td></tr>
+    <tr><td>A1 环星光带</td><td>不要做成土星环那样的宽扁盘 · 不要满屏粒子（会糊掉城体）· 不要闪频过快</td></tr>
+    <tr><td>色板通用</td><td>同一部件的两个色板色感不要撞车 · 霓虹类只保留一条主霓虹线 · C2 的色板只作用于城体不改锥体</td></tr>
   </table>
 
   <div class="box gold">
     <h4>一个题材冲突，提前说清</h4>
     <p class="fine">主城套装的循环档期是 <b>3 月科技节</b>和 <b>11 月感恩节</b>。科技节历年方向已用满
       废土工具 / 废土工业 / 摩登都市 / 星际飞船 / 军事机甲，且避坑项明确写了 <b>❌ 猿族元素</b>（科技节起去猿族化）。</p>
-    <p class="fine">本案首期是<b>废土工业 + 装甲军事 + 丛林遗迹</b>的中性题材，且 C3 用了猿王 ——
-      <b>与科技节撞方向、也和它的去猿族化冲突</b>。处理方式：万象主城是常驻系统、不是节日套装循环，
-      首期题材<b>刻意做中性</b>当底子（往期不下架、要跨期通用，题材越中性越耐配），
-      <b>节日主题留给后续每期新增的那 1-2 款</b>。所以美需没挂节日 tab，走「临时需求」那类独立 tab
+    <p class="fine">本案首期的四款本体里有两款带猿族元素（C1 钢拳巨猿、C4 猿王巨面）——
+      <b>与科技节的去猿族化口径冲突</b>（但与拓荒节 / 周年庆强化猿族梗的口径正好呼应）。
+      处理方式：万象主城是常驻系统、不是节日套装循环，
+      首期四款走<b>四个题材方向各一款</b>、不绑单一节日，
+      <b>节日主题留给后续每期新增的那 1-2 款</b>；档期上避开 3 月科技节即可。所以美需没挂节日 tab，走「临时需求」那类独立 tab
       （主表已有先例：临时需求-世界杯装饰物）。</p>
   </div>
 </section>
@@ -444,7 +525,7 @@
     <tr><td class="gr"><b>P2</b></td><td class="gr"><b>城市本体 ★</b></td>
       <td class="gr"><b>本体槽只有 1 个，本期新款比手上任一款都更想穿 → 买来替换，旧的进预设备用</b></td>
       <td>节日 GACHA / 常驻商店</td></tr>
-    <tr><td>P3</td><td>城辉</td><td>城基和本体都够门槛了，城辉槽空着 → 差这一件进不了璀璨态</td><td>节日 BP 付费轨</td></tr>
+    <tr><td>P3</td><td>城辉</td><td>城基和本体都装好了，城辉槽空着 → <b>差这一件进不了璀璨态</b>（城辉是唯一门槛）</td><td>节日 BP 付费轨</td></tr>
     <tr><td>P4</td><td>色板</td><td>本期新色能同时刷手上 3 款旧底座 → 一次低单价购买改变三套搭配</td><td>限时抢购 / 省省卡</td></tr>
     <tr><td>P5</td><td>预设方案槽</td><td>手上 5 款本体但只有 2 套预设，换风格每次都要拆装 → 买第 3 槽</td><td>限时抢购</td></tr>
     <tr><td>P6</td><td>当期礼包</td><td>想一次拿到当期璀璨态门槛所需的件（最多打包两件）</td><td>节日 GACHA / 签到</td></tr>
@@ -453,12 +534,12 @@
   <h3>6.2　一期能卖多少</h3>
   <div class="g4">
     <div><div class="n" style="color:var(--red)">5</div><div class="l">现在一套节日套装<br>2 皮肤 + 3 挂件</div></div>
-    <div><div class="n" style="color:var(--green)">18</div><div class="l">本案首期<br>3+4+1 件 + 9 色板 + 1 槽</div></div>
-    <div><div class="n">3.6×</div><div class="l">首期倍数</div></div>
-    <div><div class="n">86 / 30</div><div class="l">全年 6 期对照<br>约 2.9×</div></div>
+    <div><div class="n" style="color:var(--green)">19</div><div class="l">本案首期<br>3+4+1 件 + 10 色板 + 1 槽</div></div>
+    <div><div class="n">3.8×</div><div class="l">首期倍数</div></div>
+    <div><div class="n">87 / 30</div><div class="l">全年 6 期对照<br>约 2.9×</div></div>
   </div>
   <p class="fine">真正的差别不在倍数：现在模式第 6 期的 5 件只卖给想要第 6 期主题的人；
-    本案第 6 期的 8 个新色板，作用对象是<b>前 5 期累积下来的 13 款底座 + 14 款本体的全部持有者</b>。
+    本案第 6 期的 8 个新色板，作用对象是<b>前 5 期累积下来的 13 款城基 + 14 款本体的全部持有者</b>。
     色板是唯一一个可售单位数随体系规模线性增长的品类。</p>
 
   <div class="box warn">
@@ -492,8 +573,11 @@
     <tr class="grp"><td colspan="4">存量接入</td></tr>
     <tr><td>D9</td><td>历史主城套装转译</td><td>7 套旧套装 → 收藏度 + 整套预设</td><td>边界见 §09 第 3 条</td></tr>
   </table>
-  <p class="fine"><b>免费件与付费件在装配上完全等价</b> —— 不做「免费件不能进某槽」「免费件不计收藏度」这类限制，
-    唯一差别是稀有度较低、因而通常达不成璀璨态。</p>
+  <p class="fine"><b>免费件与付费件同品质、装配上完全等价</b> —— 不做「免费件不能进某槽」「免费件不计收藏度」
+    这类限制，也不做「免费的那款做得糙一点」。<br>
+    区分靠<b>款数配额</b>：每期 5 款新品（2 城基 + 2 本体 + 1 城辉）里固定 1 款走免费轨，
+    <b>哪一款免费由运营按节奏定</b> —— 可以故意放最炫的那款去拉活跃。
+    零氪玩家与付费玩家的差别是<b>选择数量</b>，不是品质；唯一拿不到的是当期城辉，所以当期达不成璀璨态。</p>
 </section>
 
 <section id="s8">
@@ -548,7 +632,14 @@
       <td>整套接入部件池、<b>占两槽的不可拆组合</b>，可随时切换、全部计收藏度。
         <b>但拆不出件混搭</b>（旧模型没统一挂载点，拆开必然错位穿模）—— 这条边界要跟玩家讲清</td>
       <td>M1（评审通过后 2 周）</td></tr>
-    <tr><td><b>4</b></td><td><b>首期跟哪个档期上线</b></td>
+    <tr><td><b>4</b></td><td><b>四款本体的题材方向</b></td>
+      <td>四个方向（机械巨兽 / 天体异象 / 巨型武器 / 图腾面具）各取一款是我的建议；
+        若你只想走单一方向，四款要重新设计</td>
+      <td>建议按<b>四方向各一款</b>走 —— 同品质靠题材区分，且首期就能验证哪个方向卖得好，
+        后续每期往那边加投。方向对比见
+        <a href="directions.html" style="color:var(--accent-d)">directions.html</a></td>
+      <td class="rd"><b>美术开工前</b></td></tr>
+    <tr><td><b>5</b></td><td><b>首期跟哪个档期上线</b></td>
       <td>决定美术排期与美需 tab 归位；也决定当期璀璨态门槛件的题材是否要跟节日走</td>
       <td>避开 3 月科技节（撞方向 + 去猿族化冲突，见 §05）。
         题材已做中性，跟哪期上线都不违和，你定档期我改 tab 名</td>
@@ -583,7 +674,7 @@
   30 秒版，留着给别人快速看）。本版以<b>首期设计与美需</b>为主体，砍掉核心循环 / 分层体验 / 立项论证 /
   风险对策四章模板内容，只保留能直接拿去对齐的部分。<br>
   <b>配套</b>：开发需求表 <code>J_万象主城</code>（三页签 + 14 张横屏交互图）·
-  美需 <a href="https://docs.google.com/spreadsheets/d/1pPlo0ccRBmlQj9OFWnGXhQg1wLiihfQfSxEsoKA0hLA/edit#gid=1448671010"
+  美需 <a href="https://docs.google.com/spreadsheets/d/1pPlo0ccRBmlQj9OFWnGXhQg1wLiihfQfSxEsoKA0hLA/edit#gid=1540426825"
   style="color:var(--accentd)" target="_blank">新系统-万象主城（首期）</a>
 </p>
 
