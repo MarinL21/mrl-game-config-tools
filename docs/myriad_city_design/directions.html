@@ -1,0 +1,281 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>万象主城 · 本体题材方向（4 选）</title>
+<style>
+  :root {
+    --accent: #00A0E9; --accent-d: #007BB8; --ink: #0C1A2B;
+    --dark: #25334A; --body: #4A5462; --muted: #8A94A2;
+    --line: #E7ECF2; --card: #F7F9FC; --card-bl: #EEF7FD;
+    --red: #E03C31; --red-bg: #FDF0EE; --gold: #C8961E;
+    --gold-bg: #FFF8E8; --green: #1F9D55; --green-bg: #EFFAF3;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; color: var(--body);
+         background: #FFFFFF; line-height: 1.75; font-size: 15px; }
+  .wrap { max-width: 1060px; margin: 0 auto; padding: 0 28px 90px; }
+
+  .hero { background: var(--ink); color: #fff; padding: 0; margin-bottom: 46px; }
+  .hero-inner { max-width: 1060px; margin: 0 auto; padding: 42px 28px 38px; }
+  .kicker { color: #3ED0F5; font-size: 13px; font-weight: 700; letter-spacing: 3px; }
+  h1 { font-size: 34px; color: #fff; margin: 10px 0 6px; letter-spacing: 1px; }
+  .hero .sub { color: #A9B8C7; font-size: 15px; }
+  .meta { margin-top: 18px; font-size: 12.5px; color: #7C8CA0; }
+  .meta b { color: #BECDDB; font-weight: 600; }
+
+  section { margin-bottom: 58px; }
+  h2 { font-size: 23px; color: var(--dark); border-left: 5px solid var(--accent);
+       padding-left: 14px; margin-bottom: 6px; letter-spacing: .5px; }
+  h2 .no { color: var(--accent-d); font-family: Arial; margin-right: 6px; }
+  .h2sub { color: var(--muted); font-size: 13px; margin: 0 0 18px 19px; }
+  h3 { font-size: 16.5px; color: var(--dark); margin: 26px 0 10px; }
+  h3::before { content: "▎"; color: var(--accent); }
+  h4 { font-size: 14.5px; color: var(--dark); margin: 18px 0 8px; }
+  p { margin-bottom: 10px; }
+  b, strong { color: var(--dark); }
+  .hl { color: var(--accent-d); font-weight: 700; }
+  .rd { color: var(--red); font-weight: 700; }
+  .gd { color: var(--gold); font-weight: 700; }
+  .gr { color: var(--green); font-weight: 700; }
+
+  .box { background: var(--card); border: 1px solid var(--line); border-radius: 10px;
+         padding: 18px 22px; margin: 14px 0; }
+  .box.blue { background: var(--card-bl); border-color: #BFE3F7; }
+  .box.warn { background: var(--red-bg); border-color: #F2C7C2; }
+  .box.gold { background: var(--gold-bg); border-color: #EBD9A8; }
+  .box.green { background: var(--green-bg); border-color: #BEE6CE; }
+  .box h4:first-child { margin-top: 0; }
+  .onesent { font-size: 16.5px; color: var(--dark); font-weight: 600; }
+  table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 13.5px; }
+  th { background: var(--ink); color: #fff; padding: 9px 12px; text-align: left;
+       font-weight: 600; }
+  td { padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  tr:nth-child(even) td { background: #FAFCFE; }
+  td b { color: var(--dark); }
+  table.tight { font-size: 12.8px; }
+  table.tight th, table.tight td { padding: 7px 9px; }
+  .grp td { background: #EAF0F6 !important; font-weight: 700; color: var(--dark);
+            font-size: 13px; letter-spacing: .5px; }
+  .tag { display: inline-block; font-size: 11px; font-weight: 700; padding: 1px 7px;
+         border-radius: 4px; white-space: nowrap; }
+  .t-out { background: #E4F5EA; color: #147C42; }
+  .t-add { background: #E7F3FB; color: #0A6A9E; }
+  .t-cap { background: #FFF1D6; color: #96690A; }
+  .t-save { background: #FCE6E3; color: #B32A20; }
+  ul { margin: 6px 0 12px 22px; }
+  li { margin-bottom: 7px; }
+  ol { margin: 6px 0 12px 24px; }
+  .conclusion { background: var(--ink); color: #fff; border-radius: 10px; padding: 16px 24px;
+                font-size: 15.5px; font-weight: 600; margin: 18px 0; }
+  .conclusion .rd { color: #FF9B92; }
+  .conclusion .gd { color: #FFD277; }
+  .svgwrap { background: var(--card); border: 1px solid var(--line); border-radius: 10px;
+             padding: 16px 10px 10px; margin: 18px 0 24px; overflow-x: auto; }
+  .svgwrap svg { display: block; margin: 0 auto; }
+  figcaption { font-size: 12.5px; color: var(--muted); margin-top: 4px; text-align: center; }
+  figcaption b { color: var(--accent-d); }
+  figure { margin: 20px 0 26px; }
+  figure img { width: 100%; border-radius: 10px; border: 1px solid var(--line);
+               box-shadow: 0 6px 22px rgba(26,44,66,.10); display: block; }
+  figure.art figcaption { margin-top: 9px; }
+  figure.half { display: inline-block; width: 48.7%; vertical-align: top; }
+  figure.half + figure.half { margin-left: 2%; }
+  figure.narrow { width: 48%; margin: 20px auto 26px; }
+  .hero-img { width: 100%; display: block; }
+  .hero-cap { text-align: center; color: var(--muted); font-size: 12px; padding: 8px 0 0; }
+  .toc { columns: 2; font-size: 14px; }
+  .toc a { color: var(--accent-d); text-decoration: none; }
+  .toc li { margin-bottom: 4px; }
+  .fine { font-size: 12.5px; color: var(--muted); }
+  .kpi { display: flex; flex-wrap: wrap; gap: 12px; margin: 16px 0; }
+  .kpi div { flex: 1 1 150px; background: var(--card); border: 1px solid var(--line);
+             border-radius: 10px; padding: 13px 15px; }
+  .kpi .n { font-size: 24px; font-weight: 700; color: var(--accent-d); font-family: Arial;
+            line-height: 1.2; }
+  .kpi .l { font-size: 12px; color: var(--muted); margin-top: 3px; }
+  .rl { counter-reset: rl; }
+  .rl li { list-style: none; position: relative; padding-left: 30px; margin-bottom: 10px; }
+  .rl li::before { counter-increment: rl; content: counter(rl); position: absolute; left: 0;
+     top: 3px; width: 21px; height: 21px; border-radius: 50%; background: var(--accent);
+     color: #fff; font-size: 12px; font-weight: 700; text-align: center; line-height: 21px; }
+</style>
+<style>
+  .dir{border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-bottom:22px;background:#fff}
+  .dir.pick{border-color:var(--accent);border-width:2px;box-shadow:0 8px 26px rgba(0,160,233,.12)}
+  .dir h3{margin:0 0 3px;font-size:19px;color:var(--ink)}
+  .dir h3::before{content:none}
+  .dir .pos{font-size:14px;color:var(--accentd);font-weight:600;margin-bottom:12px}
+  .dir img{width:100%;border-radius:10px;border:1px solid var(--line);display:block;margin-bottom:12px}
+  .dir .four{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}
+  .dir .four div{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+  .dir .four b{display:block;font-size:13.5px;color:var(--ink);margin-bottom:3px}
+  .dir .four span{font-size:12px;color:var(--body)}
+  .verdict{display:flex;gap:12px;margin-top:10px}
+  .verdict>div{flex:1;border-radius:8px;padding:11px 14px;font-size:13px}
+  .verdict .good{background:var(--greenbg);border:1px solid #BEE6CE}
+  .verdict .bad{background:var(--redbg);border:1px solid #F2C7C2}
+  .verdict b{display:block;margin-bottom:3px}
+  .vw{font-size:12.5px;color:var(--muted);margin-top:9px}
+  .rec{background:var(--ink);color:#fff;border-radius:14px;padding:24px 28px;margin:26px 0}
+  .rec h3{color:#fff;font-size:19px;margin:0 0 10px}.rec h3::before{content:none}
+  .rec p{color:#C6D4E0;font-size:14.5px;margin-bottom:10px}
+  .rec .mix{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0}
+  .rec .mix div{background:rgba(255,255,255,.08);border-radius:9px;padding:12px 14px}
+  .rec .mix b{display:block;color:#3ED0F5;font-size:13.5px;margin-bottom:3px}
+  .rec .mix span{font-size:12px;color:#A9B8C7}
+</style></head><body>
+
+<div class="hero"><div class="hero-inner">
+  <div class="kicker">AGE OF APES &middot; 万象主城</div>
+  <h1>城市本体 · 题材方向 4 选</h1>
+  <div class="sub">你给的「武器」方向 + 我发散的三个 &mdash;&mdash;
+    <b style="color:#fff">四款同品质、不分好坏，靠题材区分不靠稀有度</b></div>
+  <div class="meta"><b>日期</b> 2026-08-20 ｜ <b>用途</b> 定首期本体题材 ｜
+    <b>配图</b> AI 概念图，每方向 4 款并排，非最终美术</div>
+</div></div>
+
+<div class="wrap">
+
+<div class="box warn">
+  <h4>先把两件事纠正过来</h4>
+  <p class="fine"><b>① 同品质，没有好坏差别。</b>之前我给城基和本体排了稀有度阶梯（低/中/高/最高），错了。
+    改成<b>全部同品质、统一出帅出炫</b>——每一款都要能独立撑起一座城，不存在「这款是垫底的」。
+    这带出三个连锁问题，解法在页尾。</p>
+  <p class="fine"><b>② 别搞传统。</b>上一版的锈铁台 / 装甲基 / 石遗迹 + 工厂 / 星舰 / 高塔，是常规主城语言，不炫。
+    下面四个方向全部往「非建筑主体」走。</p>
+</div>
+
+<div class="dir">
+  <h3>方向 A · 巨型武器<span style="font-size:12px;color:var(--muted);font-weight:400;margin-left:9px">你给的方向</span></h3>
+  <div class="pos">城不是「住的地方」，是一件立在那儿的兵器</div>
+  <img src="img/dir_weapon.jpg" alt="武器方向四款">
+  <div class="four">
+    <div><b>裂天巨剑</b><span>巨剑倒插入地，剑柄朝天，剑身刻符文流光</span></div>
+    <div><b>雷霆炮台</b><span>多联装巨炮，炮口朝天，弹链盘绕</span></div>
+    <div><b>裂地战锤</b><span>战锤竖立，锤头刻符文迸能量弧，锤柄是塔身</span></div>
+    <div><b>不破巨盾</b><span>环形巨盾立起，盾沿砌成城垛</span></div>
+  </div>
+  <div class="verdict">
+    <div class="good"><b>好在哪</b>概念最锐，「一把剑就是我的城」这句话本身就有传播力；
+      四款都是硬轮廓，缩到世界地图小图标也认得出。</div>
+    <div class="bad"><b>问题（出图暴露的）</b>剑和锤<b>城感太弱</b> ——
+      看着像立了个巨型道具，不像一座城。炮台和巨盾好得多，因为炮座和盾面上能长出建筑。</div>
+  </div>
+  <p class="vw">→ 要救的话：武器必须是<b>「插在城里」而不是「取代城」</b>——保留可辨识的城体，
+    武器从城里穿出来，武器上再长栈道和瞭望台（就像下面 C 方向的陨星那样处理）。</p>
+</div>
+
+<div class="dir pick">
+  <h3>方向 B · 机械巨兽<span style="font-size:12px;color:var(--accentd);font-weight:700;margin-left:9px">我最推荐</span></h3>
+  <div class="pos">一头机械巨兽盘在城上 —— 兽是主体，城是它的窝</div>
+  <img src="img/dir_beast.jpg" alt="机械巨兽方向四款">
+  <div class="four">
+    <div><b>钢拳巨猿</b><span>机械巨猿半身破城而出，一只金属拳撑地</span></div>
+    <div><b>铁尾蝎王</b><span>钢铁蝎盘踞城顶，尾钩高举</span></div>
+    <div><b>秃鹫铁翼</b><span>巨鹫展翅栖顶，翼骨是钢梁</span></div>
+    <div><b>缠塔钢蛇</b><span>钢蛇缠绕塔身，蛇头俯视</span></div>
+  </div>
+  <div class="verdict">
+    <div class="good"><b>好在哪</b>「城 + 主体」的关系最正确 —— 城体完整保留，兽只是盘在上面，
+      玩家仍认得出这是自己的城。<b>而且 Age of Apes 题材天然适配</b>，钢拳巨猿这款几乎是白送的辨识度。
+      四款姿态差异大（坐 / 盘 / 展翅 / 缠绕），一眼分得清。</div>
+    <div class="bad"><b>要盯的</b>兽要有重量感，不能做成高达或载具；关节和液压要外露，
+      否则会变成「毛绒玩具放大版」。</div>
+  </div>
+</div>
+
+<div class="dir pick">
+  <h3>方向 C · 天体异象<span style="font-size:12px;color:var(--accentd);font-weight:700;margin-left:9px">视觉最独特</span></h3>
+  <div class="pos">天上掉下来的东西砸成了城</div>
+  <img src="img/dir_cosmic.jpg" alt="天体异象方向四款">
+  <div class="four">
+    <div><b>陨星熔核</b><span>还在冒烟的陨星嵌进城里，熔光从裂缝渗出</span></div>
+    <div><b>残月悬垣</b><span>一块碎月牙被锁链吊在城上</span></div>
+    <div><b>噬光漏斗</b><span>吸光的倒锥立在城顶，周围的光都被弯曲</span></div>
+    <div><b>凝极光柱</b><span>一道极光冻成晶柱，从城心长出</span></div>
+  </div>
+  <div class="verdict">
+    <div class="good"><b>好在哪</b>奇观感最强、最不像现有任何一套主城皮肤。
+      噬光漏斗那款尤其抓眼 —— 玩家在世界地图上一眼就会点进去看。
+      城体（下面那堆密集建筑）保留得也很完整。</div>
+    <div class="bad"><b>要盯的</b>不能太抽象，否则玩家认不出「这是我的城」；
+      黑洞那款要控制体量，不然会盖住整个城。</div>
+  </div>
+</div>
+
+<div class="dir">
+  <h3>方向 D · 图腾面具</h3>
+  <div class="pos">巨型部落图腾当城 —— 猿族梗最重的一档</div>
+  <img src="img/dir_totem.jpg" alt="图腾面具方向四款">
+  <div class="four">
+    <div><b>猿王巨面</b><span>巨型石雕猿面，眼睛发光，嘴是城门</span></div>
+    <div><b>叠兽图腾</b><span>层层兽面图腾柱，每层一张脸</span></div>
+    <div><b>骸骨王座</b><span>巨兽头骨改成的王座，双角撑起城墙</span></div>
+    <div><b>战鼓高塔</b><span>巨型战鼓叠成塔，鼓面绷紧</span></div>
+  </div>
+  <div class="verdict">
+    <div class="good"><b>好在哪</b>猿族文化感最强，跟拓荒节 / 周年庆强化猿族梗的口径正好呼应；
+      猿王巨面的压迫感是四个方向里最足的。</div>
+    <div class="bad"><b>问题</b>部落图腾是<b>比较常见的套路</b>，「不传统」这条上它是四个里最弱的；
+      另外要避开宗教符号（不能做成神像 / 祭坛）。</div>
+  </div>
+</div>
+
+<div class="rec">
+  <h3>我的建议：不要选一个方向，四个方向各取一款</h3>
+  <p>你说了「同品质、没好坏差别」——那<b>用什么来区分四款本体？答案是题材，不是稀有度。</b>
+    四个方向各出最强的那一款，凑成首期 4 款：</p>
+  <div class="mix">
+    <div><b>钢拳巨猿</b><span>B 机械巨兽 · 猿族适配、辨识度最高</span></div>
+    <div><b>噬光漏斗</b><span>C 天体异象 · 最奇观、最抓眼</span></div>
+    <div><b>雷霆炮台</b><span>A 武器 · 武器方向里城感最强的那款</span></div>
+    <div><b>猿王巨面</b><span>D 图腾 · 猿族梗最重、压迫感最足</span></div>
+  </div>
+  <p>这么做有三个好处：<b>① 四款视觉区分度拉到最大</b>（机械兽 / 天体 / 兵器 / 石雕，玩家一眼分得清，
+    不会觉得「这四个不都差不多」）；<b>② 同品质这件事立得住</b> —— 四款是四种口味不是四个档次；
+    <b>③ 首期就把四个方向的市场反应验证掉</b>，哪个方向卖得好，后续每期就往那个方向加投。</p>
+  <p style="color:#FFD277"><b>换档抓手也现成了</b>：万象主城是常驻系统，每期要上新款。
+    方向本身就是换档的抓手 —— 第二期可以「机械巨兽 ×2」，第三期「天体 ×2」，
+    不用每期从零想题材。</p>
+</div>
+
+<h2><span class="no">配套</span>城基三款（同品质，三种托举方式）</h2>
+<p>本体换成非建筑主体之后，城基的角色就明确了：<b>它是「托举装置」，不该抢本体的戏，但自己也要炫。</b>
+  三款给三种完全不同的托举语言 ——</p>
+<table class="tight">
+  <tr><th style="width:14%">编号</th><th style="width:16%">名称</th><th style="width:30%">造型</th><th>为什么是它</th></tr>
+  <tr><td>B1</td><td><b>浮岩台</b></td><td>反重力悬浮的破碎岩台，底部四个能量喷口，碎石在周围小幅浮动</td>
+    <td>悬浮感 —— 让上面的主体像「被托起来展示」，最适合配天体和武器</td></tr>
+  <tr><td>B2</td><td><b>巨轮台</b></td><td>一整个巨型齿轮当平台，还在缓慢转动，齿间卡着建筑</td>
+    <td>机械感 —— 配机械巨兽最搭，转动本身就是动态</td></tr>
+  <tr><td>B3</td><td><b>晶簇台</b></td><td>巨大晶簇顶起的平台，晶体从下往上刺出、缝里透光</td>
+    <td>能量感 —— 配图腾和天体都成立，也是三款里最亮的</td></tr>
+</table>
+<p class="fine">三款都不用「锈铁 / 装甲 / 石台」那种平铺直叙的建筑语言，
+  而是<b>用一种机制去托举</b>（反重力 / 齿轮 / 晶体生长）—— 这样城基自己也有看点，但不会跟本体抢。
+  <b>要不要我把这三款也跑图？</b></p>
+
+<h2><span class="no">连锁</span>同品质带出的三个问题，我的解法</h2>
+<table class="tight">
+  <tr><th style="width:22%">原来靠稀有度做的事</th><th style="width:38%">同品质之后不成立了</th><th>解法</th></tr>
+  <tr><td><b>璀璨态门槛</b></td>
+    <td>原来是「三槽都达到当期最高稀有度」。现在没有稀有度阶梯，这个判定失效</td>
+    <td><b>改成「三槽装满 + 城辉必须是当期款」</b>。城辉款数最少、单价最高，用它当门槛最自然；
+      每期换新城辉，璀璨态就每期都要重新凑，照样永不封顶</td></tr>
+  <tr><td><b>免费 / 付费怎么分</b></td>
+    <td>原来是「低稀有度那款走免费轨」。同品质之后不能再让免费款做得差</td>
+    <td><b>靠款数配额，不靠品质。</b>每期 5 款新品里固定 1 款走免费轨，
+      <b>哪一款免费由运营按节奏定</b>（可以是最炫的那款，用来拉活跃）。
+      免费玩家拿到的款和付费款同品质，差的只是<b>选择数量</b></td></tr>
+  <tr><td><b>定价怎么排</b></td>
+    <td>原来按稀有度分档定价</td>
+    <td><b>同品质 = 同价，反而更简单。</b>本体一个价、城基一个价（低于本体）、城辉一个价、色板一个价。
+      玩家纯凭喜好选，不用算「哪个更值」</td></tr>
+</table>
+
+<p class="fine" style="margin-top:30px;padding-top:16px;border-top:1px solid var(--line)">
+  完整策划案见 <a href="index.html" style="color:var(--accentd)">index.html</a>（v3.0，其中稀有度相关内容待按本页改口径）·
+  30 秒版 <a href="onepager.html" style="color:var(--accentd)">onepager.html</a> ·
+  美需 <a href="https://docs.google.com/spreadsheets/d/1pPlo0ccRBmlQj9OFWnGXhQg1wLiihfQfSxEsoKA0hLA/edit#gid=1448671010" style="color:var(--accentd)" target="_blank">新系统-万象主城（首期）</a>
+</p>
+
+</div></body></html>
