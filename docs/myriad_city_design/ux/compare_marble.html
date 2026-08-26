@@ -1,0 +1,78 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>宇宙弹弹乐 · 布局三版对比</title>
+<link rel="stylesheet" href="p2ux19.css">
+
+<div class="canvas board" id="board" style="width:4560px;height:5600px" data-layer="宇宙弹弹乐 布局两版对比" data-name="宇宙弹弹乐 布局两版对比">
+  <div class="board-title abs" style="left:120px;top:70px" data-layer="板标题" data-name="板标题">
+    <div class="bar"></div><div class="txt">宇宙弹弹乐 · 布局三版对比</div>
+  </div>
+  <div class="note-d abs" style="left:186px;top:186px;width:3000px" data-layer="板说明" data-name="板说明">
+    骨架照搬 P2 现有「幸运弹弹弹」（8月周年庆本体 gacha）　·　C 版学竞品做成一台弹珠机 · A/B 版沿用幸运弹弹弹的盘面+挂件　·　单屏 1920×1080，槽位待跑图
+  </div>
+</div>
+
+<script src="marble2.js"></script>
+<script>
+const BASE = { balls:128, adv:6, mult:10, hits:0, acc:0, score:96000, gauge:[5,8], rank:34 };
+const S = (o) => Object.assign({}, BASE, o);
+
+const ROWS = [
+  { t:'C 版　机柜整合（学竞品）—— 玩法区是一台实体弹珠机，HUD 全长在机器上',
+    cells:[
+      { key:'C1 主界面 · 初始态', cap:'C① 主界面 · 初始态',
+        note:'竞品的核心不是「盘面 + 四周挂件」，是<b>整个玩法区做成一台弹珠机</b>。<br>拱形招牌挂活动名、倒计时贴招牌旁、主视觉嵌机身圆窗、阶段进度条横跨机身、<br><b>发射器是右侧实体大按钮 + 齿轨，弹珠余量就贴在它上方</b> —— 操作与资源在一起。',
+        s:S({ layout:'C' }) },
+      { key:'C2 发射中', cap:'C② 发射中（发射器置灰 + 实时读数）',
+        note:'发射器按下即变灰并显「发射中」；盘顶提示条切成撞击 / 本发累计读数。<br>档位徽章、余量、商店、ⓘ 全在机柜上，<b>屏幕四角是干净的</b> —— 这是 A/B 版最大的毛病。',
+        s:S({ layout:'C', advSel:true, flying:true, hits:7, acc:1400,
+              ball:[560,300], trail:[[540,120],[470,190],[600,250]], pop:[640,250,200] }) }
+    ]},
+  { t:'A 版　严格套壳 —— 盘面占满，辅助功能挂四角，无右面板',
+    cells:[
+      { key:'A1 主界面 · 初始态', cap:'A① 主界面 · 初始态',
+        note:'盘面 980×700。档位在盘左上、垂直积分条贴盘右侧、入槽进度做成盘底横条、排行榜卡压盘右上。<br>跟现有母版零偏差，但<b>五个挂件散在四周，各是各的</b>。',
+        s:S({ layout:'A' }) },
+      { key:'A2 档位展开 + 发射中', cap:'A② 档位展开 → 发射中',
+        note:'档位竖向下拉、发射口整排置灰 —— 照幸运弹弹弹原样。<br>垂直进度条每格只放一个图标，<b>阈值数字与限时皮肤讲不开</b>。',
+        s:S({ layout:'A', tierOpen:true, advSel:true, flying:true, hits:7, acc:1400,
+              ball:[520,300], trail:[[500,110],[430,180],[560,240]], pop:[600,250,200] }) }
+    ]},
+  { t:'B 版　套壳 + 右侧信息面板（盘面已放大到与 A 等大，压面板不压盘面）',
+    cells:[
+      { key:'B1 主界面 · 初始态', cap:'B① 主界面 · 初始态',
+        note:'盘面同为 980×700，右侧压到 <b>508 面板</b>：阈值、状态、限时皮肤大图、领取按钮都讲得开。<br>代价是多一个母版里没有的组件。',
+        s:S({ layout:'B' }) },
+      { key:'B2 发射中', cap:'B② 发射中',
+        note:'同样置灰 + 实时读数。面板行改双行紧凑排才塞进 508。',
+        s:S({ layout:'B', advSel:true, flying:true, hits:11, acc:2800, dead:true, burst:true,
+              ball:[560,300], trail:[[540,120],[470,190],[600,250]] }) }
+    ]}
+];
+
+const board = document.getElementById('board');
+const X = [140, 2420], CAP_H = 66, NOTE_H = 150, GAP_Y = 120, SEC_H = 116;
+let y = 300, html = '';
+
+ROWS.forEach((sec) => {
+  y += SEC_H;
+  html += `<div class="sec abs" style="left:186px;top:${y - 80}px;font-size:44px" data-layer="${sec.t}" data-name="${sec.t}">${sec.t}</div>`;
+  sec.cells.forEach((cell, i) => {
+    const x = X[i];
+    html += `<div class="cap abs" style="left:${x}px;top:${y}px" data-layer="标题-${cell.key}" data-name="标题-${cell.key}">${cell.cap}</div>`;
+    cell.s.x = x; cell.s.y = y + CAP_H; cell.s.key = cell.key;
+    html += renderScreen2(cell.s);
+    html += `<div class="note-d abs" data-note style="left:${x}px;top:${y + CAP_H + 1080 + 24}px;width:1920px" data-layer="标注-${cell.key}" data-name="标注-${cell.key}">${cell.note}</div>`;
+    if (i === 0) {
+      const my = y + CAP_H + 540;
+      html += `<div class="ln abs" data-note style="left:${x + 1930}px;top:${my}px;width:440px"></div>`
+            + `<div class="ar r abs" data-note style="left:${x + 2370}px;top:${my - 10}px"></div>`;
+    }
+  });
+  y += CAP_H + 1080 + NOTE_H + GAP_Y;
+});
+
+board.insertAdjacentHTML('beforeend', html);
+board.style.height = (y + 120) + 'px';
+</script>
+<script src="svgbake.js"></script>

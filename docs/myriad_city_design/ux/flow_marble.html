@@ -1,0 +1,122 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>宇宙弹弹乐 · 交互流程</title>
+<link rel="stylesheet" href="p2ux19.css">
+<style>
+  .peg  { position:absolute; width:12px; height:12px; border-radius:50%; background:#7C8AA8; }
+  .post { position:absolute; border-radius:50%; background:#243046; border:3px solid #4FC3F7;
+          display:flex; align-items:center; justify-content:center;
+          font-weight:900; color:#9FE8FF; font-size:22px; }
+  .slotcell { flex:1; height:100%; border-right:2px solid #33405C; display:flex;
+              align-items:center; justify-content:center; font-weight:900; font-size:30px; color:#C8CDD4; }
+  .slotcell:last-child { border-right:0; }
+  .slotcell.hot { color:#FFC600; font-size:40px; background:rgba(255,198,0,.10); }
+  .ent { width:100px; height:100px; border-radius:16px; background:#1F2630; border:2px solid #4C586A;
+         display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; }
+  .ent .lb { font-size:20px; font-weight:700; color:#C8CDD4; -webkit-text-stroke:0; }
+</style>
+
+<div class="canvas board" id="board" style="width:4560px;height:9520px" data-layer="宇宙弹弹乐 交互流程" data-name="宇宙弹弹乐 交互流程">
+  <div class="board-title abs" style="left:120px;top:70px" data-layer="板标题" data-name="板标题">
+    <div class="bar"></div><div class="txt">宇宙弹弹乐 · 交互流程</div>
+  </div>
+  <div class="note-d abs" style="left:186px;top:186px;width:2400px" data-layer="板说明" data-name="板说明">
+    单屏 1920×1080　·　全流程 12 屏，含正常态、结算态、付费转化态与三个边界态　·　槽位（青色虚线框）待跑图
+  </div>
+</div>
+
+<script src="marble.js"></script>
+<script>
+// ═══════════ 12 屏状态定义 ═══════════
+// 盘面坐标系：620×540，原点在盘左上角
+const BASE = { balls:128, adv:6, mult:10, hits:0, acc:0, score:12480, gauge:[5,8], rank:128 };
+const S = (o) => Object.assign({}, BASE, o);
+
+const SECTIONS = [
+  { t:'（1）进入与主界面', rows:[[
+    { key:'1 主界面 · 初始态', cap:'① 主界面 · 初始态',
+      note:'进入即可见：左导航选中态、两种弹珠资产、盘面、7 个倍数槽、积分面板、榜首大奖。<br>此时未发射 —— 撞击 0/11、累计 0，发射按钮可用。',
+      s:S({}) },
+    { key:'2 选倍数 · 待发射', cap:'② 选倍数 · 待发射（已切高级弹珠）',
+      note:'倍数选 ×10 高亮；弹珠类型切到「高级 ×5」，切换器描金边。<br><b>倍数同步放大得分与消耗</b>，每弹珠效率恒定 —— 它是风险杠杆不是收益提升。',
+      s:S({ advSel:true }) }
+  ]]},
+
+  { t:'（2）核心循环：发射 → 撞柱 → 翻倍 → 落槽', rows:[[
+    { key:'3 发射中 · 撞柱计分', cap:'③ 发射中 · 撞柱计分',
+      note:'弹珠入盘弹跳，撞中撞柱累计撞击次数。<br><b>撞柱位置与数量不影响得分</b>，全盘共用同一计数 —— 盘面排布是纯美术。',
+      s:S({ advSel:true, hits:7, acc:1400, ball:[300,300], trail:[[310,60],[250,140],[330,220]] }) },
+    { key:'4 第11次翻倍封顶', cap:'④ 第 11 次撞击 · 累计翻倍并封顶',
+      note:'第 11 次把已累计分<b>整体 ×2</b>（不是这一下得 2 倍分），此后撞击不再计分、<b>撞柱全部熄灭</b>。<br>必须给全屏级演出 —— 这是单发体验的高潮点。',
+      s:S({ advSel:true, hits:11, acc:2800, burst:true, dead:true, ball:[330,380], trail:[[310,60],[250,140],[330,220],[280,300]] }) }
+  ],[
+    { key:'5 落槽结算', cap:'⑤ 落槽结算 · 落入 ×10 中央槽',
+      note:'落槽倍数对本次累计分整体再乘一次。本发得分 = 2,800 × 10 × 5(高级) = <b>140,000</b>。<br>一发两次乘：第 11 次累计 ×2、落槽 ×倍数；高级弹珠在最外层再 ×5。',
+      s:S({ advSel:true, hits:11, acc:2800, dead:true, slot:3, ball:[310,520], score:152480, gain:140000, gauge:[6,8] }) },
+    { key:'6 入槽进度累计', cap:'⑥ 入槽进度累计（未满）',
+      note:'弹珠每次落槽累计一次入槽进度。<b>入槽进度与阶段积分是两条独立进度</b>，不能合并。<br>青条推进，右上读数实时跳。',
+      s:S({ hits:0, acc:0, score:152480, gauge:[7,8] }) }
+  ]]},
+
+  { t:'（3）入槽 Buff 与付费转化', rows:[[
+    { key:'7 入槽满 · Buff三选一', cap:'⑦ 入槽进度满 → Buff 池三选一（L3）',
+      note:'进度满触发抽取，<b>3 选 1</b>：触发礼包 / 阶段积分 / 弹珠返还。抽后进度重置、继续累计。<br>触发礼包是付费转化位，卡面需与另两个拉开视觉权重。',
+      s:S({ hits:0, acc:0, score:152480, gauge:[8,8], dialog:'buff' }) },
+    { key:'8 触发礼包弹窗', cap:'⑧ 触发礼包（Buff 结果 · 付费转化）',
+      note:'限时只售<b>高级弹珠</b>，高 ROI。倒计时、限购次数、ROI 标签三件必须同屏。<br>高级弹珠只出自触发礼包与成就礼包，<b>不走常规免费产出</b>。',
+      s:S({ hits:0, acc:0, score:152480, gauge:[0,8], dialog:'pack' }) }
+  ]]},
+
+  { t:'（4）奖励与排行', rows:[[
+    { key:'9 阶段奖励可领取', cap:'⑨ 阶段奖励 · 可领取 → 已领取',
+      note:'累计积分跨档即可领。第二档内置<b>限时主城皮肤</b>覆盖中小 R —— 防「皮肤只给头部」。<br>领取后该行置灰并改「已领取」，按钮消失。',
+      s:S({ hits:0, acc:0, score:152480, gauge:[2,8], claimed:true }) },
+    { key:'10 排行榜弹窗', cap:'⑩ 排行榜（L3）',
+      note:'跨服总榜，按<b>活动期累计弹珠消耗量</b>排名。名次奖励预览常驻在弹窗底部。<br>自己那一行必须高亮定位，不能让玩家自己翻。',
+      s:S({ hits:0, acc:0, score:152480, gauge:[2,8], dialog:'rank' }) }
+  ]]},
+
+  { t:'（5）边界态 —— 不能只画正常态', rows:[[
+    { key:'11 弹珠不足', cap:'⑪ 边界态 · 弹珠不足',
+      note:'发射按钮置灰，<b>并给出原因与获取入口</b> —— 规范要求禁用态不能只变灰。<br>资产条【+】是主要获取路径，此时应加强提示。',
+      s:S({ balls:0, adv:0, mult:1, fireOff:true, fireLabel:'弹珠不足', lowHint:'弹珠不足　·　点击【+】获取' }) },
+    { key:'12 加载失败', cap:'⑫ 边界态 · 数据加载失败',
+      note:'排行 / 积分拉取超时。必须说明<b>本次发射结果已保留</b>，否则玩家会以为白花了。<br>断网、倒计时异常沿用同一套弹窗骨架，只换文案。',
+      s:S({ hits:0, acc:0, dialog:'error' }) }
+  ],[
+    { key:'13 活动结束', cap:'⑬ 边界态 · 活动结束',
+      note:'名次奖励统一邮件发放；<b>剩余弹珠折算金币</b>也走邮件 —— 案子明确写了这条，必须在结束弹窗里讲清。',
+      s:S({ hits:0, acc:0, fireOff:true, fireLabel:'已结束', dialog:'end' }) }
+  ]]}
+];
+
+// ═══════════ 排版：2 列 × N 行 ═══════════
+const board = document.getElementById('board');
+const X = [140, 2420], CAP_H = 66, NOTE_H = 150, GAP_Y = 110, SEC_H = 110;
+let y = 300, html = '';
+
+SECTIONS.forEach((sec) => {
+  y += SEC_H;
+  html += `<div class="sec abs" style="left:186px;top:${y - 76}px" data-layer="${sec.t}" data-name="${sec.t}">${sec.t}</div>`;
+  sec.rows.forEach((row) => {
+    row.forEach((cell, i) => {
+      const x = X[i];
+      html += `<div class="cap abs" style="left:${x}px;top:${y}px" data-layer="标题-${cell.key}" data-name="标题-${cell.key}">${cell.cap}</div>`;
+      cell.s.x = x; cell.s.y = y + CAP_H; cell.s.key = cell.key;
+      html += renderScreen(cell.s);
+      html += `<div class="note-d abs" data-note style="left:${x}px;top:${y + CAP_H + 1080 + 26}px;width:1920px" data-layer="标注-${cell.key}" data-name="标注-${cell.key}">${cell.note}</div>`;
+      // 同行左 → 右 箭头
+      if (i === 0 && row.length > 1) {
+        const my = y + CAP_H + 540;
+        html += `<div class="ln abs" data-note style="left:${x + 1930}px;top:${my}px;width:440px"></div>`
+              + `<div class="ar r abs" data-note style="left:${x + 2370}px;top:${my - 10}px"></div>`;
+      }
+    });
+    y += CAP_H + 1080 + NOTE_H + GAP_Y;
+  });
+});
+
+board.insertAdjacentHTML('beforeend', html);
+board.style.height = (y + 120) + 'px';
+</script>
+<script src="svgbake.js"></script>

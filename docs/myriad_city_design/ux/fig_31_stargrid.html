@@ -1,0 +1,199 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>图 3-1 星格面板</title>
+<link rel="stylesheet" href="p2ux19.css">
+
+<!-- 画板自由尺寸；内嵌的每一屏必须精确 1920×1080 -->
+<div class="canvas board" style="width:3520px;height:1560px" data-layer="图3-1 星格面板">
+
+  <div class="board-title abs" style="left:60px;top:56px" data-layer="板标题">
+    <div class="bar"></div><div class="txt">万象主城 · 星格面板</div>
+  </div>
+  <div class="sec abs" style="left:126px;top:180px" data-layer="章节号">（1）主界面信息</div>
+
+  <!-- ══════════════════ 1920×1080 单屏 ══════════════════ -->
+  <div class="screen abs" style="left:800px;top:290px" data-layer="星格面板 主界面">
+
+    <!-- 场景底：主城所在环境 -->
+    <div class="slot corner abs" style="left:0;top:0;width:1920px;height:1080px" data-slot="场景底_主城环境">场景底　·　主城所在环境（天空 / 地表 / 氛围）</div>
+
+    <!-- ── 左侧导航条 369×1080　全部真切图 ── -->
+    <div class="nav abs" data-layer="左侧导航条">
+      <img class="abs" style="left:0;top:0" width="358" height="1080" src="assets/nav/导航底板_358x1080.png" data-layer="导航底板">
+      <div class="abs" style="left:11px;top:17px" data-layer="返回按钮">
+        <img class="abs" style="left:0;top:0" width="189" height="113" src="assets/nav/返回按钮底_189x113.png">
+        <img class="abs" style="left:70px;top:22px" width="49" height="69" src="assets/nav/返回箭头_49x69.png">
+      </div>
+
+      <div class="abs" style="left:6px;top:158px" data-layer="分组条-星格">
+        <img class="abs" style="left:0;top:0" width="345" height="56" src="assets/nav/分组标题条_345x56.png">
+        <div class="t group abs nav-tab-hit" style="left:0;top:0;width:345px;height:56px;font-size:30px">星格</div>
+      </div>
+
+      <div class="t abs nav-tab-hit" style="left:6px;top:238px;width:345px;height:76px;font-size:52px;color:#C8CDD4" data-layer="页签-颜色">颜色</div>
+      <div class="t abs nav-tab-hit" style="left:6px;top:326px;width:345px;height:76px;font-size:52px;color:#C8CDD4" data-layer="页签-城基">城基</div>
+
+      <div class="abs" style="left:0;top:414px" data-layer="页签-城市 选中态">
+        <img class="abs" style="left:0;top:0" width="368" height="152" src="assets/nav/页签_黄选中含尖角_368x152.png">
+        <div class="t dark abs nav-tab-hit" style="left:0;top:0;width:345px;height:152px;font-size:62px">城市</div>
+      </div>
+
+      <div class="t abs nav-tab-hit" style="left:6px;top:600px;width:345px;height:76px;font-size:52px;color:#6E747C" data-layer="页签-城辉 锁定态">城辉</div>
+
+      <div class="abs" style="left:6px;top:722px" data-layer="分组条-收藏">
+        <img class="abs" style="left:0;top:0" width="345" height="56" src="assets/nav/分组标题条_345x56.png">
+        <div class="t group abs nav-tab-hit" style="left:0;top:0;width:345px;height:56px;font-size:30px">收藏</div>
+      </div>
+      <div class="t abs nav-tab-hit" style="left:6px;top:802px;width:345px;height:76px;font-size:52px;color:#C8CDD4" data-layer="页签-外观图鉴 待定">外观图鉴</div>
+    </div>
+
+    <!-- ── 标题 ── -->
+    <div class="t abs" style="left:404px;top:34px;font-size:78px;-webkit-text-stroke-width:7px" data-layer="系统名">万象主城</div>
+
+    <!-- ── 中央：主城预览　三段各一层 = 三个模块的美术 ── -->
+    <div class="abs" style="left:396px;top:158px;width:770px;height:820px" data-layer="主城预览区">
+      <div class="slot top abs" style="left:20px;top:0;width:730px;height:800px" data-slot="城辉层">城辉特效层　·　三格满 30★ 后解锁</div>
+      <div class="slot abs" style="left:150px;top:70px;width:470px;height:390px" data-slot="城市本体">城市本体<br>紫档 · 当期款式</div>
+      <div class="slot abs" style="left:96px;top:500px;width:578px;height:250px" data-slot="城基">城基　·　金档</div>
+
+      <div class="abs" style="left:-30px;top:96px" data-layer="铭牌-城市本体">
+        <img class="abs" style="left:0;top:0" width="223" height="224" src="assets/floor/铭牌气泡.png">
+        <img class="abs" style="left:74px;top:76px" width="76" height="76" src="assets/floor/铭牌icon_1511.png">
+      </div>
+      <div class="abs" style="left:-30px;top:520px" data-layer="铭牌-城基">
+        <img class="abs" style="left:0;top:0" width="223" height="224" src="assets/floor/铭牌气泡.png">
+        <img class="abs" style="left:74px;top:76px" width="76" height="76" src="assets/floor/铭牌icon_1511.png">
+      </div>
+    </div>
+
+    <!-- ── 右侧：星格面板 739×898 ── -->
+    <div class="abs" style="left:1170px;top:130px" data-layer="星格面板">
+      <div class="taskpanel abs" style="left:0;top:0" data-layer="面板底"></div>
+
+      <div class="abs" style="left:220px;top:-64px" data-layer="面板标题标签">
+        <img class="abs" style="left:0;top:0" width="298" height="127" src="assets/floor/楼层标签底b.png">
+        <div class="t abs nav-tab-hit" style="left:0;top:0;width:298px;height:112px;font-size:40px">城市格</div>
+      </div>
+
+      <!-- 星数 / 属性值 -->
+      <div class="abs" style="left:36px;top:96px;width:668px" data-layer="星格数据">
+        <div class="t abs" style="left:0;top:0;font-size:38px">星数</div>
+        <div class="t gold abs" style="left:104px;top:-10px;font-size:60px">7 ★</div>
+        <div class="t abs" style="left:330px;top:0;font-size:38px">属性值</div>
+        <div class="t gold abs" style="left:490px;top:-10px;font-size:60px">1,240</div>
+        <div class="t green abs sm" style="left:640px;top:6px;font-size:34px">+38</div>
+        <div class="t cyan abs sm" style="left:0;top:78px;font-size:30px">部队攻击（属性类型上线后不再变更）</div>
+      </div>
+
+      <!-- 档位轨道 -->
+      <div class="abs" style="left:36px;top:224px;width:668px" data-layer="档位轨道">
+        <div class="t abs" style="left:0;top:0;font-size:34px">档位与外观解锁</div>
+        <div class="t cyan abs sm" style="left:284px;top:6px;font-size:28px">星数跨阈值才解锁</div>
+        <div class="abs" style="left:0;top:64px;width:668px;height:12px;background:#3A3A3A;border-radius:6px" data-layer="轨道底"></div>
+        <div class="abs" style="left:0;top:64px;width:314px;height:12px;background:#FFC600;border-radius:6px" data-layer="轨道已达成"></div>
+
+        <div class="abs" style="left:0;top:110px;width:668px;display:flex;justify-content:space-between" data-layer="外观解锁四格">
+          <div style="position:relative;width:94px" data-layer="外观1-灰 已解锁">
+            <div class="t sm" style="font-size:26px;color:#C8CDD4;white-space:nowrap">灰 0★</div>
+            <div style="position:relative;width:94px;height:94px;margin-top:10px">
+              <img style="position:absolute;left:0;top:0" width="94" height="94" src="assets/task/奖励格底_黄.png">
+              <img style="position:absolute;left:13px;top:13px" width="68" height="68" src="assets/task/道具图标A_UiItemsGoldAllPower.png">
+            </div>
+          </div>
+          <div style="position:relative;width:94px" data-layer="外观2-紫 已解锁">
+            <div class="t sm" style="font-size:26px;color:#C8CDD4;white-space:nowrap">紫 5★</div>
+            <div style="position:relative;width:94px;height:94px;margin-top:10px">
+              <img style="position:absolute;left:0;top:0" width="94" height="94" src="assets/task/奖励格底_黄.png">
+              <img style="position:absolute;left:13px;top:13px" width="68" height="68" src="assets/task/道具图标A_UiItemsGoldAllPower.png">
+            </div>
+          </div>
+          <div style="position:relative;width:94px;opacity:.42" data-layer="外观3-金 未解锁">
+            <div class="t sm" style="font-size:26px;color:#6E747C;white-space:nowrap">金 15★</div>
+            <div style="position:relative;width:94px;height:94px;margin-top:10px">
+              <img style="position:absolute;left:0;top:0" width="94" height="94" src="assets/task/奖励格底_青.png">
+              <img style="position:absolute;left:13px;top:13px" width="68" height="68" src="assets/task/道具图标B_IconRisingStarStone4.png">
+            </div>
+          </div>
+          <div style="position:relative;width:94px;opacity:.42" data-layer="外观4-红 未解锁">
+            <div class="t sm" style="font-size:26px;color:#6E747C;white-space:nowrap">红 30★</div>
+            <div style="position:relative;width:94px;height:94px;margin-top:10px">
+              <img style="position:absolute;left:0;top:0" width="94" height="94" src="assets/task/奖励格底_青.png">
+              <img style="position:absolute;left:13px;top:13px" width="68" height="68" src="assets/task/道具图标B_IconRisingStarStone4.png">
+            </div>
+          </div>
+        </div>
+
+        <div class="abs" style="left:0;top:270px;width:668px" data-layer="下一档进度">
+          <div class="t abs sm" style="left:0;top:0;font-size:32px">距金档还差 8★</div>
+          <div class="t cyan abs sm" style="left:560px;top:0;font-size:32px">7 / 15</div>
+        </div>
+      </div>
+
+      <!-- 本次升星收益 -->
+      <div class="abs" style="left:36px;top:596px;width:668px" data-layer="本次收益">
+        <div class="t abs sm" style="left:0;top:0;font-size:30px">本次升星：星数 +1，部队攻击</div>
+        <div class="t green abs sm" style="left:432px;top:0;font-size:30px">+ 小 / 中 / 大</div>
+        <div class="t cyan abs sm" style="left:0;top:52px;font-size:28px">增量恒为正，不会变差</div>
+      </div>
+
+      <!-- 主 CTA -->
+      <div class="abs" style="left:270px;top:712px" data-layer="主按钮-升星">
+        <img class="abs" style="left:0;top:0" width="199" height="75" src="assets/task/按钮_领取绿.png">
+        <div class="t abs nav-tab-hit" style="left:0;top:0;width:199px;height:75px;font-size:40px">升星</div>
+      </div>
+      <div class="t abs sm" style="left:36px;top:806px;width:668px;text-align:center;font-size:28px" data-layer="消耗">消耗　升星材料 ×120</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════ 标注层 ══════════════════ -->
+  <!-- 左侧标注 -->
+  <div class="abs" data-note style="left:60px;top:640px;width:600px" data-layer="标注-星格导航">
+    <div class="note-d r">四个星格即一级导航。<b>换外观不影响星格进度</b>，<br>星格是系统级、不是每款外观各带一套。</div>
+    <div class="note-t" style="text-align:right;margin-top:10px">星格导航</div>
+  </div>
+  <div class="abs ln" data-note style="left:678px;top:700px;width:104px" data-layer="引线1"></div>
+  <div class="abs ar r" data-note style="left:782px;top:690px" data-layer="箭头1"></div>
+
+  <div class="abs" data-note style="left:60px;top:900px;width:600px" data-layer="标注-城辉锁定">
+    <div class="note-d r">常驻可见但置灰，<b>不隐藏</b> —— 它是长期目标的可视锚点。<br>灰态要带实时进度 (2/3) 与「哪一格还差多少星」。</div>
+    <div class="note-t" style="text-align:right;margin-top:10px">城辉格 · 锁定态</div>
+  </div>
+  <div class="abs ln" data-note style="left:678px;top:960px;width:104px" data-layer="引线2"></div>
+  <div class="abs ar r" data-note style="left:782px;top:950px" data-layer="箭头2"></div>
+
+  <div class="abs" data-note style="left:60px;top:1150px;width:600px" data-layer="标注-图鉴待定">
+    <div class="note-d r" style="color:#FFC600">⚠ 案子只写了「图鉴进度 +1」，没给入口位置。<br>此处按第二分组的一级页签摆，<b>待你拍板</b>。</div>
+    <div class="note-t" style="text-align:right;margin-top:10px">外观图鉴入口（未定稿）</div>
+  </div>
+  <div class="abs ln" data-note style="left:678px;top:1200px;width:104px" data-layer="引线3"></div>
+  <div class="abs ar r" data-note style="left:782px;top:1190px" data-layer="箭头3"></div>
+
+  <!-- 右侧标注 -->
+  <div class="abs" data-note style="left:2830px;top:390px;width:640px" data-layer="标注-三段拼装">
+    <div class="note-t">主城 = 三段拼装</div>
+    <div class="note-d">城基 / 城市本体 / 城辉各一层，各自出图、各自换。<br>装配零成本、无冷却，槽固定 3 个、<b>不是付费点</b>。</div>
+  </div>
+  <div class="abs ln" data-note style="left:2700px;top:440px;width:120px" data-layer="引线4"></div>
+  <div class="abs ar l" data-note style="left:2682px;top:430px" data-layer="箭头4"></div>
+
+  <div class="abs" data-note style="left:2830px;top:640px;width:640px" data-layer="标注-硬约束">
+    <div class="note-t">升星：只有一个操作</div>
+    <div class="note-d">1. 升完<b>直接生效</b>，界面上不得出现「保留 / 替换 /<br>　 本次结果不理想」任何分支 —— 增量恒为正。<br>2. 不跨阈值是常态，这一次也必须给「星数 +1」<br>　 与「属性值跳数」两个动效，否则玩家判定为白花。<br>3. 星数无上限，30★ 后继续升只涨属性值 ——<br>　 轨道右端<b>不显示 MAX</b>、不做封顶态。</div>
+  </div>
+  <div class="abs ln" data-note style="left:2700px;top:690px;width:120px" data-layer="引线5"></div>
+  <div class="abs ar l" data-note style="left:2682px;top:680px" data-layer="箭头5"></div>
+
+  <div class="abs" data-note style="left:2830px;top:1010px;width:640px" data-layer="标注-主按钮待换">
+    <div class="note-d" style="color:#FFC600">⚠ 主 CTA 暂借用「领取」绿按钮资源。按规范主按钮应为<br>黄/橙/金，<b>需美术补一版金色主按钮切图</b>。</div>
+    <div class="note-t" style="margin-top:10px">主按钮资源（缺件）</div>
+  </div>
+  <div class="abs ln" data-note style="left:2700px;top:1060px;width:120px" data-layer="引线6"></div>
+  <div class="abs ar l" data-note style="left:2682px;top:1050px" data-layer="箭头6"></div>
+
+  <div class="abs note-d" data-note style="left:800px;top:1424px;width:1920px;text-align:center" data-layer="标注-骨架声明">
+    本页是常驻系统页、非活动页 → 右上 CD/资产条、右下活动倒计时、左下 ❗ 规则按钮三项在此豁免；左侧导航条按规范保留。
+  </div>
+
+</div>
+
+<script src="svgbake.js"></script>

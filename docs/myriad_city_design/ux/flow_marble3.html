@@ -1,0 +1,105 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>宇宙弹弹乐 · 交互流程（定版）</title>
+<link rel="stylesheet" href="p2ux19.css">
+
+<div class="canvas board" id="board" style="width:4560px;height:9000px" data-layer="宇宙弹弹乐 交互流程" data-name="宇宙弹弹乐 交互流程">
+  <div class="board-title abs" style="left:120px;top:70px" data-layer="板标题" data-name="板标题">
+    <div class="bar"></div><div class="txt">宇宙弹弹乐 · 交互流程</div>
+  </div>
+  <div class="note-d abs" style="left:186px;top:186px;width:3400px" data-layer="板说明" data-name="板说明">
+    机制：撞柱按次数加分（柱全同）→ 落槽翻倍 → 积分满一关领奖、重置进下一场　·　触发槽随机指定、满则抽 Buff　·　排布语言照 P2「庆典弹弹乐」　·　单屏 1920×1080　·　青色虚线框 = 待跑图槽位
+  </div>
+</div>
+
+<script src="marble3.js"></script>
+<script>
+const BASE = { balls:128, adv:6, mult:10, hits:0, acc:0, gauge:[3,8], trigSlot:4,
+               round:84, need:120, stage:3, rank:34 };
+const S = (o) => Object.assign({}, BASE, o);
+
+const SECTIONS = [
+  { t:'（1）进入与准备', rows:[[
+    { key:'1 主界面 · 首次进入', cap:'① 主界面 · 首次进入（第 1 场 · 0 分）',
+      note:'一关进度条 0/120 挂盘顶，右端「场数 1」。触发槽已随机指定（金框发光 + 0/8）。<br>提示条讲一句话规则：撞柱按次数加分 · 满 120 分领本关奖励。倍数默认 ×1。',
+      s:S({ mult:1, round:0, stage:1, gauge:[0,8], trigSlot:2 }) },
+    { key:'2 选倍数 · 切高级弹珠', cap:'② 选倍数 ×10 · 切高级弹珠',
+      note:'消耗倍数就在发射按钮上方（×1/×5/×10），选中金底；发射按钮实时显示「消耗 弹珠 ×10」。<br>弹珠类型切到高级：切换器描金，<b>本发最终得分 ×5</b>。高级弹珠只出自触发礼包与成就礼包。',
+      s:S({ advSel:true }) }
+  ]]},
+  { t:'（2）核心循环：发射 → 撞柱计次 → 翻倍 → 落槽', rows:[[
+    { key:'3 发射中 · 撞柱计次', cap:'③ 发射中 · 撞柱按次数加分',
+      note:'入球口出球、发射按钮置灰「发射中」。<b>柱子全部一样</b>，撞中任意柱 = 次数 +1、加一份基础分；<br>提示条切成实时读数：撞击 7/11 · 本发累计 1,400。命中给飘字 + 弹珠拖尾。',
+      s:S({ advSel:true, flying:true, hits:7, acc:1400, ball:[420,240], trail:[[400,60],[330,130],[460,190]], pop:[500,190,200] }) },
+    { key:'4 第11次 · 翻倍封顶', cap:'④ 第 11 次撞击 · 累计翻倍并封顶',
+      note:'第 11 次把本发累计分<b>整体 ×2</b> 并封顶，此后不再计分、<b>撞柱全部熄灭</b>。<br>全屏级演出 —— 这是单发体验的高潮点，不能只跳个数字。',
+      s:S({ advSel:true, flying:true, hits:11, acc:2800, burst:true, dead:true, ball:[480,330], trail:[[400,60],[330,130],[460,190],[420,260]] }) }
+  ],[
+    { key:'5 落槽 · 倍数结算', cap:'⑤ 落入 ×10 槽 · 本发得分结算',
+      note:'落槽倍数对累计分整体再乘：2,800 × 10(槽) × 5(高级) = <b>140,000</b>，计入本关进度。<br>一发两次乘：第 11 次 ×2、落槽 ×N；高级弹珠在最外层再 ×5。命中槽白框高亮。',
+      s:S({ advSel:true, hits:11, acc:2800, dead:true, slot:3, round:112 }) },
+    { key:'6 落入触发槽', cap:'⑥ 落入触发槽 · 入槽进度 +1',
+      note:'弹珠落进<b>金框触发槽</b>（本例在 ×3 位），槽上计数跳 3/8 → 4/8。<br>只有落入触发槽才累计；其余槽只做倍数结算。',
+      s:S({ slot:4, gauge:[4,8] }) }
+  ]]},
+  { t:'（3）一关达成 → 下一场', rows:[[
+    { key:'7 本关达标 · 结算弹窗', cap:'⑦ 积分满 120 · 本关达成（L3）',
+      note:'领取本场奖励 → <b>进度重置、场数 +1、奖励升级</b>。主按钮直接写「领取 · 进入第 4 场」，<br>不给玩家停顿点 —— 领完即进下一场，循环不断。',
+      s:S({ round:120, dialog:'roundup' }) },
+    { key:'8 新一场开始', cap:'⑧ 第 4 场开始（进度重置）',
+      note:'进度条回 0/120、场数徽章跳 4、本场奖励预览刷新为新一档。<br>触发槽进度<b>不重置</b>（与关卡进度独立），继续累计。',
+      s:S({ round:0, stage:4 }) }
+  ]]},
+  { t:'（4）触发槽 Buff 与付费转化', rows:[[
+    { key:'9 触发槽满 · Buff三选一', cap:'⑨ 触发槽满 8 次 · Buff 池三选一（L3）',
+      note:'从 Buff 池 <b>3 选 1</b>：触发礼包 / 阶段积分 / 弹珠返还。抽后进度重置、<b>重新随机</b>一个槽为触发槽。<br>触发礼包卡面要与另两张拉开视觉权重 —— 它是付费转化位。',
+      s:S({ gauge:[8,8], dialog:'buff' }) },
+    { key:'10 触发礼包', cap:'⑩ 触发礼包（限时 · 只售高级弹珠）',
+      note:'倒计时、限购次数、内容三件同屏。高级弹珠<b>不走常规免费产出</b>，只出自这里和成就礼包 ——<br>这是全玩法的核心付费链路。',
+      s:S({ gauge:[0,8], dialog:'pack' }) }
+  ]]},
+  { t:'（5）排行与边界态', rows:[[
+    { key:'11 排行榜', cap:'⑪ 总排名（L3 · 跨服榜/每日榜）',
+      note:'母版样式：灰白标题条 + 红✕外凸 + 文件夹页签。按<b>活动期累计弹珠消耗量</b>排名，<br>自己那行金框高亮置底，奖励挂行内。活动结束统一邮件发放。',
+      s:S({ dialog:'rank' }) },
+    { key:'12 弹珠不足', cap:'⑫ 边界态 · 弹珠不足',
+      note:'发射按钮置灰 + 写明原因；资产条下方红条提示「点击【+】获取」。<b>禁用态必须带原因与获取入口</b>，不能只变灰。',
+      s:S({ balls:0, adv:0, mult:1, fireOff:true, fireLabel:'弹珠不足', lowHint:'弹珠不足　·　点击【+】获取' }) }
+  ],[
+    { key:'13 加载失败', cap:'⑬ 边界态 · 数据加载失败',
+      note:'排行 / 积分拉取超时。必须说明<b>本次发射结果已保留</b>，否则玩家会以为白花了。断网、倒计时异常共用这套弹窗骨架。',
+      s:S({ dialog:'error' }) },
+    { key:'14 活动结束', cap:'⑭ 边界态 · 活动结束',
+      note:'名次奖励统一邮件发放；<b>剩余弹珠折算金币</b>也走邮件 —— 案子明确写了这条，要在结束弹窗里讲清。',
+      s:S({ fireOff:true, fireLabel:'已结束', dialog:'end' }) }
+  ]]}
+];
+
+const board = document.getElementById('board');
+const X = [140, 2420], CAP_H = 66, NOTE_H = 150, GAP_Y = 110, SEC_H = 110;
+let y = 300, html = '';
+
+SECTIONS.forEach((sec) => {
+  y += SEC_H;
+  html += `<div class="sec abs" style="left:186px;top:${y - 76}px;font-size:44px" data-layer="${sec.t}" data-name="${sec.t}">${sec.t}</div>`;
+  sec.rows.forEach((row) => {
+    row.forEach((cell, i) => {
+      const x = X[i];
+      html += `<div class="cap abs" style="left:${x}px;top:${y}px" data-layer="标题-${cell.key}" data-name="标题-${cell.key}">${cell.cap}</div>`;
+      cell.s.x = x; cell.s.y = y + CAP_H; cell.s.key = cell.key;
+      html += renderScreen3(cell.s);
+      html += `<div class="note-d abs" data-note style="left:${x}px;top:${y + CAP_H + 1080 + 24}px;width:1920px" data-layer="标注-${cell.key}" data-name="标注-${cell.key}">${cell.note}</div>`;
+      if (i === 0 && row.length > 1) {
+        const my = y + CAP_H + 540;
+        html += `<div class="ln abs" data-note style="left:${x + 1930}px;top:${my}px;width:440px"></div>`
+              + `<div class="ar r abs" data-note style="left:${x + 2370}px;top:${my - 10}px"></div>`;
+      }
+    });
+    y += CAP_H + 1080 + NOTE_H + GAP_Y;
+  });
+});
+
+board.insertAdjacentHTML('beforeend', html);
+board.style.height = (y + 120) + 'px';
+</script>
+<script src="svgbake.js"></script>

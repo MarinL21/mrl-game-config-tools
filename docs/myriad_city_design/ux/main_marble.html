@@ -1,0 +1,18 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>宇宙弹弹乐 · 活动主界面（定版布局）</title>
+<link rel="stylesheet" href="p2ux19.css">
+<div class="canvas board" id="board" style="width:2200px;height:1520px" data-layer="宇宙弹弹乐 主界面" data-name="宇宙弹弹乐 主界面">
+  <div class="board-title abs" style="left:120px;top:44px" data-layer="板标题" data-name="板标题">
+    <div class="bar"></div><div class="txt">宇宙弹弹乐 · 活动主界面</div>
+  </div>
+  <div class="note-d abs" style="left:186px;top:140px;width:1900px" data-layer="板说明" data-name="板说明">
+    排布语言照 P2 现有「庆典弹弹乐」　·　机制逐条对《宇宙弹弹乐》案子　·　单屏 1920×1080，青色虚线框为待跑图槽位
+  </div>
+</div>
+<script src="marble3.js"></script>
+<script>
+const S={balls:128,adv:6,mult:10,hits:0,acc:0,score:21310,gauge:[3,8],trigSlot:4,round:84,need:120,stage:3,rank:34,x:140,y:220,key:'主界面 初始态'};
+document.getElementById('board').insertAdjacentHTML('beforeend', renderScreen3(S));
+</script>
+<script src="svgbake.js"></script>

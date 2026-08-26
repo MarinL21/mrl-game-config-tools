@@ -1,0 +1,255 @@
+/* ===========================================================================
+   p2uxkit.css —— P2 / AOA 交互示意图元库
+   画布锁死 1376×768（p2-game-ux 规范：设计基准尺寸 / 单屏评审图交付尺寸）
+   色彩角色取自 p2-game-ux「P2 视觉与信息调性」一节，改动前先回去看那张表。
+
+   命名约定（决定 Figma 图层树）：
+     data-layer="名字"   → 在 SVG 里烘焙成 <g id="名字">，容器会嵌套
+     data-slot="名字"    → 美术槽位，AI 跑图后往这里贴；SVG 里是命名好的空框
+     data-note           → 标注层，全部收进 <g id="标注层">，Figma 里一键隐藏
+   =========================================================================== */
+
+:root {
+  /* —— 背景三层（深灰 / 黑灰 / 深蓝灰）—— */
+  --bg-0:      #0E1218;   /* 最底：屏底 */
+  --bg-1:      #161B23;   /* 容器底 */
+  --bg-2:      #1F2630;   /* 卡片 / 槽底 */
+  --bg-3:      #2A323E;   /* 抬起态 / 表头 */
+  --line:      #39424F;   /* 常规描边 */
+  --line-2:    #4C586A;   /* 强描边 */
+
+  /* —— 文字 —— */
+  --ink:       #E8EDF3;   /* 主文字 */
+  --ink-2:     #9AA6B4;   /* 次级说明 */
+  --ink-3:     #68737F;   /* 最弱 / 禁用 */
+
+  /* —— 色彩角色（规范表）—— */
+  --gold:      #F5A623;   /* 主强调：主 CTA、奖励、价值感 */
+  --gold-hi:   #FFC53D;   /* 主强调高亮 */
+  --gold-dim:  #7A5514;   /* 主强调压暗（进度条底） */
+  --blue:      #3BA3D0;   /* 次强调：次按钮、功能入口、系统信息 */
+  --green:     #4CAF50;   /* 成功：可领取、正向增长 */
+  --red:       #E04A3F;   /* 风险：关闭、不足、危险 */
+  --purple:    #A25BD6;   /* 品质紫（本案档位用） */
+
+  /* —— 档位色（万象主城：灰 → 紫 → 金 → 红）—— */
+  --t-gray:    #8A929B;
+  --t-purple:  #A25BD6;
+  --t-gold:    #F5A623;
+  --t-red:     #E04A3F;
+
+  /* —— 标注层（浅色，压在深色 UI 上）—— */
+  --note:      #FF5A4E;   /* 硬约束红 */
+  --note-2:    #4FC3F7;   /* 引线蓝 */
+  --note-3:    #FFD166;   /* 补充橙 */
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body { background: #000; }
+
+/* —— 画布：规范硬尺寸，不许改 —— */
+.canvas {
+  position: relative;
+  width: 1376px; height: 768px;
+  background: var(--bg-0);
+  font-family: "PingFang SC", "Noto Sans SC", "Hiragino Sans GB", sans-serif;
+  font-size: 13px; color: var(--ink); line-height: 1.4;
+  overflow: hidden;
+}
+/* 三连图 4128×768 / 流程板整数倍，用 .canvas.x3 */
+.canvas.x3 { width: 4128px; }
+
+/* 定位显式声明：要绝对定位就挂 .abs，其余走正常流。
+   ⛔ 别再用 data-layer 去隐式触发 absolute —— 图层命名和布局是两件事，混在一起必塌。 */
+.abs { position: absolute; }
+
+/* ===========================================================================
+   一、活动页四骨架（p2-game-ux 第 23-26 条：换主题也不许省）
+   =========================================================================== */
+
+/* 1. 左侧导航条 —— 黑灰纵向底板 + 顶部返回 + 页签上下堆叠 + 黄色选中态 */
+.navbar {
+  position: absolute;
+  left: 0; top: 0; width: 176px; height: 768px;
+  background: var(--bg-1); border-right: 1px solid var(--line);
+}
+.nav-back {
+  position: absolute;
+  left: 16px; top: 16px; width: 40px; height: 40px;
+  background: var(--bg-3); border: 1px solid var(--line-2); border-radius: 8px;
+  color: var(--ink-2); font-size: 18px;
+  display: flex; align-items: center; justify-content: center;
+}
+.nav-tabs { left: 14px; top: 72px; width: 148px; display: flex; flex-direction: column; gap: 10px; }
+.nav-tab {
+  position: relative; height: 54px; border-radius: 8px;
+  background: var(--bg-2); border: 1px solid var(--line);
+  color: var(--ink-2); font-size: 13px;
+  display: flex; align-items: center; padding-left: 12px; gap: 9px;
+}
+.nav-tab .ico { width: 26px; height: 26px; border-radius: 5px; background: var(--bg-3); flex: none; }
+.nav-tab.on {                                   /* 黄色选中态：造型不许换成别的高亮结构 */
+  background: linear-gradient(180deg, #F5A623 0%, #D98A0C 100%);
+  border-color: var(--gold-hi); color: #2A1B02; font-weight: 700;
+}
+.nav-tab.on .ico { background: rgba(0,0,0,.22); }
+.nav-tab.lock { color: var(--ink-3); }
+.nav-tab .sub { font-size: 10px; color: var(--ink-3); }
+.nav-tab.on .sub { color: #5C3D06; }
+/* 红点：只用于「有可操作收益」 */
+.reddot {
+  position: absolute; right: -4px; top: -4px; width: 12px; height: 12px;
+  border-radius: 50%; background: var(--red); border: 1.5px solid var(--bg-1);
+}
+
+/* 2. 左上：活动/系统名 + 一小段描述（双层结构，描述要短） */
+.titlebox {
+  position: absolute; left: 192px; top: 14px; }
+.titlebox .t1 { font-size: 20px; font-weight: 700; color: var(--ink); letter-spacing: .5px; }
+.titlebox .t2 { font-size: 11px; color: var(--ink-2); margin-top: 3px; }
+
+/* 3. 右上：CD / 资产条 */
+.assetbar {
+  position: absolute; right: 14px; top: 14px; height: 34px; display: flex; gap: 8px; }
+.asset {
+  height: 34px; border-radius: 17px; background: var(--bg-2);
+  border: 1px solid var(--line); display: flex; align-items: center;
+  padding: 0 4px 0 4px; gap: 6px;
+}
+.asset .ico { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-3); flex: none; }
+.asset .num { font-size: 13px; color: var(--ink); padding-right: 2px; }
+.asset .plus {
+  width: 22px; height: 22px; border-radius: 50%; background: var(--gold);
+  color: #2A1B02; font-size: 15px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+}
+.btn-close {
+  width: 34px; height: 34px; border-radius: 8px; background: var(--red);
+  color: #fff; font-size: 16px; display: flex; align-items: center; justify-content: center;
+}
+
+/* 4. 左下：❗规则按钮（固定位；主界面不许常驻规则摘要文本） */
+.btn-rule {
+  position: absolute;
+  left: 196px; bottom: 16px; width: 38px; height: 38px; border-radius: 50%;
+  background: var(--bg-2); border: 1px solid var(--line-2); color: var(--gold);
+  font-size: 19px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* 5. 右下：活动倒计时（常驻系统页可豁免，但必须在图上显式声明） */
+.countdown {
+  position: absolute;
+  right: 14px; bottom: 16px; height: 30px; border-radius: 15px;
+  background: var(--bg-2); border: 1px solid var(--line);
+  display: flex; align-items: center; gap: 6px; padding: 0 12px;
+  font-size: 12px; color: var(--ink-2);
+}
+
+/* ===========================================================================
+   二、通用容器与组件
+   =========================================================================== */
+
+.panel {
+  background: var(--bg-1); border: 1px solid var(--line); border-radius: 10px;
+}
+.panel-hd {
+  height: 34px; border-bottom: 1px solid var(--line); background: var(--bg-2);
+  border-radius: 10px 10px 0 0; display: flex; align-items: center;
+  padding: 0 12px; font-size: 13px; font-weight: 700; color: var(--ink);
+}
+.card { background: var(--bg-2); border: 1px solid var(--line); border-radius: 8px; }
+
+/* 美术槽位：虚线框 + 居中标签。AI 跑完图往这里贴 */
+.slot {
+  border: 1px dashed var(--line-2); border-radius: 8px;
+  background: #171C24;   /* 纯色，别用斜纹 —— SVG 烘焙不支持 repeating-gradient，会导致 PNG 与 Figma 不一致 */
+  display: flex; align-items: center; justify-content: center;
+  color: var(--ink-3); font-size: 12px; text-align: center; line-height: 1.5;
+}
+.slot img { width: 100%; height: 100%; object-fit: contain; }
+.slot.filled { border-style: solid; background: none; }
+.slot.top { align-items: flex-start; padding-top: 9px; }
+
+/* 按钮：主按钮永远只有一个视觉主角 */
+.btn {
+  border-radius: 8px; display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 700; flex-direction: column; gap: 1px;
+}
+.btn.primary { background: linear-gradient(180deg,#FFC53D 0%,#E09105 100%); color: #2A1B02;
+               border: 1px solid var(--gold-hi); }
+.btn.second  { background: var(--bg-3); color: var(--blue); border: 1px solid var(--blue); }
+.btn.danger  { background: var(--red);  color: #fff; }
+.btn.off     { background: #262C36; color: var(--ink-3); border: 1px solid var(--line); }
+.btn .cost   { font-size: 11px; font-weight: 400; opacity: .85; }
+
+/* 奖励格 / 物品格：统一边框 + 底板 + 角标 */
+.item {
+  width: 56px; height: 56px; border-radius: 8px; background: var(--bg-3);
+  border: 1px solid var(--line-2); position: relative;
+}
+.item .qty { position: absolute; right: 3px; bottom: 2px; font-size: 10px; color: var(--ink); }
+.item.gray   { border-color: var(--t-gray); }
+.item.purple { border-color: var(--t-purple); }
+.item.gold   { border-color: var(--t-gold); }
+.item.red    { border-color: var(--t-red); }
+.item.lock   { opacity: .45; }
+.item .tick  { position: absolute; right: 2px; top: 2px; color: var(--green); font-size: 12px; }
+
+/* 进度条：未开始灰 / 进行中主色 / 可领取高亮 / 已完成 / MAX */
+.bar { height: 10px; border-radius: 5px; background: #232A34; border: 1px solid var(--line);
+       overflow: hidden; }
+.bar > i { display: block; height: 100%; background: linear-gradient(90deg,#F5A623,#FFC53D); }
+.bar.done > i { background: var(--green); }
+
+/* 档位轨道（灰→紫→金→红），节点状态统一 */
+.track { display: flex; align-items: center; }
+.node {
+  width: 13px; height: 13px; border-radius: 50%; background: #2A323E;
+  border: 2px solid var(--line-2); flex: none;
+}
+.node.gray{background:var(--t-gray);border-color:var(--t-gray)}
+.node.purple{background:var(--t-purple);border-color:var(--t-purple)}
+.node.gold{background:var(--t-gold);border-color:var(--t-gold)}
+.node.red{background:var(--t-red);border-color:var(--t-red)}
+.node.todo{background:#2A323E;border-color:var(--line-2)}
+.seg { height: 4px; flex: 1; background: #2A323E; }
+.seg.on { background: var(--gold); }
+
+.tag {
+  border-radius: 4px; padding: 2px 7px; font-size: 11px; font-weight: 700;
+  display: inline-flex; align-items: center;
+}
+.tag.gray{background:rgba(138,146,155,.18);color:var(--t-gray)}
+.tag.purple{background:rgba(162,91,214,.18);color:var(--t-purple)}
+.tag.gold{background:rgba(245,166,35,.18);color:var(--t-gold)}
+.tag.red{background:rgba(224,74,63,.18);color:var(--t-red)}
+
+.kv { display: flex; align-items: baseline; gap: 6px; }
+.kv .k { font-size: 11px; color: var(--ink-2); }
+.kv .v { font-size: 22px; font-weight: 700; color: var(--ink); }
+.kv .d { font-size: 12px; font-weight: 700; color: var(--green); }
+
+.txt   { color: var(--ink); }
+.txt-2 { color: var(--ink-2); font-size: 12px; }
+.txt-3 { color: var(--ink-3); font-size: 11px; }
+
+/* ===========================================================================
+   三、标注层 —— 全部进 <g id="标注层">，Figma 里一键隐藏
+   =========================================================================== */
+.note      { color: var(--note-2); font-size: 11px; line-height: 1.5; }
+.note.red  { color: var(--note); font-weight: 700; }
+.note.org  { color: var(--note-3); }
+.note-box  { border: 1px dashed var(--note-2); border-radius: 4px; }
+.note-box.red { border-color: var(--note); }
+.note-num  {
+  width: 18px; height: 18px; border-radius: 50%; background: var(--note-2);
+  color: #06121A; font-size: 11px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+}
+.note-line { background: var(--note-2); height: 1px; }
+.note-line.v { width: 1px; height: auto; }
+
+/* 图标题：画在图里 */
+.figtitle { left: 0; top: 0; width: 1376px; height: 0; }

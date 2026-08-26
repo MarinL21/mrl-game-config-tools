@@ -1,0 +1,105 @@
+/* ===========================================================================
+   p2ux19.css —— P2 / AOA 交互稿图元库 v2
+   画布 1920×1080（照《分层累充-新累充》真实 Figma 稿，不是 skill 里写的 1376×768）
+
+   ⛔ 与 v1(p2uxkit.css) 的根本差别：
+      这不是线框。P2 的交互稿是**用真实游戏切图拼的高保真稿**。
+      chrome（导航条/页签/按钮/奖励格/面板）一律引 assets/ 里的真图，
+      CSS 只负责定位与文字，不用 CSS 仿造游戏控件。
+
+   色值全部取样自真实稿：
+      导航底 #1A1A1A · 返回按钮 #2E2E2E · 任务面板 #161013
+      选中黄 #FFC600 · 领取绿 #3EEE00 · 前往蓝 #00CFEE · 分组标题橙 #E8A020
+   =========================================================================== */
+
+:root {
+  --nav-bg:     #1A1A1A;
+  --panel-bg:   #161013;
+  --gold:       #FFC600;
+  --green:      #3EEE00;
+  --cyan:       #00CFEE;
+  --group-ink:  #E8A020;   /* 分组标题「热门活动」那个橙 */
+  --ink:        #FFFFFF;
+  --ink-2:      #C8CDD4;
+  --stroke:     #1A1A1A;   /* 文字描边色，P2 全站统一深色 */
+
+  /* 标注层：真实稿只用青色一色，白标题 + 青说明 */
+  --note:       #3ED8E0;
+  --note-t:     #FFFFFF;
+  --board-bg:   #0D0D0D;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--board-bg); }
+
+/* —— 单屏画布：1920×1080，规范硬尺寸 —— */
+.screen {
+  position: relative; width: 1920px; height: 1080px; overflow: hidden;
+  font-family: "PingFang SC", "Noto Sans SC", sans-serif; color: var(--ink);
+}
+.abs { position: absolute; }
+img  { display: block; }
+
+/* —— P2 文字：粗黑体 + 粗深色描边，是这个项目最强的视觉签名 —— */
+.t {
+  font-weight: 900; color: var(--ink);
+  -webkit-text-stroke: 4px var(--stroke); paint-order: stroke fill;
+}
+.t.sm  { -webkit-text-stroke-width: 3px; }
+.t.xs  { -webkit-text-stroke-width: 2px; }
+.t.none{ -webkit-text-stroke-width: 0; }
+.t.gold  { color: var(--gold); }
+.t.green { color: var(--green); }
+.t.cyan  { color: var(--cyan); }
+.t.dark  { color: #3A2A00; -webkit-text-stroke-width: 0; }   /* 压在黄底上的字 */
+.t.group { color: var(--group-ink); -webkit-text-stroke-width: 0; font-weight: 700; }
+
+/* —— 导航条：369×1080，底板/返回/分组条/页签全部引真图 —— */
+.nav      { left: 0; top: 0; width: 369px; height: 1080px; }
+.nav-tab-hit  { display: flex; align-items: center; justify-content: center; }
+
+/* —— 右侧任务面板：739×898 —— */
+.taskpanel { width: 739px; height: 898px; background: var(--panel-bg); border-radius: 10px; }
+.taskrow   { width: 704px; height: 192px; }
+.taskrow.alt { background: rgba(255,255,255,.045); }
+
+/* —— 美术槽位：还没跑图的位置。虚线青框 + 居中标签 —— */
+.slot {
+  border: 3px dashed rgba(62,216,224,.55); border-radius: 10px;
+  background: rgba(62,216,224,.05);
+  display: flex; align-items: center; justify-content: center; text-align: center;
+  color: var(--note); font-size: 22px; font-weight: 700; line-height: 1.45;
+}
+.slot.top { align-items: flex-start; padding-top: 14px; }
+.slot.corner { align-items: flex-end; justify-content: flex-start; padding: 0 0 22px 396px; }
+
+/* ===========================================================================
+   板式：黑底大画板 + （1）（2）章节 + 青色标注 + 箭头
+   照《分层累充-新累充》的排版语言
+   =========================================================================== */
+.board { position: relative; background: var(--board-bg); }
+
+.board-title { display: flex; align-items: center; gap: 26px; }
+.board-title .bar { width: 44px; height: 76px; background: var(--note); }
+.board-title .txt { font-size: 76px; font-weight: 900; color: #fff; }
+
+.sec { font-size: 50px; font-weight: 700; color: #fff; }      /* （1）策划需求 */
+.cap { font-size: 34px; font-weight: 700; color: #fff; }      /* 每张界面上方的白标题 */
+
+/* 标注：白色粗体标题 + 青色说明行 */
+.note-t  { font-size: 30px; font-weight: 700; color: var(--note-t); }
+.note-d  { font-size: 28px; color: var(--note); line-height: 1.5; }
+.note-d.r{ text-align: right; }
+
+/* 引线：青色细线 + 箭头 */
+.ln  { background: var(--note); height: 3px; }
+.ln.v{ width: 3px; height: auto; }
+.ar  { width: 0; height: 0; border-top: 11px solid transparent; border-bottom: 11px solid transparent; }
+.ar.l{ border-right: 18px solid var(--note); }
+.ar.r{ border-left: 18px solid var(--note); }
+
+/* 状态序列块：浅灰圆角底 + 蓝色粗箭头 */
+.seq     { background: #2E2E2E; border-radius: 18px; }
+.seq-cap { font-size: 32px; font-weight: 700; color: #fff; }
+.bigar   { width: 0; height: 0; border-top: 26px solid transparent;
+           border-bottom: 26px solid transparent; border-left: 46px solid var(--cyan); }

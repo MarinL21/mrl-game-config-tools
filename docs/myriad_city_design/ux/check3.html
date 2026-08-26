@@ -1,0 +1,11 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>宇宙弹弹乐 · 主界面（照庆典弹弹乐复刻）</title>
+<link rel="stylesheet" href="p2ux19.css">
+<div class="canvas board" id="board" style="width:2200px;height:1500px" data-layer="校验" data-name="校验"></div>
+<script src="marble3.js"></script>
+<script>
+const S={balls:128,adv:6,mult:10,hits:0,acc:0,score:21310,gauge:[0,8],rank:34,x:140,y:200,key:'主界面 初始态'};
+document.getElementById('board').insertAdjacentHTML('beforeend', renderScreen3(S));
+</script>
+<script src="svgbake.js"></script>
