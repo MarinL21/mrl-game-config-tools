@@ -12,7 +12,7 @@ m = re.search(r'<pre id="__assert"[^>]*>(.*?)</pre>', dom, re.S)
 if not m:
     sys.exit("✗ 没找到自检探针（页面没跑起来？）")
 report = m.group(1).strip().replace("&lt;", "<").replace("&gt;", ">")
-bad = [l for l in report.splitlines() if l.startswith(("OVERFLOW", "CLIP"))]
+bad = [l for l in report.splitlines() if l.startswith(("OUTSIDE", "CLIP", "JSERR"))]
 sizes = [l for l in report.splitlines() if l.startswith("screen")]
 for s in sizes:
     ok = s.endswith("=1920x1080")

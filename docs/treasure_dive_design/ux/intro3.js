@@ -12,8 +12,10 @@
 'use strict';
 
 const A = 'assets/';
+/* 0909 换黑金 HOW TO PLAY 版式后，scene / nav / popBase / popBar / close / b* / info
+   这几件已不在稿子里出现（旧 P2 蓝弹窗壳用的），留着方便回退，bundle 不会内联未引用的图 */
 const IMG = {
-  scene:    A + 'td/UI_场景全屏.jpg',   // 背景烘成 JPEG：单文件 bundle 里要内联 3 次
+  scene:    A + 'td/UI_场景全屏.jpg',
   nav:      A + 'common/导航条_母版整条_369x1080.png',
   popBase:  A + 'common/弹窗高_底板_1542x1027.png',
   popBar:   A + 'common/弹窗高_标题横条_1528x111.png',
@@ -43,9 +45,8 @@ const CELL_ART = {
   e: A + 'td/格_空格.png',
   t: A + 'td/UI_奖_宝箱.png'
 };
-const COST = { b: 1, x: 1, s: 1, r: 2, t: 0 };          // c 中心格 / e 空格 不可点
 const PAGES = ['怎么下潜', '道具怎么用', '海螺换奖 + 深度奖励'];
-const SUBCAP = ['点击 → 挖穿一行 → 下潜 10 米', '水母 / 炸弹 / 手电 + 5 类格子', '17 个货位 + 11 档深度'];
+const SUBCAP = ['点击 → 通路 → 下潜 10 米', '炸弹 13 格 / 手电整列 / 落点限制', '海螺来源 / 兑换商店 / 11 档深度'];
 
 /* ---------------------------------------------------------------- 小工具 */
 const el = (h) => { const d = document.createElement('div'); d.innerHTML = h.trim(); return d.firstElementChild; };
@@ -77,343 +78,343 @@ function boardHTML(grid, o) {
       ${cells}</div></div>`;
 }
 
-/* ---------------------------------------------------------------- 演示盘 */
+/* 盘面格子构造器：P('b') 气泡 / 'x' 空气泡 / 'r' 石块 / 's' 海藻 / 'c' 海藻中心 / 'e' 空格 / 't' 宝箱 */
 const P = (t, n) => (n == null ? { t } : { t, n });
-function freshGrid() {
-  const rows = ['eeeeee', 'eeeeee', 'eeeeee', 'bbrbbb', 'bbbsss', 'xbbscs', 'brbsss', 'bbtbbb']
-    .map((line) => line.split('').map((ch) => P(ch)));
-  rows[5][4] = P('c', 5);     // 海藻中心格：数字 = 周围 8 格里有奖的个数
-  rows[7][2] = P('t', 4);     // 宝箱：可点 3~5 次
-  return rows;
-}
-const POOL = 'bbbbbbbbbbbxxxxrrreet'.split('');
-const newRow = () => Array.from({ length: 6 }, () => {
-  const t = POOL[(Math.random() * POOL.length) | 0];
-  return t === 't' ? P(t, 3 + ((Math.random() * 3) | 0)) : P(t);
-});
-const DROPS = [['+高级资源箱', 26], ['+普通奖池抽奖券', 14], ['+高级探测券', 10], ['+英雄升星石·橙', 8],
-               ['+金海螺 ×1', 9], ['+银海螺 ×10', 13], ['+水母 ×3', 10], ['+炸弹 ×1', 5], ['+手电筒 ×1', 5]];
-function rollDrop() {
-  let k = Math.random() * DROPS.reduce((a, d) => a + d[1], 0);
-  for (const d of DROPS) { k -= d[1]; if (k <= 0) return d[0]; }
-  return DROPS[0][0];
-}
 
-/* ================================================================ ①页 */
-const P1_RULES = [
-  ['点一下 = 花水母', '气泡 / 空气泡 / 海藻各 <b>1 只</b>，石块 <b>2 只</b>，宝箱 <b>免费</b>'],
-  ['只能挖「通路」', '格子要<b>上下左右紧贴空格</b>才点得动，够不到的先绕开'],
-  ['挖穿最下一行 = 下潜', '底行只要出现空格，棋盘立刻<b>下潜一行</b>，深度 <b>+10 米</b>'],
-  ['会连锁往下掉', '新补的一行若又带空格，<i>接着往下潜</i>，一次最多 32 行'],
-  ['深度只增不减', '整期累计，越深档位越高，<b>12000 米</b>拿最终大奖']
+/* ================================================================ ①页
+   2026-09-09 换版式：黑底金标题 HOW TO PLAY 三联分镜（参考竞品 HTP 弹窗）
+   一页说清：① 点开格子要花水母 ② 只能挖紧贴空格的通路 ③ 挖穿底行=下潜10米
+   底部横贯一条「点一格要花多少水母」把 5 类格子的 cost 全列出来
+   cost 口径 = 2189 实配：气泡/空气泡/海藻 1，石块 2，宝箱 0（click_num 3~5）
+   ============================================================== */
+const SVG_ARROW = `<svg width="100" height="96" viewBox="0 0 100 96" fill="none">
+  <path d="M8 72 C 26 26, 52 14, 80 30" stroke="#F2A93B" stroke-width="13"
+        stroke-linecap="round" fill="none"/>
+  <path d="M98 40 L62 20 L68 52 Z" fill="#F2A93B"/></svg>`;
+const SVG_TAP = `<svg width="76" height="76" viewBox="0 0 76 76">
+  <circle cx="38" cy="38" r="11" fill="#FFD34F"/>
+  <circle cx="38" cy="38" r="21" fill="none" stroke="#FFD34F" stroke-width="4" opacity=".72"/>
+  <circle cx="38" cy="38" r="32" fill="none" stroke="#FFD34F" stroke-width="3" opacity=".34"/></svg>`;
+const SVG_DOWN = `<svg width="46" height="46" viewBox="0 0 46 46" fill="none">
+  <path d="M23 5 L23 32 M11 23 L23 38 L35 23" stroke="#F8B32B" stroke-width="6"
+        stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+const SVG_FRAME = `<svg width="46" height="46" viewBox="0 0 46 46" fill="none">
+  <rect x="5" y="5" width="36" height="36" rx="5" stroke="#F8B32B" stroke-width="5"/>
+  <rect x="15" y="15" width="16" height="16" rx="2" fill="#F8B32B" opacity=".55"/></svg>`;
+
+const g4 = (rows) => rows.map((l) => l.split('').map((ch) => P(ch)));
+
+/* 三格分镜：盘面 4 列 × 3 行，cell 82 */
+const P1_SHOTS = [
+  { rows: ['eeee', 'bbbb', 'bxsr'],
+    mark: (r, c) => (r === 1 && c === 1 ? 'pick' : ''),
+    deco: `<div style="position:absolute;left:150px;top:104px">${SVG_TAP}</div>
+           <div class="htp-tag gold" style="left:236px;top:64px">−1 水母</div>`,
+    icon: () => img(IMG.jelly, 46, 46, '', 'display:inline-block'),
+    tt: '点开格子', 
+    desc: '点一下就<b>破一格</b>，同时扣水母。<br>不同格子价钱不一样 —— 见下面那条。' },
+
+  { rows: ['eeee', 'bbbb', 'bxsr'],
+    mark: (r, c) => (r === 1 ? 'pick' : r === 2 ? 'nogo' : ''),
+    deco: `<div class="htp-tag gold" style="left:74px;top:-52px">金框 = 现在点得动</div>
+           <div class="htp-tag" style="left:146px;top:214px">够不到 · 先绕开</div>`,
+    icon: () => SVG_FRAME,
+    tt: '只能挖通路',
+    desc: '格子要<b>上下左右紧贴空格</b>才点得动。<br>够不到的先绕开，挖出一条路再说。' },
+
+  { rows: ['bbbb', 'bxsr', 'eeee'],
+    mark: (r, c) => (r === 2 ? 'dug' : ''),
+    deco: `<div class="htp-tag cyan" style="left:58px;top:-52px">挖穿底行 → 整盘下潜</div>
+           <div class="htp-tag cyan" style="left:176px;top:226px">+10 米</div>`,
+    icon: () => SVG_DOWN,
+    tt: '下潜 +10 米',
+    desc: '底行一出空格，整盘<b>下潜一行</b>。<br>新行要是又带空格就<em>接着连锁</em>，一次最多 32 行。' }
 ];
+
+/* 底部消耗一览：k = CELL_ART 键；n = 水母数；free 时显示绿字 */
+const P1_COST = [
+  ['b', '气泡', 1, '开出奖励'],
+  ['x', '空气泡', 1, '打破没奖励'],
+  ['s', '海藻', 1, '中心格不可点'],
+  ['r', '石块', 2, '纯路障'],
+  ['t', '宝箱', 0, '可连点 3~5 次']
+];
+
 function renderP1(st) {
-  const grid = st.grid;
-  const canDig = (r, c) => COST[grid[r][c].t] != null &&
-    [[1, 0], [-1, 0], [0, 1], [0, -1]].some(([dr, dc]) =>
-      grid[r + dr] && grid[r + dr][c + dc] && grid[r + dr][c + dc].t === 'e');
+  const COLX = [170, 730, 1290], COLY = 176;
 
-  return `
-  <div class="well-h" data-name="页标题">① 怎么下潜<small>点气泡 → 挖穿最下一行 → 棋盘往下潜 10 米</small></div>
-  <div class="rule-line"></div>
-  <div class="chip" data-name="资源_水母" style="left:34px;top:100px">
-    ${img(IMG.jelly, 44, 44)}<span class="k">水母</span><span class="v">${st.jelly}</span></div>
-  <div class="chip" data-name="读数_深度" style="left:236px;top:100px">
-    <span class="k" style="margin-left:10px">当前深度</span><span class="v">${st.depth}</span><span class="k">米</span></div>
-  ${boardHTML(grid, { x: 34, y: 172, cell: 58, mark: (r, c) => (canDig(r, c) ? 'pick' : '') })}
-  <div class="board-lbl" style="left:34px;top:706px">▲ 金框 = 现在点得动的格子 · <b>本稿可直接点着试</b></div>
-  <div class="rules" style="${box(456, 104, 972, 460)}" data-name="规则条目">
-    ${P1_RULES.map((it, i) => `<div class="ri"><div class="n">${i + 1}</div>
-       <h5>${it[0]}</h5><p>${it[1]}</p></div>`).join('')}
-  </div>
-  <div class="side" style="${box(456, 578, 972, 132)}" data-name="下潜示意">
-    <h6 style="margin:14px 0 4px 20px">下潜一次的完整过程</h6>
-    <div style="position:absolute;left:20px;top:64px;display:flex;align-items:center;gap:16px;
-                font-size:24px;color:#CBE6F2;white-space:nowrap">
-      <span>挖开底行任意一格</span><span style="color:#4FE3F5;font-size:28px">➜</span>
-      <span>整盘上移一行</span><span style="color:#4FE3F5;font-size:28px">➜</span>
-      <span style="color:#FFC94A;font-weight:700">深度 +10 米</span><span style="color:#4FE3F5;font-size:28px">➜</span>
-      <span>底部补一行新格子</span>
-    </div>
-  </div>`;
-}
-
-/* ================================================================ ②页 */
-const TOOLS = [
-  { k: 'jelly', name: '水母', icon: IMG.jelly, cost: '挖掘消耗品 · 礼包 / 盘面产出',
-    cap: '水母：只清点中的那 1 格',
-    note: ['气泡 · 空气泡 · 海藻：每格 1 只', '石块 2 只 · 宝箱不花水母',
-           '空格与海藻中心格点不动，也不扣'], warn: '' },
-  { k: 'bomb', name: '炸弹', icon: IMG.bomb, cost: '消耗 1 个 · 礼包 / 气泡掉落',
-    cap: '炸弹：一次 13 格（九宫格 + 十字各远一格）',
-    note: ['只卷气泡与石块，宝箱 / 海藻不吃', '落点必须是空格或海藻格',
-           '先算范围再扣费：范围里没有可清的格子就用不掉，道具不扣'],
-    warn: '斜角外圈那 4 格（±2,±1）不在范围内' },
-  { k: 'light', name: '手电筒', icon: IMG.light, cost: '消耗 1 个 · 礼包 / 气泡掉落',
-    cap: '手电筒：沿一列整列通吃（本列 8 格）',
-    note: ['宝箱剩余次数一次用完、有奖海藻的奖全领', '落点必须是空格或海藻格',
-           '范围最大但只能沿一列，拿来挖通深井最划算'], warn: '' }
-];
-const KINDS = [
-  { k: 'b', name: '有奖气泡', art: CELL_ART.b, desc: '1 只水母<br>出海螺 / 道具',
-    cap: '有奖气泡：破开直接拿奖励',
-    note: ['奖励内容看得见，值不值得点由玩家自己判断', '盘面上最常见的一类格子'], warn: '' },
-  { k: 'x', name: '空气泡', art: CELL_ART.x, desc: '1 只水母<br>没奖励，只为打路',
-    cap: '空气泡：花 1 只水母打通道',
-    note: ['敲开没有任何奖励，作用是把通路挖通', '开局倒数第二排整排都是空气泡'], warn: '' },
-  { k: 'r', name: '石块', art: CELL_ART.r, desc: '2 只水母<br>盘面最贵的一格',
-    cap: '石块：2 只水母，盘面上最贵的一格',
-    note: ['能绕开就绕开，绕不开才砸', '炸弹和手电筒都能清掉它'], warn: '' },
-  { k: 't', name: '宝箱', art: CELL_ART.t, desc: '不花水母<br>可点 3~5 次',
-    cap: '宝箱：免费连点 3~5 次',
-    note: ['不消耗水母，刷到就是白赚', '每点一次给一份奖励，点满次数箱子才消失',
-           '手电筒扫到它，会把剩余次数一次用完'], warn: '' },
-  { k: 's', name: '海藻', art: CELL_ART.s, desc: '3×3 一整片<br>中心格不可破',
-    cap: '海藻：3×3 一片，可点的是外围 8 格',
-    note: ['中心格打不破，上面的数字 = 周围 8 格里有奖的个数', '外围 8 格每格 1 只水母',
-           '屏幕上同时最多出现一片海藻'], warn: '中心格不算奖励格，别按 9 格算收益' }
-];
-const CENTER = [3, 3];
-function rangeGrid(kind) {          // 6 列 × 8 行 = 实装盘面尺寸
-  const g = Array.from({ length: 8 }, () => Array.from({ length: 6 }, () => P('b')));
-  g[0][1] = P('r'); g[1][4] = P('r'); g[5][0] = P('x'); g[6][3] = P('x');
-  g[7][5] = P('t', 3); g[2][1] = P('e'); g[6][1] = P('e');
-  if (kind === 's') {
-    for (let r = 2; r <= 4; r++) for (let c = 2; c <= 4; c++) g[r][c] = P('s');
-    g[3][3] = P('c', 5);
-  }
-  if (kind === 'x') g[3][3] = P('x');
-  if (kind === 'r') g[3][3] = P('r');
-  if (kind === 't') g[3][3] = P('t', 4);
-  return g;
-}
-function hotSet(sel) {
-  const [R, C] = CENTER, out = {};
-  const put = (r, c) => { if (r >= 0 && r < 8 && c >= 0 && c < 6) out[r + ',' + c] = 1; };
-  if (sel === 'bomb') {
-    for (let dr = -1; dr <= 1; dr++) for (let dc = -1; dc <= 1; dc++) put(R + dr, C + dc);
-    put(R - 2, C); put(R + 2, C); put(R, C - 2); put(R, C + 2);
-  } else if (sel === 'light') {
-    for (let r = 0; r < 8; r++) put(r, C);
-  } else if (sel === 's') {
-    for (let r = 2; r <= 4; r++) for (let c = 2; c <= 4; c++) if (!(r === 3 && c === 3)) put(r, c);
-  } else put(R, C);
-  return out;
-}
-function renderP2(st) {
-  const sel = st.sel;
-  const cur = TOOLS.find((t) => t.k === sel) || KINDS.find((c) => c.k === sel);
-  const hot = hotSet(sel);
-  const nHot = Object.keys(hot).length;
-
-  const toolCards = TOOLS.map((t, i) => `
-    <div class="card tool${sel === t.k ? ' on' : ''}" data-sel="${t.k}" data-name="道具卡_${t.name}"
-         style="${box(34, 104 + i * 146, 552, 136)}">
-      <div class="ic">${img(t.icon, 104, 104)}</div>
-      <h5>${t.name}</h5><div class="cost" style="width:390px">${t.cost}</div>
-      <div class="pin">${sel === t.k ? '● 正在看' : '点我看范围'}</div>
-    </div>`).join('');
-
-  const kindCards = KINDS.map((c, i) => `
-    <div class="card kind${sel === c.k ? ' on' : ''}" data-sel="${c.k}" data-name="格子卡_${c.name}"
-         style="${box(34 + i * 281, 574, 270, 108)}">
-      <div class="ic">${img(c.art, 66, 66)}</div>
-      <h6>${c.name}</h6><p>${c.desc}</p>
-    </div>`).join('');
-
-  return `
-  <div class="well-h" data-name="页标题">② 道具怎么用<small>点左边任意一项，中间盘面会亮出它的作用范围</small></div>
-  <div class="rule-line"></div>
-  ${toolCards}
-  ${boardHTML(rangeGrid(sel), { x: 620, y: 104, cell: 46, mark: (r, c) => (hot[r + ',' + c] ? 'hot' : '') })}
-  <div class="board-lbl" style="left:620px;top:542px">红框 = 本次作用范围（<b>${nHot} 格</b>）· 盘面即实装尺寸 6 列 × 8 行</div>
-  <div class="side" style="${box(1010, 104, 418, 429)}" data-name="规则说明">
-    <h6>${cur.cap}</h6>
-    <ul>${cur.note.map((s) => `<li>${s}</li>`).join('')}</ul>
-    ${cur.warn ? `<div class="warn">⛔ ${cur.warn}</div>` : ''}
-    <div style="position:absolute;left:20px;bottom:14px;width:378px" data-name="工具钮位置">
-      <div style="display:flex;gap:12px">
-        ${img(IMG.btnBomb, 178, 80, '', 'border-radius:8px')}
-        ${img(IMG.btnLight, 178, 80, '', 'border-radius:8px')}
+  const cols = P1_SHOTS.map((s, i) => {
+    const grid = g4(s.rows);
+    return `<div class="htp-col" style="left:${COLX[i]}px;top:${COLY}px" data-name="分镜${i + 1}">
+      <div class="htp-stage">
+        ${boardHTML(grid, { x: 41, y: 0, cell: 82, gap: 8, mark: s.mark })}
+        ${s.deco}
       </div>
-      <div style="font-size:20px;color:#7FA8BC;line-height:1.35;margin-top:6px">
-        ↑ 两个工具钮在主界面盘面右下角，数量为 0 时置灰、点了跳礼包</div>
-    </div>
-  </div>
-  <div class="board-lbl" style="left:34px;top:542px">盘面上会遇到的 5 类格子（也可以点）</div>
-  ${kindCards}`;
-}
-
-/* ================================================================ ③页 */
-const SHELF = [
-  { nm: '水母 ×5', pr: 1, cur: 'g', lim: 5, art: IMG.jelly },
-  { nm: '四周年庆-白色保底卡包 ×1', pr: 1, cur: 'g', lim: 10, art: null },
-  { nm: '万能英雄碎片-橙色 ×1', pr: 4, cur: 'g', lim: 10, art: null },
-  { nm: '装饰券 ×5', pr: 10, cur: 's', lim: 20, art: IMG.decor },
-  { nm: '60 分钟加速 ×1', pr: 10, cur: 's', lim: 30, art: null }
-];
-const TIERS = [
-  [300, '自选宝箱 ×1', 'chest'], [600, '节日装饰 ×1', 'decor'], [1200, '自选宝箱 ×3', 'chest'],
-  [1800, '装饰升级 ×1', 'decor'], [2400, '装饰升级 ×2', 'decor'], [3000, '装饰升级 ×3', 'decor'],
-  [3600, '装饰升级 ×6', 'decor'], [4800, '涂饰道具 ×7', null], [6000, '装饰升级 ×8', 'decor'],
-  [9000, '涂饰道具 ×7', null], [12000, '节日装饰 ×13', 'decor']
-];
-function renderP3(st) {
-  const rows = SHELF.map((s) => `
-    <div class="srow" data-name="货位_${s.nm}">
-      <div class="s">${s.art ? img(s.art, 60, 60) : ph('道具<br>图标', 15)}</div>
-      <div class="nm">${s.nm}</div><div class="lm">限购 ${s.lim} 次 · 活动内累计</div>
-      <div class="pr${s.cur === 's' ? ' silver' : ''}">
-        ${img(s.cur === 'g' ? IMG.gold : IMG.silver, 36, 36)}<b>${s.pr}</b></div>
-    </div>`).join('');
-
-  const tiers = TIERS.map((t) => {
-    const state = st.depth >= t[0] ? 'done' : (t[0] === st.next ? 'now' : 'lock');
-    const art = t[2] === 'chest' ? IMG.chest : (t[2] === 'decor' ? IMG.decor : null);
-    const last = t[0] === 12000;
-    return `<div class="tier ${state}" data-tier="${t[0]}" data-name="深度档_${t[0]}m">
-      <div class="ln"></div><div class="pt"></div>
-      <div class="m">${t[0]}<span> 米</span></div>
-      <div class="sl">${art ? img(art, 46, 46) : ph('图标', 14)}</div>
-      <div class="rw">${t[1]}</div>
-      <div class="st"${last ? ' style="color:#FFC94A"' : ''}>${last ? '最终大奖'
-        : state === 'done' ? '已达成' : state === 'now' ? '下一档' : '未达成'}</div>
+      <div class="htp-cap"><div class="ic">${s.icon()}</div><div class="tt">${s.tt}</div></div>
+      <div class="htp-desc"><div>${s.desc}</div></div>
     </div>`;
   }).join('');
 
-  return `
-  <div class="well-h" data-name="页标题">③ 海螺换奖 + 深度奖励<small>挖出来的海螺去商店换，潜下去的深度按档发奖</small></div>
-  <div class="rule-line"></div>
+  const arrows = [645, 1205].map((x) =>
+    `<div class="htp-ar" style="left:${x}px;top:${COLY + 108}px">${SVG_ARROW}</div>`).join('');
 
-  <div class="side" style="${box(34, 104, 700, 124)}" data-name="双币说明">
-    <div style="position:absolute;left:18px;top:12px;display:flex;align-items:center;gap:12px">
-      ${img(IMG.gold, 80, 80)}
-      <div><div style="font-size:29px;font-weight:900;color:#FFC94A">金海螺</div>
-           <div style="font-size:21px;color:#CBE6F2;line-height:1.35">换稀有货位<br>产量少，留给大件</div></div>
-    </div>
-    <div style="position:absolute;left:370px;top:12px;display:flex;align-items:center;gap:12px">
-      ${img(IMG.silver, 80, 80)}
-      <div><div style="font-size:29px;font-weight:900;color:#DCEAF3">银海螺</div>
-           <div style="font-size:21px;color:#CBE6F2;line-height:1.35">换常规货位<br>产量大，日常消耗</div></div>
-    </div>
-  </div>
-  ${img(IMG.shop, 54, 50, '', 'position:absolute;left:34px;top:238px;border-radius:6px')}
-  <div class="board-lbl" style="left:98px;top:248px" data-name="商店入口">
-    兑换商店货位（示意 5 个，实装共 <b>17</b> 个）· 入口在主界面右上角 ↗</div>
-  <div class="shelf" style="${box(34, 282, 700, 418)}" data-name="商店货架">${rows}</div>
+  const costs = P1_COST.map(([k, nm, n, note]) => `
+    <div class="it">
+      ${img(CELL_ART[k], 54, 54)}
+      <div class="nm">${nm}</div>
+      <div class="vl${n === 0 ? ' free' : ''}">${n === 0 ? '免费'
+        : img(IMG.jelly, 28, 28) + ' ×' + n}</div>
+      <div class="nm" style="color:#8B98A4;font-size:20px">${note}</div>
+    </div>`).join('');
 
-  <div style="position:absolute;left:800px;top:100px;font-size:30px;font-weight:900;color:#4FE3F5"
-       data-name="深度奖励标题">深度奖励</div>
-  ${img(IMG.rail, 112, 470, '', 'position:absolute;left:800px;top:150px;border-radius:8px;opacity:.92')}
-  <div class="mark" style="left:794px;top:630px;width:124px;text-align:center">实装位置：<br>盘面左侧竖轨</div>
-  <div class="rail" style="${box(930, 152, 498, 572)}" data-name="深度档位轨">${tiers}</div>
-  <div class="mark" style="left:944px;top:108px;width:484px">
-    潜多深发多深 · 点任意一档可切三态</div>
-  <div class="mark" style="left:34px;top:702px;width:880px">
-    深度只增不减 · 达到档位即可领 · 理论最深 <b>18000 米</b>（1800 行 × 10 米）</div>`;
+  return `${cols}${arrows}
+  <div class="htp-cost" data-name="消耗一览">
+    <div class="hd"><span>点一格要花多少水母</span></div>
+    <div class="row">${costs}</div>
+  </div>`;
+}
+
+/* ================================================================ ②页
+   2026-09-09：黑金三联「道具怎么用」
+   口径（服务端 htreasuredive/rule.go + dive.go 通读）：
+     · 落点 toolTargetOk = 空格 or 海藻三种格 —— 0909 用户定版：稿子按实装画，海藻也是合法落点
+     · 炸弹 inBombRange = 3x3 再加上下左右各远一格 = 13 格，且只卷【气泡与石块】
+     · 手电 ColumnCells = 整列通吃，宝箱剩余次数一次用完、有奖海藻的奖全领
+     · 先算范围再扣费：范围内一格都消不掉 → ErrCodeTreasureDiveToolTargetInvalid，不扣道具
+   ============================================================== */
+const SVG_NO = `<svg width="76" height="76" viewBox="0 0 76 76" fill="none">
+  <circle cx="38" cy="38" r="30" fill="rgba(20,0,0,.55)" stroke="#FF4D4D" stroke-width="7"/>
+  <path d="M20 20 L56 56" stroke="#FF4D4D" stroke-width="8" stroke-linecap="round"/></svg>`;
+
+/* 5 列 × 5 行，cell 62 / gap 6 / pad 13 → 360×360，居中于 460 的 col 里 x=50 */
+const SVG_OK = `<svg width="76" height="76" viewBox="0 0 76 76" fill="none">
+  <circle cx="38" cy="38" r="30" fill="rgba(0,24,8,.55)" stroke="#5FE07A" stroke-width="7"/>
+  <path d="M22 39 L34 51 L55 26" stroke="#5FE07A" stroke-width="8"
+        stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+const P2_CELL = 62, P2_STEP = 68, P2_BX = 50;
+const p2xy = (r, c, size) => `left:${P2_BX + 13 + c * P2_STEP + (P2_CELL - size) / 2}px;` +
+                             `top:${13 + r * P2_STEP + (P2_CELL - size) / 2}px`;
+const p2corner = (r, c) => `left:${P2_BX + 13 + c * P2_STEP + P2_CELL - 32}px;` +
+                           `top:${13 + r * P2_STEP - 13}px`;      // 角标：压格子右上角，不盖住道具
+const g5 = (rows) => rows.map((l) => l.split('').map((ch) => P(ch)));
+const inBomb = (dr, dc) => {
+  dr = Math.abs(dr); dc = Math.abs(dc);
+  if (dr <= 1 && dc <= 1) return true;
+  return (dr === 2 && dc === 0) || (dr === 0 && dc === 2);
+};
+
+const P2_SHOTS = [
+  { /* ① 炸弹 */
+    rows: ['bbbbr', 'brbbb', 'bberb', 'bbrbb', 'rbbbb'],
+    tgt: [2, 2],
+    mark(r, c, cell) {
+      if (r === 2 && c === 2) return 'pick';
+      if (!inBomb(r - 2, c - 2)) return '';
+      return (cell.t === 'b' || cell.t === 'r') ? 'hot' : '';
+    },
+    over: `${img(IMG.bomb, 54, 54, 'htp-tool', p2xy(2, 2, 54))}`,
+    icon: () => img(IMG.bomb, 46, 46, '', 'display:inline-block'),
+    tt: '炸弹 · 炸掉 13 格',
+    desc: '以落点为中心 <b>3×3</b>，上下左右再远一格。<br>只炸<b>气泡和石块</b>，宝箱海藻不收。' },
+
+  { /* ② 手电 */
+    rows: ['bbbbr', 'bsssb', 'bscsb', 'bsssb', 'rbtbb'],
+    tgt: [2, 2],
+    mark(r, c) { return (r === 2 && c === 2) ? 'pick' : (c === 2 ? 'hot' : ''); },   // 落点=海藻中心格
+    over: `${img(IMG.light, 54, 54, 'htp-tool', p2xy(2, 2, 54))}`,
+    icon: () => img(IMG.light, 46, 46, '', 'display:inline-block'),
+    tt: '手电 · 通吃整列',
+    desc: '落点那一<b>整列从头清到尾</b>。<br>宝箱剩余次数一次用光，海藻的奖全领。' },
+
+  { /* ③ 落点限制：空格与海藻可放，其余不行（0909 用户定版，与服务端 toolTargetOk 一致） */
+    rows: ['bbbbr', 'bsssb', 'bscsb', 'bsssb', 'rbbbb'],
+    tgt: null,
+    mark(r, c) { return (r === 2 && c === 4) ? 'bad' : (r === 1 && c === 1 ? 'pick' : ''); },
+    over: `${img(IMG.bomb, 54, 54, 'htp-tool', p2xy(1, 1, 54))}
+           <div class="htp-ok" style="${p2corner(1, 1)}">${SVG_OK.replace('76', '46').replace('76', '46')}</div>
+           ${img(IMG.bomb, 54, 54, 'htp-tool', p2xy(2, 4, 54) + ';opacity:.5')}
+           <div class="htp-no" style="${p2xy(2, 4, 76)}">${SVG_NO}</div>
+           <div class="htp-tag gold" style="left:34px;top:-52px">海藻上也放得下</div>`,
+    icon: () => SVG_OK.replace('width="76" height="76"', 'width="46" height="46"'),
+    tt: '只能放空格或海藻',
+    desc: '落点只有<b>空格和海藻</b>放得下。<br>气泡、石块、宝箱都不行。<br>范围内没东西可消也<em>拒绝</em>，不白扣道具。' }
+];
+
+function renderP2(st) {
+  const COLX = [170, 730, 1290], COLY = 158, STAGE = 366;
+
+  const cols = P2_SHOTS.map((s, i) => `
+    <div class="htp-col" style="left:${COLX[i]}px;top:${COLY}px" data-name="分镜${i + 1}">
+      <div class="htp-stage" style="height:${STAGE}px">
+        ${boardHTML(g5(s.rows), { x: P2_BX, y: 0, cell: P2_CELL, gap: 6, mark: s.mark })}
+        ${s.over}
+      </div>
+      <div class="htp-cap" style="top:${STAGE + 14}px">
+        <div class="ic">${s.icon()}</div><div class="tt">${s.tt}</div></div>
+      <div class="htp-desc" style="top:${STAGE + 126}px;height:140px;padding:16px 18px;font-size:22px"><div>${s.desc}</div></div>
+    </div>`).join('');
+
+  const arrows = [645, 1205].map((x) =>
+    `<div class="htp-ar" style="left:${x}px;top:${COLY + 140}px">${SVG_ARROW}</div>`).join('');
+
+  return `${cols}${arrows}
+  <div class="htp-legend" data-name="图例">
+    <span><i class="sw pick"></i>落点（空格或海藻）</span>
+    <span><i class="sw hot"></i>这次会被清掉的格子</span>
+    <span><b>道具从哪来</b>：气泡里开出 / 商店买</span>
+    <span><em>用一次扣 1 个</em></span>
+  </div>`;
+}
+
+/* ================================================================ ③页
+   2026-09-09 换版式：黑金三联「海螺换奖 + 深度奖励」
+   ① 海螺从哪来（气泡 / 宝箱 / 海藻三个来源，宝箱不花水母）
+   ② 拿海螺换奖（2116 group58 共 17 位；金 = 稀有位 / 银 = 常规位，各有限购）
+   ③ 潜得越深奖越大（2115 group10003 共 11 档 300→12000m，终档 = 节日装饰 ×13）
+   底部横贯一条 11 档深度阶梯，点任意一档可切「已达成 / 下一档 / 未达成」三态
+   ============================================================== */
+const P3_SRC = [
+  { k: 'b', lb: '气泡',  sub: '1 只水母',  out: ['g', 's'] },
+  { k: 't', lb: '宝箱',  sub: '不花水母',  out: ['g'] },
+  { k: 's', lb: '海藻',  sub: '1 只水母',  out: ['g', 's'] }
+];
+const P3_SHELF = [
+  { nm: '水母 ×5',          pr: 1,  cur: 'g', lim: 5,  art: IMG.jelly },
+  { nm: '万能英雄碎片-橙 ×1', pr: 4,  cur: 'g', lim: 10, art: null },
+  { nm: '装饰券 ×5',        pr: 10, cur: 's', lim: 20, art: IMG.decor }
+];
+/* 深度奖励 11 档 = 2115 group10003 实配（王庭君主装饰占位，待 12 月节装饰件替换） */
+const TIERS = [
+  [300, '宝箱 ×1', 'chest'], [600, '装饰 ×1', 'decor'], [1200, '宝箱 ×3', 'chest'],
+  [1800, '升级 ×1', 'decor'], [2400, '升级 ×2', 'decor'], [3000, '升级 ×3', 'decor'],
+  [3600, '升级 ×6', 'decor'], [4800, '涂饰 ×7', null], [6000, '升级 ×8', 'decor'],
+  [9000, '涂饰 ×7', null], [12000, '装饰 ×13', 'decor']
+];
+const P3_RAIL = [
+  [12000, '节日装饰 ×13 · 大奖', 'decor', 1],
+  [6000,  '装饰升级件 ×8', 'decor', 0],
+  [3600,  '装饰升级件 ×6', 'decor', 0],
+  [300,   '自选宝箱 ×1', 'chest', 0]
+];
+const tierArt = (k) => (k === 'chest' ? IMG.chest : k === 'decor' ? IMG.decor : null);
+
+function renderP3(st) {
+  const COLX = [170, 730, 1290], COLY = 150, STAGE = 330;
+
+  /* —— 分镜① 海螺从哪来 —— */
+  const srcs = P3_SRC.map((o, i) => `
+    <div class="htp-src" style="left:${41 + i * 126}px;top:40px" data-name="来源_${o.lb}">
+      <div style="margin:0 auto;width:82px;height:82px">${cellHTML(P(o.k), '', 82)}</div>
+      <div style="margin:8px auto 0;width:46px">${SVG_DOWN}</div>
+      <div class="out">${o.out.map((c) => img(c === 'g' ? IMG.gold : IMG.silver, 56, 56)).join('')}</div>
+      <div class="lb">${o.lb}<small>${o.sub}</small></div>
+    </div>`).join('');
+
+  /* —— 分镜② 拿海螺换奖 —— */
+  const rows = P3_SHELF.map((o) => `
+    <div class="r" data-name="货位_${o.nm}">
+      <div class="ic">${o.art ? img(o.art, 56, 56) : ph('道具<br>图标', 14)}</div>
+      <div class="nm">${o.nm}</div><div class="lm">限购 ${o.lim} 次</div>
+      <div class="pr${o.cur === 's' ? ' s' : ''}">
+        ${img(o.cur === 'g' ? IMG.gold : IMG.silver, 30, 30)}${o.pr}</div>
+    </div>`).join('');
+  const shop = `
+    <div style="position:absolute;left:0;top:0;display:flex;align-items:center;gap:12px"
+         data-name="商店入口">
+      ${img(IMG.shop, 60, 55, '', 'border-radius:6px')}
+      <div style="font-size:21px;color:#C9D3DC;line-height:1.3">主界面右上角<br>进兑换商店 ↗</div>
+      <div style="margin-left:auto;font-size:21px;color:#8B98A4">共 17 位</div>
+    </div>
+    <div class="htp-shop" style="top:70px">${rows}</div>`;
+
+  /* —— 分镜③ 潜得越深奖越大 —— */
+  const rail = `<div class="htp-rail" style="top:14px" data-name="深度轨">
+    <div class="ln"></div>
+    ${P3_RAIL.map(([m, rw, art, top]) => `
+      <div class="nd${top ? ' top' : ''}">
+        <div class="m">${m}<small> 米</small></div><div class="pt"></div>
+        <div class="ic">${tierArt(art) ? img(tierArt(art), 48, 48) : ph('图标', 13)}</div>
+        <div class="rw">${rw}</div>
+      </div>`).join('')}
+    <div style="position:absolute;left:156px;top:308px;font-size:20px;color:#8B98A4">…中间还有 7 档，见下方</div>
+  </div>`;
+
+  const SHOTS = [
+    { body: srcs, icon: img(IMG.gold, 46, 46, '', 'display:inline-block'), tt: '海螺从哪来',
+      desc: '气泡、宝箱、海藻都能开出<b>金 / 银海螺</b>。<br>宝箱不花水母，刷到就是白赚。' },
+    { body: shop, icon: img(IMG.shop, 50, 46, '', 'display:inline-block'), tt: '拿海螺换奖',
+      desc: '右上角进<b>兑换商店</b>，共 <b>17 个货位</b>。<br>金海螺换稀有位，银海螺换常规位。<br>每位都有限购。' },
+    { body: rail, icon: SVG_DOWN, tt: '潜得越深奖越大',
+      desc: '深度<b>只增不减</b>，到档就能领。<br>一共 <b>11 档</b>，<b>12000 米</b>拿最终大奖。<br>理论最深 18000 米。' }
+  ];
+  const cols = SHOTS.map((s, i) => `
+    <div class="htp-col" style="left:${COLX[i]}px;top:${COLY}px" data-name="分镜${i + 1}">
+      <div class="htp-stage" style="height:${STAGE}px">${s.body}</div>
+      <div class="htp-cap" style="top:${STAGE + 14}px">
+        <div class="ic">${s.icon}</div><div class="tt">${s.tt}</div></div>
+      <div class="htp-desc" style="top:${STAGE + 140}px;height:136px;padding:14px 18px;font-size:22px">
+        <div>${s.desc}</div></div>
+    </div>`).join('');
+
+  const arrows = [645, 1205].map((x) =>
+    `<div class="htp-ar" style="left:${x}px;top:${COLY + 122}px">${SVG_ARROW}</div>`).join('');
+
+  /* —— 底部：11 档深度阶梯（可点，切三态）—— */
+  const next = (TIERS.find((t) => t[0] > st.depth) || [null])[0];
+  const ladder = TIERS.map(([m, rw, art]) => {
+    const cls = st.depth >= m ? 'done' : (m === next ? 'next' : '');
+    return `<div class="st ${cls}${m === 12000 ? ' big' : ''}" data-tier="${m}" data-name="深度档_${m}m">
+      <div class="sic">${tierArt(art) ? img(tierArt(art), 46, 46) : ph('图标', 12)}</div>
+      <div class="sm">${m}</div><div class="sn">${rw}</div></div>`;
+  }).join('');
+
+  return `${cols}${arrows}
+  <div class="htp-ladder" data-name="深度阶梯">
+    <div class="hd"><span>深度奖励 11 档（点一档看三态）</span></div>
+    <div class="row">${ladder}</div>
+  </div>`;
 }
 
 /* ---------------------------------------------------------------- 单屏壳 */
-function screenHTML(st) {
-  const last = st.page === 2;
-  const dots = [0, 1, 2].map((i) => `<div class="dot${i === st.page ? ' on' : ''}" data-page="${i}"></div>`).join('');
-  const first = st.page === 0;
+/* ---------------------------------------------------------------- ①页黑金外壳 */
+function screenHTMLDark(st) {
+  const dots = [0, 1, 2].map((i) =>
+    `<div class="dot${i === st.page ? ' on' : ''}" data-page="${i}"></div>`).join('');
   return `
-  ${img(IMG.scene, 0, 0, 'bgscene')}
-  <div class="dim"></div>
-  ${img(IMG.nav, 369, 1080, 'navbar')}
-  <div class="pop" data-layer="弹窗_玩法介绍" data-name="弹窗_玩法介绍">
-    ${img(IMG.popBase, 1542, 1027, 'pop-base')}
-    ${img(IMG.popBar, 1528, 111, 'pop-bar')}
-    <div class="pop-title">深海探宝 · 玩法介绍</div>
-    <div class="pop-page">${st.page + 1} / 3</div>
-    ${img(IMG.close, 122, 115, 'pop-x')}
-    <div class="well" data-layer="内容井" data-name="内容井"></div>
-    <div class="foot" data-name="页脚">
-      ${first ? '' : `<div class="btn blue" data-act="prev" style="left:60px;top:16px">
-        ${img(IMG.bBlue, 300, 112)}
-        <div class="lbl" style="font-size:38px">上一页</div></div>`}
-      <div class="btn ${last ? 'gold' : 'blue'}" data-act="next" style="left:1128px;top:6px">
-        ${img(last ? IMG.bGold : IMG.bBlue, 354, 132)}
-        <div class="lbl">${last ? '开始挖宝' : '下一页'}</div></div>
-      <div class="dots">${dots}</div>
-      <div class="foot-hint">${img(IMG.info, 40, 40)}关闭后点界面左下角 ⓘ 可以再看一次</div>
-    </div>
-  </div>`;
+  <div class="htp-dim"></div>
+  <div class="htp-bar" data-name="标题条"><span>HOW TO PLAY</span></div>
+  <div class="htp-x" data-act="close" data-name="关闭">✕</div>
+  <div class="htp-nav l${st.page === 0 ? ' off' : ''}"${st.page === 0 ? '' : ' data-act="prev"'}
+       data-name="上一页">‹</div>
+  <div class="htp-nav r${st.page === 2 ? ' off' : ''}"${st.page === 2 ? '' : ' data-act="next"'}
+       data-name="下一页">›</div>
+  <div class="htp-well" data-layer="内容井" data-name="内容井"></div>
+  <div class="htp-dots">${dots}</div>`;
 }
 function renderScreen(scr) {
   const st = scr.__st;
-  scr.innerHTML = screenHTML(st);
-  scr.querySelector('.well').innerHTML =
+  scr.innerHTML = screenHTMLDark(st);          // 三页统一黑金 HOW TO PLAY 壳
+  scr.querySelector('.htp-well').innerHTML =
     st.page === 0 ? renderP1(st) : st.page === 1 ? renderP2(st) : renderP3(st);
   bind(scr);
 }
 
 /* ---------------------------------------------------------------- 交互 */
-function toast(scr, msg, cyan) {
-  const t = el(`<div class="toast" style="top:${cyan ? 226 : 300}px${cyan ?
-    ';background:rgba(8,64,88,.94);border-color:#4FE3F5;color:#CFF7FF' : ''}">${msg}</div>`);
-  scr.querySelector('.well').appendChild(t);
-  setTimeout(() => t.remove(), 1600);
-}
-function floatText(scr, node, msg, color) {
-  const well = scr.querySelector('.well');
-  const b = node.getBoundingClientRect(), w = well.getBoundingClientRect();
-  const k = w.width / 1462 || 1;
-  const f = el(`<div class="float" style="left:${(b.left - w.left) / k - 20}px;` +
-               `top:${(b.top - w.top) / k - 8}px${color ? `;color:${color}` : ''}">${msg}</div>`);
-  well.appendChild(f);
-  setTimeout(() => f.remove(), 1000);
-}
-function dig(scr, r, c, node) {
-  const st = scr.__st, grid = st.grid, cell = grid[r][c], cost = COST[cell.t];
-  if (cell.t === 'c') return toast(scr, '海藻中心格打不破，它只显示周围有几格有奖');
-  if (cost == null) return toast(scr, '空格不可点，也不消耗水母');
-  const near = [[1, 0], [-1, 0], [0, 1], [0, -1]].some(([dr, dc]) =>
-    grid[r + dr] && grid[r + dr][c + dc] && grid[r + dr][c + dc].t === 'e');
-  if (!near) return toast(scr, '只能挖上下左右紧贴空格的格子');
-  if (st.jelly < cost) return toast(scr, '水母不足，去礼包补一些');
-
-  st.jelly -= cost;
-  if (cell.t === 't') {                          // 宝箱：cost 0，点满次数才消失
-    cell.n -= 1;
-    floatText(scr, node, rollDrop());
-    if (cell.n <= 0) grid[r][c] = P('e');
-  } else {
-    grid[r][c] = P('e');
-    if (cell.t === 'x') floatText(scr, node, '空气泡 · 无奖励', '#9FC7D8');
-    else if (cell.t === 'r') floatText(scr, node, '石块 · −2 只水母', '#9FC7D8');
-    else floatText(scr, node, rollDrop());
-  }
-  // 下潜：最下一行出现空格 → 整盘上移一行、深度 +10；新行若又有空格则连锁
-  let dives = 0;
-  while (grid[grid.length - 1].some((x) => x.t === 'e') && dives < 8) {
-    grid.shift(); grid.push(newRow()); st.depth += 10; dives++;
-  }
-  renderScreen(scr);
-  if (dives) toast(scr, dives > 1 ? `连锁下潜 ${dives} 行 · 深度 +${dives * 10} 米`
-                                  : '下潜一行 · 深度 +10 米', true);
-}
 function bind(scr) {
   const st = scr.__st;
   scr.querySelectorAll('.dot').forEach((d) => { d.onclick = () => { st.page = +d.dataset.page; renderScreen(scr); }; });
   const nx = scr.querySelector('[data-act="next"]'), pv = scr.querySelector('[data-act="prev"]');
   if (nx) nx.onclick = () => { st.page = (st.page + 1) % 3; renderScreen(scr); };
   if (pv) pv.onclick = () => { if (st.page > 0) { st.page -= 1; renderScreen(scr); } };
-  scr.querySelector('.pop-x').onclick = () => {
-    scr.querySelector('.pop').style.display = 'none';
-    const back = el(`<div class="btn blue" style="left:1400px;top:880px;z-index:9">
-      ${img(IMG.bBlue, 300, 112)}<div class="lbl" style="font-size:34px">再看一次</div></div>`);
+  const xd = scr.querySelector('[data-act="close"]');
+  if (xd) xd.onclick = () => {                  // 关掉 = 回主界面；稿子里给个「再看一次」把弹窗叫回来
+    scr.querySelectorAll('.htp-well,.htp-bar,.htp-nav,.htp-dots,.htp-x').forEach((n) => { n.style.display = 'none'; });
+    const back = el(`<div class="htp-tag gold" data-name="再看一次"
+      style="left:832px;top:498px;font-size:30px;padding:14px 30px;cursor:pointer;z-index:9">再看一次</div>`);
     back.onclick = () => renderScreen(scr);
     scr.appendChild(back);
   };
-  if (st.page === 0) scr.querySelectorAll('.board [data-rc]').forEach((n) => {
-    const [r, c] = n.dataset.rc.split(',').map(Number);
-    n.onclick = () => dig(scr, r, c, n);
-  });
-  if (st.page === 1) scr.querySelectorAll('[data-sel]').forEach((n) => {
-    n.onclick = () => { st.sel = n.dataset.sel; renderScreen(scr); };
-  });
   if (st.page === 2) scr.querySelectorAll('[data-tier]').forEach((n) => {
     n.onclick = () => {
       const m = +n.dataset.tier;
@@ -428,44 +429,57 @@ function bind(scr) {
 const NOTES = [
   { h: '①页「怎么下潜」— 交互与判定',
     li: ['<b>触发时机</b>：活动首次进入自动弹出，一期只弹一次（客户端本地标记）；之后点界面左下角 <b>ⓘ</b> 重新打开',
-         '<b>弹窗母版</b>：高弹窗底板 1542×1027 + 浅灰标题条（标题字 #3A3A3A）；三页共用一个壳，只换中间内容井',
+         '<b>版式</b>：整屏 1920×1080 黑底 + 金色 HOW TO PLAY 横幅、左右圆钮翻页、底部页码点；三页同一个壳，只换中间三联分镜',
          '<b>可挖判定</b>：仅「上下左右紧贴空格」的格子可点 —— 教学图必须画出这条通路，否则玩家会以为随便点',
          '<b>下潜判定</b>：<b>最下一行出现空格</b>即下潜一行（+10 米）；新行若又含空格则连锁，服务端单次上限 32 行',
          '<b>深度口径</b>：depth = 顶行行号 × 10，客户端自乘、服务端不落库；深度只增不减',
-         '<em>本页盘面在稿子里可直接点着试</em>；实装建议做成 2~3 秒一轮的循环动画，别用静态图',
+         '<em>三联是静态示意</em>：实装每联可各自 K 一小段循环动画（点破一格 / 通路高亮 / 整盘上移），别摆一张死图',
          '<span class="cfg">棋盘 6 列 × 8 行、10 米/行、32 行上限都写死在服务端；刷新权重在 2121·212140056</span>'] },
   { h: '②页「道具怎么用」— 规则硬约束',
     li: ['水母消耗按 2189 <b>A_ARR_cost</b> 给定：气泡 / 空气泡 / 海藻 1 只、石块 2 只、<b>宝箱 0</b>（刷到就是白赚）',
          '<b>炸弹 = 13 格</b>：九宫格再加上下左右各远一格；<b>只卷气泡与石块</b>，宝箱 / 海藻不吃',
          '<b>手电筒 = 整列通吃</b>：宝箱剩余次数一次用完、有奖海藻的奖全领，代价是只能沿一列',
-         '两者<b>落点必须是空格或海藻格</b>，且先算范围再扣费 —— 范围内没有可清的格子就直接拒绝，道具不扣',
+         '两者<b>落点必须是空格或海藻格</b>（0909 定版：稿子按实装 <span class="cfg">toolTargetOk</span> 画，海藻是合法落点），先算范围再扣费 —— 范围内没有可清的格子就直接拒绝，道具不扣',
          '宝箱可点 <b>3~5 次</b>随机（2189 status <span class="cfg">click_num arg2=[3,5]</span>），每次各抽一份奖励',
          '海藻 <b>3×3 一片</b>：<b>中心格不可打破</b>，数字 = 周围 8 格里有奖的个数 ⇒ 可点的是 <b>8 格</b>不是 9 格；屏幕同时最多一片',
+         '<b>示意口径</b>：金框 = 落点、红框 = 这次会被清掉的格子；炸弹那联 12 红 + 1 金 = 13 格，手电那联画的是 5 行示意（实装整列 8 行）',
          '<em>待程序确认：工具清出来的空格是否触发下潜</em>（数值 v12 按「触发」算，两种口径通顶差约 $50）',
          '<span class="cfg">中心格与工具图标此稿借现网切图占位，等 1511000093-097 正式图标</span>'] },
-  { h: '③页「海螺换奖 + 深度奖励」— 数据来源',
-    li: ['兑换商店 = 2116 <b>group58 共 17 个货位</b>，双币：<b>金海螺</b>（稀有位）/ <b>银海螺</b>（常规位，v12 起 5 个货位改银）',
-         '商店入口在主界面右上角；本页只讲规则，<b>不是实装商店界面</b>',
-         '深度奖励 = 2115 <b>group10003</b>，现配 11 档 300 → 12000 米，计数走 fin_cond <span class="cfg">cat=10149044</span>',
+  { h: '③页「海螺换奖 + 深度奖励」— 版式与数据来源',
+    li: ['<b>三联</b>：① 海螺从哪来（气泡 / 宝箱 / 海藻）→ ② 兑换商店 → ③ 深度奖励；底部横贯 <b>11 档深度阶梯</b>，稿子里点一档可切三态',
+         '兑换商店 = 2116 <b>group58 共 17 个货位</b>：<b>金海螺</b>换稀有位 / <b>银海螺</b>换常规位（v12 起 5 个货位改银），每位有限购；<b>本页只讲规则，不是实装商店界面</b>',
+         '深度奖励 = 2115 <b>group10003</b>，11 档 300 → 12000 米，计数走 fin_cond <span class=\"cfg\">cat=10149044</span>',
          '<em>⛔ 这 11 条深度任务不要补 arg.ids</em>：服务端正是不带 ID 投递才命中，补了进度会静默不动、也没有报错',
          '<b>12000 米终档</b> = 节日装饰 ×13（最终大奖外显）；理论最深 <b>18000 米</b> = 1800 行 × 10 米',
-         '档位三态（已达成 / 下一档 / 未达成）在稿子里点档位即可切；可领态沿用通用绿「领取」钮',
-         '<span class="cfg">奖励现为「王庭君主」装饰占位，待 12 月节装饰件替换；v12 数值拟并为 10 档</span>'] }
+         '①联特意标了<b>宝箱不花水母</b> —— 它是免费玩家唯一稳定的金海螺来源，教学里别漏',
+         '<span class=\"cfg\">奖励现为「王庭君主」装饰占位，待 12 月节装饰件替换；v12 数值拟并为 10 档，若并档这页与阶梯要同步改</span>']
+  }
 ];
 
 /* ---------------------------------------------------------------- 组板 */
 const X = [90, 2150, 4210], TOP = 300;
-const initState = (i) => ({ page: i, jelly: 20, depth: 120, sel: 'jelly', next: 300, grid: freshGrid() });
+const initState = (i) => ({ page: i, depth: 120 });   // depth 只给③页阶梯的三态演示用
 
 function build() {
   const cv = document.getElementById('canvas');
+  // ?only=N 只出第 N 屏（1920×1080 裸屏），给截图脚本用
+  const only = new URLSearchParams(location.search).get('only');
+  if (only) {
+    const i = Math.max(0, Math.min(2, (+only) - 1));
+    cv.style.width = '1920px'; cv.style.height = '1080px'; cv.innerHTML = '';
+    const s = el(`<div class="screen" data-layer="第${i + 1}页"
+      style="left:0;top:0;width:1920px;height:1080px"></div>`);
+    const ctl = document.getElementById('ctl'); if (ctl) ctl.style.display = 'none';
+    s.__st = initState(i); cv.appendChild(s); renderScreen(s); audit(); return;
+  }
   cv.innerHTML = `
     <div class="bd-title" data-name="板标题"><div class="bar"></div>
       <div class="txt">深海探宝 · 开局玩法介绍（三联）</div></div>
     <div class="bd-sub">活动开始时自动弹出的三页教学：<b>怎么下潜 → 道具怎么用 → 海螺换奖与深度奖励</b>。
-      三屏都是活的 —— 盘面能点、道具能切、深度档位能切三态。</div>
+      版式照竞品 HOW TO PLAY 弹窗：每页三联分镜 + 一条底部横条。
+      翻页钮 / 页码点 / ③页深度阶梯（点一档看三态）都能点。</div>
     <div class="bd-meta">2112 = <b>21129575</b> · 12 月节<br>
-      画布 1920×1080 / 屏 · 甲式流程板<br>切图：真机截图 + 共享素材库母版</div>
+      画布 1920×1080 / 屏 · 甲式流程板<br>切图：0901 真机截图<br>版式：竞品 HOW TO PLAY 弹窗</div>
     ${[0, 1, 2].map((i) => `<div class="scr-cap" style="left:${X[i]}px;top:236px">
         ${i + 1}页 · ${PAGES[i]}<span>${SUBCAP[i]}</span></div>`).join('')}
     ${[0, 1].map((i) => `<div class="flowar" style="left:${X[i] + 1964}px;top:${TOP + 510}px"></div>`).join('')}
@@ -485,28 +499,28 @@ function build() {
 }
 
 /* ---------------------------------------------------------------- 自检 */
-// 把「每屏像素 + 内容溢出」打进隐藏 <pre>，交给 check_sizes.py 断言 —— 不靠肉眼对齐
+// 把「每屏像素 + 元素越界 + 文字被裁」打进隐藏 <pre>，交给 check_sizes.py 断言 —— 不靠肉眼对齐
+// 换黑金版式后不再查「弹窗内容井」，改查「有没有元素跑出 1920×1080」——
+// 分镜的 cap / desc 是绝对定位挂在 stage 下面的，按父盒高度算溢出全是假警报。
 function audit() {
   const lines = [];
   document.querySelectorAll('.screen').forEach((s, i) => {
     lines.push(`screen${i + 1}=${s.offsetWidth}x${s.offsetHeight}`);
-    const wells = [['well', s.querySelector('.well'), 1462, 740],
-                   ['pop', s.querySelector('.pop'), 1542, 1027]];
-    wells.forEach(([tag, host, W, H]) => {
-      if (!host) return;
-      [...host.children].forEach((n) => {
-        if (!n.offsetParent && n.offsetWidth === 0) return;
-        if (n.classList.contains('pop-x')) return;   // 关闭钮挂在弹窗角外，是母版做法
-        const r = n.offsetLeft + n.offsetWidth, b = n.offsetTop + n.offsetHeight;
-        if (r > W + 1 || b > H + 1 || n.offsetLeft < -1 || n.offsetTop < -1) {
-          lines.push(`OVERFLOW screen${i + 1}.${tag} <${n.className || n.tagName}> ` +
-                     `l=${n.offsetLeft} t=${n.offsetTop} r=${r} b=${b} (max ${W}x${H})`);
-        }
-        if (n.scrollHeight > n.offsetHeight + 2 || n.scrollWidth > n.offsetWidth + 2) {
-          lines.push(`CLIP screen${i + 1}.${tag} <${n.className || n.tagName}> ` +
-                     `box=${n.offsetWidth}x${n.offsetHeight} content=${n.scrollWidth}x${n.scrollHeight}`);
-        }
-      });
+    const sb = s.getBoundingClientRect();
+    s.querySelectorAll('.htp-well *').forEach((n) => {
+      if (!n.offsetWidth && !n.offsetHeight) return;
+      const r = n.getBoundingClientRect();
+      const l = Math.round(r.left - sb.left), t = Math.round(r.top - sb.top);
+      const rr = Math.round(l + r.width), bb = Math.round(t + r.height);
+      if (l < -2 || t < -2 || rr > 1922 || bb > 1082) {
+        lines.push(`OUTSIDE screen${i + 1} <${n.className || n.tagName}> ` +
+                   `l=${l} t=${t} r=${rr} b=${bb} (screen 1920x1080)`);
+      }
+      if (getComputedStyle(n).overflow !== 'visible' &&
+          (n.scrollHeight > n.offsetHeight + 2 || n.scrollWidth > n.offsetWidth + 2)) {
+        lines.push(`CLIP screen${i + 1} <${n.className || n.tagName}> ` +
+                   `box=${n.offsetWidth}x${n.offsetHeight} content=${n.scrollWidth}x${n.scrollHeight}`);
+      }
     });
   });
   const probe = document.createElement('pre');
@@ -517,31 +531,37 @@ function audit() {
 }
 
 /* ---------------------------------------------------------------- 自动交互测试 */
-// intro3.html?autotest → 脚本自己点一遍，把结果写进探针；靠断言不靠肉眼
+// intro3.html?autotest → 脚本自己点一遍 + 按版式逐项数数，把结果写进探针；靠断言不靠肉眼
 function autotest() {
   const log = [];
   window.onerror = (m) => log.push('JSERR ' + m);
   const S = [...document.querySelectorAll('.screen')];
-  const s1 = S[0];
-  for (let i = 0; i < 4; i++) {
-    const pick = s1.querySelector('.cell.pick');
-    if (!pick) { log.push('TEST no-pick@' + i); break; }
-    pick.parentElement.click();
-  }
-  log.push(`TEST p1 jelly=${s1.__st.jelly} depth=${s1.__st.depth}`);
-  const s2 = S[1];
-  [['bomb', 13], ['light', 8], ['s', 8], ['t', 1], ['jelly', 1]].forEach(([k, want]) => {
-    const c = s2.querySelector(`[data-sel="${k}"]`);
-    if (!c) return log.push('TEST no-sel ' + k);
-    c.click();
-    const got = s2.querySelectorAll('.cell.hot').length;
-    log.push(`TEST range ${k}=${got} want=${want}${got === want ? '' : ' ✗'}`);
-  });
+  const eq = (tag, got, want) => log.push(`TEST ${tag}=${got} want=${want}${got === want ? '' : ' ✗'}`);
+
+  // 版式：每屏 3 联 + 各自的底部横条
+  S.forEach((s, i) => eq(`p${i + 1}.cols`, s.querySelectorAll('.htp-col').length, 3));
+  eq('p1.cost', S[0].querySelectorAll('.htp-cost .it').length, 5);        // 5 类格子消耗
+  eq('p2.legend', S[1].querySelectorAll('.htp-legend span').length, 4);
+  eq('p3.ladder', S[2].querySelectorAll('.htp-ladder .st').length, 11);   // 深度 11 档
+
+  // ②页范围：炸弹 12 红 + 1 金 = 13 格；手电整列 5 格；③联落点一可一不可
+  eq('p2.hot', S[1].querySelectorAll('.cell.hot').length, 12 + 4);
+  eq('p2.pick', S[1].querySelectorAll('.cell.pick').length, 3);
+  eq('p2.bad', S[1].querySelectorAll('.cell.bad').length, 1);
+  eq('p2.ok/no', S[1].querySelectorAll('.htp-ok, .htp-no').length, 2);
+
+  // ③页阶梯三态：点 3600 → 300~3600 共 7 档已达成，下一档 4800
   const s3 = S[2];
   s3.querySelector('[data-tier="3600"]').click();
-  log.push(`TEST tier depth=${s3.__st.depth} done=${s3.querySelectorAll('.tier.done').length} now=${s3.querySelectorAll('.tier.now').length}`);
-  s3.querySelectorAll('.dot')[0].click();
-  log.push(`TEST page=${s3.__st.page} boards=${s3.querySelectorAll('.board').length}`);
+  eq('p3.done', s3.querySelectorAll('.htp-ladder .st.done').length, 7);
+  eq('p3.next', s3.querySelectorAll('.htp-ladder .st.next').length, 1);
+  log.push(`TEST p3.depth=${s3.__st.depth}`);
+
+  // 翻页：任意屏点页码点都能换页
+  s3.querySelectorAll('.htp-dots .dot')[0].click();
+  eq('p3.pageAfterDot', s3.__st.page, 0);
+  eq('p3.colsAfterDot', s3.querySelectorAll('.htp-col').length, 3);
+
   document.getElementById('__assert').textContent += '\n' + log.join('\n');
 }
 

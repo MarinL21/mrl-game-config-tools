@@ -95,6 +95,11 @@ body{background:#0D0D0D;}
 .cell img{width:100%;height:100%;}
 .cell.pick{outline:4px solid var(--sea-gold);outline-offset:-4px;cursor:pointer;}
 .cell.pick::after{content:"";position:absolute;inset:0;background:rgba(255,201,74,.14);}
+.cell.nogo{opacity:.38;box-shadow:inset 0 0 0 3px rgba(255,255,255,.30);border-radius:6px;}
+.cell.dug{outline:4px solid #5FE3F5;outline-offset:-4px;}
+.cell.dug::after{content:"";position:absolute;inset:0;background:rgba(95,227,245,.20);}
+.cell.bad{outline:4px solid #FF4D4D;outline-offset:-4px;}
+.cell.bad::after{content:"";position:absolute;left:0;top:0;right:0;bottom:0;background:rgba(255,77,77,.22);}
 .cell.hot{outline:4px solid #FF6B4A;outline-offset:-4px;}
 .cell.hot::after{content:"";position:absolute;inset:0;background:rgba(255,107,74,.24);}
 .cell .num{position:absolute;left:0;top:0;width:100%;height:100%;display:flex;align-items:center;
@@ -207,6 +212,140 @@ body{background:#0D0D0D;}
             padding:6px 11px;font:600 13px/1 inherit;cursor:pointer;}
 #ctl button:hover{background:#2F3A49;}
 #ctl b{color:#7FE7F0;}
+
+/* ===========================================================================
+   ①页 · 黑底金标题「HOW TO PLAY」三联分镜版（2026-09-09 换版式，参考竞品 HTP 弹窗）
+   整屏铺满 1920×1080，不套 P2 蓝弹窗底板
+   =========================================================================== */
+/* 纯色底：参考图就是近黑底，不铺游戏场景图（场景图右下自带斜纹会透出来） */
+.htp-dim{position:absolute;left:0;top:0;width:1920px;height:1080px;z-index:1;
+         background:#05080C;
+         background-image:radial-gradient(78% 62% at 50% 34%,rgba(18,46,72,.55),rgba(4,8,13,0) 70%),
+                          radial-gradient(120% 100% at 50% 100%,rgba(2,14,24,.9),rgba(0,0,0,0) 60%);}
+
+/* 金色渐变标题条：中间亮、两端收深，白字深描边 */
+.htp-bar{position:absolute;left:480px;top:30px;width:960px;height:86px;z-index:5;
+         background:linear-gradient(180deg,#8A6A18 0%,#E8C255 18%,#FFF0B0 46%,#E2B845 62%,#7A5A12 100%);
+         box-shadow:0 0 34px rgba(255,206,90,.34),inset 0 0 0 2px rgba(255,240,180,.55);
+         display:flex;align-items:center;justify-content:center;
+         clip-path:polygon(30px 0,930px 0,960px 43px,930px 86px,30px 86px,0 43px);}
+.htp-bar span{font-size:50px;font-weight:900;letter-spacing:6px;color:#fff;
+              -webkit-text-stroke:6px #4A3208;paint-order:stroke fill;}
+.htp-x{position:absolute;left:1784px;top:34px;width:74px;height:74px;cursor:pointer;z-index:6;
+       font-size:62px;font-weight:900;line-height:70px;text-align:center;color:#fff;
+       text-shadow:0 3px 10px rgba(0,0,0,.85);}
+
+/* 左右翻页圆钮 */
+.htp-nav{position:absolute;top:452px;width:92px;height:92px;border-radius:50%;z-index:6;
+         border:5px solid rgba(255,255,255,.86);color:#fff;font-size:56px;font-weight:400;
+         line-height:82px;text-align:center;cursor:pointer;background:rgba(0,0,0,.30);}
+.htp-nav.l{left:52px;}  .htp-nav.r{left:1776px;}
+.htp-nav.off{opacity:.26;cursor:default;}
+
+/* —— 三联分镜 —— */
+.htp-col{position:absolute;width:460px;}
+.htp-stage{position:relative;height:296px;}          /* 盘面示意区 */
+.htp-cap{position:absolute;left:0;width:460px;top:304px;text-align:center;}
+.htp-cap .ic{font-size:44px;line-height:52px;}
+.htp-cap .tt{font-size:36px;font-weight:900;color:#F8B32B;letter-spacing:2px;
+             -webkit-text-stroke:5px #2A1602;paint-order:stroke fill;margin-top:2px;}
+.htp-desc{position:absolute;left:0;top:416px;width:460px;height:152px;padding:16px 22px;
+          display:flex;flex-direction:column;align-items:center;justify-content:center;
+          background:rgba(0,0,0,.86);border:2px solid rgba(255,255,255,.16);border-radius:6px;
+          font-size:23px;line-height:1.62;color:#E4EAF0;text-align:center;}
+.htp-desc b{color:#FFD34F;font-weight:800;}
+.htp-desc em{color:#FF8A5B;font-style:normal;font-weight:800;}
+
+/* 两联之间的橙色弯箭头 */
+.htp-ar{position:absolute;top:150px;width:100px;height:96px;}
+
+/* —— 底部横贯消耗条 —— */
+.htp-cost{position:absolute;left:170px;top:772px;width:1580px;height:158px;
+          background:linear-gradient(180deg,rgba(28,20,4,.95),rgba(12,9,2,.95));
+          border:2px solid rgba(248,179,43,.55);border-radius:8px;}
+.htp-cost .hd{position:absolute;left:0;top:-19px;width:1580px;text-align:center;}
+.htp-cost .hd span{background:#0A0A0A;padding:0 22px;font-size:26px;font-weight:800;color:#F8B32B;}
+.htp-cost .row{position:absolute;left:0;top:34px;width:1580px;display:flex;
+               align-items:center;justify-content:space-around;}
+.htp-cost .it{display:flex;flex-direction:column;align-items:center;gap:6px;width:280px;}
+.htp-cost .it .nm{font-size:22px;color:#C9D3DC;}
+.htp-cost .it .vl{font-size:27px;font-weight:900;color:#fff;display:flex;align-items:center;gap:6px;}
+.htp-cost .it .vl.free{color:#6FE38A;}
+.htp-cost .it .vl small{font-size:20px;font-weight:400;color:#9AA8B4;}
+
+/* 分镜内的浮标 */
+.htp-tag{position:absolute;font-size:24px;font-weight:900;padding:4px 12px;border-radius:5px;
+         background:rgba(0,0,0,.8);border:2px solid rgba(255,255,255,.2);color:#fff;white-space:nowrap;}
+.htp-tag.gold{color:#FFD34F;border-color:rgba(255,211,79,.5);}
+.htp-tag.cyan{color:#5FE3F5;border-color:rgba(95,227,245,.5);}
+.htp-hand{position:absolute;font-size:52px;filter:drop-shadow(0 4px 8px rgba(0,0,0,.8));}
+.htp-dots{position:absolute;left:0;top:988px;width:1920px;display:flex;justify-content:center;gap:20px;z-index:5;}
+.htp-dots .dot{width:16px;height:16px;border-radius:50%;background:rgba(255,255,255,.3);cursor:pointer;}
+.htp-dots .dot.on{background:#F8B32B;}
+.htp-well{position:absolute;left:0;top:0;width:1920px;height:1080px;z-index:3;}
+
+/* ②页：道具示意用的叠加件 */
+.htp-tool{position:absolute;filter:drop-shadow(0 4px 10px rgba(0,0,0,.9));}
+.htp-no{position:absolute;width:76px;height:76px;}
+.htp-legend{position:absolute;left:170px;top:842px;width:1580px;height:92px;
+            background:rgba(0,0,0,.72);border:2px solid rgba(255,255,255,.14);border-radius:8px;
+            display:flex;align-items:center;justify-content:center;gap:54px;
+            font-size:24px;color:#C9D3DC;}
+.htp-legend b{color:#FFD34F;font-weight:800;}
+.htp-legend em{color:#FF8A5B;font-style:normal;font-weight:800;}
+.htp-legend .sw{display:inline-block;width:26px;height:26px;border-radius:5px;vertical-align:-5px;margin-right:9px;}
+.htp-legend .sw.hot{outline:3px solid #FF6B4A;background:rgba(255,107,74,.28);}
+.htp-legend .sw.pick{outline:3px solid #FFC94A;background:rgba(255,201,74,.20);}
+
+/* ③页：海螺来源 / 兑换商店 / 深度奖励 —— 沿用 htp 黑金体系 */
+.htp-src{position:absolute;width:120px;text-align:center;}
+.htp-src .lb{font-size:21px;font-weight:700;color:#E4EAF0;margin-top:8px;white-space:nowrap;}
+.htp-src .lb small{display:block;font-size:18px;font-weight:400;color:#8B98A4;}
+.htp-src .out{display:flex;align-items:center;justify-content:center;gap:4px;margin-top:2px;}
+.htp-shop{position:absolute;left:0;width:460px;}
+.htp-shop .r{position:relative;height:76px;margin-bottom:11px;border-radius:9px;
+             background:rgba(255,255,255,.05);border:2px solid rgba(248,179,43,.30);}
+.htp-shop .r .ic{position:absolute;left:8px;top:8px;width:56px;height:56px;border-radius:8px;
+                 background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.14);overflow:hidden;}
+.htp-shop .r .ic img{width:100%;height:100%;}
+.htp-shop .r .nm{position:absolute;left:76px;top:11px;font-size:22px;font-weight:700;color:#fff;}
+.htp-shop .r .lm{position:absolute;left:76px;top:43px;font-size:19px;color:#8B98A4;}
+.htp-shop .r .pr{position:absolute;right:8px;top:16px;display:flex;align-items:center;gap:6px;
+                 height:44px;padding:0 14px 0 6px;border-radius:22px;background:rgba(0,0,0,.55);
+                 border:2px solid rgba(248,179,43,.5);font-size:25px;font-weight:900;color:#FFD34F;}
+.htp-shop .r .pr.s{border-color:rgba(200,220,235,.5);color:#DCEAF3;}
+.htp-shop .r .pr img{width:30px;height:30px;}
+.htp-rail{position:absolute;width:460px;}
+.htp-rail .ln{position:absolute;left:120px;top:14px;bottom:14px;width:5px;height:auto;  /* ⛔ 不写 height:auto 会被 p2ux19.css 的 .ln{height:3px} 吃掉 */
+              background:linear-gradient(180deg,#F8B32B,rgba(248,179,43,.25));}
+.htp-rail .nd{position:relative;height:76px;}
+.htp-rail .nd .pt{position:absolute;left:110px;top:24px;width:25px;height:25px;border-radius:50%;
+                  background:#0A0A0A;border:5px solid rgba(248,179,43,.7);}
+.htp-rail .nd.top .pt{background:#F8B32B;border-color:#FFF0B0;box-shadow:0 0 16px rgba(255,206,90,.9);}
+.htp-rail .nd .m{position:absolute;left:0;top:22px;width:100px;text-align:right;
+                 font-size:27px;font-weight:900;color:#fff;white-space:nowrap;}
+.htp-rail .nd .m small{font-size:18px;color:#9AA8B4;}
+.htp-rail .nd .ic{position:absolute;left:156px;top:14px;width:48px;height:48px;border-radius:7px;
+                  background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.14);overflow:hidden;}
+.htp-rail .nd .ic img{width:100%;height:100%;}
+.htp-rail .nd .rw{position:absolute;left:218px;top:25px;font-size:21px;color:#E4EAF0;white-space:nowrap;}
+.htp-rail .nd.top .rw{color:#FFD34F;font-weight:800;}
+.htp-ladder{position:absolute;left:170px;top:786px;width:1580px;height:148px;border-radius:8px;
+            background:linear-gradient(180deg,rgba(28,20,4,.95),rgba(12,9,2,.95));
+            border:2px solid rgba(248,179,43,.55);}
+.htp-ladder .hd{position:absolute;left:0;top:-19px;width:1580px;text-align:center;}
+.htp-ladder .hd span{background:#0A0A0A;padding:0 22px;font-size:26px;font-weight:800;color:#F8B32B;}
+.htp-ladder .row{position:absolute;left:0;top:30px;width:1580px;display:flex;
+                 align-items:flex-start;justify-content:space-around;}
+.htp-ladder .st{display:flex;flex-direction:column;align-items:center;gap:5px;width:132px;}
+.htp-ladder .st .sic{width:46px;height:46px;border-radius:7px;overflow:hidden;
+                     background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.14);}
+.htp-ladder .st .sic img{width:100%;height:100%;}
+.htp-ladder .st .sm{font-size:23px;font-weight:900;color:#fff;}
+.htp-ladder .st .sn{font-size:18px;color:#8B98A4;text-align:center;line-height:1.25;}
+.htp-ladder .st.big .sm{color:#FFD34F;}
+.htp-ladder .st.big .sic{border-color:rgba(255,211,79,.85);box-shadow:0 0 14px rgba(255,206,90,.55);}
+.htp-ok{position:absolute;width:76px;height:76px;}
 </style>
 </head>
 <body>
