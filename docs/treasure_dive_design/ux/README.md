@@ -13,6 +13,19 @@
 | intro3.html + intro3.js | 源文件（renderScreen(state) 驱动，改内容改这两个） |
 | scripts/prep_assets.py | 从真机截图重建全部切图（源图也在仓库里，可复现） |
 
+## 发同事的链接（公开仓库，免登录直接开）
+
+**交互稿**（带缩放条，1.5 MB 单文件，第一次打开等一两秒）：
+https://rawcdn.githack.com/MarinL21/mrl-game-config-tools/50cf113/docs/treasure_dive_design/ux/intro3.preview.html
+
+**整板一张图**（不想点的人看这个）：
+https://github.com/MarinL21/mrl-game-config-tools/blob/main/docs/treasure_dive_design/ux/intro3_board.jpg
+
+**目录**：https://github.com/MarinL21/mrl-game-config-tools/tree/main/docs/treasure_dive_design/ux
+
+> githack 链接里那段 `50cf113` 是 commit sha，**换稿后要换成新 sha** 才是新版本（sha 版永久缓存、不会串版）。
+> `raw.githack.com`（不带 cdn 那个域）会 403，别用。
+
 ## 三屏都是活的
 
 - **①页**：盘面就是个小模拟器 —— 点金框格子会扣水母、破格、挖穿底行触发下潜（含连锁），深度读数跟着涨
