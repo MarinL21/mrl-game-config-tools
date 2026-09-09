@@ -46,7 +46,7 @@ const CELL_ART = {
   t: A + 'td/UI_奖_宝箱.png'
 };
 const PAGES = ['怎么下潜', '道具怎么用', '海螺换奖 + 深度奖励'];
-const SUBCAP = ['点击 → 通路 → 下潜 10 米', '炸弹 13 格 / 手电整列 / 落点限制', '海螺来源 / 兑换商店 / 11 档深度'];
+const SUBCAP = ['点击 → 通路 → 下潜 10 米', '炸弹 13 格 / 手电整列 / 落点限制', '海螺来源 / 兑换商店 / 深度奖励'];
 
 /* ---------------------------------------------------------------- 小工具 */
 const el = (h) => { const d = document.createElement('div'); d.innerHTML = h.trim(); return d.firstElementChild; };
@@ -279,25 +279,9 @@ const P3_SRC = [
   { k: 't', lb: '宝箱',  sub: '不花水母',  out: ['g'] },
   { k: 's', lb: '海藻',  sub: '1 只水母',  out: ['g', 's'] }
 ];
-const P3_SHELF = [
-  { nm: '水母 ×5',          pr: 1,  cur: 'g', lim: 5,  art: IMG.jelly },
-  { nm: '万能英雄碎片-橙 ×1', pr: 4,  cur: 'g', lim: 10, art: null },
-  { nm: '装饰券 ×5',        pr: 10, cur: 's', lim: 20, art: IMG.decor }
-];
-/* 深度奖励 11 档 = 2115 group10003 实配（王庭君主装饰占位，待 12 月节装饰件替换） */
-const TIERS = [
-  [300, '宝箱 ×1', 'chest'], [600, '装饰 ×1', 'decor'], [1200, '宝箱 ×3', 'chest'],
-  [1800, '升级 ×1', 'decor'], [2400, '升级 ×2', 'decor'], [3000, '升级 ×3', 'decor'],
-  [3600, '升级 ×6', 'decor'], [4800, '涂饰 ×7', null], [6000, '升级 ×8', 'decor'],
-  [9000, '涂饰 ×7', null], [12000, '装饰 ×13', 'decor']
-];
-const P3_RAIL = [
-  [12000, '节日装饰 ×13 · 大奖', 'decor', 1],
-  [6000,  '装饰升级件 ×8', 'decor', 0],
-  [3600,  '装饰升级件 ×6', 'decor', 0],
-  [300,   '自选宝箱 ×1', 'chest', 0]
-];
-const tierArt = (k) => (k === 'chest' ? IMG.chest : k === 'decor' ? IMG.decor : null);
+/* 深度轨只画「有档位、越深越厚」这件事 —— 奖励内容不进教学页（用户 0909 口径：
+   功能介绍别本末倒置，玩家先玩懂；每档具体给什么去活动界面的深度轨上看） */
+const P3_RAIL = [[12000, 1], [6000, 0], [3600, 0], [300, 0]];
 
 function renderP3(st) {
   const COLX = [170, 730, 1290], COLY = 150, STAGE = 330;
@@ -311,40 +295,39 @@ function renderP3(st) {
       <div class="lb">${o.lb}<small>${o.sub}</small></div>
     </div>`).join('');
 
-  /* —— 分镜② 拿海螺换奖 —— */
-  const rows = P3_SHELF.map((o) => `
-    <div class="r" data-name="货位_${o.nm}">
-      <div class="ic">${o.art ? img(o.art, 56, 56) : ph('道具<br>图标', 14)}</div>
-      <div class="nm">${o.nm}</div><div class="lm">限购 ${o.lim} 次</div>
-      <div class="pr${o.cur === 's' ? ' s' : ''}">
-        ${img(o.cur === 'g' ? IMG.gold : IMG.silver, 30, 30)}${o.pr}</div>
-    </div>`).join('');
+  /* —— 分镜② 拿海螺换奖：只讲功能「去兑换商店换奖励」，不列货位（0909 用户口径）—— */
   const shop = `
-    <div style="position:absolute;left:0;top:0;display:flex;align-items:center;gap:12px"
-         data-name="商店入口">
-      ${img(IMG.shop, 60, 55, '', 'border-radius:6px')}
-      <div style="font-size:21px;color:#C9D3DC;line-height:1.3">主界面右上角<br>进兑换商店 ↗</div>
-      <div style="margin-left:auto;font-size:21px;color:#8B98A4">共 17 位</div>
+    <div class="out" style="position:absolute;left:0;top:28px;width:460px;gap:22px"
+         data-name="两种海螺">
+      ${img(IMG.gold, 88, 88)}${img(IMG.silver, 88, 88)}
     </div>
-    <div class="htp-shop" style="top:70px">${rows}</div>`;
+    <div style="position:absolute;left:207px;top:126px;width:46px">${SVG_DOWN}</div>
+    <div style="position:absolute;left:130px;top:182px;width:200px;text-align:center"
+         data-name="兑换商店入口">
+      ${img(IMG.shop, 200, 183, '', 'margin:0 auto;border-radius:10px')}
+    </div>
+    <div class="htp-tag gold" style="left:302px;top:196px">主界面右上角 ↗</div>`;
 
   /* —— 分镜③ 潜得越深奖越大 —— */
   const rail = `<div class="htp-rail" style="top:14px" data-name="深度轨">
     <div class="ln"></div>
-    ${P3_RAIL.map(([m, rw, art, top]) => `
-      <div class="nd${top ? ' top' : ''}">
+    ${P3_RAIL.map(([m, top]) => {
+      const got = st.depth >= m;
+      return `<div class="nd${top ? ' top' : ''}${got ? ' got' : ''}" data-tier="${m}"
+                   data-name="深度档_${m}m">
         <div class="m">${m}<small> 米</small></div><div class="pt"></div>
-        <div class="ic">${tierArt(art) ? img(tierArt(art), 48, 48) : ph('图标', 13)}</div>
-        <div class="rw">${rw}</div>
-      </div>`).join('')}
-    <div style="position:absolute;left:156px;top:308px;font-size:20px;color:#8B98A4">…中间还有 7 档，见下方</div>
+        <div class="ic">${img(IMG.chest, 48, 48)}</div>
+        <div class="rw">${got ? '可领取' : (top ? '最终大奖' : '未达成')}</div>
+      </div>`;
+    }).join('')}
+    <div style="position:absolute;left:156px;top:306px;font-size:20px;color:#8B98A4">一共 11 档，越深越厚</div>
   </div>`;
 
   const SHOTS = [
     { body: srcs, icon: img(IMG.gold, 46, 46, '', 'display:inline-block'), tt: '海螺从哪来',
       desc: '气泡、宝箱、海藻都能开出<b>金 / 银海螺</b>。<br>宝箱不花水母，刷到就是白赚。' },
     { body: shop, icon: img(IMG.shop, 50, 46, '', 'display:inline-block'), tt: '拿海螺换奖',
-      desc: '右上角进<b>兑换商店</b>，共 <b>17 个货位</b>。<br>金海螺换稀有位，银海螺换常规位。<br>每位都有限购。' },
+      desc: '攒到的<b>金 / 银海螺</b>，去主界面右上角的<br><b>兑换商店</b>换奖励。<br>换什么、什么价，进商店看。' },
     { body: rail, icon: SVG_DOWN, tt: '潜得越深奖越大',
       desc: '深度<b>只增不减</b>，到档就能领。<br>一共 <b>11 档</b>，<b>12000 米</b>拿最终大奖。<br>理论最深 18000 米。' }
   ];
@@ -360,19 +343,12 @@ function renderP3(st) {
   const arrows = [645, 1205].map((x) =>
     `<div class="htp-ar" style="left:${x}px;top:${COLY + 122}px">${SVG_ARROW}</div>`).join('');
 
-  /* —— 底部：11 档深度阶梯（可点，切三态）—— */
-  const next = (TIERS.find((t) => t[0] > st.depth) || [null])[0];
-  const ladder = TIERS.map(([m, rw, art]) => {
-    const cls = st.depth >= m ? 'done' : (m === next ? 'next' : '');
-    return `<div class="st ${cls}${m === 12000 ? ' big' : ''}" data-tier="${m}" data-name="深度档_${m}m">
-      <div class="sic">${tierArt(art) ? img(tierArt(art), 46, 46) : ph('图标', 12)}</div>
-      <div class="sm">${m}</div><div class="sn">${rw}</div></div>`;
-  }).join('');
-
   return `${cols}${arrows}
-  <div class="htp-ladder" data-name="深度阶梯">
-    <div class="hd"><span>深度奖励 11 档（点一档看三态）</span></div>
-    <div class="row">${ladder}</div>
+  <div class="htp-legend" data-name="图例">
+    <span>深度<b>只增不减</b>，挖多深算多深</span>
+    <span>到档<b>就能领</b>，不用抢</span>
+    <span><b>12000 米</b>拿最终大奖</span>
+    <span>奖励挂在<em>盘面左侧竖轨</em>，点开看</span>
   </div>`;
 }
 
@@ -416,10 +392,8 @@ function bind(scr) {
     scr.appendChild(back);
   };
   if (st.page === 2) scr.querySelectorAll('[data-tier]').forEach((n) => {
-    n.onclick = () => {
-      const m = +n.dataset.tier;
-      st.depth = m;
-      st.next = (TIERS.find((t) => t[0] > m) || [null])[0];
+    n.onclick = () => {                         // 点一档 = 假装潜到这个深度，看「未达成 / 可领取」两种态
+      st.depth = +n.dataset.tier;
       renderScreen(scr);
     };
   });
@@ -446,12 +420,15 @@ const NOTES = [
          '<em>待程序确认：工具清出来的空格是否触发下潜</em>（数值 v12 按「触发」算，两种口径通顶差约 $50）',
          '<span class="cfg">中心格与工具图标此稿借现网切图占位，等 1511000093-097 正式图标</span>'] },
   { h: '③页「海螺换奖 + 深度奖励」— 版式与数据来源',
-    li: ['<b>三联</b>：① 海螺从哪来（气泡 / 宝箱 / 海藻）→ ② 兑换商店 → ③ 深度奖励；底部横贯 <b>11 档深度阶梯</b>，稿子里点一档可切三态',
-         '兑换商店 = 2116 <b>group58 共 17 个货位</b>：<b>金海螺</b>换稀有位 / <b>银海螺</b>换常规位（v12 起 5 个货位改银），每位有限购；<b>本页只讲规则，不是实装商店界面</b>',
+    li: ['<b>三联</b>：① 海螺从哪来（气泡 / 宝箱 / 海藻）→ ② 去兑换商店换奖励 → ③ 潜得越深奖越大；底部一条功能口径横条',
+         '<em>⛔ 这页不列奖励详情</em>（用户 0909 口径：功能介绍别本末倒置，这页只为让玩家玩懂）—— 货位清单与每档奖励内容都不上教学页，玩家去活动界面自己看',
+         '②联<b>只讲「去兑换商店换奖励」这个功能</b>，不列货位（用户 0909 口径：教学页是功能介绍，货架进商店自己看）',
+         '货位实配在 2116 <b>group58 共 17 位</b>：<b>金海螺</b>换稀有位 / <b>银海螺</b>换常规位（v12 起 5 位改银），每位有限购 —— 这些只写在标注里，不进教学页',
          '深度奖励 = 2115 <b>group10003</b>，11 档 300 → 12000 米，计数走 fin_cond <span class=\"cfg\">cat=10149044</span>',
          '<em>⛔ 这 11 条深度任务不要补 arg.ids</em>：服务端正是不带 ID 投递才命中，补了进度会静默不动、也没有报错',
-         '<b>12000 米终档</b> = 节日装饰 ×13（最终大奖外显）；理论最深 <b>18000 米</b> = 1800 行 × 10 米',
+         '<b>12000 米终档</b> = 节日装饰 ×13（最终大奖外显，教学页只说「最终大奖」不写内容）；理论最深 <b>18000 米</b> = 1800 行 × 10 米',
          '①联特意标了<b>宝箱不花水母</b> —— 它是免费玩家唯一稳定的金海螺来源，教学里别漏',
+         '③联深度轨在稿子里点一档 = 切「未达成 / 可领取」，给 GUI 看两种态；奖励格用通用宝箱图占位，实装按 2115 各档真实奖励出图',
          '<span class=\"cfg\">奖励现为「王庭君主」装饰占位，待 12 月节装饰件替换；v12 数值拟并为 10 档，若并档这页与阶梯要同步改</span>']
   }
 ];
@@ -542,7 +519,8 @@ function autotest() {
   S.forEach((s, i) => eq(`p${i + 1}.cols`, s.querySelectorAll('.htp-col').length, 3));
   eq('p1.cost', S[0].querySelectorAll('.htp-cost .it').length, 5);        // 5 类格子消耗
   eq('p2.legend', S[1].querySelectorAll('.htp-legend span').length, 4);
-  eq('p3.ladder', S[2].querySelectorAll('.htp-ladder .st').length, 11);   // 深度 11 档
+  eq('p3.legend', S[2].querySelectorAll('.htp-legend span').length, 4);
+  eq('p3.rail', S[2].querySelectorAll('.htp-rail .nd').length, 4);        // 只示意 4 档，不列清单
 
   // ②页范围：炸弹 12 红 + 1 金 = 13 格；手电整列 5 格；③联落点一可一不可
   eq('p2.hot', S[1].querySelectorAll('.cell.hot').length, 12 + 4);
@@ -550,11 +528,10 @@ function autotest() {
   eq('p2.bad', S[1].querySelectorAll('.cell.bad').length, 1);
   eq('p2.ok/no', S[1].querySelectorAll('.htp-ok, .htp-no').length, 2);
 
-  // ③页阶梯三态：点 3600 → 300~3600 共 7 档已达成，下一档 4800
+  // ③页深度轨两态：点 3600 → 3600 与 300 变「可领取」
   const s3 = S[2];
   s3.querySelector('[data-tier="3600"]').click();
-  eq('p3.done', s3.querySelectorAll('.htp-ladder .st.done').length, 7);
-  eq('p3.next', s3.querySelectorAll('.htp-ladder .st.next').length, 1);
+  eq('p3.got', s3.querySelectorAll('.htp-rail .nd.got').length, 2);
   log.push(`TEST p3.depth=${s3.__st.depth}`);
 
   // 翻页：任意屏点页码点都能换页
