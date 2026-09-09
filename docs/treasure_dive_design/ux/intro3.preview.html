@@ -563,13 +563,15 @@ const P1_SHOTS = [
     tt: '只能挖通路',
     desc: '格子要<b>上下左右紧贴空格</b>才点得动。<br>够不到的先绕开，挖出一条路再说。' },
 
-  { rows: ['bbbb', 'bxsr', 'eeee'],
-    mark: (r, c) => (r === 2 ? 'dug' : ''),
-    deco: `<div class="htp-tag cyan" style="left:58px;top:-52px">挖穿底行 → 整盘下潜</div>
-           <div class="htp-tag cyan" style="left:176px;top:226px">+10 米</div>`,
+  /* 下潜口径按案子「下潜示意」：有空格就潜，**直到某一行没有空格才停**（32 行只是服务端保险丝，不进玩家文案） */
+  { rows: ['ebee', 'bbeb', 'bbbb'],
+    mark: (r, c) => (r === 2 ? 'nogo' : (r === 1 && c === 2 ? 'dug' : '')),
+    deco: `<div class="htp-tag cyan" style="left:118px;top:-52px">每潜一行 +10 米</div>
+           <div class="htp-tag gold" style="left:48px;top:116px">有空格 → 潜</div>
+           <div class="htp-tag" style="left:48px;top:208px">没空格 → 停</div>`,
     icon: () => SVG_DOWN,
-    tt: '下潜 +10 米',
-    desc: '底行一出空格，整盘<b>下潜一行</b>。<br>新行要是又带空格就<em>接着连锁</em>，一次最多 32 行。' }
+    tt: '会一直往下潜',
+    desc: '底行有空格 → 往下潜一行，<b>+10 米</b>。<br>新补的一行还有空格 → 接着潜。<br><em>直到有一行没有空格才停。</em>' }
 ];
 
 /* 底部消耗一览：k = CELL_ART 键；n = 水母数；free 时显示绿字 */
@@ -846,7 +848,8 @@ const NOTES = [
     li: ['<b>触发时机</b>：活动首次进入自动弹出，一期只弹一次（客户端本地标记）；之后点界面左下角 <b>ⓘ</b> 重新打开',
          '<b>版式</b>：整屏 1920×1080 黑底 + 金色 HOW TO PLAY 横幅、左右圆钮翻页、底部页码点；三页同一个壳，只换中间三联分镜',
          '<b>可挖判定</b>：仅「上下左右紧贴空格」的格子可点 —— 教学图必须画出这条通路，否则玩家会以为随便点',
-         '<b>下潜判定</b>：<b>最下一行出现空格</b>即下潜一行（+10 米）；新行若又含空格则连锁，服务端单次上限 32 行',
+         '<b>下潜判定</b>：<b>最下一行出现空格</b>即下潜一行（+10 米），新补的一行若又含空格就继续 —— <b>玩家侧口径 = 「一直潜到某一行没有空格才停」</b>（照案子的「下潜示意」写，别说成「挖穿一行才下潜」）',
+         '<span class="cfg">单次最多连潜 32 行（服务端 MaxDivePerAction 保险丝）—— 是兜底不是规则，不进玩家文案</span>',
          '<b>深度口径</b>：depth = 顶行行号 × 10，客户端自乘、服务端不落库；深度只增不减',
          '<em>三联是静态示意</em>：实装每联可各自 K 一小段循环动画（点破一格 / 通路高亮 / 整盘上移），别摆一张死图',
          '<span class="cfg">棋盘 6 列 × 8 行、10 米/行、32 行上限都写死在服务端；刷新权重在 2121·212140056</span>'] },
@@ -959,6 +962,8 @@ function autotest() {
   // 版式：每屏 3 联 + 各自的底部横条
   S.forEach((s, i) => eq(`p${i + 1}.cols`, s.querySelectorAll('.htp-col').length, 3));
   eq('p1.cost', S[0].querySelectorAll('.htp-cost .it').length, 5);        // 5 类格子消耗
+  eq('p1.nogo', S[0].querySelectorAll('.cell.nogo').length, 4 + 4);       // ②联够不到那行 + ③联满的那行
+  eq('p1.dug', S[0].querySelectorAll('.cell.dug').length, 1);             // ③联指着的那个空格
   eq('p2.legend', S[1].querySelectorAll('.htp-legend span').length, 4);
   eq('p3.legend', S[2].querySelectorAll('.htp-legend span').length, 4);
   eq('p3.rail', S[2].querySelectorAll('.htp-rail .nd').length, 4);        // 只示意 4 档，不列清单
