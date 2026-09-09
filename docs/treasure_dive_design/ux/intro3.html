@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>深海探宝 · 活动开始介绍流程（三联）</title>
+<link rel="stylesheet" href="p2ux19.css">
+<style>
+/* ===========================================================================
+   深海探宝 · 开局介绍三联图
+   甲式黑底流程板，横排 3 张 1920×1080 单屏，每屏都是活的（可点）
+   =========================================================================== */
+:root{
+  --sea-1:#0B2138; --sea-2:#071726; --sea-line:#2A6E8E;
+  --sea-cyan:#4FE3F5; --sea-gold:#FFC94A; --sea-ink:#CBE6F2;
+}
+body{background:#0D0D0D;}
+.canvas{position:relative;width:6220px;height:1940px;background:#0D0D0D;
+        font-family:"PingFang SC","Noto Sans SC",sans-serif;}
+
+/* —— 板头 —— */
+.bd-title{position:absolute;left:90px;top:52px;display:flex;align-items:center;gap:26px;}
+.bd-title .bar{width:44px;height:76px;background:var(--note);}
+.bd-title .txt{font-size:72px;font-weight:900;color:#fff;}
+.bd-sub{position:absolute;left:160px;top:146px;font-size:30px;color:#8FA6B4;line-height:1.6;}
+.bd-sub b{color:#fff;font-weight:700;}
+.bd-meta{position:absolute;right:90px;top:58px;text-align:right;font-size:28px;color:#8FA6B4;line-height:1.75;}
+.bd-meta b{color:var(--note);font-weight:700;}
+
+.scr-cap{position:absolute;font-size:38px;font-weight:900;color:#fff;}
+.scr-cap span{font-size:26px;font-weight:400;color:#8FA6B4;margin-left:16px;}
+.flowar{position:absolute;width:0;height:0;border-top:30px solid transparent;
+        border-bottom:30px solid transparent;border-left:52px solid var(--cyan);}
+
+/* —— 标注块（甲式：白标题 + 青说明） —— */
+.note{position:absolute;width:1920px;}
+.note h4{font-size:32px;font-weight:900;color:#fff;margin-bottom:16px;}
+.note ul{list-style:none;}
+.note li{font-size:26px;color:var(--note);line-height:1.66;padding-left:28px;position:relative;}
+.note li::before{content:"·";position:absolute;left:8px;color:var(--note);}
+.note li b{color:#fff;font-weight:700;}
+.note li em{color:#FF8A5B;font-style:normal;font-weight:700;}
+.note .cfg{color:#7E93A2;}
+
+/* ===========================================================================
+   单屏内部
+   =========================================================================== */
+.screen{position:absolute;overflow:hidden;}
+.bgscene{position:absolute;left:-189px;top:0;width:2298px;height:1080px;}
+.dim{position:absolute;left:0;top:0;width:1920px;height:1080px;
+     background:radial-gradient(120% 100% at 50% 40%,rgba(2,18,34,.46),rgba(1,10,20,.84));}
+.navbar{position:absolute;left:0;top:0;width:369px;height:1080px;}
+
+.pop{position:absolute;left:189px;top:26px;width:1542px;height:1027px;}
+.pop-base{position:absolute;left:0;top:0;}
+.pop-bar{position:absolute;left:7px;top:8px;}
+.pop-title{position:absolute;left:0;top:28px;width:1542px;text-align:center;
+           font-size:52px;font-weight:900;color:#3A3A3A;}
+.pop-page{position:absolute;right:130px;top:38px;font-size:34px;font-weight:700;color:#6E6E6E;}
+.pop-x{position:absolute;left:1465px;top:-20px;width:122px;height:115px;cursor:pointer;}
+
+/* 内容井 */
+.well{position:absolute;left:40px;top:142px;width:1462px;height:740px;
+      background:linear-gradient(180deg,var(--sea-1),var(--sea-2));
+      border:3px solid var(--sea-line);border-radius:14px;overflow:hidden;}
+.well::after{content:"";position:absolute;inset:0;pointer-events:none;
+      background:radial-gradient(80% 60% at 50% 0%,rgba(79,227,245,.10),transparent 70%);}
+.well-h{position:absolute;left:30px;top:20px;font-size:42px;font-weight:900;color:var(--sea-gold);
+        -webkit-text-stroke:4px #12293D;paint-order:stroke fill;white-space:nowrap;}
+.well-h small{font-size:25px;font-weight:400;color:var(--sea-ink);
+              -webkit-text-stroke-width:0;margin-left:18px;}
+.rule-line{position:absolute;left:30px;top:84px;width:1402px;height:2px;
+           background:linear-gradient(90deg,rgba(79,227,245,.75),rgba(79,227,245,0));}
+
+/* 底部页脚 */
+.foot{position:absolute;left:0;top:886px;width:1542px;height:141px;}
+.dots{position:absolute;left:0;top:48px;width:1542px;display:flex;justify-content:center;gap:20px;}
+.dot{width:22px;height:22px;border-radius:50%;background:#8B8892;border:2px solid #3B3942;cursor:pointer;}
+.dot.on{background:var(--sea-cyan);border-color:#0E3A4A;box-shadow:0 0 12px rgba(79,227,245,.9);}
+.btn{position:absolute;cursor:pointer;}
+.btn img{display:block;}
+.btn .lbl{position:absolute;left:0;top:0;width:100%;height:100%;display:flex;align-items:center;
+          justify-content:center;font-size:42px;font-weight:900;}
+.btn.blue .lbl{color:#08323C;}
+.btn.gold .lbl{color:#4A2E00;}
+.btn.gray .lbl{color:#5A5A5A;}
+.foot-hint{position:absolute;left:412px;top:88px;display:flex;align-items:center;gap:12px;
+           font-size:24px;color:#3E3B44;}
+.foot-hint img{width:40px;height:40px;}
+
+/* —— 盘面 —— */
+.board{position:absolute;border-radius:14px;background:#0A2C3E;
+       box-shadow:0 0 0 3px #2A6E8E inset;}
+.board-in{position:absolute;display:grid;}
+.cell{position:relative;background:#123A5C;border-radius:6px;overflow:hidden;}
+.cell img{width:100%;height:100%;}
+.cell.pick{outline:4px solid var(--sea-gold);outline-offset:-4px;cursor:pointer;}
+.cell.pick::after{content:"";position:absolute;inset:0;background:rgba(255,201,74,.14);}
+.cell.hot{outline:4px solid #FF6B4A;outline-offset:-4px;}
+.cell.hot::after{content:"";position:absolute;inset:0;background:rgba(255,107,74,.24);}
+.cell .num{position:absolute;left:0;top:0;width:100%;height:100%;display:flex;align-items:center;
+           justify-content:center;font-size:32px;font-weight:900;color:#fff;
+           -webkit-text-stroke:4px #0C2438;paint-order:stroke fill;}
+.cell .qty{position:absolute;right:3px;bottom:1px;font-size:21px;font-weight:900;color:#fff;
+           -webkit-text-stroke:3px #0C2438;paint-order:stroke fill;}
+.board-lbl{position:absolute;font-size:23px;color:#7FB9CE;}
+.board-lbl b{color:var(--sea-gold);}
+
+.chip{position:absolute;display:flex;align-items:center;gap:10px;height:56px;padding:0 20px 0 8px;
+      background:rgba(4,24,42,.86);border:2px solid #2F6C8C;border-radius:30px;}
+.chip img{width:44px;height:44px;}
+.chip .v{font-size:32px;font-weight:900;color:#fff;-webkit-text-stroke:3px #0C2438;paint-order:stroke fill;}
+.chip .k{font-size:23px;color:#8FC6DA;}
+
+/* 规则条目 */
+.rules{position:absolute;}
+.ri{position:relative;height:84px;margin-bottom:6px;padding-left:72px;}
+.ri .n{position:absolute;left:0;top:6px;width:50px;height:50px;border-radius:50%;
+       background:linear-gradient(180deg,#3FD0E8,#1B7EA0);border:3px solid #0C3348;
+       display:flex;align-items:center;justify-content:center;font-size:29px;font-weight:900;color:#04222E;}
+.ri h5{font-size:32px;font-weight:900;color:#fff;-webkit-text-stroke:3px #0E2A3E;paint-order:stroke fill;}
+.ri p{font-size:26px;color:var(--sea-ink);line-height:1.4;margin-top:4px;}
+.ri p b{color:var(--sea-gold);font-weight:700;}
+.ri p i{color:#FF9A6B;font-style:normal;font-weight:700;}
+
+/* 卡片：道具（竖排大卡） */
+.card{position:absolute;background:rgba(6,32,56,.9);border:3px solid #245F7D;border-radius:14px;
+      cursor:pointer;}
+.card.on{border-color:var(--sea-cyan);background:rgba(12,52,80,.96);
+         box-shadow:0 0 0 3px rgba(79,227,245,.35) inset;}
+.card .ic{position:absolute;border-radius:10px;background:#0E3550;border:2px solid #2E7392;overflow:hidden;}
+.card .ic img{width:100%;height:100%;}
+.card.tool .ic{left:16px;top:16px;width:104px;height:104px;}
+.card.tool h5{position:absolute;left:138px;top:20px;font-size:36px;font-weight:900;color:#fff;
+              -webkit-text-stroke:3px #0E2A3E;paint-order:stroke fill;}
+.card.tool .cost{position:absolute;left:138px;top:70px;width:396px;font-size:24px;
+                 color:var(--sea-gold);line-height:1.35;}
+.card.tool .pin{position:absolute;right:14px;bottom:10px;font-size:21px;color:#5F8EA4;}
+.card.on.tool .pin{color:var(--sea-cyan);}
+/* 卡片：格子（横排小卡） */
+.card.kind .ic{left:12px;top:12px;width:66px;height:66px;}
+.card.kind h6{position:absolute;left:90px;top:12px;font-size:26px;font-weight:900;color:#fff;}
+.card.kind p{position:absolute;left:90px;top:44px;width:172px;font-size:20px;color:#9FC7D8;line-height:1.35;}
+
+.side{position:absolute;background:rgba(4,24,42,.82);border:2px dashed #2F6C8C;border-radius:12px;}
+.side h6{font-size:29px;font-weight:900;color:var(--sea-cyan);margin:16px 0 10px 20px;line-height:1.25;}
+.side ul{list-style:none;margin:0 20px;}
+.side li{font-size:23px;color:var(--sea-ink);line-height:1.45;padding-left:20px;position:relative;
+         margin-bottom:6px;}
+.side li::before{content:"▪";position:absolute;left:0;color:#2F9CBC;}
+.side .warn{margin:12px 20px 0;font-size:21px;color:#FF9A6B;line-height:1.4;}
+
+/* 商店行 */
+.shelf{position:absolute;}
+.srow{position:relative;height:78px;margin-bottom:7px;background:rgba(6,32,56,.86);
+      border:2px solid #245F7D;border-radius:10px;}
+.srow .s{position:absolute;left:7px;top:7px;width:60px;height:60px;border-radius:8px;
+         background:#0E3550;border:2px solid #2E7392;overflow:hidden;}
+.srow .s img{width:100%;height:100%;}
+.srow .nm{position:absolute;left:82px;top:9px;font-size:26px;font-weight:700;color:#fff;}
+.srow .lm{position:absolute;left:82px;top:43px;font-size:21px;color:#7FA8BC;}
+.srow .pr{position:absolute;right:10px;top:13px;display:flex;align-items:center;gap:8px;
+          height:48px;padding:0 16px 0 6px;border-radius:24px;
+          background:linear-gradient(180deg,#123C5C,#0A2740);border:2px solid #3D86A6;}
+.srow .pr img{width:36px;height:36px;}
+.srow .pr b{font-size:28px;font-weight:900;color:var(--sea-gold);}
+.srow .pr.silver b{color:#DCEAF3;}
+
+/* 深度轨 */
+.rail{position:absolute;}
+.tier{position:relative;height:52px;cursor:pointer;}
+.tier .ln{position:absolute;left:19px;top:0;width:4px;height:52px;background:#245F7D;}
+.tier .pt{position:absolute;left:8px;top:12px;width:26px;height:26px;border-radius:50%;
+          background:#0E3550;border:4px solid #3D86A6;}
+.tier.done .pt{background:#3EEE00;border-color:#1C6A00;}
+.tier.now .pt{background:var(--sea-gold);border-color:#7A5100;box-shadow:0 0 14px rgba(255,201,74,.9);}
+.tier .m{position:absolute;left:54px;top:8px;width:132px;font-size:29px;font-weight:900;color:#fff;
+         -webkit-text-stroke:3px #0E2A3E;paint-order:stroke fill;}
+.tier .m span{font-size:21px;}
+.tier .sl{position:absolute;left:190px;top:3px;width:46px;height:46px;border-radius:6px;
+          background:#0E3550;border:2px solid #2E7392;overflow:hidden;}
+.tier .sl img{width:100%;height:100%;}
+.tier .rw{position:absolute;left:246px;top:11px;font-size:24px;color:var(--sea-ink);}
+.tier.now .rw{color:var(--sea-gold);font-weight:700;}
+.tier .st{position:absolute;right:2px;top:12px;font-size:22px;font-weight:700;}
+.tier.done .st{color:#3EEE00;}
+.tier.now .st{color:var(--sea-gold);}
+.tier.lock .st{color:#6E8A9A;}
+
+.mark{position:absolute;font-size:22px;color:#7E93A2;line-height:1.45;}
+.mark b{color:var(--sea-gold);}
+.float{position:absolute;font-size:29px;font-weight:900;color:#7CFF5B;white-space:nowrap;
+       -webkit-text-stroke:4px #0C2438;paint-order:stroke fill;pointer-events:none;
+       animation:fl 1s ease-out forwards;}
+@keyframes fl{0%{opacity:0;transform:translateY(6px) scale(.86)}
+              18%{opacity:1;transform:translateY(-6px) scale(1.06)}
+              100%{opacity:0;transform:translateY(-56px) scale(1)}}
+.toast{position:absolute;left:50%;transform:translateX(-50%);padding:10px 26px;border-radius:26px;
+       background:rgba(120,18,18,.92);border:2px solid #FF6B4A;font-size:26px;font-weight:700;
+       color:#FFD9CF;animation:tf 1.6s ease-out forwards;pointer-events:none;white-space:nowrap;}
+@keyframes tf{0%{opacity:0}10%{opacity:1}80%{opacity:1}100%{opacity:0}}
+
+/* 操作条（不进单屏，只给评审用） */
+#ctl{position:fixed;left:16px;bottom:16px;z-index:99998;display:flex;gap:8px;align-items:center;
+     background:rgba(14,20,28,.95);border:1px solid #3A4658;border-radius:10px;padding:8px 12px;
+     font:13px/1 "PingFang SC",sans-serif;color:#E8EDF3;}
+#ctl button{background:#232B36;border:1px solid #3A4658;color:#E8EDF3;border-radius:6px;
+            padding:6px 11px;font:600 13px/1 inherit;cursor:pointer;}
+#ctl button:hover{background:#2F3A49;}
+#ctl b{color:#7FE7F0;}
+</style>
+</head>
+<body>
+<div class="canvas" id="canvas"></div>
+<div id="ctl">
+  <b>深海探宝 · 开局介绍三联</b><span>｜三屏都能点</span>
+  <button id="c-fit">适应宽度</button>
+  <button id="c-100">100%</button>
+  <button id="c-reset">重置演示</button>
+</div>
+<script src="intro3.js"></script>
+</body>
+</html>
