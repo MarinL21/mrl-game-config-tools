@@ -1,0 +1,1096 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>闯关弹珠 · 主界面交互稿 v4</title>
+<style>
+/* ═══════════ 基础 ═══════════ */
+:root{--cy:#3ED8E0;--gold:#FFC61E;--grn:#6FE04A;--red:#FF5A4E;--ink:#1A1230;}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#0D0D0D;color:#EDEAF8;
+  font-family:"PingFang SC","Noto Sans SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;overflow:hidden;
+  -webkit-user-select:none;user-select:none}
+.abs{position:absolute}
+.t{font-weight:900;color:#fff;-webkit-text-stroke:3px var(--ink);paint-order:stroke fill;letter-spacing:.01em}
+.t.sm{-webkit-text-stroke:2px var(--ink)}
+.t.xs{-webkit-text-stroke:1.5px var(--ink)}
+.gold{color:var(--gold)} .cyan{color:var(--cy)} .green{color:var(--grn)} .red{color:var(--red)}
+.cen{display:flex;align-items:center;justify-content:center}
+img{display:block;pointer-events:none}
+
+/* ═══════════ 工具条（画布外） ═══════════ */
+#bar{position:fixed;left:0;right:0;top:0;height:48px;background:#15131F;border-bottom:1px solid #2A2740;
+  display:flex;align-items:center;gap:10px;padding:0 14px;z-index:100;font-size:13px}
+#bar b{font-size:14px;color:#fff;margin-right:8px}
+#bar .seg{display:flex;border:1px solid #3A3660;border-radius:8px;overflow:hidden}
+#bar .seg div{padding:6px 14px;cursor:pointer;color:#9E97C4}
+#bar .seg div.on{background:#3ED8E0;color:#062A2E;font-weight:700}
+#bar button{background:#252239;border:1px solid #3A3660;color:#EDEAF8;border-radius:8px;padding:6px 12px;cursor:pointer;font-size:13px}
+#bar button:hover{border-color:var(--cy)}
+#bar .sp{flex:1}
+#bar .dim{color:#7A72A6}
+#wrap{position:fixed;left:0;right:0;top:48px;bottom:0;display:flex;overflow:auto;background:#0A0A0A}
+#sizer{margin:auto;flex:0 0 auto;width:1920px;height:1080px;position:relative}
+#wrap.panning{cursor:grabbing}
+#bar .zoom{display:flex;align-items:center;gap:0;border:1px solid #3A3660;border-radius:8px;overflow:hidden}
+#bar .zoom button{border:0;border-radius:0;background:#252239;padding:6px 11px;font-size:15px;line-height:1}
+#bar .zoom button:hover{background:#332F52}
+#bar .zoom .pct{min-width:58px;text-align:center;color:#3ED8E0;font-variant-numeric:tabular-nums;cursor:pointer;padding:6px 4px;background:#1B1930}
+
+body.bare #bar{display:none} body.bare #wrap{top:0}
+body.legend #wrap{right:400px}
+body.flow:not(.bare) #wrap{right:400px}
+.pop.hold{animation:none;opacity:1}
+
+/* ═══════════ 1920×1080 画布 ═══════════ */
+#stage{position:absolute;left:0;top:0;width:1920px;height:1080px;overflow:hidden;background:#12101F;
+  transform-origin:0 0;box-shadow:0 0 0 1px #2A2740}
+#scene{left:0;top:0;width:1920px;height:1080px}
+#shade{display:none}
+#preload{display:none}
+
+/* 机身 */
+#machine{background:linear-gradient(180deg,#FFE58A 0%,#F7B733 22%,#E68F1C 60%,#B9620C 100%);border-radius:40px;
+  box-shadow:inset 0 3px 0 rgba(255,255,255,.55),inset 0 -5px 0 rgba(90,40,0,.45),inset 0 0 0 10px #F2A62B,inset 0 0 0 13px #7A3D0C,inset 0 0 0 16px #FFD36B,0 34px 70px rgba(0,0,0,.75),0 0 0 3px #4A2306}
+#machine .bulbs{position:absolute;left:70px;right:70px;top:6px;height:12px;display:flex;justify-content:space-between}
+#machine::before{content:'';position:absolute;left:0;top:0;right:0;bottom:0;border-radius:40px;pointer-events:none;
+  background:linear-gradient(115deg,rgba(255,255,255,.35) 0%,rgba(255,255,255,0) 28%,rgba(255,255,255,0) 70%,rgba(255,255,255,.12) 100%)}
+.bolt{position:absolute;width:20px;height:20px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#FFF6D0,#F0A828 52%,#8A4A0C 100%);
+  box-shadow:0 2px 3px rgba(0,0,0,.6),inset 0 -2px 0 rgba(0,0,0,.25);pointer-events:none}
+.bolt::after{content:'';position:absolute;left:8px;top:4px;width:4px;height:12px;background:rgba(90,40,0,.55);border-radius:2px;transform:rotate(35deg)}
+#topPlate{background:linear-gradient(180deg,#2B1D66,#1A1140);border-radius:18px;
+  box-shadow:inset 0 0 0 3px #5B3FA8,inset 0 8px 16px rgba(0,0,0,.65),inset 0 -2px 0 rgba(255,255,255,.08),0 0 0 3px #7A3D0C}
+#vignette{display:none}
+#cv{border-radius:20px;background:#1A1040;will-change:transform;box-shadow:inset 0 0 0 4px #5B2E8C,0 0 0 4px #7A3D0C,0 0 0 6px #FFD36B,inset 0 14px 30px rgba(0,0,0,.5);cursor:default;touch-action:none}
+#panel{display:none}
+.pip{width:26px;height:26px;border-radius:50%;background:#1A1540;border:3px solid #0B0720;box-shadow:inset 0 2px 3px rgba(0,0,0,.8)}
+#gaugePips .pip{width:30px;height:30px}
+.pip.on{background:radial-gradient(circle at 35% 30%,#FFF3B0,#FFC61E 60%,#C97A06);border-color:#7A4A06;box-shadow:0 0 12px rgba(255,198,30,.85),inset 0 -2px 0 rgba(0,0,0,.2)}
+.pip.x2{width:30px;height:30px;border-radius:9px;font-size:13px;font-weight:900;display:flex;align-items:center;justify-content:center;background:#1A1540;border-color:#0B0720;color:#7A6AB8}
+.pip.x2.on{background:linear-gradient(180deg,#FFE070,#F0A020);color:#5A3A06;border-color:#7A4A06;box-shadow:0 0 14px rgba(255,198,30,.9)}
+.chip{position:absolute;height:70px;border-radius:14px;background:rgba(10,8,26,.7);border:3px solid rgba(110,100,160,.7);cursor:pointer;transition:.15s}
+.chip:hover{border-color:#B9A8FF}
+.chip.on{border-color:var(--gold);background:rgba(255,198,30,.14);box-shadow:0 0 14px rgba(255,198,30,.35)}
+.chip .tag{position:absolute;right:-4px;top:-12px;background:var(--gold);color:#4A3206;font-size:12px;font-weight:900;padding:2px 8px;border-radius:8px;display:none}
+.chip.on .tag{display:block}
+.mbtn{position:absolute;width:96px;height:96px;cursor:pointer;transition:opacity .15s;opacity:.6}
+.mbtn img{border-radius:50%;box-shadow:0 4px 4px rgba(0,0,0,.55)}
+.mbtn:hover{opacity:.85}
+.mbtn.on{opacity:1}
+.mbtn.on img{box-shadow:0 0 0 3px var(--gold),0 0 16px 4px rgba(255,198,30,.8),0 4px 4px rgba(0,0,0,.55)}
+.mbtn img{width:96px;height:96px}
+.bar{position:absolute;height:34px;border-radius:17px;background:linear-gradient(180deg,#07061A,#1B1640);overflow:hidden;
+  box-shadow:inset 0 3px 6px rgba(0,0,0,.85),0 0 0 3px #4A3E86,0 0 0 5px #1A1230}
+.bar>i{position:absolute;left:0;top:0;bottom:0;width:0;border-radius:17px;background:linear-gradient(180deg,#9BE8FF 0%,#39B4F5 45%,#1272D6 100%);
+  box-shadow:0 0 12px rgba(80,180,255,.7);transition:width .35s}
+.bar>i::after{content:'';position:absolute;left:8px;right:8px;top:5px;height:10px;border-radius:5px;background:rgba(255,255,255,.35)}
+.bar.full>i{background:linear-gradient(180deg,#C6FF7A 0%,#4CC860 45%,#1E8F2E 100%);box-shadow:0 0 14px rgba(120,255,120,.8)}
+.medal{position:absolute;border-radius:50%;background:radial-gradient(circle at 50% 38%,#FFF3C0,#F5B02A 55%,#B9620C 100%);
+  box-shadow:0 0 0 4px #7A3D0C,0 0 0 6px #FFD36B,0 5px 10px rgba(0,0,0,.6),inset 0 -3px 0 rgba(90,40,0,.35)}
+.star{position:absolute;background:linear-gradient(180deg,#FFF6D0,#FFD24A);
+  clip-path:polygon(50% 0%,63% 33%,98% 38%,72% 61%,79% 96%,50% 78%,21% 96%,28% 61%,2% 38%,37% 33%)}
+.btnimg{position:absolute;cursor:pointer;transition:.1s}
+.btnimg:hover{filter:brightness(1.08)} .btnimg:active{transform:scale(.97)}
+.btnimg img{width:100%;height:100%}
+.btnimg .lb{position:absolute;left:0;top:0;right:0;bottom:6px;display:flex;align-items:center;justify-content:center;font-weight:900}
+.ent{position:absolute;width:130px;height:80px;cursor:pointer;text-align:center}
+.ent .ico{width:54px;height:54px;border-radius:50%;margin:0 auto;display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(circle at 50% 35%,#3A2D78,#1B1340);box-shadow:0 0 0 3px #6A4FC8,0 0 0 5px #1A1230,0 4px 0 #0B0720,0 6px 8px rgba(0,0,0,.6)}
+.ent img{width:40px;height:40px;object-fit:contain}
+.ent .lb{font-size:20px;margin-top:0;line-height:1.1}
+.ent:hover .ico{filter:brightness(1.15)}
+.slotlab{position:absolute;top:0;height:50px;display:flex;align-items:center;justify-content:center}
+.slotlab .disc{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;
+  border:3px solid rgba(60,30,0,.55);box-shadow:inset 0 3px 0 rgba(255,255,255,.35),inset 0 -5px 0 rgba(0,0,0,.3),0 3px 0 rgba(0,0,0,.55),0 5px 8px rgba(0,0,0,.5)}
+.slotlab .disc{position:relative}
+.slotlab.trig .disc{box-shadow:0 0 0 3px var(--gold),0 0 12px rgba(255,198,30,.7)}
+.slotlab.trig .disc::after{content:'';position:absolute;left:-9px;top:-9px;right:-9px;bottom:-9px;border-radius:50%;border:4px solid var(--gold);animation:ringpulse 1.2s ease-in-out infinite;will-change:transform,opacity}
+.slotlab .zap{position:absolute;right:6px;top:-8px;font-size:22px;display:none}
+.slotlab.trig .zap{display:block}
+.slotlab.hit .disc{transform:scale(1.15);box-shadow:0 0 0 4px #fff}
+@keyframes ringpulse{0%,100%{transform:scale(1);opacity:.95}50%{transform:scale(1.14);opacity:.35}}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(10px)}}
+#pulltip{position:absolute;background:linear-gradient(180deg,#FFE27A,#F0A828);color:#4A3206;font-size:26px;font-weight:900;padding:8px 16px;border-radius:12px;
+  white-space:nowrap;box-shadow:0 3px 0 #7A3D0C,0 8px 16px rgba(0,0,0,.55);animation:bob 1.4s ease-in-out infinite;pointer-events:none}
+#pulltip::after{content:'';position:absolute;right:-9px;top:50%;transform:translateY(-50%);border:9px solid transparent;border-left:9px solid var(--gold)}
+.pop{position:absolute;font-size:34px;pointer-events:none;animation:rise .9s ease-out forwards;white-space:nowrap}
+@keyframes rise{0%{transform:translateY(0);opacity:1}100%{transform:translateY(-70px);opacity:0}}
+#toast{position:absolute;left:424px;top:560px;width:792px;text-align:center;font-size:28px;pointer-events:none;opacity:0;transition:opacity .25s}
+#toast.on{opacity:1}
+.status{position:absolute;left:10px;width:586px;top:92px;height:60px;display:flex;align-items:center;font-size:22px}
+.status .strip{display:none}
+.status::before{content:'';position:absolute;left:0;top:0;right:0;bottom:0;border-radius:10px;background:linear-gradient(180deg,#FFE070,#F5B02A);box-shadow:inset 0 -3px 0 rgba(0,0,0,.18),0 2px 0 #7A3D0C}
+.status.bad::before{display:none}
+.status .txt{position:relative;z-index:1;width:100%;text-align:center;color:#4A3206;font-weight:900;font-size:22px;line-height:1.25;padding:0 12px}
+.status.bad .strip{display:none}
+.status.bad .txt{color:#FF8A80;-webkit-text-stroke:2px var(--ink);paint-order:stroke fill;text-align:left;padding-left:6px;font-size:22px}
+#pw{position:absolute;left:10px;width:586px;top:54px;height:24px;border-radius:9px;background:linear-gradient(180deg,#07061A,#1B1640);overflow:hidden;box-shadow:inset 0 2px 5px rgba(0,0,0,.85),0 0 0 3px #4A3E86,0 0 0 5px #1A1230}
+#pw>i{position:absolute;left:0;top:0;bottom:0;width:0;border-radius:9px;background:linear-gradient(90deg,#5FE04A,#FFC94A 55%,#FF5A4E);box-shadow:0 0 10px rgba(255,200,80,.6)}
+#pw>b{position:absolute;top:-2px;bottom:-2px;left:30%;width:3px;background:#fff;opacity:.85}
+
+/* 顶部显示屏 + 控制台 */
+.screen{background:linear-gradient(180deg,#0A0E2A,#141C4A);border:5px solid #3B4276;border-radius:14px;
+  box-shadow:inset 0 0 0 3px #060818,inset 0 0 40px rgba(60,120,255,.35),0 0 0 3px #1A1230,0 0 0 6px #6A4FC8,0 6px 12px rgba(0,0,0,.55)}
+.screen::after{content:'';position:absolute;left:0;top:0;right:0;bottom:0;border-radius:9px;pointer-events:none;
+  background:repeating-linear-gradient(180deg,rgba(255,255,255,.035) 0 2px,transparent 2px 4px),linear-gradient(100deg,rgba(255,255,255,.14) 0%,rgba(255,255,255,0) 22%)}
+.screw{position:absolute;width:8px;height:8px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#DDE4FF,#6A74A8 60%,#20264A);box-shadow:0 1px 1px rgba(0,0,0,.7)}
+.led{font:900 60px/66px "Menlo","SF Mono","Consolas","Courier New",monospace;color:#7FE7FF;letter-spacing:.06em;
+  text-shadow:0 0 12px rgba(80,220,255,.9),0 0 2px #fff;transition:color .15s,text-shadow .15s}
+.led.gold{color:#FFD24A;text-shadow:0 0 16px rgba(255,200,60,1),0 0 2px #fff}
+.led.bump{animation:bump .18s ease-out}
+@keyframes bump{0%{transform:scale(1)}40%{transform:scale(1.12)}100%{transform:scale(1)}}
+#scrMsg.bump{animation:bump .22s ease-out}
+.fly{position:absolute;font-weight:900;font-size:32px;color:#FFD98A;-webkit-text-stroke:3px var(--ink);paint-order:stroke fill;white-space:nowrap;pointer-events:none;z-index:30;will-change:transform,opacity;
+  transition:transform .65s cubic-bezier(.2,.7,.2,1),opacity .65s}
+#deck{background:linear-gradient(180deg,#2B1F66 0%,#1C1345 45%,#150E33 100%);border-radius:22px;
+  box-shadow:inset 0 0 0 4px #6A4FC8,inset 0 0 0 7px #2A1B5E,inset 0 10px 22px rgba(0,0,0,.6),inset 0 -3px 0 rgba(255,255,255,.06),0 0 0 4px #7A3D0C}
+#deck::after{content:'';position:absolute;left:10px;top:10px;right:10px;bottom:10px;border-radius:16px;pointer-events:none;
+  background:repeating-linear-gradient(135deg,rgba(255,255,255,.025) 0 2px,transparent 2px 6px)}
+.sec{}
+.sec::before{content:'';position:absolute;left:10px;right:10px;top:-8px;height:2px;background:linear-gradient(90deg,transparent,rgba(255,215,120,.35),transparent)}
+.sec.first::before{display:none}
+.sh{position:absolute;left:10px;top:6px;height:36px;padding:0 18px;border-radius:9px;display:flex;align-items:center;font-size:22px;font-weight:900;color:#4A2A06;white-space:nowrap;letter-spacing:.06em;
+  background:linear-gradient(180deg,#FFE27A,#E9A21F);box-shadow:0 2px 0 #7A3D0C,inset 0 1px 0 rgba(255,255,255,.6)}
+.sh i{display:none}
+.chip2{position:absolute;width:128px;height:104px;border-radius:16px;cursor:pointer;text-align:center;transition:.15s;
+  background:linear-gradient(180deg,#3A2D78,#221A4E);border:3px solid #150E33;box-shadow:inset 0 2px 0 rgba(255,255,255,.16),inset 0 -4px 0 rgba(0,0,0,.4),0 4px 0 #0B0720}
+.chip2:hover{filter:brightness(1.1)}
+.chip2 img{width:64px;height:64px;margin:8px auto 0}
+.chip2 .cnt{font-size:34px;line-height:1.1}
+.chip2 .lb{font-size:18px;color:#C9BBFF;font-weight:800;margin-top:2px}
+.chip2.on{border-color:#7A4A06;background:linear-gradient(180deg,#5A4390,#2E2260);box-shadow:0 0 0 3px var(--gold),0 0 18px rgba(255,198,30,.65),inset 0 2px 0 rgba(255,255,255,.2),inset 0 -4px 0 rgba(0,0,0,.4),0 4px 0 #0B0720}
+.chip2.on::after{content:'使用中';position:absolute;right:-8px;top:-14px;background:linear-gradient(180deg,#FFE27A,#E9A21F);color:#4A3206;font-size:15px;font-weight:900;padding:3px 10px;border-radius:8px;box-shadow:0 2px 0 #7A3D0C}
+.icochip{position:absolute;height:44px;display:flex;align-items:center;gap:8px;padding:0 16px 0 8px;border-radius:22px;background:rgba(0,0,0,.35);box-shadow:inset 0 2px 4px rgba(0,0,0,.7),0 0 0 2px #2A1B5E}
+.icochip img{width:32px;height:32px;object-fit:contain}
+.buffcell{position:absolute;width:64px;height:64px}
+.buffcell img.b{position:absolute;left:0;top:0;width:64px;height:64px}
+.buffcell img.i{position:absolute;left:12px;top:10px;width:40px;height:40px;object-fit:contain}
+.buffcell .tag{position:absolute;left:-12px;right:-12px;top:66px;text-align:center;font-size:15px;color:#C9BBFF;font-weight:800;white-space:nowrap}
+#gaugePips{background:rgba(0,0,0,.35);border-radius:22px;padding:6px 10px;box-shadow:inset 0 2px 4px rgba(0,0,0,.7),0 0 0 2px #2A1B5E}
+#rwReady{box-shadow:0 0 0 4px var(--gold),0 0 18px rgba(255,198,30,.9);animation:ringpulse 1.2s ease-in-out infinite;will-change:transform,opacity}
+
+/* 机柜顶灯牌 */
+#marquee{background:linear-gradient(180deg,#FFE58A 0%,#F7B733 30%,#E68F1C 70%,#B9620C 100%);border-radius:24px 24px 10px 10px;
+  box-shadow:inset 0 3px 0 rgba(255,255,255,.5),inset 0 0 0 8px #F2A62B,inset 0 0 0 11px #7A3D0C,inset 0 0 0 13px #FFD36B,0 14px 28px rgba(0,0,0,.6),0 0 0 3px #4A2306}
+#marquee .mqin{position:absolute;left:18px;right:18px;top:30px;bottom:13px;border-radius:10px;background:linear-gradient(180deg,#0A0E2A,#141C4A);
+  box-shadow:inset 0 0 0 3px #060818,inset 0 0 26px rgba(60,120,255,.35);display:flex;align-items:center;justify-content:center;overflow:hidden}
+#marquee .mqin::after{content:'';position:absolute;left:0;top:0;right:0;bottom:0;background:repeating-linear-gradient(180deg,rgba(255,255,255,.035) 0 2px,transparent 2px 4px),linear-gradient(100deg,rgba(255,255,255,.12),rgba(255,255,255,0) 30%)}
+#marquee .mqtxt{font-size:21px;font-weight:900;color:#7FE7FF;letter-spacing:.08em;white-space:nowrap;text-shadow:0 0 10px rgba(80,220,255,.9)}
+#marquee .mqtxt b{color:#FFD24A;text-shadow:0 0 12px rgba(255,200,60,1)}
+#marquee .bulbs{position:absolute;left:24px;right:24px;top:10px;height:12px;display:flex;justify-content:space-between}
+.bulb{width:12px;height:12px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#fff,#FFD24A 50%,#B9620C);box-shadow:0 0 9px rgba(255,220,100,.95);animation:blink 2.2s ease-in-out infinite;will-change:opacity}
+.bulb.c{background:radial-gradient(circle at 40% 35%,#fff,#5FE7FF 50%,#1272D6);box-shadow:0 0 9px rgba(120,230,255,.95);animation-delay:.55s}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+
+/* 活动名 logo 字：渐变金 + 深描边 */
+.logo{position:relative;font-size:72px;font-weight:900;line-height:1.1;white-space:nowrap;letter-spacing:.02em}
+.logo::before{content:attr(data-t);position:absolute;left:0;top:4px;color:#3A1E08;-webkit-text-stroke:10px #3A1E08;z-index:0}
+.logo span{position:relative;z-index:1;background:linear-gradient(180deg,#FFF9D8 0%,#FFD65A 48%,#F08A12 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+/* 弹窗 */
+#mask{position:absolute;left:0;top:0;width:1920px;height:1080px;background:rgba(0,0,0,.66);display:none;z-index:50}
+#mask.on{display:block}
+#dlg{position:absolute;left:472px;top:204px;width:976px;height:673px}
+#dlg .bg{position:absolute;left:0;top:0;width:976px;height:673px}
+#dlg .tb{position:absolute;left:3px;top:2px;width:970px;height:106px}
+#dlg .ttl{position:absolute;left:0;top:2px;width:976px;height:106px;display:flex;align-items:center;justify-content:center;font-size:42px}
+#dlg .x{position:absolute;left:858px;top:-6px;width:116px;height:110px;cursor:pointer}
+#dlg .x img{width:116px;height:110px}
+#dlg .body{position:absolute;left:40px;top:124px;width:896px;height:520px}
+.rule{font-size:23px;line-height:1.55;color:#3A3A3A;margin:0 0 8px;font-weight:600}
+.rule b{color:#B8600A}
+.card{position:absolute;top:40px;width:270px;height:380px;border-radius:18px;background:linear-gradient(180deg,#F7F2E6,#E6DCC6);border:4px solid #B8945A;cursor:pointer;text-align:center;padding:18px 14px;transition:.15s;color:#3A3A3A}
+.card:hover{transform:translateY(-6px);border-color:#E8A020;box-shadow:0 12px 30px rgba(0,0,0,.35)}
+.card.hot{background:linear-gradient(180deg,#FFF3C4,#FFD98A);border-color:#E8A020}
+.card h4{margin:6px 0 4px;font-size:26px;color:#3A2A10}
+.card p{margin:0;font-size:17px;line-height:1.5;color:#5A4A30}
+.card .ico{font-size:64px;line-height:1.1}
+.card.nopick{cursor:default;top:46px;height:312px;padding-top:10px}
+.card.nopick:hover{transform:none;box-shadow:none}
+.card.spin{outline:6px solid #FFC61E;outline-offset:-2px;transform:translateY(-6px)}
+.card.win{outline:6px solid #FFC61E;outline-offset:-2px;transform:translateY(-8px);box-shadow:0 14px 34px rgba(0,0,0,.4)}
+.card.lose{opacity:.35}
+.card .rb{position:absolute;left:-6px;top:-16px;background:#E02020;color:#fff;font-size:14px;font-weight:900;padding:3px 10px;border-radius:8px;transform:rotate(-6deg)}
+.rw{position:absolute;width:120px;height:120px}
+.rw img.b{position:absolute;left:0;top:0;width:120px;height:120px}
+.rw img.i{position:absolute;left:24px;top:22px;width:72px;height:72px;object-fit:contain}
+.rw .n{position:absolute;right:8px;bottom:6px;font-size:22px}
+.rw .lb{position:absolute;left:-20px;right:-20px;top:124px;text-align:center;font-size:18px;color:#3A3A3A;font-weight:700}
+.tbl{width:100%;border-collapse:collapse;font-size:21px;color:#3A3A3A}
+.tbl th{background:#E6DCC6;padding:8px;text-align:left;font-weight:800}
+.tbl td{padding:8px;border-bottom:1px solid #D8CFBC}
+.tbl tr.cur td{background:#FFF3C4;font-weight:800}
+
+/* ═══════════ 标注模式 ═══════════ */
+#stage.note [data-el]{outline:2px solid rgba(62,216,224,.9);outline-offset:-2px}
+#stage.note [data-el]::after{content:attr(data-n);position:absolute;left:-4px;top:-18px;min-width:30px;height:30px;padding:0 8px;border-radius:15px;
+  background:var(--cy);color:#062A2E;font-size:20px;font-weight:900;display:flex;align-items:center;justify-content:center;z-index:40;
+  box-shadow:0 2px 6px rgba(0,0,0,.6);pointer-events:none;font-family:inherit;-webkit-text-stroke:0}
+#stage [data-el].hl{outline:4px solid #FFC61E !important;outline-offset:0;z-index:45;box-shadow:0 0 0 9999px rgba(0,0,0,.45)}
+#legend{position:fixed;right:0;top:48px;bottom:0;width:400px;background:#0D0D0D;border-left:1px solid #2A2740;overflow-y:auto;padding:14px 16px;display:none;z-index:99}
+body.legend #legend{display:block}
+#legend h3{margin:0 0 4px;font-size:18px;color:#fff;display:flex;align-items:center;gap:10px}
+#legend h3::before{content:'';width:5px;height:22px;background:var(--cy)}
+#legend .sub{color:#7A72A6;font-size:12px;margin-bottom:12px;line-height:1.5}
+.li{border-left:3px solid #2A2740;padding:8px 10px 8px 12px;margin-bottom:8px;cursor:pointer;border-radius:0 8px 8px 0}
+.li:hover,.li.on{background:#15131F;border-left-color:var(--cy)}
+.li b{display:flex;align-items:center;gap:8px;font-size:14px;color:#fff;margin-bottom:5px}
+.li b span{min-width:24px;height:24px;border-radius:12px;background:var(--cy);color:#062A2E;font-size:13px;display:flex;align-items:center;justify-content:center;padding:0 6px}
+.li p{margin:0 0 3px;font-size:12.5px;line-height:1.55;color:#B7B0D8}
+.li p em{font-style:normal;color:var(--cy);font-weight:700;margin-right:4px}
+.li p.u em{color:#FFC61E}
+
+/* ═══════════ 流程模式（19 步交互示意，用本稿真实渲染） ═══════════ */
+#flow{position:fixed;right:0;top:48px;bottom:0;width:400px;background:#0D0D0D;border-left:1px solid #2A2740;display:none;z-index:99;flex-direction:column}
+body.flow:not(.bare) #flow{display:flex}
+#flow .hd{padding:14px 16px 10px;border-bottom:1px solid #2A2740}
+#flow h3{margin:0 0 4px;font-size:18px;color:#fff;display:flex;align-items:center;gap:10px}
+#flow h3::before{content:'';width:5px;height:22px;background:var(--gold)}
+#flow .sub{color:#7A72A6;font-size:12px;line-height:1.5}
+#flow .ctl{display:flex;gap:6px;margin-top:10px;align-items:center;flex-wrap:wrap}
+#flow .ctl button{background:#252239;border:1px solid #3A3660;color:#EDEAF8;border-radius:8px;padding:6px 10px;cursor:pointer;font-size:13px}
+#flow .ctl button:hover{border-color:var(--gold)}
+#flow .ctl button.on{background:var(--gold);color:#4A3206;font-weight:700}
+#flow .ctl .pos{margin-left:auto;color:#FFC61E;font-size:13px;font-weight:700;font-variant-numeric:tabular-nums}
+#flow .ls{flex:1;overflow-y:auto;padding:10px 16px 20px}
+#flow .fs{margin:14px 0 6px;font-size:13px;color:#FFC61E;font-weight:800;letter-spacing:.04em}
+#flow .fs:first-child{margin-top:2px}
+#flow .st{border-left:3px solid #2A2740;padding:7px 10px 7px 12px;margin-bottom:6px;cursor:pointer;border-radius:0 8px 8px 0}
+#flow .st:hover{background:#15131F}
+#flow .st.on{background:#1A1626;border-left-color:var(--gold)}
+#flow .st b{display:flex;align-items:center;gap:8px;font-size:14px;color:#fff}
+#flow .st b span{min-width:24px;height:24px;border-radius:12px;background:#3A3660;color:#EDEAF8;font-size:12.5px;display:flex;align-items:center;justify-content:center;padding:0 6px;flex:0 0 auto}
+#flow .st.on b span{background:var(--gold);color:#4A3206}
+#flow .st p{display:none;margin:6px 0 0;font-size:12.5px;line-height:1.6;color:#B7B0D8}
+#flow .st.on p{display:block}
+#flow .st p b{display:inline;color:#FFE08A;font-size:inherit}
+
+/* ═══════════ 编辑模式 ═══════════ */
+#stage.edit [data-el]{outline:2px dashed rgba(62,216,224,.7);outline-offset:-2px;cursor:move}
+#stage.edit [data-el].sel{outline:3px solid #FFC61E;z-index:46}
+#stage.edit #cv{cursor:crosshair}
+.rh{position:absolute;right:-8px;bottom:-8px;width:18px;height:18px;background:#FFC61E;border:2px solid #1A1230;cursor:nwse-resize;z-index:47}
+#insp{position:fixed;right:16px;top:60px;width:250px;background:#15131F;border:1px solid #3A3660;border-radius:10px;padding:12px;z-index:200;display:none;font-size:12.5px}
+body.edit #insp{display:block}
+#insp h4{margin:0 0 8px;font-size:13px;color:#fff}
+#insp .g{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}
+#insp label{display:flex;align-items:center;gap:6px;color:#9E97C4}
+#insp input{width:100%;background:#0D0D0D;border:1px solid #3A3660;color:#fff;border-radius:6px;padding:4px 6px;font-size:12.5px}
+#insp button{background:#252239;border:1px solid #3A3660;color:#EDEAF8;border-radius:6px;padding:5px 8px;cursor:pointer;font-size:12px;margin-right:4px}
+#insp .hint{color:#7A72A6;line-height:1.5;margin-top:6px}
+#exp{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:720px;height:520px;background:#15131F;border:1px solid #3A3660;border-radius:12px;padding:14px;z-index:300;display:none;flex-direction:column;gap:8px}
+#exp.on{display:flex}
+#exp textarea{flex:1;background:#0D0D0D;color:#8FE9A0;border:1px solid #3A3660;border-radius:8px;font:12px/1.5 ui-monospace,monospace;padding:10px;resize:none}
+#exp .r{display:flex;gap:8px;justify-content:flex-end}
+#exp button{background:#252239;border:1px solid #3A3660;color:#EDEAF8;border-radius:8px;padding:6px 12px;cursor:pointer}
+#testlog{display:none}
+</style>
+
+<!-- ═══════════ 工具条 ═══════════ -->
+<div id="bar">
+  <b>闯关弹珠 · 主界面交互稿 v4</b>
+  <div class="seg" id="modes"><div class="on" data-m="play">演示</div><div data-m="note">标注</div><div data-m="edit">编辑</div><div data-m="flow">流程</div></div>
+  <button onclick="autoDemo()">自动发射一次</button>
+  <button onclick="resetDemo()">重置演示</button>
+  <button onclick="exportLayout()">导出布局 JSON</button>
+  <button onclick="resetLayout()">恢复默认布局</button>
+  <span class="sp"></span>
+  <div class="zoom"><button onclick="zoomStep(-1)" title="缩小 (⌘−)">−</button><div class="pct" id="scaleTxt" onclick="zoomFit()" title="点一下=适应窗口">100%</div><button onclick="zoomStep(1)" title="放大 (⌘+)">+</button></div>
+  <button onclick="zoomFit()" title="⌘0">适应窗口</button>
+  <button onclick="zoomSet(1)" title="1:1 原尺寸">100%</button>
+  <span class="dim">1920×1080 · ⌘/Ctrl+滚轮缩放 · 拖空白平移 · 空格=蓄力发射</span>
+</div>
+
+<div id="wrap"><div id="sizer"><div id="stage">
+  <img id="scene" class="abs" src="assets/marble/场景底_街机厅_dark.jpg">
+  <div id="shade" class="abs"></div>
+  <div id="vignette" class="abs"></div>
+
+  <div id="preload">
+    <img id="im_board" src="assets/parts/盘面.png"><img id="im_coin" src="assets/parts/金币柱.png"><img id="im_peg" src="assets/parts/小钉.png">
+    <img id="im_knob" src="assets/parts/发射钮.png"><img id="im_item" src="assets/marble/道具_弹珠AI.png"><img id="im_ballp" src="assets/marble/弹珠_紫.png"><img id="im_ballg" src="assets/marble/弹珠_金.png">
+  </div>
+
+  <!-- ① 左导航条（母版固化，唯一变量=选中活动名） -->
+  <div class="abs" id="nav" data-el="nav" data-title="左侧导航条" style="left:0;top:0;width:369px;height:1080px">
+    <img class="abs" style="left:0;top:0;width:358px;height:1080px" src="assets/nav/导航底板_358x1080.png">
+    <div class="abs" style="left:11px;top:17px;width:189px;height:113px;cursor:pointer" onclick="toast('返回活动中心（本稿不跳转）')">
+      <img class="abs" style="left:0;top:0;width:189px;height:113px" src="assets/nav/返回按钮底_189x113.png">
+      <img class="abs" style="left:64px;top:19px;width:49px;height:69px" src="assets/nav/返回箭头_49x69.png"></div>
+    <div class="abs" style="left:6px;top:153px;width:345px;height:56px"><img class="abs" style="left:0;top:0;width:345px;height:56px" src="assets/nav/分组标题条_345x56.png">
+      <div class="abs cen" style="left:0;top:0;width:345px;height:56px;font-weight:900;font-size:30px;color:#E8A020">热门活动</div></div>
+    <div class="abs" style="left:1px;top:224px;width:368px;height:152px"><img class="abs" style="left:0;top:0;width:368px;height:152px" src="assets/nav/页签_黄选中含尖角_368x152.png">
+      <div class="abs cen" style="left:0;top:0;width:340px;height:152px;font-weight:900;font-size:44px;color:#4A3206">闯关弹珠</div></div>
+    <div class="abs" style="left:20px;top:356px;width:318px;height:308px"><img class="abs" style="left:0;top:0;width:318px;height:308px" src="assets/nav/页签组底_318x308.png">
+      <div class="abs" style="left:15px;top:26px;width:287px;height:108px"><img class="abs" style="left:0;top:0;width:287px;height:108px" src="assets/nav/页签_蓝态_287x108.png">
+        <div class="t abs cen" style="left:0;top:0;width:287px;height:108px;font-size:36px">选中页签</div></div>
+      <div class="t abs cen" style="left:28px;top:204px;width:256px;height:44px;font-size:36px">选中页签</div></div>
+    <div class="abs" style="left:6px;top:709px;width:345px;height:56px"><img class="abs" style="left:0;top:0;width:345px;height:56px" src="assets/nav/分组标题条_345x56.png">
+      <div class="abs cen" style="left:0;top:0;width:345px;height:56px;font-weight:900;font-size:30px;color:#E8A020">普通活动</div></div>
+    <div class="t abs cen" style="left:51px;top:800px;width:256px;height:44px;font-size:42px;color:#C8CDD4">活动2</div>
+    <div class="abs" style="left:6px;top:896px;width:345px;height:56px"><img class="abs" style="left:0;top:0;width:345px;height:56px" src="assets/nav/分组标题条_345x56.png">
+      <div class="abs cen" style="left:0;top:0;width:345px;height:56px;font-weight:900;font-size:30px;color:#E8A020">赛事</div></div>
+    <div class="t abs cen" style="left:51px;top:998px;width:256px;height:44px;font-size:42px;color:#C8CDD4">活动3</div>
+  </div>
+
+  <!-- ② 活动名 + 一句话说明 -->
+  <div class="abs" data-el="title" data-title="活动名与一句话说明" style="left:396px;top:12px;width:430px;height:120px">
+    <div class="logo abs" data-t="闯关弹珠" style="left:0;top:0"><span>闯关弹珠</span></div>
+    <div class="t sm abs" style="left:4px;top:88px;width:430px;font-size:20px;color:#E6DDFF;line-height:1.3;white-space:nowrap">拉动发射器打弹珠，撞金币攒分、落槽翻倍，攒满目标闯下一场</div>
+  </div>
+
+  <!-- ③ 资产条（母版：前三固定资源 + 活动道具位 + 【+】） -->
+  <div class="abs" data-el="assets" data-title="资产条" style="left:837px;top:14px;width:1063px;height:80px">
+    <img class="abs" style="left:0;top:0;width:773px;height:80px" src="assets/common/资产条_前三资源.png">
+    <div class="abs" style="left:781px;top:6px;width:282px;height:68px">
+      <div class="abs" style="left:0;top:2px;width:196px;height:64px;background:rgba(8,10,14,.82);border-radius:12px"></div>
+      <img class="abs" style="left:-10px;top:-4px;width:72px;height:72px;object-fit:contain" src="assets/marble/道具_弹珠AI.png">
+      <div class="t abs" id="hudBalls" style="left:60px;top:2px;width:128px;height:64px;display:flex;align-items:center;justify-content:flex-end;font-size:32px">128</div>
+      <div class="abs" style="left:204px;top:-2px;width:68px;height:72px;cursor:pointer" onclick="openPack()">
+        <img class="abs" style="left:0;top:0;width:68px;height:72px" src="assets/common/钮_绿加号小_68x72.png">
+        <div class="t abs cen" style="left:0;top:2px;width:68px;height:68px;font-size:44px">+</div></div></div>
+  </div>
+
+  <!-- ④ 排行榜入口（母版组合原件） -->
+  <div class="abs" data-el="rank" data-title="排行榜入口" style="left:1335px;top:100px;width:565px;height:115px;cursor:pointer" onclick="openGeneric('rank')">
+    <img class="abs" style="left:0;top:0;width:565px;height:115px" src="assets/common/排行榜入口_母版组合.png">
+  </div>
+
+  <!-- ⑤～⑩ 弹珠机：金框 + 顶部（进度条 / 显示屏）+ 盘面 + 右侧控制台 -->
+  <div class="abs" id="machine" data-el="machine" data-title="弹珠机机身（金框）" style="left:400px;top:128px;width:840px;height:868px">
+    <div class="bulbs" id="mqBulbs"></div>
+    <div class="bolt" style="left:22px;top:24px"></div><div class="bolt" style="right:22px;top:24px"></div>
+    <div class="bolt" style="left:22px;bottom:22px"></div><div class="bolt" style="right:22px;bottom:22px"></div>
+    <div class="bolt" style="left:50%;bottom:6px;margin-left:-10px"></div>
+    <div class="bolt" style="left:6px;top:50%;margin-top:-10px"></div><div class="bolt" style="right:6px;top:50%;margin-top:-10px"></div>
+  </div>
+  <div class="abs" id="topPlate" data-el="top_plate" data-title="顶棚嵌板（进度条 + 显示屏底板）" style="left:416px;top:152px;width:808px;height:150px"></div>
+
+  <!-- 顶部进度条：左关卡 · 中本场进度 · 右本场奖励 -->
+  <div class="abs" id="hdrProg" data-el="hdr_prog" data-title="本场进度条（左：关卡 / 右：本场奖励）" style="left:424px;top:164px;width:792px;height:50px">
+    <div class="medal" style="left:2px;top:-12px;width:72px;height:72px"></div>
+    <div class="star" style="left:13px;top:-1px;width:50px;height:50px"></div>
+    <div class="t sm abs cen" id="stageNum" style="left:2px;top:-8px;width:72px;height:62px;font-size:34px">1</div>
+    <div class="t sm abs" style="left:86px;top:0;height:50px;display:flex;align-items:center;font-size:26px;white-space:nowrap">第 <span id="stageNum2" style="color:var(--gold);margin:0 6px;font-size:32px">1</span> 场</div>
+    <div class="bar" id="progBar" style="left:196px;top:5px;width:470px;height:40px"><i id="progFill"></i></div>
+    <div class="t sm abs cen" id="progTxt" style="left:196px;top:5px;width:470px;height:40px;font-size:25px">0 / 120</div>
+    <div class="abs" id="rewardCell" style="left:716px;top:-12px;width:74px;height:74px;cursor:pointer" onclick="onRewardClick()">
+      <div class="abs" id="rwReady" style="left:-5px;top:-5px;width:84px;height:84px;border-radius:16px;display:none"></div>
+      <img class="abs" style="left:0;top:0;width:74px;height:74px" src="assets/task/奖励格底_黄.png">
+      <img class="abs" style="left:14px;top:11px;width:46px;height:46px" src="assets/marble/积分币.png">
+      <div class="t xs abs" id="rwNum" style="left:26px;top:46px;width:44px;text-align:right;font-size:19px">×3</div>
+    </div>
+  </div>
+
+  <!-- 显示屏：本次发射实时反馈 -->
+  <div class="abs screen" id="hdrScreen" data-el="hdr_screen" data-title="显示屏（本次发射逐击反馈 → 结算飞入进度条）" style="left:424px;top:220px;width:792px;height:78px">
+    <div class="screw" style="left:4px;top:4px"></div><div class="screw" style="right:4px;top:4px"></div><div class="screw" style="left:4px;bottom:4px"></div><div class="screw" style="right:4px;bottom:4px"></div>
+    <div class="abs" style="left:18px;top:8px;font-size:16px;color:#7FE7FF;font-weight:800;letter-spacing:.12em">本次发射</div>
+    <div class="abs" id="hitPips" style="left:18px;top:36px;display:flex;gap:6px;align-items:center;height:30px"></div>
+    <div class="abs" style="left:372px;top:8px;font-size:14px;color:#5A7AB8;font-weight:800;letter-spacing:.1em">累计</div>
+    <div class="abs led" id="accTxt" style="left:372px;top:4px;width:226px;height:66px;text-align:right">0</div>
+    <div class="abs" id="scrMsg" style="left:606px;top:0;width:172px;height:78px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:21px;font-weight:900;color:#FFD98A;line-height:1.25;white-space:pre-line">拉动发射器开始</div>
+  </div>
+
+  <canvas class="abs" id="cv" data-el="board" data-title="弹珠盘 + 发射槽（画布）" width="792" height="616" style="left:424px;top:304px;width:792px;height:616px"></canvas>
+  <div class="abs" id="slotLabels" data-el="slotlabels" data-title="七格倍数槽标签（机身底栏）" style="left:424px;top:924px;width:700px;height:50px"></div>
+  <div id="pulltip" class="abs" style="left:880px;top:734px">按住向下拉蓄力 →</div>
+
+  <!-- ⑪～⑭ 右侧控制台 -->
+  <div class="abs" id="deck" data-el="deck" data-title="右侧控制台底板" style="left:1262px;top:232px;width:638px;height:764px"></div>
+
+  <div class="abs sec first" data-el="m_type" data-title="弹珠类型切换（普通 / 高级×5）" style="left:1278px;top:250px;width:606px;height:172px">
+    <div class="sh">弹珠</div>
+    <div class="chip2 on" id="chipN" style="left:10px;top:54px;width:290px;height:110px" onclick="setType(false)"><img src="assets/marble/弹珠_紫.png" style="float:left;margin:22px 0 0 26px"><div style="position:absolute;left:112px;top:22px;text-align:left"><div class="t sm cnt" id="cntN">×128</div><div class="lb">普通弹珠</div></div></div>
+    <div class="chip2" id="chipA" style="left:306px;top:54px;width:290px;height:110px" onclick="setType(true)"><img src="assets/marble/弹珠_金.png" style="float:left;margin:22px 0 0 26px"><div style="position:absolute;left:112px;top:22px;text-align:left"><div class="t sm cnt" id="cntA">×3</div><div class="lb">高级 · 得分 <b style="color:var(--gold)">×5</b></div></div></div>
+  </div>
+
+  <div class="abs sec" data-el="m_mult" data-title="发射倍数（得分与消耗同倍放大）" style="left:1278px;top:436px;width:606px;height:164px">
+    <div class="sh">倍数</div>
+    <div class="abs" id="multRow" style="left:10px;top:54px;width:380px;height:96px"></div>
+    <div class="icochip" style="left:404px;top:56px"><img src="assets/marble/弹珠_紫.png"><span class="t xs" style="font-size:21px">每发消耗 <b class="gold" id="costTxt">1</b></span></div>
+    <div class="icochip" style="left:404px;top:108px"><img src="assets/parts/金币柱.png"><span class="t xs" style="font-size:21px">每击得分 <b class="cyan" id="baseTxt">1</b></span></div>
+  </div>
+
+  <div class="abs sec" data-el="m_gauge" data-title="触发槽充能 + Buff 池" style="left:1278px;top:614px;width:606px;height:170px">
+    <div class="sh">充能 ⚡</div>
+    <div class="t sm abs" id="gaugeTxt" style="left:140px;top:6px;font-size:30px;color:var(--gold)">0 / 8</div>
+    <div class="abs" id="gaugePips" style="left:10px;top:60px;display:flex;gap:9px"></div>
+    <div class="buffcell" style="left:378px;top:50px"><img class="b" src="assets/task/奖励格底_黄.png"><img class="i" src="assets/marble/弹珠_金.png"><div class="tag">触发礼包</div></div>
+    <div class="buffcell" style="left:456px;top:50px"><img class="b" src="assets/task/奖励格底_青.png"><img class="i" src="assets/marble/积分币.png"><div class="tag">阶段积分</div></div>
+    <div class="buffcell" style="left:534px;top:50px"><img class="b" src="assets/task/奖励格底_青.png"><img class="i" src="assets/marble/弹珠_紫.png"><div class="tag">弹珠返还</div></div>
+  </div>
+
+  <div class="abs sec" data-el="m_status" data-title="力度槽 + 操作提示 / 不足态" style="left:1278px;top:798px;width:606px;height:188px">
+    <div class="sh">发射</div>
+    <div id="pw"><i id="pwFill"></i><b title="冲出槽口的最低力度"></b></div>
+    <div class="status" id="status"><img class="strip" src="assets/common/条_黄提示_600x73.png"><div class="txt" id="statusTxt">按住绿钮下拉蓄力 · 松手发射</div></div>
+    <div class="btnimg" id="goBtn" style="left:430px;top:96px;width:166px;height:62px;display:none" onclick="openPack()"><img src="assets/common/按钮_蓝通用_390x146.png"><div class="lb" style="font-size:24px;color:#fff;-webkit-text-stroke:2px #0A2A4A;paint-order:stroke fill">前往获取</div></div>
+  </div>
+
+  <!-- ⑰～⑳ 底栏 -->
+  <div class="abs" data-el="rulebtn" data-title="规则说明入口 ❗" style="left:404px;top:1010px;width:62px;height:62px;border-radius:50%;background:rgba(240,240,240,.92);border:4px solid #7A828C;cursor:pointer" onclick="openRules()">
+    <div class="abs cen" style="left:0;top:0;width:54px;height:54px;font-weight:900;font-size:36px;color:#3A3A3A">i</div></div>
+  <div class="ent" data-el="ach" data-title="成就入口" style="left:490px;top:998px" onclick="openGeneric('ach')"><div class="ico"><img src="assets/marble/成就图标.png"></div><div class="t sm lb">成就</div></div>
+  <div class="ent" data-el="shop" data-title="兑换商店入口" style="left:630px;top:998px" onclick="openGeneric('shop')"><div class="ico"><img src="assets/marble/兑换商店图标.png"></div><div class="t sm lb">兑换商店</div></div>
+  <div class="abs" data-el="cd" data-title="活动倒计时" style="left:1540px;top:994px;width:360px;height:80px">
+    <img class="abs" style="left:0;top:0;width:360px;height:80px" src="assets/common/底_倒计时_392x92.png">
+    <img class="abs" style="left:30px;top:22px;width:32px;height:34px" src="assets/common/图标_时钟绿_40x42.png">
+    <div class="t sm abs" style="left:72px;top:20px;font-size:26px;white-space:nowrap"><span id="cdTxt">进行中 <span class="gold">05天14时</span></span></div>
+  </div>
+
+  <div id="toast" class="t"></div>
+  <div id="pops" class="abs" style="left:0;top:0;width:0;height:0"></div>
+
+  <!-- L3 弹窗 -->
+  <div id="mask" onclick="if(event.target===this)closeDlg()">
+    <div id="dlg">
+      <img class="bg" src="assets/common/弹窗小_底板_976x673.png">
+      <img class="tb" src="assets/common/弹窗_标题条_976x106.png">
+      <div class="t ttl" id="dlgTitle">标题</div>
+      <div class="x" onclick="closeDlg()"><img src="assets/common/弹窗_关闭红X_122x115.png"></div>
+      <div class="body" id="dlgBody"></div>
+    </div>
+  </div>
+</div></div></div>
+
+<!-- 标注图例 -->
+<aside id="legend"><h3>功能标注 · 逐元素说明</h3><div class="sub">悬停条目高亮对应元素。每条：功能 / 交互 / 状态 / <span style="color:#FFC61E">UI 替换说明</span>（UI 同学按位置换图即可，逻辑与坐标不动）。</div><div id="legendList"></div></aside>
+
+<!-- 流程模式侧栏 -->
+<aside id="flow"><div class="hd"><h3>交互流程 · 逐步演示</h3><div class="sub">点步骤把画面切到该状态（用主界面稿真实渲染）；画面可直接接手操作。← → 翻页，P 自动播放。</div>
+<div class="ctl"><button onclick="flowGo(FLOW_I-1)">◀ 上一步</button><button onclick="flowGo(FLOW_I+1)">下一步 ▶</button><button id="flowAutoBtn" onclick="flowAuto()">自动播放</button><button onclick="flowRelease()" title="解除冻结，从当前状态继续试玩">接手试玩</button><span class="pos" id="flowPos"></span></div></div>
+<div class="ls" id="flowList"></div></aside>
+
+<!-- 编辑检查器 -->
+<div id="insp"><h4 id="inspTitle">未选中元素</h4>
+  <div class="g"><label>X<input id="ix" type="number"></label><label>Y<input id="iy" type="number"></label><label>W<input id="iw" type="number"></label><label>H<input id="ih" type="number"></label></div>
+  <button onclick="inspApply()">应用</button><button onclick="inspReset()">复位此元素</button>
+  <div class="hint">编辑模式下：拖动元素移位，拖右下角黄块改尺寸；盘内金币柱可直接在画布上拖。所有改动自动保存在本浏览器，导出 JSON 给 UI/程序。</div></div>
+<div id="exp"><b>布局 JSON（已复制到剪贴板）</b><textarea id="expTxt"></textarea><div class="r"><button onclick="document.getElementById('exp').classList.remove('on')">关闭</button></div></div>
+<pre id="testlog"></pre>
+
+<script>
+/* ════════════════════════════════════════════════════════════════
+   闯关弹珠 · 主界面交互稿 v4
+   规则口径（案子定版）：撞柱计数全盘共享；前 10 次每次 +基础分；第 11 次累计 ×2 封顶；
+   落槽倍数 {1,2,3,10,3,2,1} 再乘一次；高级弹珠最终 ×5；倍数同放大得分与消耗；
+   本场进度满目标 → 领奖进下一场；落入触发槽累计充能，满 8 随机抽 1 个 Buff 后重随触发槽（不是玩家选）。
+   ════════════════════════════════════════════════════════════════ */
+const Q = new URLSearchParams(location.search);
+const AUTOTEST = Q.has('autotest');
+const STILL = Q.has('still');
+if (Q.has('bare')) document.body.classList.add('bare');
+
+/* ── 随机（测试可复现） ── */
+let seed = 20260902;
+function rnd(){ if(!AUTOTEST) return Math.random(); seed|=0; seed=seed+0x6D2B79F5|0; let t=Math.imul(seed^seed>>>15,1|seed); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }
+
+/* ── 状态 ── */
+const SLOTS=[1,2,3,10,3,2,1];
+const S={stage:1,need:120,prog:0,balls:128,adv:3,useAdv:false,mult:1,
+  hits:0,acc:0,capped:false,gauge:0,gaugeMax:8,trig:2,total:0,spent:0,
+  phase:'rest',pull:0,pulling:false,packUntil:0,packBought:0,pendingBuff:false,pendingClear:false,firstShot:true,freeze:false,ended:false};
+
+/* ── 画布几何（756×690；盘面 0..672，发射槽 680..748） ── */
+const BX=424,BY=304; // 画布在 1920 屏上的原点
+const CW=792,CH=616,FW=700,LANE_L=708,LANE_R=782,LANE_C=745,LANE_TOP=136,CEIL=12,FLOOR=616,POCKET_Y=580;
+// 七格槽边界（竞品：边格窄、内格宽），分隔柱在 SLOT_X[1..6]
+const SLOT_X=[0,70,181,290,399,509,619,FW];
+const slotIndex=x=>{ for(let i=0;i<7;i++){ if(x<SLOT_X[i+1]) return i; } return 6; };
+const slotCenter=i=>(SLOT_X[i]+SLOT_X[i+1])/2;
+const DOME={x:668,y:136,r:124};
+const KNOB_REST=450,PULL_MAX=100,BALL_R=14,COIN_R=41,PEG_R=10,KNOB_H=38;
+// 竞品七柱 2-3-2（两侧柱贴壁）
+const COINS0=[[188,180],[501,181],[40,274],[346,275],[660,274],[188,370],[503,370]];
+// 竞品小钉：顶中 1 / 二排夹缝 2 / 三排外侧 2 / 中下 1 / 底部两排 6+5
+const PEGS0=[[346,129],[190,275],[501,275],[64,369],[627,369],[346,412],[70,485],[181,485],[290,485],[399,485],[510,485],[619,485],[126,538],[236,538],[346,538],[455,538],[565,538]];
+// 顶部 4 根短金柱（可碰撞胶囊）+ 4 个装饰三角（不碰撞）
+const PINS=[[126,54,126,82],[269,54,269,82],[419,54,419,82],[565,54,565,82]];
+const TRIS=[57,202,489,634];
+// 左右壁粉色挡块（竞品各两块），尖端伸入盘内 28px
+const BUMPERS=[[0,425],[0,535],[FW,425],[FW,535]];
+function bumperSegs(){ const out=[]; for(const [x,y] of BUMPERS){ const tip=x===0?32:FW-32; out.push([x,y-19,tip,y],[tip,y,x,y+19]); } return out; }
+const BUMP_SEGS=bumperSegs();
+let backCv=null, frontCv=null, staticReady=false, staticDirty=true;
+let coinCache={}, knobGrey=null, glowCache={}, trigGrad=null;
+let coins=COINS0.map(([x,y],i)=>({x,y,flash:0,cool:0,star:i===3}));
+let pegs=[];
+function buildPegs(){ pegs=PEGS0.map(([x,y])=>({x,y,flash:0})); staticDirty=true; }
+buildPegs();
+const chevY=[190,250,310,370];
+
+/* ── 弹珠 ── */
+let ball=null, trail=[];
+function restBall(){ ball={x:LANE_C,y:KNOB_REST-KNOB_H-BALL_R,vx:0,vy:0}; trail=[]; }
+restBall();
+
+/* ── DOM 引用 ── */
+const $=id=>document.getElementById(id);
+const cv=$('cv'); let ctx=cv.getContext('2d');
+const IM={board:$('im_board'),coin:$('im_coin'),peg:$('im_peg'),knob:$('im_knob'),ballp:$('im_ballp'),ballg:$('im_ballg'),item:$('im_item')};
+
+/* ════════════ 渲染：右侧操作台 / HUD ════════════ */
+function base(){ return S.mult; }
+function cost(){ return S.mult; }
+function have(){ return S.useAdv?S.adv:S.balls; }
+function canFire(){ return S.phase==='rest' && !S.ended && have()>=cost() && !$('mask').classList.contains('on'); }
+
+function sync(){
+  $('hudBalls').textContent=S.balls; $('hudBalls').style.color=S.balls?'#fff':'#FF5A4E';
+  $('cntN').textContent='×'+S.balls; $('cntA').textContent='×'+S.adv;
+  $('cntN').style.color=S.balls?'#fff':'#FF5A4E'; $('cntA').style.color=S.adv?'#fff':'#FF5A4E';
+  $('chipN').classList.toggle('on',!S.useAdv); $('chipA').classList.toggle('on',S.useAdv);
+  $('stageNum').textContent=S.stage; $('stageNum2').textContent=S.stage;
+  const full=S.prog>=S.need;
+  $('progFill').style.width=Math.min(1,S.prog/S.need)*100+'%'; $('progBar').classList.toggle('full',full);
+  $('progTxt').textContent=`${S.prog} / ${S.need}`; $('rwNum').textContent='×'+(2+S.stage);
+  $('rwReady').style.display=full&&S.phase==='rest'?'block':'none';
+  // 显示屏
+  const showLast=(S.phase==='settle'||S.phase==='rest')&&S.lastScore!=null; const acc=$('accTxt'); acc.textContent=showLast?S.lastScore:S.acc; acc.classList.toggle('gold',showLast||S.capped);
+  $('hitPips').innerHTML=Array.from({length:11},(_,i)=>i<10?`<div class="pip ${i<S.hits?'on':''}" style="width:24px;height:24px"></div>`:`<div class="pip x2 ${S.capped?'on':''}" style="width:32px;height:32px;font-size:13px">×2</div>`).join('');
+  if(S.phase==='rest') setMsg(S.ended?'活动已结束':have()<cost()?'弹珠不足':(S.firstShot?'拉动发射器开始':'准备就绪'),(S.ended||have()<cost())?'#FF8A80':'#FFD98A');
+  else if(S.phase==='pull') setMsg(`蓄力 ${Math.round(S.pull/PULL_MAX*100)}%`,'#9FF0F5');
+  else if(S.phase==='lane') setMsg('发射！','#9FF0F5');
+  else if(S.phase==='field'&&S.hits===0) setMsg('飞行中…','#C9BBFF');
+  // 控制台
+  $('multRow').innerHTML=[1,5,10].map((m,i)=>`<div class="mbtn ${S.mult===m?'on':''}" style="left:${i*136}px;top:0" onclick="setMult(${m})"><img src="assets/parts/倍数钮.png"><div class="t sm abs cen" style="left:0;top:0;width:96px;height:96px;font-size:${m===10?32:38}px">×${m}</div></div>`).join('');
+  $('costTxt').textContent=cost(); $('baseTxt').textContent=base();
+  $('gaugeTxt').textContent=`${S.gauge} / ${S.gaugeMax}`;
+  $('gaugePips').innerHTML=Array.from({length:S.gaugeMax},(_,i)=>`<div class="pip ${i<S.gauge?'on':''}"></div>`).join('');
+  // 槽标签
+  const TIER={1:'#8A93A8',2:'#4CC860',3:'#3E9EF0',10:'#FFC61E'};
+  $('slotLabels').innerHTML=SLOTS.map((v,i)=>`<div class="slotlab ${i===S.trig?'trig':''}" data-slot="${i}" style="left:${SLOT_X[i]}px;width:${SLOT_X[i+1]-SLOT_X[i]}px"><div class="disc" style="background:${TIER[v]}"><span class="t sm" style="font-size:${v===10?19:21}px">×${v}</span></div><span class="zap">⚡</span></div>`).join('');
+  // 状态条
+  const st=$('status'), tx=$('statusTxt'), go=$('goBtn');
+  st.classList.remove('bad'); go.style.display='none';
+  st.style.width='';
+  if(S.phase==='rest' && S.ended){ st.classList.add('bad'); tx.textContent='活动已结束 · 名次奖励与剩余弹珠折算金币均邮件发放'; }
+  else if(S.phase==='rest' && have()<cost()){ st.classList.add('bad'); st.style.width='410px'; tx.textContent=`${S.useAdv?'高级弹珠':'弹珠'}不足 · 需 ${cost()} 现有 ${have()}`; go.style.display='block'; }
+  else if(S.phase==='pull') tx.textContent=`蓄力 ${Math.round(S.pull/PULL_MAX*100)}% · 松手发射`;
+  else if(S.phase==='lane') tx.textContent='弹珠沿发射槽上冲…';
+  else if(S.phase==='field') tx.textContent=`飞行中 · 撞击 ${S.hits} 次 · 本发累计 ${S.acc}`;
+  else if(S.phase==='settle') tx.textContent='落槽结算 · 积分飞入进度条';
+  else tx.textContent='按住绿钮下拉蓄力 · 松手发射';
+  $('pwFill').style.width=(S.phase==='pull'?S.pull/PULL_MAX*100:0)+'%';
+  $('pulltip').style.display=(S.firstShot&&S.phase==='rest'&&canFire())?'block':'none';
+  $('cdTxt').innerHTML=S.ended?'<span class="red">已结束</span>':'进行中 <span class="gold">05天14时</span>';
+}
+function setMsg(t,c){ const m=$('scrMsg'); if(m.textContent===t) return; m.textContent=t; m.style.color=c||'#FFD98A'; m.classList.remove('bump'); void m.offsetWidth; m.classList.add('bump'); }
+function bumpLed(){ const a=$('accTxt'); a.classList.remove('bump'); void a.offsetWidth; a.classList.add('bump'); }
+function onRewardClick(){ if(S.prog>=S.need) openClear(); else openReward(); }
+function setMult(m){ if(S.phase!=='rest') return toast('发射中不能切换倍数'); S.mult=m; sync(); }
+function setType(a){ if(S.phase!=='rest') return toast('发射中不能切换弹珠'); S.useAdv=a; sync(); }
+
+/* ════════════ 物理 ════════════ */
+const G_LANE=0.30,G_FIELD=0.24,MAXV_LANE=24,MAXV_FIELD=14;
+// 导流挡板（胶囊线段）：右上把过顶弹珠导向盘中；左下/右下把贴边弹珠导回中部槽区
+let WEDGES=[]; // 竞品盘面无斜挡板，导流靠左右壁挡块
+function segHit(b,x1,y1,x2,y2,r,rest){ const dx=x2-x1,dy=y2-y1,L2=dx*dx+dy*dy; let t=((b.x-x1)*dx+(b.y-y1)*dy)/L2; t=Math.max(0,Math.min(1,t)); const px=x1+dx*t,py=y1+dy*t; const ex=b.x-px,ey=b.y-py,d=Math.hypot(ex,ey),min=r+BALL_R; if(d<min&&d>0){ const nx=ex/d,ny=ey/d; b.x=px+nx*min; b.y=py+ny*min; reflect(b,nx,ny,rest); return true; } return false; }
+function reflect(b,nx,ny,rest){ const d=b.vx*nx+b.vy*ny; if(d<0){ b.vx-=(1+rest)*d*nx; b.vy-=(1+rest)*d*ny; } }
+function circleHit(b,cx,cy,cr,rest){
+  const dx=b.x-cx,dy=b.y-cy,d=Math.hypot(dx,dy),min=cr+BALL_R;
+  if(d<min && d>0){ const nx=dx/d,ny=dy/d; b.x=cx+nx*min; b.y=cy+ny*min; reflect(b,nx,ny,rest); return true; } return false;
+}
+function launch(power){
+  S.phase='lane'; ball.vy=-(9+11*power); ball.vx=0; S.pull=0; S.firstShot=false; S.hits=0; S.acc=0; S.capped=false; S.lastScore=null; sync();
+}
+let stuck=0;
+function step(){
+  if(S.phase==='pull'||S.phase==='rest'){ ball.x=LANE_C; ball.y=KNOB_REST+S.pull-KNOB_H-BALL_R; return; }
+  if(S.phase==='settle') return;
+  const b=ball;
+  S.fly=(S.fly||0)+1; const MAXV=S.phase==='lane'?MAXV_LANE:MAXV_FIELD, G=S.phase==='lane'?G_LANE:G_FIELD+Math.max(0,S.fly-420)*0.0025;
+  b.vy=Math.min(MAXV,b.vy+G); const sp=Math.hypot(b.vx,b.vy); if(sp>MAXV){ b.vx*=MAXV/sp; b.vy*=MAXV/sp; }
+  b.x+=b.vx; b.y+=b.vy;
+  trail.push([b.x,b.y]); if(trail.length>10) trail.shift();
+
+  if(S.phase==='lane'){
+    if(b.x<LANE_L+BALL_R){ b.x=LANE_L+BALL_R; b.vx=Math.abs(b.vx)*.5; }
+    if(b.x>LANE_R-BALL_R){ b.x=LANE_R-BALL_R; b.vx=-Math.abs(b.vx)*.5; }
+    if(b.y<LANE_TOP){ // 冲出槽口 → 进入盘面，此刻扣弹珠、开始计分
+      S.phase='field'; S.maxY=0; S.stalls=0; stuck=0; S.fly=0; if(S.useAdv) S.adv-=cost(); else S.balls-=cost(); S.spent+=cost();
+      S.hits=0; S.acc=0; S.capped=false; coins.forEach(c=>{c.cool=0;}); chevLit=0; sync();
+    } else if(b.vy>0 && b.y>=KNOB_REST-KNOB_H-BALL_R){ // 力度不足 → 退回，不扣弹珠
+      S.phase='rest'; restBall(); toast('力度不足，弹珠退回发射台（不消耗）'); sync();
+    }
+    return;
+  }
+  // ── 盘面 ──
+  // 顶部：平顶 + 右上圆顶
+  if(b.x<=DOME.x){ if(b.y<CEIL+BALL_R){ b.y=CEIL+BALL_R; reflect(b,0,1,.7); } }
+  else { const dx=b.x-DOME.x,dy=b.y-DOME.y,d=Math.hypot(dx,dy),lim=DOME.r-BALL_R;
+    if(b.y<DOME.y && d>lim){ const nx=-dx/d,ny=-dy/d; b.x=DOME.x+dx/d*lim; b.y=DOME.y+dy/d*lim; reflect(b,nx,ny,.82); } }
+  // 左壁 / 右壁（槽壁，单向闸门：进盘后不可回槽）
+  if(b.x<BALL_R){ b.x=BALL_R; reflect(b,1,0,.7); }
+  if(b.y>=LANE_TOP-BALL_R && b.x>FW-BALL_R){ b.x=FW-BALL_R; reflect(b,-1,0,.7); }
+  // 槽区分隔柱（胶囊）
+  if(b.y>POCKET_Y-BALL_R-6){ for(let i=1;i<7;i++){ const px=SLOT_X[i]; const cy=Math.max(POCKET_Y+5,Math.min(FLOOR,b.y)); circleHit(b,px,cy,5,.5); } }
+  // 顶部短金柱
+  if(b.y<100) for(const q of PINS) segHit(b,q[0],q[1],q[2],q[3],8,.7);
+  // 左右壁粉色挡块
+  if(b.x<46||b.x>FW-46) for(const q of BUMP_SEGS) segHit(b,q[0],q[1],q[2],q[3],4,.7);
+  // 导流挡板
+  for(const w of WEDGES) segHit(b,w[0],w[1],w[2],w[3],6,.7);
+  // 钉
+  for(const p of pegs){ if(circleHit(b,p.x,p.y,PEG_R,.8)){ p.flash=8; b.vx+=(rnd()-.5)*.6; } }
+  // 金币撞柱
+  for(const c of coins){ if(c.cool>0) c.cool--; if(circleHit(b,c.x,c.y,COIN_R,.92)){ if(c.cool===0){ c.cool=8; onHit(c); } } }
+  // 落地
+  if(b.y>=FLOOR-BALL_R){ b.y=FLOOR-BALL_R; if(Math.abs(b.vy)<2.2){ land(); return; } b.vy=-Math.abs(b.vy)*.35; b.vx*=.8; }
+  // 防卡死：150 帧没有创出新低点就推一把；600 帧仍没落槽则直接放到槽区上方
+  if(b.y>S.maxY+1){ S.maxY=b.y; stuck=0; } else if(++stuck>150){ b.vy=-3; b.vx+=(rnd()-.5)*5; stuck=0; S.stalls=(S.stalls||0)+1; if(S.stalls>=4){ b.y=POCKET_Y-20; b.vy=2; b.vx=0; S.stalls=0; } }
+}
+function onHit(c){
+  if(S.capped) { c.flash=6; return; }
+  c.flash=14; S.hits++;
+  if(S.hits<=10){ S.acc+=base(); pop(c.x,c.y-40,'+'+base(),'#7CFF6A'); setMsg(`撞中金币 +${base()}`,'#7CFF6A'); }
+  else { S.acc*=2; S.capped=true; pop(c.x,c.y-46,'×2 翻倍封顶!','#FFC61E',44); setMsg('第 11 次 · 累计 ×2 封顶!','#FFD24A'); }
+  sync(); bumpLed();
+}
+function land(){
+  const slot=slotIndex(ball.x); S.lastSlot=slot;
+  const m=SLOTS[slot], k=S.useAdv?5:1, score=S.acc*m*k;
+  S.phase='settle'; S.landed=(S.landed||0)+1; S.lastScore=score; S.total+=score;
+  const lab=$('slotLabels').children[slot]; if(lab) lab.classList.add('hit');
+  pop(slotCenter(slot),POCKET_Y-14,score?`×${m}${k>1?' ×5':''} → +${score}`:'空发 +0',score?'#FFF3B0':'#B9A8FF',30);
+  setMsg(score?`落槽 ×${m}${k>1?' · 高级 ×5':''}\n本发 ${score} 分`:'空发 · 未撞中金币',score?'#FFD24A':'#B9A8FF');
+  let trig=false;
+  if(slot===S.trig){ S.gauge++; trig=true; pop(slotCenter(slot),POCKET_Y-54,`⚡充能 ${S.gauge}/${S.gaugeMax}`,'#FFC61E',26); }
+  sync(); bumpLed();
+  const finish=()=>{
+    if(trig && S.gauge>=S.gaugeMax){ S.gauge=0; S.pendingBuff=true; }
+    if(S.prog>=S.need) S.pendingClear=true;
+    S.phase='rest'; restBall(); sync();
+    if(S.pendingBuff){ S.pendingBuff=false; openBuff(); }
+    else if(S.pendingClear){ S.pendingClear=false; openClear(); }
+  };
+  if(AUTOTEST){ S.prog+=score; finish(); return; }
+  // 积分从显示屏飞进进度条，到达后进度条增长
+  setTimeout(()=>{
+    if(score>0){
+      const f=document.createElement('div'); f.className='fly'; f.textContent='+'+score;
+      f.style.left='940px'; f.style.top='232px'; stage.appendChild(f);
+      const tx=424+196+470*Math.min(1,(S.prog+score)/S.need)-30, ty=166+4;
+      requestAnimationFrame(()=>requestAnimationFrame(()=>{ f.style.transform=`translate(${tx-940}px,${ty-232}px) scale(.55)`; f.style.opacity='.35'; }));
+      setTimeout(()=>{ f.remove(); S.prog+=score; sync(); },680);
+    }
+    setTimeout(finish,score>0?900:300);
+  },420);
+}
+
+/* ════════════ 画布绘制 ════════════ */
+let chevLit=0, tick=0;
+/* 性能：盘面分三层——backCv（底纹/钉/柱影/轨/挡块，只在布局变化时重画）→ 每帧动态（触发槽脉冲/箭头/弹簧钮/柱/球）→ frontCv（玻璃反光）。
+   不用 shadowBlur / ctx.filter（都是软件路径），发光与置灰全部预渲染成精灵。 */
+const allLoaded=()=>Object.values(IM).every(i=>i.complete&&i.naturalWidth>0);
+function invalidateStatic(){ staticDirty=true; }
+function mkCanvas(w,h){ const c=document.createElement('canvas'); c.width=w; c.height=h; return c; }
+function renderStatic(){
+  staticReady=allLoaded();
+  backCv=backCv||mkCanvas(CW,CH); frontCv=frontCv||mkCanvas(CW,CH);
+  const main=ctx; ctx=backCv.getContext('2d'); ctx.clearRect(0,0,CW,CH);
+  // 盘面区域：平顶 + 圆顶 + 槽区
+  ctx.save();
+  ctx.beginPath(); ctx.moveTo(0,CEIL); ctx.lineTo(DOME.x,CEIL); ctx.arc(DOME.x,DOME.y,DOME.r,-Math.PI/2,0); ctx.lineTo(CW,CH); ctx.lineTo(0,CH); ctx.closePath(); ctx.clip();
+  const g=ctx.createRadialGradient(FW/2,300,40,FW/2,300,560); g.addColorStop(0,'#6B3FA8'); g.addColorStop(.55,'#3A2170'); g.addColorStop(1,'#1B1140'); ctx.fillStyle=g; ctx.fillRect(0,0,CW,CH);
+  if(IM.board.complete&&IM.board.naturalWidth) ctx.drawImage(IM.board,0,120,690,520,0,CEIL,CW,CH-CEIL);
+  const vg=ctx.createRadialGradient(FW/2,CH*.45,CH*.28,FW/2,CH*.45,CH*1.0); vg.addColorStop(0,'rgba(10,5,30,0)'); vg.addColorStop(1,'rgba(10,5,30,.55)'); ctx.fillStyle=vg; ctx.fillRect(0,0,CW,CH);
+  ctx.restore();
+  // 圆顶外侧机身角
+  ctx.save(); ctx.beginPath(); ctx.moveTo(DOME.x,0); ctx.lineTo(CW,0); ctx.lineTo(CW,DOME.y); ctx.arc(DOME.x,DOME.y,DOME.r+4,0,-Math.PI/2,true); ctx.lineTo(DOME.x,0); ctx.closePath();
+  const cg=ctx.createLinearGradient(0,0,0,DOME.y); cg.addColorStop(0,'#F5B02A'); cg.addColorStop(1,'#C96E0E'); ctx.fillStyle=cg; ctx.fill(); ctx.restore();
+  // 发射槽内腔 + 未点亮箭头
+  ctx.fillStyle='#24124A'; ctx.fillRect(LANE_L,LANE_TOP,LANE_R-LANE_L,CH-LANE_TOP);
+  const lg=ctx.createLinearGradient(LANE_L,0,LANE_R,0); lg.addColorStop(0,'rgba(0,0,0,.35)'); lg.addColorStop(.5,'rgba(255,255,255,.06)'); lg.addColorStop(1,'rgba(0,0,0,.35)'); ctx.fillStyle=lg; ctx.fillRect(LANE_L,LANE_TOP,LANE_R-LANE_L,CH-LANE_TOP);
+  ctx.lineCap='round'; ctx.strokeStyle='rgba(190,150,255,.35)'; ctx.lineWidth=6;
+  chevY.forEach(y=>{ ctx.beginPath(); ctx.moveTo(LANE_C-17,y+10); ctx.lineTo(LANE_C,y-8); ctx.lineTo(LANE_C+17,y+10); ctx.stroke(); });
+  // 槽区凹陷底板 + 分隔柱
+  const pk=ctx.createLinearGradient(0,POCKET_Y-10,0,CH); pk.addColorStop(0,'rgba(5,2,20,.75)'); pk.addColorStop(.35,'rgba(10,5,30,.35)'); pk.addColorStop(1,'rgba(10,5,30,.6)'); ctx.fillStyle=pk; ctx.fillRect(0,POCKET_Y-10,FW,CH-POCKET_Y+10);
+  for(let i=1;i<7;i++){ pin(SLOT_X[i],POCKET_Y+2,CH); }
+  // 顶部短金柱 + 装饰三角 + 壁挡块
+  for(const q of PINS) pin(q[0],q[1]-6,q[3]);
+  ctx.fillStyle='rgba(200,170,255,.55)'; for(const x of TRIS){ ctx.beginPath(); ctx.moveTo(x-13,54); ctx.lineTo(x+13,54); ctx.lineTo(x,76); ctx.closePath(); ctx.fill(); }
+  for(const [x,y] of BUMPERS){ const tip=x===0?32:FW-32; ctx.beginPath(); ctx.moveTo(x,y-20); ctx.lineTo(tip,y); ctx.lineTo(x,y+20); ctx.closePath(); ctx.fillStyle='#F58AB0'; ctx.fill(); ctx.lineWidth=3; ctx.strokeStyle='#C9506F'; ctx.stroke(); }
+  // 钉（含投影）+ 柱投影
+  for(const p of pegs){ ctx.beginPath(); ctx.ellipse(p.x+2,p.y+6,12,8,0,0,7); ctx.fillStyle='rgba(0,0,0,.38)'; ctx.fill(); if(IM.peg.complete&&IM.peg.naturalWidth) ctx.drawImage(IM.peg,p.x-PEG_R-2,p.y-PEG_R-2,PEG_R*2+4,PEG_R*2+4); }
+  for(const c of coins){ ctx.beginPath(); ctx.ellipse(c.x+3,c.y+10,COIN_R+2,COIN_R*.72,0,0,7); ctx.fillStyle='rgba(0,0,0,.42)'; ctx.fill(); }
+  // 槽壁 / 顶轨 / 导流片
+  ctx.lineCap='round'; ctx.lineJoin='round';
+  gold(()=>{ ctx.beginPath(); ctx.moveTo(LANE_L-4,LANE_TOP+2); ctx.lineTo(LANE_L-4,CH-2); ctx.stroke(); });
+  gold(()=>{ ctx.beginPath(); ctx.moveTo(LANE_R+4,LANE_TOP); ctx.lineTo(LANE_R+4,CH-2); ctx.stroke(); });
+  gold(()=>{ ctx.beginPath(); ctx.moveTo(0,CEIL-4); ctx.lineTo(DOME.x,CEIL-4); ctx.arc(DOME.x,DOME.y,DOME.r+4,-Math.PI/2,0); ctx.stroke(); });
+  gold(()=>{ ctx.beginPath(); ctx.moveTo(LANE_L-4,LANE_TOP+2); ctx.lineTo(LANE_L-26,LANE_TOP+26); ctx.stroke(); },6);
+  // 前景：玻璃反光 + 顶部内阴影
+  ctx=frontCv.getContext('2d'); ctx.clearRect(0,0,CW,CH);
+  ctx.save(); ctx.beginPath(); ctx.rect(0,CEIL,FW,CH-CEIL); ctx.clip();
+  const gl=ctx.createLinearGradient(0,0,FW,CH); gl.addColorStop(0,'rgba(255,255,255,.10)'); gl.addColorStop(.18,'rgba(255,255,255,.04)'); gl.addColorStop(.30,'rgba(255,255,255,0)'); gl.addColorStop(.62,'rgba(255,255,255,0)'); gl.addColorStop(.70,'rgba(255,255,255,.035)'); gl.addColorStop(.78,'rgba(255,255,255,0)'); ctx.fillStyle=gl; ctx.fillRect(0,0,FW,CH);
+  const ts=ctx.createLinearGradient(0,CEIL,0,CEIL+60); ts.addColorStop(0,'rgba(0,0,0,.45)'); ts.addColorStop(1,'rgba(0,0,0,0)'); ctx.fillStyle=ts; ctx.fillRect(0,CEIL,FW,60);
+  ctx.restore();
+  ctx=main;
+  coinCache={}; knobGrey=null; glowCache={};
+  trigGrad=ctx.createLinearGradient(0,POCKET_Y-90,0,CH); trigGrad.addColorStop(0,'rgba(255,198,30,0)'); trigGrad.addColorStop(1,'rgba(255,198,30,.5)');
+  staticDirty=false;
+}
+function coinSprite(v){ if(coinCache[v]) return coinCache[v]; const sz=COIN_R*2+6, c=mkCanvas(sz,sz), g=c.getContext('2d');
+  if(IM.coin.complete&&IM.coin.naturalWidth) g.drawImage(IM.coin,0,0,sz,sz);
+  g.font='900 28px "PingFang SC","Noto Sans SC",sans-serif'; g.textAlign='center'; g.textBaseline='middle'; g.lineWidth=5; g.strokeStyle='#5A3A06'; g.fillStyle='#fff'; g.strokeText(v,sz/2,sz/2+1); g.fillText(v,sz/2,sz/2+1);
+  coinCache[v]=c; return c; }
+function knobSprite(grey){ if(!grey) return IM.knob; if(knobGrey) return knobGrey; const sz=KNOB_H*2, c=mkCanvas(sz,sz), g=c.getContext('2d'); g.filter='grayscale(1) brightness(.6)'; if(IM.knob.complete&&IM.knob.naturalWidth) g.drawImage(IM.knob,0,0,sz,sz); knobGrey=c; return c; }
+function glowSprite(color){ if(glowCache[color]) return glowCache[color]; const r=Math.round(BALL_R*2.4), sz=r*2, c=mkCanvas(sz,sz), g=c.getContext('2d'); const rg=g.createRadialGradient(r,r,BALL_R*.5,r,r,r); rg.addColorStop(0,color); rg.addColorStop(1,'rgba(0,0,0,0)'); g.fillStyle=rg; g.fillRect(0,0,sz,sz); glowCache[color]=c; return c; }
+function draw(){
+  tick++;
+  if(staticDirty||!staticReady) renderStatic();
+  ctx.clearRect(0,0,CW,CH);
+  ctx.drawImage(backCv,0,0);
+  // 触发槽金框光柱（脉冲用 globalAlpha，不重建渐变）
+  const tx0=SLOT_X[S.trig]+6, tw=SLOT_X[S.trig+1]-SLOT_X[S.trig]-12;
+  ctx.globalAlpha=.6+.25*Math.sin(tick/8); ctx.fillStyle=trigGrad; ctx.fillRect(tx0,POCKET_Y-90,tw,CH-POCKET_Y+90); ctx.globalAlpha=1;
+  ctx.strokeStyle='#FFC61E'; ctx.lineWidth=4; ctx.strokeRect(tx0,POCKET_Y+2,tw,CH-POCKET_Y-4);
+  // 槽内上冲：箭头依次点亮（宽半透明描边代替 shadowBlur）
+  if(S.phase==='lane'){ ctx.lineCap='round'; chevY.forEach(y=>{ if(ball.y<y){ ctx.beginPath(); ctx.moveTo(LANE_C-17,y+10); ctx.lineTo(LANE_C,y-8); ctx.lineTo(LANE_C+17,y+10); ctx.strokeStyle='rgba(196,107,255,.45)'; ctx.lineWidth=16; ctx.stroke(); ctx.strokeStyle='#E9C6FF'; ctx.lineWidth=6; ctx.stroke(); } }); }
+  // 弹簧 + 绿钮（置灰用预渲染精灵）
+  const knobY=KNOB_REST+(S.phase==='pull'?S.pull:0);
+  drawSpring(knobY+KNOB_H,CH-6);
+  const ks=knobSprite(!canFire()&&S.phase==='rest'); if(ks&&(ks.width>0)) ctx.drawImage(ks,LANE_C-KNOB_H,knobY-KNOB_H,KNOB_H*2,KNOB_H*2);
+  // 钉闪
+  for(const p of pegs){ if(p.flash>0){ if(!S.freeze) p.flash--; ctx.beginPath(); ctx.arc(p.x,p.y,PEG_R+6,0,7); ctx.lineWidth=5; ctx.strokeStyle=`rgba(255,240,180,${p.flash/10})`; ctx.stroke(); } }
+  // 金币柱（带数字的精灵，按基础分缓存）
+  const spr=coinSprite(base());
+  for(const c of coins){
+    if(c.star){ ctx.save(); ctx.translate(c.x,c.y); ctx.rotate(tick/90); ctx.fillStyle='rgba(180,90,255,.45)'; star8(0,0,COIN_R+36,COIN_R+9); ctx.restore(); }
+    if(c.flash>0){ if(!S.freeze) c.flash--; ctx.beginPath(); ctx.arc(c.x,c.y,COIN_R+14,0,7); ctx.fillStyle=`rgba(255,220,90,${c.flash/16})`; ctx.fill(); }
+    if(S.capped){ ctx.globalAlpha=.42; ctx.drawImage(spr,c.x-COIN_R-3,c.y-COIN_R-3); ctx.globalAlpha=1; } else ctx.drawImage(spr,c.x-COIN_R-3,c.y-COIN_R-3);
+  }
+  // 拖尾 + 弹珠（发光用预渲染精灵）
+  const img=S.useAdv?IM.ballg:IM.ballp, glow=S.useAdv?'rgba(255,198,30,.75)':'rgba(190,120,255,.75)';
+  trail.forEach((p,i)=>{ ctx.beginPath(); ctx.arc(p[0],p[1],BALL_R*(0.3+i*.06),0,7); ctx.fillStyle=`rgba(230,215,255,${0.05+i*.04})`; ctx.fill(); });
+  if(ball){ const gs=glowSprite(glow); ctx.drawImage(gs,ball.x-gs.width/2,ball.y-gs.height/2); if(img.complete&&img.naturalWidth) ctx.drawImage(img,ball.x-BALL_R-1,ball.y-BALL_R-1,BALL_R*2+2,BALL_R*2+2); }
+  ctx.drawImage(frontCv,0,0);
+  // 调试：轨迹描线（?trace=力度）
+  if(TRACE.length){ ctx.strokeStyle='rgba(120,255,160,.9)'; ctx.lineWidth=3; ctx.beginPath(); TRACE.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1])); ctx.stroke(); }
+}
+let TRACE=[];
+function gold(fn,w=9){ ctx.lineWidth=w+4; ctx.strokeStyle='#7A3D0C'; fn(); ctx.lineWidth=w; ctx.strokeStyle='#F5B02A'; fn(); ctx.lineWidth=Math.max(2,w-6); ctx.strokeStyle='#FFE9A0'; fn(); }
+function pin(x,y0,y1){ ctx.lineCap='round'; ctx.lineWidth=13; ctx.strokeStyle='#7A3D0C'; ctx.beginPath(); ctx.moveTo(x,y0+6); ctx.lineTo(x,y1); ctx.stroke(); ctx.lineWidth=9; ctx.strokeStyle='#F5B02A'; ctx.beginPath(); ctx.moveTo(x,y0+6); ctx.lineTo(x,y1); ctx.stroke(); ctx.lineWidth=3; ctx.strokeStyle='#FFE9A0'; ctx.beginPath(); ctx.moveTo(x-2,y0+8); ctx.lineTo(x-2,y1); ctx.stroke(); }
+function drawSpring(y0,y1){ const n=9,h=(y1-y0)/n; ctx.lineWidth=5; ctx.strokeStyle='#2A1F55'; ctx.beginPath(); ctx.moveTo(LANE_C,y0); for(let i=0;i<n;i++){ ctx.lineTo(LANE_C+(i%2?-17:17),y0+h*(i+.5)); } ctx.lineTo(LANE_C,y1); ctx.stroke(); ctx.lineWidth=3; ctx.strokeStyle='#E9E7F6'; ctx.stroke(); }
+function star8(x,y,R,r){ ctx.beginPath(); for(let i=0;i<16;i++){ const a=i*Math.PI/8, rr=i%2?r:R; ctx.lineTo(x+Math.cos(a)*rr,y+Math.sin(a)*rr); } ctx.closePath(); ctx.fill(); }
+function pop(x,y,txt,color,size=34,hold=false){ if(AUTOTEST) return; const d=document.createElement('div'); d.className='pop t'; d.style.cssText=`left:${BX+x-100}px;top:${BY+y}px;width:200px;text-align:center;font-size:${size+4}px;color:${color}`; d.textContent=txt; $('pops').appendChild(d); if(hold) d.classList.add('hold'); else setTimeout(()=>d.remove(),950); }
+let toastT; function toast(m,hold){ const t=$('toast'); t.textContent=m; t.classList.add('on'); clearTimeout(toastT); if(!hold) toastT=setTimeout(()=>t.classList.remove('on'),1600); }
+
+/* ════════════ 发射器输入（拖拽 / 空格 / 自动） ════════════ */
+let pullStartY=null;
+function cvPos(e){ const r=cv.getBoundingClientRect(); return {x:(e.clientX-r.left)*CW/r.width,y:(e.clientY-r.top)*CH/r.height}; }
+cv.addEventListener('pointerdown',e=>{
+  if(MODE==='edit'){ return editCanvasDown(e); }
+  if(S.freeze) flowRelease();
+  const p=cvPos(e);
+  if(p.x>LANE_L-14 && p.x<LANE_R+14 && p.y>KNOB_REST-80){
+    if(!canFire()){ if(S.phase==='rest') toast(have()<cost()?'弹珠不足，点【+】或【前往获取】':'请稍候'); return; }
+    S.phase='pull'; S.pull=0; pullStartY=p.y; cv.setPointerCapture(e.pointerId); sync();
+  }
+});
+cv.addEventListener('pointermove',e=>{ if(MODE==='edit') return editCanvasMove(e); if(S.phase!=='pull') return; const p=cvPos(e); S.pull=Math.max(0,Math.min(PULL_MAX,p.y-pullStartY)); $('pwFill').style.width=S.pull/PULL_MAX*100+'%'; $('statusTxt').textContent=`蓄力 ${Math.round(S.pull/PULL_MAX*100)}% · 松手发射`; });
+function release(){ if(S.phase!=='pull') return; if(S.pull<8){ S.phase='rest'; S.pull=0; sync(); return; } launch(S.pull/PULL_MAX); }
+cv.addEventListener('pointerup',e=>{ if(MODE==='edit') return editCanvasUp(e); release(); });
+cv.addEventListener('pointercancel',release);
+let spaceHold=false;
+window.addEventListener('keydown',e=>{ if(e.code!=='Space'||e.repeat||(MODE!=='play'&&MODE!=='flow')) return; e.preventDefault(); if(S.freeze) flowRelease(); if(!canFire()) return; S.phase='pull'; S.pull=0; spaceHold=true; sync(); });
+window.addEventListener('keyup',e=>{ if(e.code!=='Space') return; spaceHold=false; release(); });
+function autoDemo(){ if(!canFire()) return toast('当前不能发射'); S.phase='pull'; S.pull=0; sync(); const t0=performance.now(); (function anim(){ const k=Math.min(1,(performance.now()-t0)/650); S.pull=PULL_MAX*(0.55+0.35*k); $('pwFill').style.width=S.pull/PULL_MAX*100+'%'; if(k<1) requestAnimationFrame(anim); else release(); })(); }
+function resetDemo(){ Object.assign(S,{stage:1,need:120,prog:0,balls:128,adv:3,useAdv:false,mult:1,hits:0,acc:0,capped:false,gauge:0,trig:2,total:0,spent:0,phase:'rest',pull:0,packUntil:0,packBought:0,firstShot:true,freeze:false,ended:false,lastScore:null}); flowClear(); restBall(); closeDlg(); sync(); toast('演示已重置'); }
+
+/* ════════════ L3 弹窗 ════════════ */
+function openDlg(title,html){ $('dlgTitle').textContent=title; $('dlgBody').innerHTML=html; $('mask').classList.add('on'); sync(); }
+function closeDlg(){ $('mask').classList.remove('on'); sync(); }
+function openRules(){ openDlg('规则说明',`
+  <p class="rule">1. 按住发射槽里的<b>绿色发射钮向下拉</b>蓄力，拉得越深力度越大；松手后弹珠沿槽上冲，从槽顶冲进盘面。力度不足会退回发射台，不消耗弹珠。</p>
+  <p class="rule">2. 弹珠<b>撞中任意金币柱</b>记 1 次撞击并获得一份基础分（基础分 = 当前倍数）。撞击次数全盘共用，前 10 次每次加分。</p>
+  <p class="rule">3. <b>第 11 次撞击把本发累计分整体 ×2 并封顶</b>，之后金币柱熄灭不再计分。</p>
+  <p class="rule">4. 弹珠落入底部七格倍数槽 <b>×1 ×2 ×3 ×10 ×3 ×2 ×1</b>，本发累计分再乘落槽倍数，即为本发得分。</p>
+  <p class="rule">5. <b>高级弹珠</b>本发最终得分再 ×5；只能从触发礼包与成就礼包获得。</p>
+  <p class="rule">6. 发射倍数 ×1 / ×5 / ×10 同时放大得分与每发弹珠消耗。</p>
+  <p class="rule">7. 本发得分计入<b>本场进度</b>，满目标领取本场奖励并进入下一场，进度重置、奖励升级。</p>
+  <p class="rule">8. 弹珠落入 <b>⚡金框触发槽</b> 累计充能，满 8 次从 Buff 池<b>随机抽取 1 个</b>（触发礼包 / 阶段积分 / 弹珠返还），之后重新随机触发槽。</p>`); }
+function openReward(){ const rows=[1,2,3,4,5].map(s=>`<tr class="${s===S.stage?'cur':''}"><td>第 ${s} 场</td><td>120 分</td><td>积分币 ×${2+s}</td></tr>`).join('');
+  openDlg('本场奖励预览',`<table class="tbl"><tr><th>场次</th><th>目标</th><th>本场奖励（每场一件，数值待精算）</th></tr>${rows}<tr><td>第 6 场起</td><td>120 分</td><td>循环第 5 场奖励</td></tr></table><p class="rule" style="margin-top:14px;font-size:19px;color:#6A5A40">进度满后自动弹出领取；也可点进度条右侧的奖励格。</p>`); }
+function openClear(){ if(S.prog<S.need) return; const n=S.stage; openDlg('本场达成',`
+  <div class="t" style="position:absolute;left:0;top:6px;width:896px;text-align:center;font-size:44px;color:#FFC61E">第 ${n} 场 · 积分 ${S.prog} / ${S.need}</div>
+  <div class="rw" style="left:388px;top:96px"><img class="b" src="assets/task/奖励格底_黄.png"><img class="i" src="assets/marble/积分币.png"><div class="t sm n">×${2+n}</div><div class="lb">本场奖励 · 积分币</div></div>
+  <p class="rule" style="position:absolute;left:0;top:270px;width:896px;text-align:center">领取后进度重置 → 进入第 ${n+1} 场，本场奖励升级</p>
+  <div class="btnimg" style="left:303px;top:330px;width:290px;height:108px" onclick="nextStage()"><img src="assets/common/按钮_金购买_390x146.png"><div class="lb" style="font-size:30px;color:#5A3A06">领取 · 进入第 ${n+1} 场</div></div>`); }
+function nextStage(){ const got=2+S.stage; S.stage++; S.prog=0; closeDlg(); toast(`进入第 ${S.stage} 场 · 积分币 ×${got} 已发放`); sync(); }
+function openBuff(){ openDlg('充能已满 · 随机抽取 Buff',`
+  <div class="rule" style="text-align:center;margin-bottom:0" id="buffHint">充能满 8 → 从 Buff 池<b>随机抽 1 个</b>；抽后充能清零、重新随机触发槽</div>
+  <div class="card hot nopick" id="bc1" style="left:16px"><div class="rb">高 ROI · 限时 1 小时</div><div class="ico">🎁</div><h4>触发礼包</h4><p>解锁限时礼包，<b>只售高级弹珠</b>（本发得分 ×5）。1 小时内可购买 1 次。</p></div>
+  <div class="card nopick" id="bc2" style="left:313px"><div class="ico">⭐</div><h4>阶段积分</h4><p>本场进度直接 <b>+30</b> 分。</p></div>
+  <div class="card nopick" id="bc3" style="left:610px"><div class="ico">↩</div><h4>弹珠返还</h4><p>返还普通弹珠 <b>×${5*S.mult}</b>（按当前倍数）。</p></div>
+  <div class="btnimg" id="buffBtn" style="left:303px;top:378px;width:290px;height:108px" onclick="buffDraw()"><img src="assets/common/按钮_金购买_390x146.png"><div class="lb" style="font-size:30px;color:#5A3A06">抽取</div></div>`); }
+let buffAnim=null;
+function buffDraw(){ const btn=$('buffBtn'); if(!btn||buffAnim) return; btn.style.pointerEvents='none'; btn.style.opacity='.5';
+  const r=rnd(), k=r<.2?1:r<.6?2:3;            // 演示权重：礼包 20 / 阶段积分 40 / 返还 40（正式值按数值页）
+  let t=0; const T=12+k;                         // 跑 T 步，最后一步正好停在第 k 张
+  (function tick(){ [1,2,3].forEach(j=>$('bc'+j).classList.toggle('spin',j===(t%3)+1)); t++;
+    if(t<T) buffAnim=setTimeout(tick,80+Math.pow(t/T,2)*260); else { buffAnim=null; buffResult(k); } })(); }
+function applyBuff(k,fixedTrig){ const old=S.trig; if(fixedTrig!=null) S.trig=fixedTrig; else do{ S.trig=Math.floor(rnd()*7); }while(S.trig===old);
+  if(k===1){ S.packUntil=Date.now()+3600e3; S.packBought=0; } else if(k===2){ S.prog+=30; } else { S.balls+=5*S.mult; } S.gauge=0; }
+function buffResult(k,fixedTrig){ applyBuff(k,fixedTrig);
+  [1,2,3].forEach(j=>{ const c=$('bc'+j); if(!c) return; c.classList.remove('spin'); c.classList.toggle('win',j===k); c.classList.toggle('lose',j!==k); });
+  const T={1:'抽中「触发礼包」· 限时礼包已解锁，1 小时内可购 1 次',2:`抽中「阶段积分」· 本场进度 +30（${S.prog-30} → ${S.prog}）`,3:`抽中「弹珠返还」· 普通弹珠 +${5*S.mult}（${S.balls-5*S.mult} → ${S.balls}）`}[k];
+  const h=$('buffHint'); if(h) h.innerHTML=`<b style="color:#B8600A">${T}</b>　充能已清零，触发槽已重随`;
+  const btn=$('buffBtn'); if(btn){ btn.style.pointerEvents=''; btn.style.opacity='1'; btn.querySelector('.lb').textContent=k===1?'确定 · 打开礼包':'确定'; btn.onclick=()=>{ closeDlg(); if(k===1) openPack(); else if(S.prog>=S.need) openClear(); }; }
+  sync(); }
+function pickBuff(k){ applyBuff(k); closeDlg(); if(k===1){ openPack(); toast('触发礼包已解锁 · 1 小时内有效'); } else if(k===2){ toast('阶段积分 +30'); if(S.prog>=S.need) setTimeout(openClear,300); } else toast(`弹珠返还 ×${5*S.mult}`); sync(); }
+function packLeft(){ const s=Math.max(0,Math.floor((S.packUntil-Date.now())/1000)); return `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`; }
+function openPack(){ const hot=S.packUntil>Date.now(); const sold=hot&&S.packBought>=1;
+  openDlg(hot?'限时触发礼包':'弹珠礼包',`
+  <div class="abs" style="left:20px;top:10px;width:300px;height:300px;border-radius:20px;background:linear-gradient(180deg,#2E2166,#1A1240);border:4px solid #7A4FD0" class="cen">
+    <img style="position:absolute;left:70px;top:60px;width:160px;height:160px" src="${hot?IM.ballg.src:IM.item.src}">
+    <div class="t abs" style="left:0;top:236px;width:300px;text-align:center;font-size:30px">${hot?'高级弹珠 ×5':'弹珠 ×20'}</div></div>
+  <div class="abs" style="left:350px;top:14px;width:530px">
+    <div style="font-size:30px;font-weight:900;color:#3A2A10">${hot?'高级弹珠礼包（限时）':'弹珠补给包'}</div>
+    <div style="font-size:19px;color:#5A4A30;margin-top:6px;line-height:1.5">${hot?'由触发槽充能满抽中解锁。<b>高级弹珠本发最终得分 ×5</b>，不走常规免费产出，仅此礼包与成就礼包可得。':'普通弹珠补给，用于发射。'}</div>
+    <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap">
+      ${hot?`<span style="background:#1A1230;color:#FFD98A;border-radius:10px;padding:6px 12px;font-size:19px;font-weight:900">⏱ 倒计时 <span id="packCd">${packLeft()}</span></span>`:''}
+      <span style="background:#1A1230;color:#fff;border-radius:10px;padding:6px 12px;font-size:19px;font-weight:900">限购 ${hot?(sold?'0':'1'):'∞'}/${hot?'1':'∞'}</span>
+      ${hot?`<span style="background:#E02020;color:#fff;border-radius:10px;padding:6px 12px;font-size:19px;font-weight:900">价值 500%</span>`:''}</div></div>
+  <div class="btnimg" style="left:430px;top:330px;width:395px;height:158px;${sold?'filter:grayscale(1) opacity(.6);pointer-events:none':''}" onclick="buyPack(${hot?1:0})"><img src="assets/common/按钮_金购买原价现价_395x158.png"><div class="lb" style="font-size:34px;color:#5A3A06;top:18px">${sold?'已购买':(hot?'$4.99':'$1.99')}</div></div>
+  ${hot?`<div class="rule" style="position:absolute;left:430px;top:296px;font-size:18px;color:#8A7A60">原价 <s>$9.99</s></div>`:''}`);
+  if(hot){ clearInterval(window._pcd); window._pcd=setInterval(()=>{ const e=$('packCd'); if(e) e.textContent=packLeft(); else clearInterval(window._pcd); },1000); } }
+function buyPack(hot){ if(hot){ S.adv+=5; S.packBought=1; toast('购买成功：高级弹珠 ×5'); } else { S.balls+=20; toast('购买成功：弹珠 ×20'); } closeDlg(); }
+function openGeneric(k){ const M={
+  rank:['排行榜（跨服总榜）','<p class="rule">按活动期<b>累计弹珠消耗量</b>排名（score = 消耗 ×200），只做跨服个人总榜。榜首获<b>限定主城皮肤（永久）</b>，2~3 名高级皮肤 30 天，4~10 名初级皮肤永久，11~50 名初级皮肤 7 天，51~100 名皮肤体验券。</p><p class="rule">入口母版：排名奖励预览格 ×4 + 奖杯 + 「排行榜」字。二级榜单界面沿用项目通用排行榜弹窗（弹窗排行_外板 + 列表区），本稿不展开。</p>'],
+  ach:['成就','<p class="rule">完成成就（累计发射 / 累计撞击 / 单发满分 / 落入 ×10 槽 N 次 …）领取<b>成就礼包</b>。成就礼包是高级弹珠的第二来源。</p><p class="rule">二级界面沿用项目任务列表母版（任务行 704×192：标题 + 进度 + 奖励格 ×3 + 领取钮），本稿不展开。</p>'],
+  shop:['兑换商店','<p class="rule">用活动积分币兑换养成资源与节日外显（按当期节日换档）。</p><p class="rule">二级界面沿用项目商店母版，本稿不展开。</p>'],
+  end:['活动已结束','<p class="rule">本期闯关弹珠已结束，发射与购买已关闭。</p><p class="rule"><b>名次奖励</b>按最终排名统一邮件发放；<b>剩余弹珠按数量折算金币</b>，同样走邮件。</p><p class="rule" style="color:#6A5A40;font-size:19px">兑换商店保留 3 天，积分币请及时兑换。</p><div class="btnimg" style="left:303px;top:330px;width:290px;height:108px" onclick="closeDlg()"><img src="assets/common/按钮_金购买_390x146.png"><div class="lb" style="font-size:30px;color:#5A3A06">知道了</div></div>'],
+  error:['数据加载失败','<p class="rule">排行 / 积分数据拉取超时，请检查网络后重试。</p><p class="rule"><b>本次发射结果已保留</b>，不会丢分、不会重复扣弹珠。</p><div class="btnimg" style="left:303px;top:330px;width:290px;height:108px" onclick="closeDlg();toast(\'已重新连接\')"><img src="assets/common/按钮_蓝通用_390x146.png"><div class="lb" style="font-size:30px;color:#fff;-webkit-text-stroke:2px #0A2A4A;paint-order:stroke fill">重试</div></div>']}[k]; openDlg(M[0],M[1]); }
+
+/* ════════════ 模式：演示 / 标注 / 编辑 ════════════ */
+let MODE='play';
+const stage=$('stage');
+function setMode(m){ MODE=m; document.querySelectorAll('#modes div').forEach(d=>d.classList.toggle('on',d.dataset.m===m));
+  stage.classList.toggle('note',m==='note'); stage.classList.toggle('edit',m==='edit');
+  document.body.classList.toggle('legend',m==='note'); document.body.classList.toggle('edit',m==='edit');
+  document.body.classList.toggle('flow',m==='flow'); if(m==='flow'&&FLOW_I<0) flowGo(0); if(m!=='flow'&&S.freeze) flowRelease();
+  if(m!=='edit') selectEl(null); fit(); }
+document.querySelectorAll('#modes div').forEach(d=>d.onclick=()=>setMode(d.dataset.m));
+
+/* ── 标注图例 ── */
+const NOTES=[
+ ['nav','左侧导航条（母版固化）','活动分类 / 玩法切换 / 当前选中态；一级选中 = 闯关弹珠。','点页签切活动；左上返回键回活动中心。','选中：黄底右尖角；未选：纯文字。','整条按共享素材库 27:378 原件输出，唯一变量是选中页签文案；禁改色、改圆角、挪顶部。'],
+ ['title','活动名 + 一句话说明','让玩家 3 秒懂：怎么玩、为什么玩。','无。','固定。','活动名 72px 黑体 7px 描边；说明 21px。按当期节日包装换活动名与美术字。'],
+ ['assets','资产条（母版 + 活动道具位）','前三固定资源原件 + 第 4 位活动消耗道具「弹珠」实时数量 + 【+】跳礼包。','点【+】打开弹珠礼包（触发礼包激活时打开限时礼包）。','弹珠为 0 时数字变红。','前三 chip 用母版原件不动；第 4 位图标每活动按玩法出一张新道具图（192px）替换。'],
+ ['rank','排行榜入口（母版组合）','跨服总榜入口，预览榜位奖励（榜首限定主城皮肤）。','点击进入排行榜二级界面。','固定。','母版组合原件（排名奖励预览格 ×4 + 奖杯 + 字），只换预览格里的奖励图。'],
+ ['machine','弹珠机机身（金框）','把进度条、显示屏、盘面、发射槽、控制台包成一台完整机器。','无。','固定。','金色厚框可整体换节日主题机身（外框 840×868，顶沿一排跑马灯泡；内挖：顶棚 808×150、盘面 792×616）。手机可读性：所有可点元素 ≥ 90px，正文 ≥ 22px。'],
+ ['hdr_prog','本场进度条（左关卡 / 右本场奖励）','闯关主目标。左：星形关卡徽章 + 「第 N 场」；中：本场累计分 / 目标；右：本场完成奖励格。每发结算后积分从显示屏<b>飞入</b>进度条，条随之增长。','点右侧奖励格：未满看各场奖励预览，已满弹「本场达成」领奖进下一场。','进行中（蓝条）/ 已满（绿条 + 奖励格金色脉冲外圈，自动弹领取）。','星徽章 64、进度条 470×34（滑条原件可替换）、奖励格 66（奖励格底_黄 + 道具图标 + ×N）。'],
+ ['hdr_screen','显示屏（本次发射逐击反馈）','机身顶部 LED 屏，一直做反馈：左「本次发射」+ 11 粒撞击指示（10 粒 + ×2 粒）；中大号累计分，<b>每撞一下 +基础分并跳动</b>；右消息区：撞中金币 +N / 第 11 次累计 ×2 封顶 / 落槽 ×N 本发 X 分。撞完落槽后累计分变金，随后飞入上方进度条。','无（自动反馈）。','待发「拉动发射器开始」/ 蓄力% / 发射！/ 飞行中 / 撞击累计（青）/ 封顶（金）/ 结算（金）/ 弹珠不足（红）。','屏体 722×74：深色玻璃 + 扫描线；数字用等宽字带青光。UI 可整体换成节日风格液晶屏，数字与消息位保留。'],
+ ['board','弹珠盘 + 发射槽（画布）','玩法主体，盘内布局<b>按竞品 1:1 量取映射</b>：<br>·顶部 4 根短金柱夹 4 个装饰三角；·金币柱 ×7 呈 2-3-2 蜂窝排（两侧柱贴壁，中柱带星芒），撞中 +基础分，第 11 次 ×2 封顶后熄灭；·小钉 17 颗：顶中 1、二排夹缝 2、三排外侧 2、中下 1、底部两排 6+5（上排正对槽分隔柱）；·左右壁各 2 块粉色挡块把贴边球顶回盘中；·右上圆顶轨：弹珠从槽顶冲出后沿圆顶滑入盘面；·底部七格槽 ×1 ×2 ×3 ×10 ×3 ×2 ×1（边格窄内格宽，同竞品），金框 ⚡ 为触发槽。<br>·<b>发射槽</b>（盘内右侧内嵌竖槽）：底部弹簧 + 绿色发射钮，待发弹珠坐在钮上；全程可见弹珠从槽内上冲 → 槽顶敞口 → 圆顶 → 盘面。','按住绿钮向下拉蓄力（越深越强），松手发射；空格键同效。力度不足 ≈25% 冲不出槽口 → 退回不消耗。飞行中：撞柱发光 + 飘字 +N 同步显示屏；第 11 次金色「×2 翻倍封顶」飘字、全部金币柱熄灭；落槽：槽标签放大白框 + 飘字「×N → +分」。','待发 / 蓄力 / 槽内上冲（箭头逐个点亮）/ 盘内飞行 / 落槽结算 / 弹珠不足（发射钮置灰）。','画布内元素均为独立切图位：盘面底纹 700×604、金币柱 88、小钉 24、顶柱 16×28、粉挡块 32×40、发射钮 76、弹珠 30、槽分隔柱、金轨。编辑模式可拖金币柱，导出 JSON 含全部坐标（含钉 / 柱 / 挡块 / 槽边界）。'],
+ ['slotlabels','七格倍数槽标签（机身底栏）','标出每格落槽倍数，颜色按倍数品质：灰 ×1 / 绿 ×2 / 蓝 ×3 / 金 ×10。','无。','触发槽：金色脉冲外圈 + ⚡；命中：放大 + 白框 0.7s。','7 个圆盘 52px + 24px 描边字，位置跟随各槽边界。'],
+  ['top_plate','顶棚嵌板','进度条与显示屏的暗色嵌板，让顶部读成机柜顶棚。','无。','固定。','嵌板 808×150 可整换材质。'],
+ ['deck','右侧控制台底板','承载 4 组操作：弹珠 / 倍数 / 充能 / 发射，每组一块黄铜铭牌。所有解释性文字不进界面，规则见 ❗。','无。','固定。','底板 638×764 + 铭牌 4 块可整换节日材质。'],
+ ['m_type','弹珠类型切换','普通弹珠 / 高级弹珠（本发最终 ×5），各自显示持有数。','点 chip 切换（发射中锁定）。','选中金框 + 「使用中」角标；数量 0 变红。','两个 chip 290×110，图标 64（弹珠_紫 / 弹珠_金），数量 34px。'],
+ ['m_mult','发射倍数','×1 / ×5 / ×10 同倍放大得分与消耗；下方两枚图标胶囊实时显示「每发消耗 N 颗」「每击 +N 分」。','点倍数钮切换（发射中锁定）。','选中高亮发光，未选压暗。','倍数钮原件 96px 原尺寸 ×3；胶囊图标 32px、字 21px。'],
+ ['m_gauge','触发槽充能 + Buff 池','弹珠落入金框触发槽累计充能，铭牌右侧显示 N/8；满 8 弹出抽取弹窗，点「抽取」从 Buff 池<b>随机抽 1 个</b>（触发礼包 / 阶段积分 / 弹珠返还，不是玩家选），抽完重新随机触发槽。下方三格预览 Buff 池。','点「抽取」跑一轮随机。','8 粒 LED 充能点；Buff 弹窗三张牌 → 跑马灯高亮 → 停在抽中那张，其余压暗。','8 粒 30px 指示点 + 3 个奖励格 64px（奖励格底 + 道具图标）。'],
+ ['m_status','力度槽 + 操作提示 / 不足态','上：蓄力力度条（白线 = 冲出槽口最低力度）；下：黄提示条讲操作，或红字报「弹珠不足：需 N 现有 M」+【前往获取】。','点【前往获取】打开礼包。','提示 / 蓄力% / 上冲中 / 飞行中 / 结算中 / 不足（红字 + 蓝钮，发射钮同时置灰）。','金色药丸 586×60（字 22px）；蓝通用钮 166×62。'],
+ ['rulebtn','规则说明入口 ❗','进入完整规则（目标 / 操作 / 计分 / 奖励 / 限制）。','点击弹出规则弹窗。','固定。','项目通用 i 钮。'],
+ ['ach','成就入口','完成成就领成就礼包（高级弹珠第二来源）。','点击进入成就二级界面。','有可领时挂红点（本稿未画）。','图标 52 + 文字。'],
+ ['shop','兑换商店入口','积分币兑换资源 / 节日外显。','点击进入商店二级界面。','固定。','图标 52 + 文字。'],
+ ['cd','活动倒计时','剩余时间。','无。','固定。','倒计时底原件 392×92 缩放 + 时钟图标 + 描边字。'],
+];
+function buildLegend(){ const L=$('legendList'); L.innerHTML=''; NOTES.forEach((n,i)=>{ const el=stage.querySelector(`[data-el="${n[0]}"]`); if(el) el.dataset.n=i+1;
+  const d=document.createElement('div'); d.className='li'; d.innerHTML=`<b><span>${i+1}</span>${n[1]}</b><p><em>功能</em>${n[2]}</p><p><em>交互</em>${n[3]}</p><p><em>状态</em>${n[4]}</p><p class="u"><em>UI替换</em>${n[5]}</p>`;
+  d.onmouseenter=()=>{ document.querySelectorAll('[data-el].hl').forEach(x=>x.classList.remove('hl')); el&&el.classList.add('hl'); d.classList.add('on'); };
+  d.onmouseleave=()=>{ el&&el.classList.remove('hl'); d.classList.remove('on'); }; L.appendChild(d); });
+  // 弹窗清单
+  const d=document.createElement('div'); d.className='li'; d.innerHTML=`<b><span>L3</span>弹窗层（演示模式可全部触达）</b><p><em>规则说明</em>❗钮 → 8 条规则。</p><p><em>本场达成</em>进度满自动弹出（也可点进度条右侧奖励格）：1 格奖励（与进度条右侧奖励格同一件）+ 「领取·进入第 N 场」金钮。</p><p><em>Buff 抽取</em>触发槽充能满：三张牌展示 → 点「抽取」随机停一张（礼包热卡 / 阶段积分 / 弹珠返还）→ 结果写在弹窗里，确定后生效。</p><p><em>限时触发礼包</em>倒计时 + 限购 1 + 价值标签 + 原价现价金钮；购后钮置灰「已购买」。</p><p><em>弹珠礼包</em>资产条【+】/ 不足态【前往获取】。</p><p><em>本场奖励预览</em>各场奖励表，当前场高亮。</p><p><em>排行榜 / 成就 / 商店</em>说明页（二级界面沿用项目母版，本稿不展开）。</p><p class="u"><em>UI替换</em>小弹窗底板 976×673 + 标题条 + 红 X 原件；按钮全部为项目通用金 / 蓝 / 绿钮原件。</p>`; L.appendChild(d); }
+
+/* ════════════ 流程模式：19 步交互示意（本稿真实渲染，取代旧 flow_marble3 板；flow_marble4 板由 build_flow_board.py 从这里截图生成） ════════════ */
+const FLOW_BASE={stage:3,need:120,prog:0,balls:128,adv:3,useAdv:false,mult:1,hits:0,acc:0,capped:false,gauge:3,gaugeMax:8,trig:2,phase:'rest',pull:0,firstShot:false,lastScore:null,lastSlot:null,packUntil:0,packBought:0,pendingBuff:false,pendingClear:false,ended:false,freeze:false};
+const FLOW=[
+ {sec:'（1）进入与准备',cap:'① 主界面 · 首次进入（第 1 场 · 0 分）',s:{stage:1,gauge:0,firstShot:true},
+  note:'顶部进度条：左「第 1 场」徽章、中 0 / 120、右本场奖励格。显示屏待发「拉动发射器开始」。盘内右侧是发射槽：弹珠坐在绿钮上，箭头提示下拉蓄力。底部七格倍数槽，金框 ⚡ 为触发槽（随机指定）。'},
+ {cap:'② 选倍数 ×10 · 切高级弹珠',s:{stage:1,gauge:0,mult:10,useAdv:true},
+  note:'右控制台：点倍数钮 ×1 / ×5 / ×10，得分与每发消耗同倍放大，胶囊实时显示「每发消耗 10 · 每击 +10」。点高级弹珠 chip 切换，待发弹珠变金，<b>本发最终得分 ×5</b>。发射中两者锁定。后续步骤按 ×1 普通弹珠演示。'},
+ {sec:'（2）发射',cap:'③ 按住绿钮下拉 · 蓄力 70%',s:{phase:'pull',pull:70},
+  note:'按住发射钮向下拉，拉得越深力度越大；控制台力度条同步，白线 = 冲出槽口的最低力度。显示屏「蓄力 70%」。松手发射，空格键同效。'},
+ {cap:'④ 松手 · 弹珠沿发射槽上冲',s:{phase:'lane'},ball:[745,200,0,-14],trail:[[745,330],[745,300],[745,270],[745,240]],msg:['发射！','#9FF0F5'],
+  note:'弹珠全程可见：槽内上冲、箭头逐个点亮 → 槽顶敞口 → 右上圆顶轨 → 滑入盘面。<b>冲出槽口那一刻才扣弹珠、开始计分</b>；力度不足退回发射台，不消耗。'},
+ {sec:'（3）计分核心循环',cap:'⑤ 盘内飞行 · 撞金币按次数加分（7 / 11）',s:{phase:'field',hits:7,acc:7,balls:127},ball:[440,232,-3,4],trail:[[520,110],[490,140],[468,172],[452,204]],flash:[1],pops:[[501,136,'+1','#7CFF6A',34]],msg:['撞中金币 +1','#7CFF6A'],
+  note:'撞中任意金币柱 = 撞击 +1、加一份基础分；7 根柱全同、次数全盘共用。显示屏：左 11 粒指示逐粒点亮、中累计分逐击跳动、右「撞中金币 +1」；盘上飘字 +1 与拖尾。'},
+ {cap:'⑥ 第 11 次撞击 · 累计 ×2 封顶',s:{phase:'field',hits:11,acc:20,capped:true,balls:127},ball:[470,318,3,3],trail:[[380,220],[410,250],[440,280],[458,300]],flash:[6],pops:[[503,318,'×2 翻倍封顶!','#FFC61E',44]],msg:['第 11 次 · 累计 ×2 封顶!','#FFD24A'],
+  note:'第 11 次把本发累计分<b>整体 ×2 并封顶</b>，此后金币柱全部熄灭不再计分。显示屏 ×2 粒点亮、累计分变金；盘上金色大飘字——单发体验高潮点，要全屏级演出。'},
+ {cap:'⑦ 落入触发槽（×3 ⚡）· 倍数结算 + 充能 +1',s:{phase:'settle',hits:11,acc:20,capped:true,balls:127,lastScore:60,lastSlot:2,gauge:4},ball:[235,602,0,0],slotHit:2,pops:[[235,566,'×3 → +60','#FFF3B0',30],[235,524,'⚡充能 4/8','#FFC61E',26]],msg:['落槽 ×3\n本发 60 分','#FFD24A'],
+  note:'落槽倍数对本发累计整体再乘：20 × 3 = <b>60 分</b>；槽标签放大白框，显示屏变金，随后积分飞入上方进度条。落的是金框触发槽 → 充能 3/8 → 4/8（其余槽只结算倍数）。'},
+ {cap:'⑧ 落入 ×10 槽 · 本场进度补满',s:{phase:'settle',hits:6,acc:6,balls:126,lastScore:60,lastSlot:3,gauge:4,prog:120},ball:[344,602,0,0],slotHit:3,pops:[[344,566,'×10 → +60','#FFF3B0',30]],msg:['落槽 ×10\n本发 60 分','#FFD24A'],
+  note:'6 次撞击 6 分 × 落槽 ×10 = 60 分，本场进度 60 → <b>120 满</b>：进度条变绿，结算后奖励格金圈脉冲并自动弹「本场达成」。一发两次乘：第 11 次 ×2、落槽 ×N；高级弹珠在最外层再 ×5。'},
+ {sec:'（4）闯关',cap:'⑨ 积分满 120 · 本场达成（L3）',s:{prog:120,balls:126,gauge:4},dlg:'clear',
+  note:'弹窗：第 N 场 · 积分 120 / 120 + <b>本场奖励一件</b>（就是进度条右侧奖励格那件）+ 主按钮「领取 · 进入第 4 场」。<b>领完即进下一场</b>，不给停顿点。奖励是什么以数值页为准，本稿只画结构。'},
+ {cap:'⑩ 第 4 场开始（进度重置）',s:{stage:4,balls:126,gauge:4},
+  note:'进度条回 0 / 120、场数徽章跳 4、右侧本场奖励格换新一档（×5 → ×6）。<b>触发槽充能不重置</b>（与关卡进度独立），继续累计。'},
+ {sec:'（5）充能 Buff 与付费转化',cap:'⑪ 充能满 8 · 弹出 Buff 抽取（L3）',s:{stage:4,prog:30,gauge:8,balls:124},dlg:'buff',
+  note:'充能满自动弹出：Buff 池三张牌全展示，底部一颗「抽取」钮——<b>随机抽 1 个，不是玩家选</b>。触发礼包是付费转化位，抽中权重压低、卡面视觉权重要拉开。抽后充能清零、触发槽重随。⑫⑬⑭ 是三种抽中结果。'},
+ {cap:'⑫ 抽中「阶段积分」· 本场进度 +30',s:{stage:4,prog:30,gauge:0,balls:124},dlg:'buff',win:2,winTrig:5,
+  note:'点「抽取」后三张牌跑马灯高亮、减速、停在抽中那张；其余两张压暗。结果写在弹窗顶：本场进度 +30（30 → 60），背景进度条同步涨；触发槽 ⚡ 从 ×3 位重随到 ×2 位。「确定」关窗。'},
+ {cap:'⑬ 抽中「弹珠返还」· 弹珠 ×5',s:{stage:4,prog:30,gauge:0,balls:124},dlg:'buff',win:3,winTrig:5,
+  note:'返还普通弹珠 ×5，按<b>当前倍数</b>放大（×10 时返 50）；资产条与弹珠 chip 数量当场跳（124 → 129）。同样充能清零、触发槽重随。'},
+ {cap:'⑭ 抽中「触发礼包」· 解锁限时礼包',s:{stage:4,prog:30,gauge:0,balls:124},dlg:'buff',win:1,winTrig:5,
+  note:'热卡停牌，钮变「确定 · 打开礼包」→ 直接进限时礼包弹窗（⑮）。礼包 1 小时内有效，倒计时从这一刻起。'},
+ {cap:'⑮ 限时触发礼包（只售高级弹珠）',s:{stage:4,prog:30,gauge:0,trig:5,balls:124},pack:true,dlg:'pack',
+  note:'倒计时、限购 1、价值标签、原价现价金钮四件同屏；购后钮置灰「已购买」。高级弹珠不走常规免费产出，<b>只出自这里和成就礼包</b>——全玩法核心付费链路。资产条【+】平时打开普通弹珠补给包。'},
+ {sec:'（6）排行与边界态',cap:'⑯ 排行榜入口 → 排行榜（L3）',s:{stage:4,prog:30},dlg:'rank',
+  note:'按活动期<b>累计弹珠消耗量</b>排名，只做跨服个人总榜，榜首限定主城皮肤。二级榜单沿用项目通用排行榜弹窗，本稿不展开。'},
+ {cap:'⑰ 边界态 · 弹珠不足',s:{stage:4,prog:30,balls:0,adv:0},
+  note:'发射钮置灰、显示屏红字「弹珠不足」、资产条数字变红；控制台红字写明「需 1 现有 0」+【前往获取】直达礼包。<b>禁用态必须带原因与获取入口</b>，不能只变灰。'},
+ {cap:'⑱ 边界态 · 活动结束',s:{stage:4,prog:75,ended:true},dlg:'end',
+  note:'发射钮置灰、倒计时改「已结束」、控制台写明原因；弹窗讲清<b>名次奖励与剩余弹珠折算金币统一邮件发放</b>——案子明确这条，必须讲清。'},
+ {cap:'⑲ 边界态 · 数据加载失败',s:{stage:4,prog:75},dlg:'error',
+  note:'排行 / 积分拉取超时。弹窗必须说明「<b>本次发射结果已保留</b>」+【重试】，否则玩家会以为白花了。断网、倒计时异常共用这套骨架。'},
+];
+let FLOW_I=-1, flowTimer=null;
+function flowClear(){ clearTimeout(buffAnim); buffAnim=null; $('pops').innerHTML=''; $('toast').classList.remove('on'); clearTimeout(toastT); document.querySelectorAll('.slotlab.hit').forEach(x=>x.classList.remove('hit')); coins.forEach(c=>{c.flash=0;c.cool=0;}); pegs.forEach(p=>p.flash=0); trail=[]; clearInterval(window._pcd); }
+function flowGo(i){
+  if(i<0||i>=FLOW.length) return; FLOW_I=i; const f=FLOW[i];
+  closeDlg(); flowClear(); Object.assign(S,FLOW_BASE,f.s); restBall();
+  if(f.pack) S.packUntil=Date.now()+3600e3;
+  if(S.phase==='pull') ball.y=KNOB_REST+S.pull-KNOB_H-BALL_R;
+  if(f.ball) ball={x:f.ball[0],y:f.ball[1],vx:f.ball[2]||0,vy:f.ball[3]||0};
+  if(f.trail) trail=f.trail.map(p=>p.slice());
+  S.freeze=S.phase!=='rest';
+  sync();
+  if(f.flash) f.flash.forEach(k=>{ if(coins[k]) coins[k].flash=12; });
+  if(f.slotHit!=null){ const lab=$('slotLabels').children[f.slotHit]; if(lab) lab.classList.add('hit'); }
+  if(f.msg) setMsg(f.msg[0],f.msg[1]);
+  if(f.pops) f.pops.forEach(p=>pop(p[0],p[1],p[2],p[3],p[4],true));
+  if(f.toast) toast(f.toast,true);
+  if(f.dlg==='clear') openClear(); else if(f.dlg==='buff'){ openBuff(); if(f.win) buffResult(f.win,f.winTrig); } else if(f.dlg==='pack') openPack(); else if(f.dlg) openGeneric(f.dlg);
+  document.querySelectorAll('#flowList .st').forEach((el,k)=>{ el.classList.toggle('on',k===i); if(k===i&&el.scrollIntoView) el.scrollIntoView({block:'nearest'}); });
+  $('flowPos').textContent=`${i+1} / ${FLOW.length}`;
+}
+function flowRelease(){ S.freeze=false; flowClear(); if(S.phase!=='rest'){ S.phase='rest'; S.lastScore=null; restBall(); } sync(); }
+function flowAuto(){ const b=$('flowAutoBtn'); if(flowTimer){ clearInterval(flowTimer); flowTimer=null; b.classList.remove('on'); b.textContent='自动播放'; return; }
+  b.classList.add('on'); b.textContent='停止'; if(FLOW_I>=FLOW.length-1) flowGo(0); flowTimer=setInterval(()=>{ if(FLOW_I>=FLOW.length-1){ flowAuto(); return; } flowGo(FLOW_I+1); },3200); }
+function buildFlow(){ const L=$('flowList'); L.innerHTML=''; FLOW.forEach((f,i)=>{ if(f.sec){ const h=document.createElement('div'); h.className='fs'; h.textContent=f.sec; L.appendChild(h); }
+  const d=document.createElement('div'); d.className='st'; d.innerHTML=`<b><span>${i+1}</span>${f.cap.replace(/^[①-⑳]\s*/,'')}</b><p>${f.note}</p>`; d.onclick=()=>{ if(flowTimer) flowAuto(); flowGo(i); }; L.appendChild(d); }); }
+window.addEventListener('keydown',e=>{ if(MODE!=='flow'||e.metaKey||e.ctrlKey||/INPUT|TEXTAREA/.test(document.activeElement.tagName)) return;
+  if(e.key==='ArrowRight'||e.key==='PageDown'){ e.preventDefault(); if(flowTimer) flowAuto(); flowGo(FLOW_I+1); }
+  else if(e.key==='ArrowLeft'||e.key==='PageUp'){ e.preventDefault(); if(flowTimer) flowAuto(); flowGo(FLOW_I-1); }
+  else if(e.key==='p'||e.key==='P'){ flowAuto(); } });
+
+/* ── 编辑模式：拖动 / 缩放 / 检查器 / 导出 ── */
+const LS_KEY='marble_v4_layout';
+const DEF={}; let LAYOUT={}; let selEl=null, drag=null;
+function readRect(el){ return {x:parseFloat(el.style.left)||0,y:parseFloat(el.style.top)||0,w:parseFloat(el.style.width)||el.offsetWidth,h:parseFloat(el.style.height)||el.offsetHeight}; }
+function applyRect(el,r){ el.style.left=r.x+'px'; el.style.top=r.y+'px'; if(r.w) el.style.width=r.w+'px'; if(r.h) el.style.height=r.h+'px'; }
+function initLayout(){ stage.querySelectorAll('[data-el]').forEach(el=>{ DEF[el.dataset.el]=readRect(el); });
+  try{ const s=JSON.parse(localStorage.getItem(LS_KEY)||'null'); if(s&&s.elements){ LAYOUT=s.elements; for(const id in LAYOUT){ const el=stage.querySelector(`[data-el="${id}"]`); if(el) applyRect(el,LAYOUT[id]); } if(s.coins){ coins.forEach((c,i)=>{ if(s.coins[i]){ c.x=s.coins[i][0]; c.y=s.coins[i][1]; } }); buildPegs(); } } }catch(e){} }
+function saveLayout(){ try{ localStorage.setItem(LS_KEY,JSON.stringify({elements:LAYOUT,coins:coins.map(c=>[Math.round(c.x),Math.round(c.y)])})); }catch(e){} }
+function selectEl(el){ document.querySelectorAll('[data-el].sel').forEach(x=>{x.classList.remove('sel'); const h=x.querySelector(':scope>.rh'); h&&h.remove();}); selEl=el;
+  if(!el){ $('inspTitle').textContent='未选中元素'; return; }
+  el.classList.add('sel'); const h=document.createElement('div'); h.className='rh'; el.appendChild(h);
+  const r=readRect(el); $('inspTitle').textContent=`${el.dataset.title}（${el.dataset.el}）`; $('ix').value=Math.round(r.x); $('iy').value=Math.round(r.y); $('iw').value=Math.round(r.w); $('ih').value=Math.round(r.h); }
+function inspApply(){ if(!selEl) return; const r={x:+$('ix').value,y:+$('iy').value,w:+$('iw').value,h:+$('ih').value}; applyRect(selEl,r); LAYOUT[selEl.dataset.el]=r; saveLayout(); }
+function inspReset(){ if(!selEl) return; const r=DEF[selEl.dataset.el]; applyRect(selEl,r); delete LAYOUT[selEl.dataset.el]; saveLayout(); selectEl(selEl); }
+function stagePos(e){ const r=stage.getBoundingClientRect(); return {x:(e.clientX-r.left)*1920/r.width,y:(e.clientY-r.top)*1080/r.height}; }
+stage.addEventListener('pointerdown',e=>{ if(MODE!=='edit') return; const el=e.target.closest('[data-el]'); if(!el||el.id==='cv') return; e.preventDefault(); e.stopPropagation();
+  selectEl(el); const p=stagePos(e), r=readRect(el); drag={el,p,r,resize:e.target.classList.contains('rh')}; stage.setPointerCapture(e.pointerId); },true);
+stage.addEventListener('pointermove',e=>{ if(!drag) return; const p=stagePos(e), dx=p.x-drag.p.x, dy=p.y-drag.p.y; const r=drag.resize?{x:drag.r.x,y:drag.r.y,w:Math.max(20,drag.r.w+dx),h:Math.max(20,drag.r.h+dy)}:{x:drag.r.x+dx,y:drag.r.y+dy,w:drag.r.w,h:drag.r.h}; applyRect(drag.el,r); $('ix').value=Math.round(r.x); $('iy').value=Math.round(r.y); $('iw').value=Math.round(r.w); $('ih').value=Math.round(r.h); });
+stage.addEventListener('pointerup',e=>{ if(!drag) return; LAYOUT[drag.el.dataset.el]=readRect(drag.el); saveLayout(); drag=null; });
+let coinDrag=null;
+function editCanvasDown(e){ const p=cvPos(e); const c=coins.find(c=>Math.hypot(c.x-p.x,c.y-p.y)<COIN_R+6); if(c){ coinDrag=c; cv.setPointerCapture(e.pointerId); e.stopPropagation(); } else { selectEl(cv); } }
+function editCanvasMove(e){ if(!coinDrag) return; invalidateStatic(); const p=cvPos(e); coinDrag.x=Math.max(20,Math.min(FW-20,p.x)); coinDrag.y=Math.max(CEIL+COIN_R+4,Math.min(POCKET_Y-COIN_R-10,p.y)); }
+function editCanvasUp(e){ if(coinDrag){ coinDrag=null; buildPegs(); saveLayout(); } }
+function exportLayout(){ const out={name:'闯关弹珠 主界面 v4',canvas:'1920x1080',elements:{},board:{origin:[544,256],size:[CW,CH],field:[0,CEIL,FW,CH],lane:{x:[LANE_L,LANE_R],top:LANE_TOP,knobRest:KNOB_REST,pullMax:PULL_MAX},dome:DOME,slots:SLOTS.map((m,i)=>({i,mult:m,x:SLOT_X[i],w:SLOT_X[i+1]-SLOT_X[i],y:POCKET_Y,trigger:i===S.trig})),pins:PINS,bumpers:BUMPERS,decoTriangles:TRIS,coins:coins.map(c=>[Math.round(c.x),Math.round(c.y)]),coinR:COIN_R,pegs:pegs.map(p=>[p.x,p.y]),pegR:PEG_R}};
+  stage.querySelectorAll('[data-el]').forEach(el=>{ const r=readRect(el); out.elements[el.dataset.el]={title:el.dataset.title,x:Math.round(r.x),y:Math.round(r.y),w:Math.round(r.w),h:Math.round(r.h)}; });
+  const s=JSON.stringify(out,null,1); $('expTxt').value=s; $('exp').classList.add('on'); try{ navigator.clipboard.writeText(s); }catch(e){} }
+function resetLayout(){ try{ localStorage.removeItem(LS_KEY); }catch(e){} LAYOUT={}; for(const id in DEF){ const el=stage.querySelector(`[data-el="${id}"]`); if(el) applyRect(el,DEF[id]); } coins=COINS0.map(([x,y],i)=>({x,y,flash:0,cool:0,star:i===3})); buildPegs(); selectEl(null); toast('布局已恢复默认'); }
+
+/* ════════════ 缩放 / 主循环 ════════════ */
+const ZMIN=.15, ZMAX=3;
+let userZoom=null;                 // null = 跟随窗口自适应
+function fitK(){ const w=$('wrap').clientWidth-24,h=$('wrap').clientHeight-24; return Math.max(ZMIN,Math.min(w/1920,h/1080)); }
+function curK(){ return userZoom||fitK(); }
+function fit(anchor){
+  const sz=$('sizer'), wrap=$('wrap');
+  if(document.body.classList.contains('bare')){ stage.style.transform='none'; sz.style.width='1920px'; sz.style.height='1080px'; return; }
+  const k=curK();
+  // 以 anchor（视口坐标）为锚点保持画面不跳
+  let keep=null;
+  if(anchor){ const r=sz.getBoundingClientRect(); keep={ sx:(anchor.x-r.left)/ (sz.offsetWidth||1), sy:(anchor.y-r.top)/(sz.offsetHeight||1), vx:anchor.x-wrap.getBoundingClientRect().left, vy:anchor.y-wrap.getBoundingClientRect().top }; }
+  stage.style.transform=`scale(${k})`;
+  sz.style.width=Math.round(1920*k)+'px'; sz.style.height=Math.round(1080*k)+'px';
+  $('scaleTxt').textContent=Math.round(k*100)+'%';
+  $('scaleTxt').style.color = userZoom? '#FFC61E' : '#3ED8E0';
+  if(keep){ const r2=sz.getBoundingClientRect(), wr=wrap.getBoundingClientRect();
+    wrap.scrollLeft += (r2.left-wr.left) + keep.sx*sz.offsetWidth - keep.vx;
+    wrap.scrollTop  += (r2.top -wr.top ) + keep.sy*sz.offsetHeight - keep.vy; }
+}
+function zoomSet(k,anchor){ userZoom=Math.max(ZMIN,Math.min(ZMAX,k)); fit(anchor); }
+function zoomFit(){ userZoom=null; $('wrap').scrollTo(0,0); fit(); }
+function zoomStep(dir,anchor){ zoomSet(curK()*(dir>0?1.25:1/1.25),anchor); }
+window.addEventListener('resize',()=>fit());
+// ⌘/Ctrl + 滚轮（含触控板捏合）缩放
+$('wrap').addEventListener('wheel',e=>{ if(!(e.ctrlKey||e.metaKey)) return; e.preventDefault();
+  zoomSet(curK()*Math.exp(-e.deltaY*0.0035),{x:e.clientX,y:e.clientY}); },{passive:false});
+// ⌘/Ctrl + / − / 0
+window.addEventListener('keydown',e=>{ if(!(e.ctrlKey||e.metaKey)) return;
+  if(e.key==='='||e.key==='+'){ e.preventDefault(); zoomStep(1); }
+  else if(e.key==='-'||e.key==='_'){ e.preventDefault(); zoomStep(-1); }
+  else if(e.key==='0'){ e.preventDefault(); zoomFit(); } });
+// 放大后拖空白平移（不干扰编辑模式拖元素：只认 sizer/wrap 空白与中键）
+(function(){ let pan=null;
+  $('wrap').addEventListener('pointerdown',e=>{ const blank = e.target===$('wrap')||e.target===$('sizer');
+    if(e.button!==1 && !blank) return; e.preventDefault();
+    pan={x:e.clientX,y:e.clientY,l:$('wrap').scrollLeft,t:$('wrap').scrollTop}; $('wrap').classList.add('panning'); });
+  window.addEventListener('pointermove',e=>{ if(!pan) return; $('wrap').scrollLeft=pan.l-(e.clientX-pan.x); $('wrap').scrollTop=pan.t-(e.clientY-pan.y); });
+  window.addEventListener('pointerup',()=>{ pan=null; $('wrap').classList.remove('panning'); }); })();
+let frameNo=0;
+function loop(){ frameNo++; if(spaceHold&&S.phase==='pull'){ S.pull=Math.min(PULL_MAX,S.pull+PULL_MAX/60); $('pwFill').style.width=S.pull/PULL_MAX*100+'%'; }
+  const idle=S.phase==='rest'&&!coins.some(c=>c.flash)&&!pegs.some(p=>p.flash)&&staticReady;
+  if(!(idle&&(frameNo&1))){ if(!S.freeze) step(); draw(); }
+  if(STILL&&staticReady&&frameNo>40) return; // ?still=1：截图用，画满静态层后停表，别让 rAF 拖住 headless 的虚拟时钟
+  requestAnimationFrame(loop); }
+$('mqBulbs').innerHTML=Array.from({length:22},(_,i)=>`<div class="bulb ${i%2?'c':''}"></div>`).join('');
+initLayout(); buildLegend(); buildFlow(); sync(); fit(); if(Q.get('mode')) setMode(Q.get('mode'));
+if(Q.has('flowjson')){ $('testlog').textContent=JSON.stringify(FLOW.map(f=>({sec:f.sec||'',cap:f.cap,note:f.note}))); }
+if(Q.has('step')){ setMode('flow'); flowGo(Math.max(0,Math.min(FLOW.length-1,(+Q.get('step')||1)-1))); }
+if(Q.has('trace')){ // 调试：同步跑一发，把轨迹画在盘上
+  const p=parseFloat(Q.get('trace'))||0.8; launch(p); let n=0; while(n++<3000&&(S.phase==='lane'||S.phase==='field')){ step(); TRACE.push([ball.x,ball.y]); } }
+if(Q.has('perf')){ setTimeout(()=>{ draw(); const t0=performance.now(); for(let i=0;i<300;i++){ draw(); } ctx.getImageData(0,0,1,1); const dt=(performance.now()-t0)/300; document.title='PERF '+dt.toFixed(2)+'ms/frame'; },50); }
+if(Q.has('ops')){ setTimeout(()=>{ draw(); const cnt={}; const orig={}; for(const k of ['drawImage','fill','stroke','fillRect','strokeRect','fillText','strokeText','createLinearGradient','createRadialGradient','arc','ellipse','clip']){ orig[k]=ctx[k]; ctx[k]=function(...a){ cnt[k]=(cnt[k]||0)+1; return orig[k].apply(this,a); }; } draw(); let tot=0; for(const k in cnt) tot+=cnt[k]; document.title='OPS total='+tot+' '+JSON.stringify(cnt); },50); }
+
+if(!AUTOTEST) loop();
+
+/* ════════════ 自检（?autotest） ════════════ */
+if(AUTOTEST){ (function(){
+  const log=[]; const L=(k,v)=>log.push(`${k}: ${v}`);
+  function run(power,max=3000){ let fr=0, seen=new Set(); launch(power); while(fr<max){ step(); seen.add(S.phase); fr++; if(S.phase==='rest') break; } return {fr,phases:[...seen],phase:S.phase}; }
+  // 1 力度不足退回
+  let r=run(0.1); L('weak_pull',JSON.stringify(r)+` balls=${S.balls}`); const okWeak=r.phase==='rest'&&!r.phases.includes('field')&&S.balls===128;
+  // 2 正常发射 ×1
+  S.phase='rest'; restBall(); r=run(0.85); L('shot1',JSON.stringify(r)+` hits=${S.hits} acc=${S.acc} capped=${S.capped} prog=${S.prog} balls=${S.balls}`); const okShot=S.landed===1&&S.balls===127&&r.phases.includes('field');
+  // 3 ×10 消耗与基础分
+  S.phase='rest'; restBall(); S.mult=10; r=run(0.6); L('shot_x10',JSON.stringify(r)+` hits=${S.hits} acc=${S.acc} balls=${S.balls} prog=${S.prog}`); const okX10=S.balls===117&&(S.hits===0||S.acc>=10);
+  // 4 高级弹珠
+  S.phase='rest'; restBall(); S.mult=1; S.useAdv=true; const before=S.prog; r=run(0.9); L('shot_adv',JSON.stringify(r)+` adv=${S.adv} hits=${S.hits} acc=${S.acc} gained=${S.prog-before}`); const okAdv=S.adv===2;
+  // 5 不足态
+  S.phase='rest'; restBall(); S.adv=0; sync(); const okLow=!canFire()&&$('status').classList.contains('bad'); L('low_state',$('statusTxt').textContent);
+  // 5b 多发统计：20 发落槽分布 / 撞击均值（看盘面是否合理）
+  S.adv=0; S.balls=500; S.mult=1; const dist=[0,0,0,0,0,0,0]; let hitsSum=0, shots=0, caps=0, frs=[], hitsArr=[];
+  for(let i=0;i<40;i++){ S.phase='rest'; restBall(); closeDlg(); const l0=S.landed; const rr=run(0.3+0.7*rnd()); if(S.landed>l0){ shots++; hitsSum+=S.hits; hitsArr.push(S.hits); if(S.capped) caps++; frs.push(rr.fr); dist[S.lastSlot]++; } }
+  L('dist40',`shots=${shots} avgHits=${(hitsSum/Math.max(1,shots)).toFixed(1)} capped=${caps} slots=${JSON.stringify(dist)} frames(min/avg/max)=${Math.min(...frs)}/${Math.round(frs.reduce((a,b)=>a+b,0)/frs.length)}/${Math.max(...frs)} hits=${JSON.stringify(hitsArr)}`);
+  closeDlg(); S.prog=0; S.stage=1;
+  // 6 触发槽满 → Buff 弹窗
+  S.useAdv=false; S.phase='field'; S.gauge=7; S.acc=5; ball.x=slotCenter(S.trig); ball.y=FLOOR-BALL_R; ball.vy=0; land(); const okBuff=$('mask').classList.contains('on')&&$('dlgTitle').textContent.includes('Buff'); L('buff_popup',$('dlgTitle').textContent+' gauge='+S.gauge); pickBuff(2);
+  // 7 本场达成
+  closeDlg(); S.prog=S.need-1; S.phase='field'; S.acc=3; ball.x=slotCenter(3); ball.y=FLOOR-BALL_R; ball.vy=0; const st0=S.stage; land(); const okClear=$('dlgTitle').textContent.includes('达成'); L('clear_popup',$('dlgTitle').textContent+' prog='+S.prog); nextStage(); const okNext=S.stage===st0+1&&S.prog===0; L('next_stage','stage='+S.stage);
+  // 8 撞满 11 次翻倍公式
+  S.hits=0;S.acc=0;S.capped=false;S.mult=1; const c={flash:0,cool:0}; for(let i=0;i<11;i++){ c.cool=0; onHit(c); } const okCap=S.acc===20&&S.capped; L('cap_formula','acc='+S.acc+' capped='+S.capped);
+  // 9 导出
+  exportLayout(); const okExp=Object.keys(JSON.parse($('expTxt').value).elements).length>=18; L('export_elements',Object.keys(JSON.parse($('expTxt').value).elements).length);
+  // 10 流程模式：19 步逐个应用，弹窗步必开、相位必对、结束态不可发射、不足态红条
+  let okFlow=true; try{ FLOW.forEach((f,i)=>{ flowGo(i); if(f.dlg&&!$('mask').classList.contains('on')) throw new Error('step '+(i+1)+' dlg'); if(f.s.phase&&S.phase!==f.s.phase) throw new Error('step '+(i+1)+' phase'); });
+    const at=k=>FLOW.findIndex(f=>f.cap.includes(k)); flowGo(at('活动结束')); if(canFire()||!$('cdTxt').textContent.includes('已结束')) throw new Error('ended'); flowGo(at('弹珠不足')); if(!$('status').classList.contains('bad')) throw new Error('low'); flowGo(at('触发槽（×3')); if($('accTxt').textContent!=='60') throw new Error('settle led');
+    flowGo(at('阶段积分」')); if(S.prog!==60||!$('bc2').classList.contains('win')||!$('bc1').classList.contains('lose')) throw new Error('drawA'); flowGo(at('弹珠返还」')); if(S.balls!==129||S.gauge!==0||S.trig!==5) throw new Error('drawB'); flowGo(at('弹出 Buff')); if(!$('buffBtn')||$('bc1').classList.contains('win')) throw new Error('predraw'); flowGo(at('本场达成')); if($('dlgBody').querySelectorAll('.rw').length!==1) throw new Error('clear reward count'); flowRelease(); if(S.freeze||S.phase!=='rest') throw new Error('release'); }catch(e){ okFlow=false; L('flow_err',e.message); }
+  L('flow_steps',FLOW.length+' ok='+okFlow);
+  const all={okWeak,okShot,okX10,okAdv,okLow,okBuff,okClear,okNext,okCap,okExp,okFlow}; const pass=Object.values(all).every(Boolean);
+  L('RESULT',JSON.stringify(all)); document.title=pass?'TEST OK':'TEST FAIL'; $('testlog').textContent=log.join('\n'); $('testlog').style.display='block';
+})(); }
+</script>

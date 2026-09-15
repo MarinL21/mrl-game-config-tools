@@ -1,0 +1,93 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>闯关弹珠 · 交互流程 v4</title>
+<link rel="stylesheet" href="p2ux19.css">
+<style>
+.scr{display:block;width:1920px;height:1080px;position:absolute;box-shadow:0 0 0 2px #2A2740;cursor:pointer}
+.scr img{display:block;width:1920px;height:1080px}
+.scr .live{position:absolute;right:18px;top:18px;background:rgba(62,216,224,.92);color:#062A2E;font:900 26px/1 "PingFang SC",sans-serif;padding:12px 18px;border-radius:12px;opacity:0;transition:opacity .15s}
+.scr:hover .live{opacity:1}
+.scr:hover{box-shadow:0 0 0 6px #3ED8E0}
+.note-d b{color:#fff;font-weight:800}
+.tag{display:inline-block;background:#3ED8E0;color:#062A2E;font-weight:900;padding:4px 14px;border-radius:10px;margin-right:16px}
+</style>
+
+<div class="canvas board" id="board" style="width:4560px;height:15340px">
+  <div class="board-title abs" style="left:120px;top:70px"><div class="bar"></div><div class="txt">闯关弹珠 · 交互流程 v4</div></div>
+  <div class="note-d abs" style="left:186px;top:186px;width:4200px">
+    <span class="tag">同源</span>每一屏都是主界面交互稿 v4 的真实渲染（<code>marble_main_v4.html?step=N</code>），不是另画的示意；<b>点任一屏</b>打开可操作稿并跳到该状态，可从该状态继续发射。
+    标注只讲功能与判定，奖励内容与数值以数值页为准。共 19 步 · 6 段：进入与准备 / 发射 / 计分核心循环 / 闯关 / 充能 Buff 与付费转化 / 排行与边界态。
+  </div>
+  <div class="sec abs" style="left:186px;top:334px;font-size:44px">（1）进入与准备</div>
+  <div class="cap abs" style="left:140px;top:410px">① 主界面 · 首次进入（第 1 场 · 0 分）</div>
+  <a class="scr abs" href="marble_main_v4.bundle.html?step=1" target="_blank" style="left:140px;top:476px" title="打开可操作稿 · 跳到第 1 步"><img src="flow4/step_01.jpg" width="1920" height="1080" alt="① 主界面 · 首次进入（第 1 场 · 0 分）"><span class="live">▶ 可操作 · 点开跳到此状态</span></a>
+  <div class="note-d abs" style="left:140px;top:1580px;width:1920px">顶部进度条：左「第 1 场」徽章、中 0 / 120、右本场奖励格。显示屏待发「拉动发射器开始」。盘内右侧是发射槽：弹珠坐在绿钮上，箭头提示下拉蓄力。底部七格倍数槽，金框 ⚡ 为触发槽（随机指定）。</div>
+  <div class="ln abs" style="left:2070px;top:1016px;width:440px"></div><div class="ar r abs" style="left:2510px;top:1006px"></div>
+  <div class="cap abs" style="left:2420px;top:410px">② 选倍数 ×10 · 切高级弹珠</div>
+  <a class="scr abs" href="marble_main_v4.bundle.html?step=2" target="_blank" style="left:2420px;top:476px" title="打开可操作稿 · 跳到第 2 步"><img src="flow4/step_02.jpg" width="1920" height="1080" alt="② 选倍数 ×10 · 切高级弹珠"><span class="live">▶ 可操作 · 点开跳到此状态</span></a>
+  <div class="note-d abs" style="left:2420px;top:1580px;width:1920px">右控制台：点倍数钮 ×1 / ×5 / ×10，得分与每发消耗同倍放大，胶囊实时显示「每发消耗 10 · 每击 +10」。点高级弹珠 chip 切换，待发弹珠变金，<b>本发最终得分 ×5</b>。发射中两者锁定。后续步骤按 ×1 普通弹珠演示。</div>
+  <div class="sec abs" style="left:186px;top:1870px;font-size:44px">（2）发射</div>
+  <div class="cap abs" style="left:140px;top:1946px">③ 按住绿钮下拉 · 蓄力 70%</div>
+  <a class="scr abs" href="marble_main_v4.bundle.html?step=3" target="_blank" style="left:140px;top:2012px" title="打开可操作稿 · 跳到第 3 步"><img src="flow4/step_03.jpg" width="1920" height="1080" alt="③ 按住绿钮下拉 · 蓄力 70%"><span class="live">▶ 可操作 · 点开跳到此状态</span></a>
+  <div class="note-d abs" style="left:140px;top:3116px;width:1920px">按住发射钮向下拉，拉得越深力度越大；控制台力度条同步，白线 = 冲出槽口的最低力度。显示屏「蓄力 70%」。松手发射，空格键同效。</div>
+  <div class="ln abs" style="left:2070px;top:2552px;width:440px"></div><div class="ar r abs" style="left:2510px;top:2542px"></div>
+  <div class="cap abs" style="left:2420px;top:1946px">④ 松手 · 弹珠沿发射槽上冲</div>
+  <a class="scr abs" href="marble_main_v4.bundle.html?step=4" target="_blank" style="left:2420px;top:2012px" title="打开可操作稿 · 跳到第 4 步"><img src="flow4/step_04.jpg" width="1920" height="1080" alt="④ 松手 · 弹珠沿发射槽上冲"><span class="live">▶ 可操作 · 点开跳到此状态</span></a>
+  <div class="note-d abs" style="left:2420px;top:3116px;width:1920px">弹珠全程可见：槽内上冲、箭头逐个点亮 → 槽顶敞口 → 右上圆顶轨 → 滑入盘面。<b>冲出槽口那一刻才扣弹珠、开始计分</b>；力度不足退回发射台，不消耗。</div>
+  <div class="sec abs" style="left:186px;top:3406px;font-size:44px">（3）计分核心循环</div>
+  <div class="cap abs" style="left:140px;top:3482px">⑤ 盘内飞行 · 撞金币按次数加分（7 / 11）</div>
+  <a class="scr abs" href="marble_main_v4.bundle.html?step=5" target="_blank" style="left:140px;top:3548px" title="打开可操作稿 · 跳到第 5 步"><img src="flow4/step_05.jpg" width="1920" height="1080" alt="⑤ 盘内飞行 · 撞金币按次数加分（7 / 11）"><span class="live">▶ 可操作 · 点开跳到此状态</span></a>
+  <div class="note-d abs" style="left:140px;top:4652px;width:1920px">撞中任意金币柱 = 撞击 +1、加一份基础分；7 根柱全同、次数全盘共用。显示屏：左 11 粒指示逐粒点亮、中累计分逐击跳动、右「撞中金币 +1」；盘上飘字 +1 与拖尾。</div>
+  <div class="ln abs" style="left:2070px;top:4088px;width:440px"></div><div class="ar r abs" style="left:2510px;top:4078px"></div>
+  <div class="cap abs" style="left:2420px;top:3482px">⑥ 第 11 次撞击 · 累计 ×2 封顶</div>
+  <a class="scr abs" href="marble_main_v4.bundle.html?step=6" target="_blank" style="left:2420px;top:3548px" title="打开可操作稿 · 跳到第 6 步"><img src="flow4/step_06.jpg" width="1920" height="1080" alt="⑥ 第 11 次撞击 · 累计 ×2 封顶"><span class="live">▶ 可操作 · 点开跳到此状态</span></a>
+  <div class="note-d abs" style="left:2420px;top:4652px;width:1920px">第 11 次把本发累计分<b>整体 ×2 并封顶</b>，此后金币柱全部熄灭不再计分。显示屏 ×2 粒点亮、累计分变金；盘上金色大飘字——单发体验高潮点，要全屏级演出。</div>
+  <div class="cap abs" style="left:140px;top:4908px">⑦ 落入触发槽（×3 ⚡）· 倍数结算 + 充能 +1</div>
+  <a class="scr abs" href="marble_main_v4.bundle.html?step=7" target="_blank" style="left:140px;top:4974px" title="打开可操作稿 · 跳到第 7 步"><img src="flow4/step_07.jpg" width="1920" height="1080" alt="⑦ 落入触发槽（×3 ⚡）· 倍数结算 + 充能 +1"><span class="live">▶ 可操作 · 点开跳到此状态</span></a>
+  <div class="note-d abs" style="left:140px;top:6078px;width:1920px">落槽倍数对本发累计整体再乘：20 × 3 = <b>60 分</b>；槽标签放大白框，显示屏变金，随后积分飞入上方进度条。落的是金框触发槽 → 充能 3/8 → 4/8（其余槽只结算倍数）。</div>
+  <div class="ln abs" style="left:2070px;top:5514px;width:440px"></div><div class="ar r abs" style="left:2510px;top:5504px"></div>
+  <div class="cap abs" style="left:2420px;top:4908px">⑧ 落入 ×10 槽 · 本场进度补满</div>
+  <a class="scr abs" href="marble_main_v4.bundle.html?step=8" target="_blank" style="left:2420px;top:4974px" title="打开可操作稿 · 跳到第 8 步"><img src="flow4/step_08.jpg" width="1920" height="1080" alt="⑧ 落入 ×10 槽 · 本场进度补满"><span class="live">▶ 可操作 · 点开跳到此状态</span></a>
+  <div class="note-d abs" style="left:2420px;top:6078px;width:1920px">6 次撞击 6 分 × 落槽 ×10 = 60 分，本场进度 60 → <b>120 满</b>：进度条变绿，结算后奖励格金圈脉冲并自动弹「本场达成」。一发两次乘：第 11 次 ×2、落槽 ×N；高级弹珠在最外层再 ×5。</div>
+  <div class="sec abs" style="left:186px;top:6368px;font-size:44px">（4）闯关</div>
+  <div class="cap abs" style="left:140px;top:6444px">⑨ 积分满 120 · 本场达成（L3）</div>
+  <a class="scr abs" href="marble_main_v4.bundle.html?step=9" target="_blank" style="left:140px;top:6510px" title="打开可操作稿 · 跳到第 9 步"><img src="flow4/step_09.jpg" width="1920" height="1080" alt="⑨ 积分满 120 · 本场达成（L3）"><span class="live">▶ 可操作 · 点开跳到此状态</span></a>
+  <div class="note-d abs" style="left:140px;top:7614px;width:1920px">弹窗：第 N 场 · 积分 120 / 120 + <b>本场奖励一件</b>（就是进度条右侧奖励格那件）+ 主按钮「领取 · 进入第 4 场」。<b>领完即进下一场</b>，不给停顿点。奖励是什么以数值页为准，本稿只画结构。</div>
+  <div class="ln abs" style="left:2070px;top:7050px;width:440px"></div><div class="ar r abs" style="left:2510px;top:7040px"></div>
+  <div class="cap abs" style="left:2420px;top:6444px">⑩ 第 4 场开始（进度重置）</div>
+  <a class="scr abs" href="marble_main_v4.bundle.html?step=10" target="_blank" style="left:2420px;top:6510px" title="打开可操作稿 · 跳到第 10 步"><img src="flow4/step_10.jpg" width="1920" height="1080" alt="⑩ 第 4 场开始（进度重置）"><span class="live">▶ 可操作 · 点开跳到此状态</span></a>
+  <div class="note-d abs" style="left:2420px;top:7614px;width:1920px">进度条回 0 / 120、场数徽章跳 4、右侧本场奖励格换新一档（×5 → ×6）。<b>触发槽充能不重置</b>（与关卡进度独立），继续累计。</div>
+  <div class="sec abs" style="left:186px;top:7904px;font-size:44px">（5）充能 Buff 与付费转化</div>
+  <div class="cap abs" style="left:140px;top:7980px">⑪ 充能满 8 · 弹出 Buff 抽取（L3）</div>
+  <a class="scr abs" href="marble_main_v4.bundle.html?step=11" target="_blank" style="left:140px;top:8046px" title="打开可操作稿 · 跳到第 11 步"><img src="flow4/step_11.jpg" width="1920" height="1080" alt="⑪ 充能满 8 · 弹出 Buff 抽取（L3）"><span class="live">▶ 可操作 · 点开跳到此状态</span></a>
+  <div class="note-d abs" style="left:140px;top:9150px;width:1920px">充能满自动弹出：Buff 池三张牌全展示，底部一颗「抽取」钮——<b>随机抽 1 个，不是玩家选</b>。触发礼包是付费转化位，抽中权重压低、卡面视觉权重要拉开。抽后充能清零、触发槽重随。⑫⑬⑭ 是三种抽中结果。</div>
+  <div class="ln abs" style="left:2070px;top:8586px;width:440px"></div><div class="ar r abs" style="left:2510px;top:8576px"></div>
+  <div class="cap abs" style="left:2420px;top:7980px">⑫ 抽中「阶段积分」· 本场进度 +30</div>
+  <a class="scr abs" href="marble_main_v4.bundle.html?step=12" target="_blank" style="left:2420px;top:8046px" title="打开可操作稿 · 跳到第 12 步"><img src="flow4/step_12.jpg" width="1920" height="1080" alt="⑫ 抽中「阶段积分」· 本场进度 +30"><span class="live">▶ 可操作 · 点开跳到此状态</span></a>
+  <div class="note-d abs" style="left:2420px;top:9150px;width:1920px">点「抽取」后三张牌跑马灯高亮、减速、停在抽中那张；其余两张压暗。结果写在弹窗顶：本场进度 +30（30 → 60），背景进度条同步涨；触发槽 ⚡ 从 ×3 位重随到 ×2 位。「确定」关窗。</div>
+  <div class="cap abs" style="left:140px;top:9406px">⑬ 抽中「弹珠返还」· 弹珠 ×5</div>
+  <a class="scr abs" href="marble_main_v4.bundle.html?step=13" target="_blank" style="left:140px;top:9472px" title="打开可操作稿 · 跳到第 13 步"><img src="flow4/step_13.jpg" width="1920" height="1080" alt="⑬ 抽中「弹珠返还」· 弹珠 ×5"><span class="live">▶ 可操作 · 点开跳到此状态</span></a>
+  <div class="note-d abs" style="left:140px;top:10576px;width:1920px">返还普通弹珠 ×5，按<b>当前倍数</b>放大（×10 时返 50）；资产条与弹珠 chip 数量当场跳（124 → 129）。同样充能清零、触发槽重随。</div>
+  <div class="ln abs" style="left:2070px;top:10012px;width:440px"></div><div class="ar r abs" style="left:2510px;top:10002px"></div>
+  <div class="cap abs" style="left:2420px;top:9406px">⑭ 抽中「触发礼包」· 解锁限时礼包</div>
+  <a class="scr abs" href="marble_main_v4.bundle.html?step=14" target="_blank" style="left:2420px;top:9472px" title="打开可操作稿 · 跳到第 14 步"><img src="flow4/step_14.jpg" width="1920" height="1080" alt="⑭ 抽中「触发礼包」· 解锁限时礼包"><span class="live">▶ 可操作 · 点开跳到此状态</span></a>
+  <div class="note-d abs" style="left:2420px;top:10576px;width:1920px">热卡停牌，钮变「确定 · 打开礼包」→ 直接进限时礼包弹窗（⑮）。礼包 1 小时内有效，倒计时从这一刻起。</div>
+  <div class="cap abs" style="left:140px;top:10832px">⑮ 限时触发礼包（只售高级弹珠）</div>
+  <a class="scr abs" href="marble_main_v4.bundle.html?step=15" target="_blank" style="left:140px;top:10898px" title="打开可操作稿 · 跳到第 15 步"><img src="flow4/step_15.jpg" width="1920" height="1080" alt="⑮ 限时触发礼包（只售高级弹珠）"><span class="live">▶ 可操作 · 点开跳到此状态</span></a>
+  <div class="note-d abs" style="left:140px;top:12002px;width:1920px">倒计时、限购 1、价值标签、原价现价金钮四件同屏；购后钮置灰「已购买」。高级弹珠不走常规免费产出，<b>只出自这里和成就礼包</b>——全玩法核心付费链路。资产条【+】平时打开普通弹珠补给包。</div>
+  <div class="sec abs" style="left:186px;top:12292px;font-size:44px">（6）排行与边界态</div>
+  <div class="cap abs" style="left:140px;top:12368px">⑯ 排行榜入口 → 排行榜（L3）</div>
+  <a class="scr abs" href="marble_main_v4.bundle.html?step=16" target="_blank" style="left:140px;top:12434px" title="打开可操作稿 · 跳到第 16 步"><img src="flow4/step_16.jpg" width="1920" height="1080" alt="⑯ 排行榜入口 → 排行榜（L3）"><span class="live">▶ 可操作 · 点开跳到此状态</span></a>
+  <div class="note-d abs" style="left:140px;top:13538px;width:1920px">按活动期<b>累计弹珠消耗量</b>排名，只做跨服个人总榜，榜首限定主城皮肤。二级榜单沿用项目通用排行榜弹窗，本稿不展开。</div>
+  <div class="ln abs" style="left:2070px;top:12974px;width:440px"></div><div class="ar r abs" style="left:2510px;top:12964px"></div>
+  <div class="cap abs" style="left:2420px;top:12368px">⑰ 边界态 · 弹珠不足</div>
+  <a class="scr abs" href="marble_main_v4.bundle.html?step=17" target="_blank" style="left:2420px;top:12434px" title="打开可操作稿 · 跳到第 17 步"><img src="flow4/step_17.jpg" width="1920" height="1080" alt="⑰ 边界态 · 弹珠不足"><span class="live">▶ 可操作 · 点开跳到此状态</span></a>
+  <div class="note-d abs" style="left:2420px;top:13538px;width:1920px">发射钮置灰、显示屏红字「弹珠不足」、资产条数字变红；控制台红字写明「需 1 现有 0」+【前往获取】直达礼包。<b>禁用态必须带原因与获取入口</b>，不能只变灰。</div>
+  <div class="cap abs" style="left:140px;top:13794px">⑱ 边界态 · 活动结束</div>
+  <a class="scr abs" href="marble_main_v4.bundle.html?step=18" target="_blank" style="left:140px;top:13860px" title="打开可操作稿 · 跳到第 18 步"><img src="flow4/step_18.jpg" width="1920" height="1080" alt="⑱ 边界态 · 活动结束"><span class="live">▶ 可操作 · 点开跳到此状态</span></a>
+  <div class="note-d abs" style="left:140px;top:14964px;width:1920px">发射钮置灰、倒计时改「已结束」、控制台写明原因；弹窗讲清<b>名次奖励与剩余弹珠折算金币统一邮件发放</b>——案子明确这条，必须讲清。</div>
+  <div class="ln abs" style="left:2070px;top:14400px;width:440px"></div><div class="ar r abs" style="left:2510px;top:14390px"></div>
+  <div class="cap abs" style="left:2420px;top:13794px">⑲ 边界态 · 数据加载失败</div>
+  <a class="scr abs" href="marble_main_v4.bundle.html?step=19" target="_blank" style="left:2420px;top:13860px" title="打开可操作稿 · 跳到第 19 步"><img src="flow4/step_19.jpg" width="1920" height="1080" alt="⑲ 边界态 · 数据加载失败"><span class="live">▶ 可操作 · 点开跳到此状态</span></a>
+  <div class="note-d abs" style="left:2420px;top:14964px;width:1920px">排行 / 积分拉取超时。弹窗必须说明「<b>本次发射结果已保留</b>」+【重试】，否则玩家会以为白花了。断网、倒计时异常共用这套骨架。</div>
+</div>
