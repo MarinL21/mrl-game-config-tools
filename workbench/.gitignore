@@ -1,0 +1,5 @@
+data/
+inbox/*
+!inbox/README.txt
+__pycache__/
+*.pyc
