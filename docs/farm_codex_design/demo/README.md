@@ -4,7 +4,9 @@
 
 ## 直接玩（浏览器打开即可）
 
-- 在线：见下方「分享链接」
+- 在线（推荐，直接点开就能玩）：https://rawcdn.githack.com/MarinL21/mrl-game-config-tools/9d9a291/docs/farm_codex_design/demo/farm_demo.html
+- 在线单文件版：https://rawcdn.githack.com/MarinL21/mrl-game-config-tools/9d9a291/docs/farm_codex_design/demo/%E7%BB%BF%E6%B4%B2%E5%86%9C%E5%9B%AD_%E7%8E%A9%E6%B3%95%E7%A4%BA%E6%84%8F_%E5%8D%95%E6%96%87%E4%BB%B6.html
+- 直达参数直接拼在链接后，例如 `https://rawcdn.githack.com/MarinL21/mrl-game-config-tools/9d9a291/docs/farm_codex_design/demo/farm_demo.html?state=mid`
 - 本地：双击 `绿洲农园_玩法示意_单文件.html`（单文件，无需其他资源）
 
 打开先弹「玩法示意」，点「开始种菜」进新手指引（8 步）。左下 ❗ 随时回看带图规则（9 页）。
