@@ -36,6 +36,6 @@
 ## 目录
 
 - `farm_demo.html` 源（引 `assets/`）
-- `oasis_farm.html` = `绿洲农园_玩法示意_单文件.html` 单文件交付版（`art/bundle.py` 打出；ASCII 文件名给 CDN 用，中文名资源在 githack 上会 403）
+- `oasis_farm.html` = `绿洲农园_玩法示意_单文件.html` 单文件交付版（`art/bundle.py` 打出；ASCII 文件名只是为了分享链接干净，中文名在 githack 上也能开）
 - `assets/p2/` P2 真实切图 chrome；`assets/art/` 生成的作物 / 场景 / 巨猿形态 / 道具图标
 - `art/gen_*.py` 生图脚本（走 p2-art-gen 的 AiArtClient）；原始出图不入库
