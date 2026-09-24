@@ -4,9 +4,9 @@
 
 ## 直接玩（浏览器打开即可）
 
-- 在线（推荐，直接点开就能玩）：https://rawcdn.githack.com/MarinL21/mrl-game-config-tools/9d9a291/docs/farm_codex_design/demo/farm_demo.html
-- 在线单文件版：https://rawcdn.githack.com/MarinL21/mrl-game-config-tools/9d9a291/docs/farm_codex_design/demo/%E7%BB%BF%E6%B4%B2%E5%86%9C%E5%9B%AD_%E7%8E%A9%E6%B3%95%E7%A4%BA%E6%84%8F_%E5%8D%95%E6%96%87%E4%BB%B6.html
-- 直达参数直接拼在链接后，例如 `https://rawcdn.githack.com/MarinL21/mrl-game-config-tools/9d9a291/docs/farm_codex_design/demo/farm_demo.html?state=mid`
+- 在线（发同事就发这个）：__LINK__
+  首次打开会先看到 rawgit.hack 的「One more step」提示页，点红色「Open the page」即可（只问一次）
+- 直达参数直接拼在链接后，例如 `__LINK__?state=mid`
 - 本地：双击 `绿洲农园_玩法示意_单文件.html`（单文件，无需其他资源）
 
 打开先弹「玩法示意」，点「开始种菜」进新手指引（8 步）。左下 ❗ 随时回看带图规则（9 页）。
@@ -36,6 +36,6 @@
 ## 目录
 
 - `farm_demo.html` 源（引 `assets/`）
-- `绿洲农园_玩法示意_单文件.html` 单文件交付版（`art/bundle.py` 打出）
+- `oasis_farm.html` = `绿洲农园_玩法示意_单文件.html` 单文件交付版（`art/bundle.py` 打出；ASCII 文件名给 CDN 用，中文名资源在 githack 上会 403）
 - `assets/p2/` P2 真实切图 chrome；`assets/art/` 生成的作物 / 场景 / 巨猿形态 / 道具图标
 - `art/gen_*.py` 生图脚本（走 p2-art-gen 的 AiArtClient）；原始出图不入库
