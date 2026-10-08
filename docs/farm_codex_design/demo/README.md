@@ -4,12 +4,18 @@
 
 ## 直接玩（浏览器打开即可）
 
-- **给程序 / QA 的图文规则说明**（17 屏真实截图 + 编号标注 + 数值全集，独立页面）：https://rawcdn.githack.com/MarinL21/mrl-game-config-tools/c10a1ee/docs/farm_codex_design/demo/oasis_farm_intro.html
+**发同事就发这两个**（htmlpreview 入口，不限流、不弹确认页）：
 
-- 在线（发同事就发这个）：https://rawcdn.githack.com/MarinL21/mrl-game-config-tools/c10a1ee/docs/farm_codex_design/demo/oasis_farm.html
+- 可玩 demo：https://htmlpreview.github.io/?https://github.com/MarinL21/mrl-game-config-tools/blob/cd368d2/docs/farm_codex_design/demo/oasis_farm.html
+- 给程序 / QA 的图文规则说明（17 屏真实截图 + 编号标注 + 数值全集）：https://htmlpreview.github.io/?https://github.com/MarinL21/mrl-game-config-tools/blob/cd368d2/docs/farm_codex_design/demo/oasis_farm_intro.html
+
+备用入口：
+
+- githack（同一 IP 短时间开太多次会 429 限流，过一会儿就好）：https://rawcdn.githack.com/MarinL21/mrl-game-config-tools/cd368d2/docs/farm_codex_design/demo/oasis_farm.html ｜ https://rawcdn.githack.com/MarinL21/mrl-game-config-tools/cd368d2/docs/farm_codex_design/demo/oasis_farm_intro.html
   首次打开会先看到 rawgit.hack 的「One more step」提示页，点红色「Open the page」即可（只问一次）
-- 直达参数直接拼在链接后，例如 `https://rawcdn.githack.com/MarinL21/mrl-game-config-tools/c10a1ee/docs/farm_codex_design/demo/oasis_farm.html?state=mid`
+- GitHub Pages（仓库已开 Pages，构建完成后可用，跟 main 最新）：https://marinl21.github.io/mrl-game-config-tools/docs/farm_codex_design/demo/oasis_farm.html ｜ https://marinl21.github.io/mrl-game-config-tools/docs/farm_codex_design/demo/oasis_farm_intro.html
 - 本地：双击 `绿洲农园_玩法示意_单文件.html`（单文件，无需其他资源）
+- 直达参数直接拼在 demo 链接后，例如 `https://rawcdn.githack.com/MarinL21/mrl-game-config-tools/cd368d2/docs/farm_codex_design/demo/oasis_farm.html?state=mid`（htmlpreview 入口不透传参数）
 
 打开先弹「玩法示意」，点「开始种菜」进新手指引（8 步）。左下 ❗ 随时回看带图规则（9 页 + 第 10 页「程序规格」给开发 / QA 对照用）。
 
