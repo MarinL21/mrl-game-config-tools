@@ -532,6 +532,15 @@ html,body{height:100%;background:#000;overflow:hidden;
 .qsel button:disabled{opacity:.35;cursor:not-allowed}
 .qsel b{min-width:34px;text-align:center;font-size:18px;color:#fff}
 .qsel i{font-style:normal;font-size:12px;color:var(--cyan);cursor:pointer;text-decoration:underline;margin-left:2px}
+/* ── 程序规格页 ── */
+.spec h3{font-size:17px;color:var(--gold);margin:18px 0 6px;font-weight:800}
+.spec p{font-size:13px;color:var(--dim);line-height:1.7;margin:0 0 6px}
+.spec p b{color:var(--green)}
+.spec table{width:100%;border-collapse:collapse;font-size:12px;margin:6px 0 10px;background:#1b1519;border:1px solid #362c34}
+.spec th{background:#2b2229;color:#fff;font-weight:800;padding:5px 7px;text-align:left;border-bottom:2px solid #4a3d46;white-space:nowrap}
+.spec td{padding:4px 7px;border-bottom:1px solid #2a2228;color:#ded2bd;font-variant-numeric:tabular-nums;vertical-align:top}
+.spec tr:nth-child(even) td{background:rgba(255,255,255,.02)}
+.spec pre{font:12px/1.65 Menlo,Consolas,monospace;color:#d9ecd0;background:#120f12;border:1px solid #362c34;border-radius:8px;padding:10px 12px;white-space:pre-wrap;margin:6px 0 10px}
 /* ── 巨猿形态卡 ── */
 .fcards{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
 .fcard{position:relative;background:#221b21;border:2px solid #362c34;border-radius:12px;padding:12px 10px 10px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
@@ -1507,7 +1516,7 @@ function guideTick(){
  b.querySelector('.chev').style.left=(p.x-x)+'px';}
 
 /* ═══════ 带图规则：图 = 用 demo 自己的真实元素拼（苗床 / 作物 / 按钮 / 巨猿），不另画 ═══════ */
-const RTABS=['核心循环','异变','绿洲植物志','串门','看园巨猿','农园成长','勋绩 / 结束','★ 付费点','关于 demo'];
+const RTABS=['核心循环','异变','绿洲植物志','串门','看园巨猿','农园成长','勋绩 / 结束','★ 付费点','关于 demo','程序规格'];
 const IMG=(src,st)=>'<img src="'+src+'" style="'+(st||'')+'" alt="">';
 const CHEV='<div class="arr">➜</div>';
 const VSEP='<div style="width:2px;height:220px;background:rgba(255,255,255,.14);margin:0 14px 30px;flex:0 0 auto"></div>';
@@ -1637,6 +1646,7 @@ function ruleBody(i){
    '口径：1 丰收币 ≈ $0.0001；通顶勋绩第 8 档实付约 $138（+良田 $15）。',
    '<b>巨猿形态 商贾猿 $4.99（2 技能）/ 巫医猿 $6.99（3 技能）</b>：外观跨节日保留，技能条数和强度都压过免费形态。',
    '为什么花钱：变异倍率 × 图鉴补全两条线都缺时间，速生剂是唯一能买到的时间；形态是可炫耀的永久外观。']);
+ if(i===9)return specBody();
  return '<div class="ph">这是什么</div>'+
    '<p class="pd">按「节日农场·作物图鉴」策划案 <b>v3 口径</b>做的可玩 demo，用来体感核心循环，不是数值验证。'+
    '界面按 P2 小游戏的 B 型排布（盘面占满 + 四角挂件），chrome 引真实游戏切图，苗床 / 作物 / 场景是生成的美术。</p>'+
@@ -1653,6 +1663,103 @@ function ruleBody(i){
    '偷菜 60 次 / 祝福 10 次按演示日重置；③ 等级经验曲线按 demo 压缩（真实 20 级曲线见数值结构页第三章）。</p>'+
    '<p class="pd" style="color:#8d8279">v3 已砍掉、demo 里也不会出现：培育度囤货 · 三槽九件装备 · 双货币（金锄头）· 小摊 · 异常状态 · 暴击 · 神偷手 · 保护模式。</p>'+
    '<div style="display:flex;gap:14px;margin-top:18px">'+sb('blue','重看新手指引','data-g="guide"')+sb('blue','演示倍速 ×'+S.speed,'data-g="speed"')+sb('gold','模拟活动结束回收','data-g="end"',false,true,true)+'</div>';}
+
+/* ═══════ 程序规格：全部数字从上面的数据表现算生成，改表即改文档；可一键复制 Markdown ═══════ */
+function buildSpec(){
+ const pc1=x=>Math.round(x*1000)/10+'%';
+ const pm=x=>(x*100).toFixed(1).replace(/\.0$/,'')+'%';
+ const out=[];const sec=(t,p,tables,code)=>out.push({t,p:p||[],tables:tables||[],code:code||''});
+ sec('0 · 口径说明',[
+  '本页由 demo 的数据表现算生成，与可玩版逐字一致；demo 为演示压缩了时间（1 游戏小时 = '+(HOUR/1000)+' 秒，1 活动日 = '+(DAY_MS/1000)+' 秒），正式版按真实小时 / 自然日。',
+  '所有「随机」用服务端 RNG；所有「每日」按服务器日切（时区待确认）；活动共 '+DAYS+' 天。',
+  '丰收周末：demo 用 day % 3 === 0 代替，正式版 = 自然周的周六、周日；期间 <b>收获</b> 时单价 ×2（按收获时刻判定，不按出售时刻）。']);
+ sec('1 · 作物表（15 种 5 档）',['单株产值期望 = 单价 × 产量均值；收获颗数在 [min,max] 均匀随机；经验按株给，不随颗数变。',
+  '秘种 11~15 不在种子袋出售：11~13 来自勋绩进度 / 每日种子袋 5% / 集市限购；14~15 来自秘种礼包。秘种收获必返 1 颗同种种子。'],
+  [{h:['id','名称','档','时长','单价','产量','单株期望','种子价','经验','来源','解锁等级','猿变','彩变','晶变','巨变'],
+    r:CROPS.map(c=>{const t=TIER[c.t];return [c.id,c.n,'T'+c.t,t.h+'h',t.unit,t.y[0]+'~'+t.y[1],t.price,c.id<=10?t.seed:'不售',t.exp,c.src,c.lv||'—',pm(t.p.theme),pm(t.p.color),pm(t.p.mat),pm(t.p.giant)];})}]);
+ sec('2 · 地块（12 块）',['开垦条件 = 农园等级达标 且 丰收币足额；开垦花费计入勋绩累计消耗。',
+  '良田（11、12）只能付费解锁（灌溉良田契 ×2，$14.99，一次解锁两块）；良田：生长时间 ×0.75、变异概率乘数 ×2、不可被偷。'],
+  [{h:['序号','类型','解锁等级','开垦费'],r:PLOT_CFG.map((c,i)=>[i+1,c.free?'初始':c.gold?'良田（付费）':'普通',c.lv||'—',c.cost||'—'])}]);
+ sec('3 · 生长 / 浇水 / 速生剂',[],[],
+`total = tier.h × 1h
+      × (良田 ? 0.75 : 1)
+      × (1 − 0.01 × 植物志已点亮格数)        // 播种时结算，之后点亮不追溯
+浇水：每株最多 4 次，每次 remain −= total × (0.0625 + 灵泉技能)   // 4 次合计 −25%
+速生剂：remain = 0 立即成熟，并标记 forced（本次变异乘数 ×2）；来源：集市 6,000/颗 每日 5、礼包、勋绩、通行证
+阶段贴图：进度 < 42% 幼苗 / 42%~100% 生长 / 成熟`);
+ sec('4 · 成熟瞬间：异变判定',['四类独立判定，命中的倍率相乘；普通最多 2 个词条，出了猿变可叠 3 个；猿变作物不可被偷。基础概率见作物表（按档）。'],
+  [{h:['形态','倍率','备注'],r:FORMKEYS.map(k=>[FORM[k].n,'×'+FORM[k].m,k==='theme'?'先判；命中后词条上限 3；不可被偷':'独立判定'])}],
+`pm = 1.2 ^ min(收到的祝福次数, 3)
+   × (上一轮这块地被偷过 ? 1.2 : 1)
+   × (良田 ? 2 : 1)
+   × (速生剂催熟 ? 2 : 1)
+   × 催芽技能（巫医猿 1.26~1.50）
+pm = min(pm, 4)                                  // 乘数总上限
+if rand < p.theme × pm → 猿变
+for k in [彩变, 晶变, 巨变]: if rand < p[k] × pm → 命中（按序，达到上限即停）
+cap = 有猿变 ? 3 : 2
+mul = ∏ 命中形态倍率`);
+ sec('5 · 收获 / 谷仓 / 出售',[],[],
+`颗数 n = randInt(y.min, y.max)
+if 被偷: n = max(1, round(n × (1 − loss)))      // loss = 30% − 护灵技能，多次被偷可叠加，上限 90%
+单价 unit' = round(tier.unit × mul × (丰收周末 ? 2 : 1) × (1 + 精算技能))
+谷仓按颗入库：{作物, 形态集合, mul, unit'}；按「作物 + 形态 + 单价」分组展示，可选数量出售
+出售：coin += unit' × q；sales(丰收榜分) += unit' × q
+经验：exp = round(tier.exp × (1 + 勤恳技能))，按株给
+首次收获某作物 → 植物志点亮（账号维度，跨节日保留）
+秘种收获 → 返 1 颗同种种子
+收获后地块复位；若本轮曾被偷 → 下一轮 stolenB = 1（变异 ×1.2 一次）`);
+ sec('6 · 农园等级',['经验只来自收获；20 级封顶。NEED[L] = round(30 × 1.28^(L−1)) 为 L → L+1 所需（demo 压缩曲线，正式曲线见数值页第三章）。'],
+  [{h:['等级','升级所需经验','解锁'],r:Array.from({length:19},(_,i)=>{const L=i+1;const pl=PLOT_CFG.findIndex(c=>c.lv===L+1);return [L+'→'+(L+1),NEED[L],[UNLOCK_LV[L+1],pl>=0?'第 '+(pl+1)+' 块田垄可开垦':''].filter(Boolean).join('、')||'—'];})}]);
+ sec('7 · 串门：偷菜 / 祝福 / 被偷',['每日 60 次偷菜、10 次祝福（正式版 08:00~24:00 可偷）。同一株只能偷一次；成熟且非猿变才可偷。',
+  '祝福只能给生长中的作物，每株最多累计 3 次计入乘数；每日最多收到 30 次；累计祝福 30 次完成活动任务。'],
+  [{h:['NPC（demo）','守卫等级','抓捕率'],r:NPCS.map(x=>[x.n,x.guard,pct(npcRate(x.guard))])}],
+`对方抓捕率 npcRate = 12% + 3% × 守卫等级          // 正式版 = 对方形态初始 + 守卫等级 + 技能，同我方公式
+偷成功：gain = round(tier.price × mul × 30% × (1 + 潜行技能))，coin += gain；不计入丰收榜
+被抓：空手而归，次数照扣
+我方被偷（demo 每 22 s 抽一株候选：成熟、非良田、非猿变、本轮未被偷）：
+  抓住 → 对方空手，我方 coin += round(tier.price × 15%)
+  没抓住 → 该株 loss += (30% − 护灵)，并标记下一轮变异 ×1.2
+我方抓捕率 capRate = 形态初始(8%~16%) + 2% × (守卫等级 − 1) + 铁壁技能`);
+ sec('8 · 看园巨猿：守卫等级 + 形态技能',['守卫 1→10 级花丰收币（计入勋绩）；形态同一时间只有「使用中」的技能生效，随时免费切换；外观跨节日保留，技能等级随活动重置。',
+  '技能等级 1→5 花丰收币 '+SKILL_COST.slice(1).map(fmt).join(' / ')+'（计入勋绩），一个形态的所有技能同步升级。'],
+  [{h:['守卫等级','升级费'],r:GUARD_COST.map((c,i)=>i?[i+'→'+(i+1),c]:null).filter(Boolean)},
+   {h:['形态','初始抓捕率','获取','技能','1 级','5 级'],r:FORMS.flatMap(f=>f.skills.map((t,k)=>[k?'':f.n,k?'':pc1(f.cap),k?'':(f.unlock.free?'默认':f.unlock.coin?fmt(f.unlock.coin)+' 丰收币':'付费 '+f.unlock.usd),t.n,t.d(1),t.d(5)]))}]);
+ sec('9 · 植物志 / 异变图录',['植物志：每种作物首次收获点亮一格；每格所有作物生长时间 −'+(CODEX_STEP*100)+'%（播种时结算），15 格 = −'+(CODEX_STEP*1500)+'%；点亮记录跨节日保留（下届开局即生效）。',
+  '异变图录：15 种 × 4 形态 = 60 格，收获到对应形态即收集；某作物 4 形态集齐 → 可领一份游戏道具（按档）；图录随活动重置。'],
+  [{h:['档','集齐 4 形态奖励'],r:Object.keys(MUT_RW).map(t=>['T'+t,mutRwText(+t)])}]);
+ sec('10 · 农会勋绩（累计消耗）',['统计口径 spent：买种子、开垦、守卫升级、形态解锁（丰收币）、技能升级、集市兑换（含速生剂）；<b>付费不计入</b>。达标自动发放。'],
+  [{h:['档','门槛（累计消耗）','奖励'],r:MILE.map((m,i)=>[i+1,m,MILE_RW[i].t])}]);
+ sec('11 · 丰收榜',['分 = 出售毛额 sales（谷仓卖出的丰收币总额，偷菜所得不计），实时排名，同分先到先得（需记录达分时间戳）；活动结束按最终名次邮件发奖。demo 的 30 个对手为模拟增长。'],
+  [{h:['名次','奖励'],r:RANK_TIERS.map(t=>[tierName(t),t.rw.map(x=>x[1]).join(' + ')])}]);
+ sec('12 · 集市（两页签）',['限购 per=day 按日切重置，per=act 活动内累计；形态类购买即解锁并切换。游戏 / 节日道具发到主城背包。'],
+  [{h:['页签','id','名称','丰收币','限购'],r:SHOP.map(x=>[x.tab==='farm'?'农园道具':x.tab==='game'?'游戏通用':'节日专属',x.id,x.n,x.price,(x.per==='day'?'每日 ':'活动 ')+x.limit])},
+   {h:['付费位','价格','内容'],r:PAY.map(x=>[x.n,x.price,x.d])}]);
+ sec('13 · 每日种子袋',['每活动日领 1 次：颗数 = 2，40% 概率 +1；每颗在「已达解锁等级的 1~10 号作物」里按权重抽；另 5% 概率追加 1 颗 11 号秘种。'],
+  [{h:['作物','权重'],r:CROPS.filter(c=>c.id<=10).map(c=>[c.n+'（'+c.lv+' 级起）',c.id<=5?[40,25,15,9,5][c.id-1]:3])}]);
+ sec('14 · 活动结束结算',[],[],
+`田里未收作物：按 tier.price（基础单株期望）折算
+谷仓未售作物：按入库单价 unit' 折算
+合计丰收币 → × 20 金币，邮件发放
+跨节日保留：植物志点亮记录、巨猿形态外观、已领游戏道具
+随活动清空：种子、异变图录、速生剂（待定）、技能等级、守卫等级`);
+ sec('15 · 待程序 / 策划确认',[
+  '周末判定与日切用哪个时区。','结束时剩余速生剂作废还是折算。','植物志点亮记录落账号表的字段（跨节日累计上限 150 格的后续用法）。','丰收榜同分按先到先得需要记录达分时间戳。',
+  'BI 埋点建议：播种 / 收获（含形态与颗数）/ 出售 / 偷菜结果 / 形态切换 / 图录领奖，各带 day 与 cfgID。']);
+ return out;}
+function specBody(){
+ return '<div class="spec"><div class="cxhead"><div><div class="ph">程序规格 · 口径与数值全集</div><p class="pd" style="margin:0">给开发 / QA 对照用：数字直接从 demo 数据表生成，改表即改文档。右侧按钮复制整页为 Markdown，可直接贴 Jira / wiki。</p></div>'+
+  sb('gold','复制为 Markdown','data-g="copyspec"',false,true,true)+'</div>'+
+  buildSpec().map(x=>'<h3>'+x.t+'</h3>'+x.p.map(q=>'<p>'+q+'</p>').join('')+
+   x.tables.map(t=>'<table><thead><tr>'+t.h.map(h=>'<th>'+h+'</th>').join('')+'</tr></thead><tbody>'+t.r.map(r=>'<tr>'+r.map(c=>'<td>'+c+'</td>').join('')+'</tr>').join('')+'</tbody></table>').join('')+
+   (x.code?'<pre>'+x.code+'</pre>':'')).join('')+'</div>';}
+function specMarkdown(){const strip=v=>String(v).replace(/<[^>]+>/g,'');
+ return '# 绿洲农园 · 程序规格（demo 自动生成 '+new Date().toISOString().slice(0,10)+'）\n\n'+buildSpec().map(x=>'## '+x.t+'\n\n'+x.p.map(q=>'- '+strip(q)+'\n').join('')+
+  x.tables.map(t=>'\n| '+t.h.join(' | ')+' |\n| '+t.h.map(()=>'---').join(' | ')+' |\n'+t.r.map(r=>'| '+r.map(strip).join(' | ')+' |').join('\n')+'\n').join('')+
+  (x.code?'\n```\n'+x.code+'\n```\n':'')).join('\n');}
+function copySpec(){const md=specMarkdown();const done=()=>toast('已复制 Markdown（'+md.length+' 字）','good');
+ const fallback=()=>{const ta=document.createElement('textarea');ta.value=md;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');done();}catch(e){toast('复制失败，请手动选择','bad');}ta.remove();};
+ if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(md).then(done,fallback);else fallback();}
 
 /* ═══════ 事件 ═══════ */
 document.addEventListener('click',e=>{
@@ -1688,6 +1795,7 @@ document.addEventListener('click',e=>{
   else if(d.g==='guide'){S.gstep=0;S.guideOff=0;closePop();toast('新手指引重新开始','good');}
   else if(d.g==='bagok'){closePop();if(S.bagLast.length){S.sel=S.bagLast[0][0];}}
   else if(d.g==='close'){closePop();}
+  else if(d.g==='copyspec'){copySpec();return;}
   else if(d.g==='skipguide'){S.guideOff=1;}
   else if(d.g==='back'){S.view='farm';renderAll();}
   else if(d.g==='speed'){S.speed=S.speed===1?3:1;renderPop();toast('演示倍速 ×'+S.speed,'good');}
@@ -1748,9 +1856,11 @@ requestAnimationFrame(tick);
 function runTest(){
  const R=[],ok=(n,c)=>R.push((c?'PASS  ':'FAIL  ')+n);
  guideTick();ok('新手指引第 1 步指向空地',!!document.querySelector('#coach .bub')&&S.gstep===0);
- openPop('rule');ok('规则弹窗 9 个页签 + 首页 5 步图',document.querySelectorAll('.rtab').length===9&&document.querySelectorAll('.rbody .mini').length>=5);
+ openPop('rule');ok('规则弹窗 10 个页签 + 首页 5 步图',document.querySelectorAll('.rtab').length===10&&document.querySelectorAll('.rbody .mini').length>=5);
  let figOk=true;for(let i=0;i<8;i++){S.rtab=i;renderPop();if(!document.querySelector('.rbody .fig')||!document.querySelector('.rbody .rul'))figOk=false;}
- ok('8 个规则页都有图 + 条文',figOk);S.rtab=0;closePop();
+ ok('8 个规则页都有图 + 条文',figOk);
+ S.rtab=9;renderPop();ok('程序规格页：≥13 张表 + 5 段伪代码 + 复制按钮',document.querySelectorAll('.spec table').length>=13&&document.querySelectorAll('.spec pre').length>=5&&!!document.querySelector('[data-g="copyspec"]'));
+ ok('Markdown 导出含作物表 15 行',(specMarkdown().match(/\n\| \d+ \| /g)||[]).length>=15);S.rtab=0;closePop();
  S.sel=1;S.seeds[1]=20;
  plant(0);ok('播种占用地块并扣种子',S.plots[0].crop===1&&S.seeds[1]===19);
  const t0=S.plots[0].remain;water(0);water(0);water(0);water(0);
