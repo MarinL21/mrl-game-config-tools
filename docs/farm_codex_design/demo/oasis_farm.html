@@ -624,22 +624,34 @@ html,body{height:100%;background:#000;overflow:hidden;
 .cstate span{font-size:12px;color:var(--dim)}
 .cfh{display:flex;align-items:center;gap:12px}.cfh b{font-size:15px;color:#fff;white-space:nowrap}.cfh span{flex:1;font-size:12px;color:var(--dim);min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .adet{position:absolute;left:878px;right:0;top:0;bottom:0;display:flex;flex-direction:column;gap:8px;min-width:0}
-.adshow{position:relative;height:250px;border-radius:14px;overflow:hidden;border:3px solid var(--tc);box-shadow:0 0 18px var(--tcg);display:flex;align-items:flex-end;justify-content:center;background:radial-gradient(ellipse at 50% 30%,#3c5a2a,#121a0d 72%)}
+.adshow{position:relative;height:186px;border-radius:14px;overflow:hidden;border:3px solid var(--tc);box-shadow:0 0 18px var(--tcg);display:flex;align-items:flex-end;justify-content:center;background:radial-gradient(ellipse at 50% 30%,#3c5a2a,#121a0d 72%)}
 .adshow.dark{background:radial-gradient(ellipse at 50% 30%,#2a2a2a,#0e0e0e 72%);box-shadow:none;border-color:#4a3d46}
 .adshow .hglow{width:240px;height:240px;margin:-120px 0 0 -120px}.adshow .hfloor{width:200px;margin-left:-100px;bottom:10px;height:36px}
-.adshow img{position:relative;height:200px;max-width:88%;object-fit:contain;margin-bottom:18px;filter:drop-shadow(0 10px 14px rgba(0,0,0,.6))}
+.adshow img{position:relative;height:150px;max-width:88%;object-fit:contain;margin-bottom:18px;filter:drop-shadow(0 10px 14px rgba(0,0,0,.6))}
 .adname{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}.adname b{font-size:24px;color:#fff}.adname .hstars{display:inline;margin:0;font-size:13px}.adname span{font-size:12px;color:var(--dim);margin-left:auto}
 .adet .hlore{font-size:13px;line-height:1.6}
 .adstats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.adstats div{background:#1b1519;border:2px solid #362c34;border-radius:9px;padding:6px 4px;display:flex;flex-direction:column;align-items:center;gap:1px}
 .adstats span{font-size:11px;color:var(--dim)}.adstats b{font-size:17px;color:#fff}
 .adet .cstate{padding:7px 10px}.adet .cstate b{font-size:13px}.adet .cstate span{font-size:11px}
-.adforms{background:#1b1519;border:2px solid #362c34;border-radius:12px;padding:8px 10px;margin-top:auto;display:flex;flex-direction:column;gap:8px}
-.adf img{height:60px}
-.adforms .cfh{margin:0}.adforms .cfh span{font-size:11px}
-.adfrow{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
-.adf{display:flex;flex-direction:column;align-items:center;gap:3px;opacity:.45;background:rgba(0,0,0,.35);border:2px solid #362c34;border-radius:9px;padding:4px 2px}
-.adf.on{opacity:1;border-color:var(--green)}.adf img{height:52px;transform-origin:bottom center}.adf .mchip{font-size:10px;padding:1px 6px}
-.adforms .sbtn{width:100%;height:44px}
+.adforms{background:linear-gradient(180deg,#221b21,#1b1519);border:2px solid #4a3d46;border-radius:12px;padding:10px 12px 12px;margin-top:auto;display:flex;flex-direction:column;gap:8px}
+.adfh{display:flex;align-items:center;gap:10px}.adfh b{font-size:17px;color:var(--gold);-webkit-text-stroke:1.5px var(--ink);paint-order:stroke fill;font-weight:900}
+.adfh i{display:flex;gap:4px;flex:1}.adfh i em{width:22px;height:7px;border-radius:3px;background:#2b2229;border:1px solid #1A1A1A;display:block}.adfh i em.on{background:var(--green)}
+.adfh span{font-size:14px;color:#fff;font-weight:800}
+.adfrow{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.adf{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;background:rgba(0,0,0,.4);border:2px solid #362c34;border-radius:10px;padding:6px 6px 7px}
+.adf.on{border-color:var(--green);background:radial-gradient(ellipse at 50% 20%,rgba(62,238,0,.14),transparent 70%),rgba(0,0,0,.4)}
+.adfi{position:relative;height:78px;display:flex;align-items:flex-end;justify-content:center;width:100%}
+.adfi img{height:74px;transform-origin:bottom center}
+.adfi u{position:absolute;right:4px;top:0;text-decoration:none;font-size:16px;filter:drop-shadow(0 1px 2px rgba(0,0,0,.8))}
+.adf>b{font-size:15px;color:#fff;margin-top:2px}.adf>b small{font-size:13px;margin-left:5px;font-weight:900}
+.adf>b.fm-m1{color:#7fd0ff}.adf>b.fm-m2{color:#c9b4ff}.adf>b.fm-m3{color:#ffd76e}.adf>b.fm-m4{color:#ff9d6e}.adf>b small{color:#fff}
+.adf>span{font-size:11px;color:var(--dim)}.adf>em{font-style:normal;font-size:11px;font-weight:800;color:#8d8279}.adf.on>em{color:var(--green)}
+.adrw{display:flex;align-items:center;gap:10px}
+.adrwi{flex:1;display:flex;align-items:center;gap:6px;min-width:0}
+.adrwi span{display:flex;align-items:center;gap:2px;background:rgba(0,0,0,.4);border:1px solid #4a3d46;border-radius:8px;padding:2px 6px 2px 2px}
+.adrwi img{width:30px;height:30px;object-fit:contain}.adrwi b{font-size:12px;color:var(--gold)}
+.adrwi small{font-size:11px;color:var(--dim);margin-left:4px;white-space:nowrap}
+.adrw .sbtn{width:140px;height:42px;flex:0 0 auto}.adrw .sbtn span{font-size:14px}
 .fcards{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
 .fcard{position:relative;background:#221b21;border:2px solid #362c34;border-radius:12px;padding:12px 10px 10px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
 .fcard.on{border-color:var(--green);background:#1f2a18}
@@ -1543,9 +1555,12 @@ function renderPop(){
    '<p class="hlore">'+(lit?CROP_LORE[id]:'首次收获后解锁图鉴描述。')+'</p>'+
    '<div class="adstats">'+[['时长',t.h+'h'],['单价',fmt(t.unit)],['收获',t.y[0]+'~'+t.y[1]+' 颗'],['经验',t.exp]].map(x=>'<div><span>'+x[0]+'</span><b>'+x[1]+'</b></div>').join('')+'</div>'+
    '<div class="cstate'+(lit?' on':'')+'"><b>'+(lit?'✓ 已点亮 · 生长时间 −1% 生效中':'首次收获点亮 → 生长时间 −1%')+'</b><span>'+(c.id<=10?'种子袋 '+fmt(t.seed)+' 丰收币'+(c.lv>1?' · 农园 '+c.lv+' 级':''):c.src==='秘种·进度'?'勋绩进度 / 每日种子袋 5% / 集市':'秘种礼包')+'</span></div>'+
-   '<div class="adforms"><div class="cfh"><b>异变 '+got+' / 4</b><span>'+mutRwText(c.t)+'</span></div>'+
-    '<div class="adfrow">'+FORMKEYS.map(f=>{const on=!!S.mutbook[id+'_'+f];return '<div class="adf'+(on?' on':'')+'"><img src="'+art(c.fam+'_s3')+'" style="filter:'+(on?cropStyle(c.f,[f]):'grayscale(1) brightness(.3)')+';transform:scale('+(f==='giant'?1.25:1)+')" alt=""><span class="mchip '+FORM[f].c+'">'+FORM[f].n+'</span></div>';}).join('')+'</div>'+
-    (claimed?sb('blue','奖励已领','',true,false,true):full?sb('gold','领取集齐奖励','data-mutr="'+id+'"',false,true,true):'')+'</div>'+
+   '<div class="adforms"><div class="adfh"><b>异变图录</b><i>'+FORMKEYS.map(f=>'<em class="'+(S.mutbook[id+'_'+f]?'on':'')+'"></em>').join('')+'</i><span>'+got+' / 4</span></div>'+
+    '<div class="adfrow">'+FORMKEYS.map(f=>{const on=!!S.mutbook[id+'_'+f],pr=t.p[f];
+     return '<div class="adf'+(on?' on':'')+'"><div class="adfi"><img src="'+art(c.fam+'_s3')+'" style="filter:'+cropStyle(c.f,[f])+(on?'':' saturate(.45) brightness(.55)')+';transform:scale('+(f==='giant'?1.25:1)+')" alt="">'+(on?'':'<u>🔒</u>')+'</div>'+
+      '<b class="fm-'+FORM[f].c+'">'+FORM[f].n+'<small>×'+FORM[f].m+'</small></b><span>本档概率 '+(pr*100).toFixed(1).replace(/\.0$/,'')+'%</span><em>'+(on?'✓ 已收集':'未收集')+'</em></div>';}).join('')+'</div>'+
+    '<div class="adrw"><div class="adrwi">'+MUT_RW[c.t].map(([iid,q])=>'<span><img src="'+art(itemIcon(iid))+'" alt=""><b>×'+q+'</b></span>').join('')+'<small>集齐 4 形态奖励</small></div>'+
+     (claimed?sb('blue','已领取','',true):full?sb('gold','领取奖励','data-mutr="'+id+'"',false,true):sb('blue','还差 '+(4-got)+' 形态','',true))+'</div></div>'+
    '</div>';
  }
  else if(k==='guard'){
@@ -2084,7 +2099,7 @@ function runTest(){
   const g=gs.find(x=>x.n>=2)||gs[0];sellGroup(g.key,1);ok('谷仓可只卖 1 颗',S.store.length===n0-1&&S.coin>c0);
   openPop('barn');ok('谷仓卡片带数量选择器',document.querySelectorAll('.gcard .qsel').length===barnGroups().length);closePop();}
  openPop('seed');ok('种子袋 15 张卡片，每张四个标签',document.querySelectorAll('.gcard').length===15&&document.querySelectorAll('.gcard .tags span').length===60);closePop();
- S.csel=1;openPop('codex');ok('图鉴：整本图谱 3 行 × 5 格 + 右侧详情（4 数据 + 4 形态）',document.querySelectorAll('.acell').length===15&&document.querySelectorAll('.arow').length===3&&!!document.querySelector('.adet')&&document.querySelectorAll('.adstats div').length===4&&document.querySelectorAll('.adf').length===4);
+ S.csel=1;openPop('codex');ok('图鉴：整本图谱 3 行 × 5 格 + 右侧详情（4 数据 + 4 形态卡含概率 + 奖励图标）',document.querySelectorAll('.acell').length===15&&document.querySelectorAll('.arow').length===3&&!!document.querySelector('.adet')&&document.querySelectorAll('.adstats div').length===4&&document.querySelectorAll('.adf').length===4&&document.querySelectorAll('.adf span').length===4&&document.querySelectorAll('.adrwi img').length>=1);
  ok('已点亮格带 ✓ 戳、未点亮格显 ?',document.querySelectorAll('.acell.lit .astamp').length===codexN()&&document.querySelectorAll('.acell:not(.lit) .aq').length===15-codexN());
  S.csel=12;renderPop();ok('选未点亮作物：详情压灰 + 名字打码',!!document.querySelector('.adshow.dark')&&document.querySelector('.adname b').textContent==='？？？');closePop();S.csel=1;
  {FORMKEYS.forEach(f=>S.mutbook['1_'+f]=1);const g0=S.bag.speed8h||0;claimMut(1);ok('集齐 4 形态领游戏道具（8h 加速进背包）',(S.bag.speed8h||0)===g0+2&&S.mutRw[1]===1);
