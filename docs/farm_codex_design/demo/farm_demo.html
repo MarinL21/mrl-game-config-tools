@@ -2017,7 +2017,9 @@ function runTest(){
 if(location.search.indexOf('test')>=0)runTest();
 /* 截图/评审用直达参数：?state=mid 铺一个进行中的盘面；?rule=N 直接打开规则第 N 页；?noguide 关指引；?intro 强制先弹玩法示意 */
 (function(){const q=new URLSearchParams(location.search);
- if(!location.search||q.has('intro')){S.rtab=0;AUTO_RULE=true;openPop('rule');AUTO_RULE=false;}
+ // 没带任何已知参数就先弹玩法示意（htmlpreview 之类的外壳会往 search 里塞自己的 URL，所以不能只看 search 是否为空）
+ const KNOWN=['state','rule','pop','shop','ctab','rank','bag','end','noguide','test','ring','measure','dumpspec','still','intro'];
+ if(q.has('intro')||!KNOWN.some(k=>q.has(k))){S.rtab=0;AUTO_RULE=true;openPop('rule');AUTO_RULE=false;}
  if(q.has('noguide')){S.guideOff=1;guideTick();}
  if(q.get('state')==='mid'){S.lv=5;S.exp=40;S.coin=3260;S.boost=4;S.seeds={1:3,2:2};S.spent=4200;S.mileGot=1;
   S.plots[6].un=1;S.plots[10].un=1;S.sales=1860;S.forms={farmer:{lv:2},iron:{lv:3},night:{lv:1}};S.form='iron';
