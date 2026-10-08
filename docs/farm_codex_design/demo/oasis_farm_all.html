@@ -2424,13 +2424,15 @@ if(navigator.clipboard)navigator.clipboard.writeText(t).then(ok,()=>{});else{con
  const q=new URLSearchParams(location.search);
  const loaded={};
  function load(k){if(loaded[k])return;loaded[k]=1;const t=document.getElementById('t-'+k);
-  const html='<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">'+t.innerHTML+'</body></html>';
+  // htmlpreview 之类的外壳会把全文的 <script 改成 type="text/htmlpreview" 再自己执行，但 <template> 里的它不管 → 这里改回来
+  const inner=t.innerHTML.replace(/<script type="text\/htmlpreview"/gi,'<script').replace(/<link([^>]*)type="text\/htmlpreview"/gi,'<link$1');
+  const html='<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">'+inner+'</body></html>';
   document.getElementById('f-'+k).srcdoc=html;}
  function show(k){document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('on',b.dataset.t===k));
   document.querySelectorAll('iframe').forEach(f=>f.classList.toggle('on',f.id==='f-'+k));load(k);
-  const u=new URL(location.href);u.searchParams.set('tab',k);history.replaceState(null,'',u);}
+  try{history.replaceState(null,'','#'+k);}catch(e){}}   // 用 hash 记页签：htmlpreview 之类的外壳占着 search，别动它
  document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>show(b.dataset.t));
- show(q.get('tab')==='intro'?'intro':'demo');
+ show(q.get('tab')==='intro'||location.hash==='#intro'?'intro':'demo');
  document.getElementById('f-demo').addEventListener('load',()=>{const e=document.getElementById('tip');if(e)e.remove();});
 })();
 </script></body></html>
