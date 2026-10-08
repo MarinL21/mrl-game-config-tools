@@ -25,6 +25,7 @@
 <link rel="preload" as="image" href="assets/art/c6_s3.png">
 <link rel="preload" as="image" href="assets/art/coin.png">
 <link rel="preload" as="image" href="assets/art/boost.png">
+<link rel="preload" as="image" href="assets/art/fert.png">
 <link rel="preload" as="image" href="assets/art/guard.png">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -224,6 +225,20 @@ html,body{height:100%;background:#000;overflow:hidden;
 .pill .ck{width:14px;height:14px;border-radius:50%;border:2px solid #dfe;position:relative;display:inline-block}
 .pill .ck::after{content:"";position:absolute;left:4px;top:1px;width:2px;height:5px;background:#dfe;transform-origin:bottom;transform:rotate(0)}
 .pill.ok{background:linear-gradient(180deg,#5ea34b,#2f7a22);border-color:#173d10}
+.pill.need{background:linear-gradient(180deg,#2d8fb3,#176182);border-color:#0b3a4f;animation:needp 1.1s ease-in-out infinite}
+@keyframes needp{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+.plot.dry .bed{filter:saturate(.55) brightness(.82) sepia(.25)}
+.plot.dry .crop{filter:saturate(.6) brightness(.85)!important}
+.pdots{display:flex;gap:10px;align-items:center}
+.pdots span{display:flex;gap:4px}
+.pdots .wd i{width:10px;height:10px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:block;background:rgba(8,14,10,.5);border:2px solid rgba(0,0,0,.55)}
+.pdots .wd i.on{background:var(--cyan);border-color:#0b5e6e}
+.pdots .fd i{width:11px;height:11px;border-radius:50% 0 50% 0;display:block;background:rgba(8,14,10,.5);border:2px solid rgba(0,0,0,.55)}
+.pdots .fd i.on{background:#8be04a;border-color:#2f6a12}
+.fertb{width:34px;height:34px;border-radius:50%;background:linear-gradient(180deg,#6fae3a,#3b7a1a);border:3px solid var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;flex:0 0 auto}
+.fertb img{width:24px;height:24px}
+.fertb:hover{background:linear-gradient(180deg,#86c84e,#4a9424)}
+.fertb.full{filter:grayscale(.8) brightness(.7);cursor:default}
 .pill.dry{background:linear-gradient(180deg,#8f3a2c,#6a2418);border-color:#3a120b}
 .pill.ok .t{color:#fff}
 .wdrops{display:flex;gap:5px}
@@ -717,11 +732,12 @@ html,body{height:100%;background:#000;overflow:hidden;
     </div>
 
     <div class="lyr" id="tip"><img src="assets/p2/条_黄提示_600x73.png" alt="">
-      <span class="t sm dark" id="tipTxt">点空地播种 → 浇水 4 次省 25% → 成熟点收获</span></div>
+      <span class="t sm dark" id="tipTxt">播种 → 浇水 · 不浇不长 → 施肥 · 提变异 → 收获</span></div>
 
     <div class="lyr" id="assets">
       <img class="three" src="assets/p2/资产条_前三资源.png" alt="">
       <div class="chip"><img src="assets/art/coin.png" alt=""><b id="coinTxt">1,500</b></div>
+      <div class="chip" title="肥料：每日 10 份，自家和串门施肥都用它；集市可补"><img src="assets/art/fert.png" alt=""><b id="fertTxt">10</b></div>
       <div class="chip"><img src="assets/art/boost.png" alt=""><b id="boostTxt">3</b></div>
       <div id="plusbox" title="去集市">+</div>
     </div>
@@ -827,7 +843,7 @@ const FORMS=[
    {key:'seedoff',n:'议价',s:l=>'种子 −'+(10+2*l)+'%',d:l=>'买种子 −'+(10+2*l)+'%',v:l=>0.10+0.02*l}]},
  {k:'shaman',n:'巫医猿',ic:'form_shaman',cap:0.14,unlock:{usd:'$6.99'},skills:[
    {key:'mut',n:'催芽',s:l=>'变异 ×'+(1.2+0.06*l).toFixed(2),d:l=>'变异概率乘数 ×'+(1.2+0.06*l).toFixed(2)+'（计入 ×4 上限）',v:l=>1.2+0.06*l},
-   {key:'water',n:'灵泉',s:l=>'浇水 +'+(1+0.5*l).toFixed(1)+'%',d:l=>'每次浇水额外省 '+(1+0.5*l).toFixed(1)+'%',v:l=>0.01+0.005*l},
+   {key:'water',n:'灵泉',s:l=>'浇水 +'+(3+l)+'%',d:l=>'每次浇水额外推进 '+(3+l)+'% 生长',v:l=>0.03+0.01*l},
    {key:'loss',n:'护灵',s:l=>'被偷 −'+(4+2*l)+'%',d:l=>'被偷损失 30% → '+(30-4-2*l)+'%',v:l=>0.04+0.02*l}]}];
 const SKILL_COST=[0,800,1600,2400,3200];
 const FORM_META={
@@ -993,14 +1009,25 @@ function plant(i){const p=S.plots[i];if(!p.un||p.crop)return;
  S.seeds[id]--;if(!S.seeds[id])delete S.seeds[id];
  const c=crop(id);let total=TIER[c.t].h*HOUR;
  if(p.gold)total*=0.75; total*=1-codexSpeed();
- Object.assign(p,{crop:id,total,remain:total,water:0,bless:0,forced:0,mature:0,mut:[],mul:1});
+ Object.assign(p,{crop:id,total,remain:total,water:0,dry:1,bless:0,forced:0,mature:0,mut:[],mul:1});
  renderField();renderTop();renderEntries();renderOps();}
-function water(i){const p=S.plots[i];if(!p.crop||p.mature||p.water>=4)return;
- p.water++;p.remain=Math.max(0,p.remain-p.total*(0.0625+(sk('water')||0)));
+// 浇水：只在「缺水」时有效；每株 2 次（播种后 / 生长过半）；缺水期间计时停。灵泉技能让每次浇水额外推进一点
+function water(i){const p=S.plots[i];if(!p.crop||p.mature)return;
  const el=document.querySelector('.plot[data-i="'+i+'"]');
- if(el)floatTxt(el,'浇水 '+p.water+'/4','#00CFEE');
+ if(!p.dry){toast('这株现在不缺水（生长过半会再缺一次）','bad');return;}
+ p.dry=0;p.water++;if(sk('water'))p.remain=Math.max(0,p.remain-p.total*sk('water'));
+ if(el)floatTxt(el,'浇水 '+p.water+'/2 · 开始生长','#00CFEE');
  if(p.remain<=0)mature(p);
  renderField();renderOps();}
+// 施肥（自家）：生长中、未缺水、≤3 次；吃每日肥料（和串门共用）；每次变异率 ×1.2
+function fert(i){const p=S.plots[i];if(!p.crop||p.mature)return;
+ const el=document.querySelector('.plot[data-i="'+i+'"]');
+ if(p.dry){toast('先浇水，缺水的作物不吃肥','bad');return;}
+ if(p.bless>=3){toast('这株已施满 3 次肥','bad');return;}
+ if(S.blessLeft<=0){toast('今日肥料用完了（每日 10 份，集市可补）','bad');openPop('shop');return;}
+ S.blessLeft--;p.bless++;S.gf.ferted=1;
+ if(el)floatTxt(el,'施肥 '+p.bless+'/3 · 变异率 ×'+Math.pow(1.2,p.bless).toFixed(2),'#FFC600');
+ renderField();renderTop();renderOps();}
 function boostUse(i){const p=S.plots[i];if(!p.crop||p.mature)return;
  if(!S.boost){payModal(0);return;}
  S.boost--;p.forced=1;p.remain=0;mature(p);
@@ -1080,10 +1107,11 @@ function sellGroup(key,q){const g=barnGroups().find(x=>x.key===key);if(!g)return
  S.coin+=sum;S.sales+=sum;S.gf.sold=1;delete S.sellQty[key];
  const src=document.querySelector('.entry[data-pop="barn"]');if(src)coinFly(src,Math.min(8,q+2));
  toast('出售 '+crop(g.c).n+' ×'+q+'，得 '+fmt(sum)+' 丰收币','gold');log('出售 '+crop(g.c).n+' ×'+q+'，得 <b>'+fmt(sum)+'</b> 丰收币','gold');renderAll();}
-const cntWater=()=>S.plots.filter(p=>p.un&&p.crop&&!p.mature&&p.water<4).length;
+const cntWater=()=>S.plots.filter(p=>p.un&&p.crop&&!p.mature&&p.dry).length;
+const cntFert=()=>S.plots.filter(p=>p.un&&p.crop&&!p.mature&&!p.dry&&p.bless<3).length;
 const cntHarvest=()=>S.plots.filter(p=>p.un&&p.crop&&p.mature).length;
 const cntEmpty=()=>S.plots.filter(p=>p.un&&!p.crop).length;
-function keyWater(){let n=0;S.plots.forEach(p=>{if(p.un&&p.crop&&!p.mature&&p.water<4){water(p.i);n++;}});
+function keyWater(){let n=0;S.plots.forEach(p=>{if(p.un&&p.crop&&!p.mature&&p.dry){water(p.i);n++;}});
  toast(n?('一键浇水 '+n+' 块'):'没有可浇的田垄',n?'good':'bad');}
 function keyHarvest(){let n=0;const got={};S.plots.forEach(p=>{if(p.un&&p.crop&&p.mature){const nm=crop(p.crop).n,b=S.store.length;harvest(p.i);got[nm]=(got[nm]||0)+(S.store.length-b);n++;}});
  const tot=Object.values(got).reduce((a,b)=>a+b,0);
@@ -1095,6 +1123,7 @@ function keyPlant(){let n=0;S.plots.forEach(p=>{if(p.un&&!p.crop&&S.seeds[S.sel]
 /* ═══════ 商店：两页签。农园道具 = 本活动专用（付费礼包 + 丰收币兑换）；游戏·节日道具 = 通用资源/加速 + 节日专属外观 ═══════ */
 const SHOP=[
  // 农园道具（丰收币）
+ {id:'fert3',tab:'farm',n:'肥料 ×3',d:'施肥：作物变异率 ×1.2/次，每株最多 3 次',ic:'fert',price:900,limit:3,per:'day',f:()=>{S.blessLeft+=3}},
  {id:'boost1',tab:'farm',n:'速生剂 ×1',d:'立即成熟 + 本次变异概率 ×2',ic:'boost',price:6000,limit:5,per:'day',f:()=>{S.boost+=1}},
  {id:'seed11',tab:'farm',n:'秘种 · 星尘野穗 ×1',d:'T2 秘种，收获必返 1 颗；补植物志第 11 格',ic:'c2_s3',icf:CROPS[10].f,price:15000,limit:2,per:'act',f:()=>giveSeed(11,1)},
  {id:'seed12',tab:'farm',n:'秘种 · 琥珀硕果 ×1',d:'T3 秘种，收获必返 1 颗；补植物志第 12 格',ic:'c3_s3',icf:CROPS[11].f,price:20000,limit:2,per:'act',f:()=>giveSeed(12,1)},
@@ -1245,7 +1274,7 @@ function renderOps(){
  if(S.view==='farm'){
   const w=cntWater(),h=cntHarvest(),e=cntEmpty();
   $('#ops').innerHTML=
-   btn('blue','一键浇水',S.lv<4?'🔒 4 级解锁':(w?'可浇 '+w+' 块':'暂无可浇'),'data-g="water"',S.lv<4||!w,S.lv>=4?w:0)+
+   btn('blue','一键浇水',S.lv<4?'🔒 4 级解锁':(w?'缺水 '+w+' 块':'没有缺水的'),'data-g="water"',S.lv<4||!w,S.lv>=4?w:0)+
    btn('green','一键收获',S.lv<8?'🔒 8 级解锁':(h?'可收 '+h+' 块':'暂无成熟'),'data-g="harvest"',S.lv<8||!h,S.lv>=8?h:0)+
    btn('blue','一键播种',S.lv<12?'🔒 12 级解锁':(e?'空地 '+e+' 块 · '+crop(S.sel).n:'没有空地'),'data-g="plant"',S.lv<12||!e,0)+
    btn('gold','去串门','偷菜 30% · 施肥提变异','data-g="visit"',false,0);
@@ -1260,7 +1289,7 @@ function renderTop(){
  $('#exptxt').textContent=S.lv>=20?'已满级':(S.exp+' / '+NEED[S.lv]);
  const ng=nextGoal();$('#nextTxt').textContent=ng?('下一目标 '+ng):'';
  tweenNum('coinTxt',S.coin);
- $('#boostTxt').textContent=S.boost;
+ $('#boostTxt').textContent=S.boost;$('#fertTxt').textContent=S.blessLeft;
  const n=Object.keys(S.codex).length;
  // 右下：活动倒计时固定位（P2 规范）+ 当日剩余次数
  const leftDays=DAYS-S.day, leftMs=DAY_MS-S.dayT;
@@ -1269,11 +1298,11 @@ function renderTop(){
  $('#statChips').innerHTML=
   (isWeekend()?'<span class="sc gold">丰收周末 售价 ×2</span>':'')+
   '<span class="sc c">植物志 '+n+'/15 · 种植速度 +'+n+'%</span>'+
-  '<span class="sc">偷菜 '+S.stealLeft+'/60</span><span class="sc" title="给别人生长中的作物施肥，对方变异率 ×1.2">施肥 '+S.blessLeft+'/10</span>';
+  '<span class="sc">偷菜 '+S.stealLeft+'/60</span><span class="sc" title="自家和串门施肥共用">肥料 '+S.blessLeft+'/10</span>';
  if(S.view==='farm'){
   $('#guardTag').innerHTML=formOf(S.form).n+' <span class="t xs g">'+S.guard+' 级</span><span class="t xs y"> 抓捕 '+Math.round(capRate()*100)+'%</span>';
   const gi=$('#guard img'),gs=art(formOf(S.form).ic);if(gi.getAttribute('src')!==gs)gi.setAttribute('src',gs);
-  $('#tipTxt').textContent='点空地播种 → 浇水 4 次省 25% → 成熟点收获';
+  $('#tipTxt').textContent='播种 → 浇水 · 不浇不长 → 施肥 · 提变异 → 收获';
   $('#owner').classList.remove('show');
  }else{const x=NPCS[S.npc];
   $('#guardTag').innerHTML=x.n+'的巨猿 <span class="t xs g">'+x.guard+' 级</span><span class="t xs r"> 抓捕 '+pct(npcRate(x.guard))+'</span>';
@@ -1311,13 +1340,16 @@ function plotHud(p){
  const c=crop(p.crop),pct=p.mature?1:1-p.remain/p.total;
  const pill=p.mature
   ? '<div class="pill ok"><span class="t xs">收获 · '+c.n+(p.mul>1?' ×'+p.mul.toFixed(1):'')+'</span></div>'
+  : p.dry
+  ? '<div class="pill need"><span class="t xs">💧 缺水 · 点击浇水</span></div>'
   : '<div class="pill'+(p.stolenLoss?' dry':'')+'"><i class="pf" style="transform:scaleX('+pct.toFixed(3)+')"></i><i class="ck"></i><span class="t xs tm">'+fmtClock(p.remain)+'</span></div>';
  const tags=[];
- if(p.bless)tags.push('<span class="bl" title="收到施肥，成熟时变异率 ×1.2^'+p.bless+'">施肥 ×'+p.bless+'</span>');
  if(p.stolenLoss)tags.push('<span class="st">被偷 −'+Math.round(p.stolenLoss*100)+'%</span>');
- const boost=p.mature?'':'<button class="boostb" data-i="'+p.i+'" data-a="boost" title="速生剂：立即成熟 + 本次变异 ×2"><img src="'+ART+'boost.png'+'" alt=""></button>';
- const drops=p.mature?'':'<div class="wdrops">'+[0,1,2,3].map(k=>'<i class="'+(k<p.water?'on':'')+'"></i>').join('')+'</div>';
- return '<div class="hrow">'+pill+boost+'</div>'+drops+(tags.length?'<div class="tagmini">'+tags.join('')+'</div>':'');}
+ const fertb=(p.mature||p.dry)?'':'<button class="fertb'+(p.bless>=3?' full':'')+'" data-i="'+p.i+'" data-a="fert" title="施肥：变异率 ×1.2，最多 3 次（肥料 '+S.blessLeft+'）"><img src="'+ART+'fert.png'+'" alt=""></button>';
+ const boost=(p.mature||p.dry)?'':'<button class="boostb" data-i="'+p.i+'" data-a="boost" title="速生剂：立即成熟 + 本次变异 ×2"><img src="'+ART+'boost.png'+'" alt=""></button>';
+ const dots=p.mature?'':'<div class="pdots"><span class="wd" title="浇水 '+p.water+'/2">'+[0,1].map(k=>'<i class="'+(k<p.water?'on':'')+'"></i>').join('')+'</span>'+
+  '<span class="fd" title="施肥 '+p.bless+'/3 · 变异率 ×'+Math.pow(1.2,p.bless).toFixed(2)+'">'+[0,1,2].map(k=>'<i class="'+(k<p.bless?'on':'')+'"></i>').join('')+'</span></div>';
+ return '<div class="hrow">'+pill+fertb+boost+'</div>'+dots+(tags.length?'<div class="tagmini">'+tags.join('')+'</div>':'');}
 // 等距菱形交错阵（照白泽农场 / 精灵农场参考）：地块 (i,j) 落在旋转 45° 的格点上，
 // x = cx + (i−j)·ux, y = top + (i+j)·uy；近的压远的；小而紧凑，草坪留白
 const ISO={cx:900,top:445,w:270,h:135,t:10,pad:6,gx:34,gy:17,cols:4};
@@ -1451,7 +1483,7 @@ let fieldKey='';
 function fieldSig(){
  if(S.view==='farm')return 'F'+S.lv+'|'+S.sel+'|'+(S.seeds[S.sel]||0)+'|'+S.plots.map(p=>[p.un?1:0,p.gold?1:0,p.crop||0,p.mature?1:0,
   p.crop&&!p.mature?stageOf(p):0,p.water,p.bless,p.stolenLoss?1:0,p.stolenB?1:0,p.mut.join(''),
-  (!p.un&&PLOT_CFG[p.i].cost&&S.coin>=PLOT_CFG[p.i].cost)?1:0].join(',')).join('|');
+  (!p.un&&PLOT_CFG[p.i].cost&&S.coin>=PLOT_CFG[p.i].cost)?1:0,p.dry?1:0].join(',')).join('|');
  return 'N'+S.npc+'|'+S.npcFarms[S.npc].map(q=>[q.c,q.mature?1:0,q.mature?3:stageOf(q),q.taken,q.blessed,q.mut.join('')].join(',')).join('|');}
 function patchTimers(){
  if(S.view!=='farm')return;
@@ -1479,8 +1511,8 @@ function renderField(force){
      '<div class="plusb">+</div>'+
      '<div class="hov t xs">点 + 选种子</div></div>';
    HUD.push(hudWrap(p.i,4,null,plotHud(p)));
-   return '<div class="plot'+(p.gold?' gold':'')+(p.mature?' mature':' grow')+'"'+plotStyle(p.i,4)+
-     ' data-i="'+p.i+'" data-a="'+(p.mature?'harvest':'water')+'">'+bedImg(p.gold?'gold':'soil')+plotInner(p)+'</div>';};
+   return '<div class="plot'+(p.gold?' gold':'')+(p.mature?' mature':' grow')+(p.dry?' dry':'')+'"'+plotStyle(p.i,4)+
+     ' data-i="'+p.i+'" data-a="'+(p.mature?'harvest':p.dry?'water':'fert')+'">'+bedImg(p.gold?'gold':'soil')+plotInner(p)+'</div>';};
   F.innerHTML=groundImg(3,ISO.top)+S.plots.map(cell).join('');$('#hudLayer').innerHTML=HUD.join('');
  }else{
   const f=S.npcFarms[S.npc];
@@ -1704,7 +1736,8 @@ function payModal(i){const x=PAY[i];S.pop='shop';$('#popTitle').textContent=POPT
 /* ═══════ 新手指引：光圈 + 气泡，按真实状态推进（不是走马灯） ═══════ */
 const GUIDE=[
  {t:'点空地的 +，转出一圈种子',s:'手上有的直接种；没有的显示价格，点了买 1 颗就种',tg:()=>document.querySelector('.plot.empty .plusb')||document.querySelector('.plot.empty'),done:()=>S.plots.some(p=>p.crop)||S.gf.harvested},
- {t:'点作物浇水',s:'每轮 4 次，每次省 6.25%，一共省 25% 生长时间',tg:()=>document.querySelector('.plot.grow'),done:()=>S.plots.some(p=>p.water>0||p.mature)||S.gf.harvested},
+ {t:'它在缺水，点一下浇水',s:'不浇不长；长到一半还会缺一次，每株浇 2 次',tg:()=>document.querySelector('.plot.dry')||document.querySelector('.plot.grow'),done:()=>S.plots.some(p=>p.water>0||p.mature)||S.gf.harvested},
+ {t:'点叶子钮给它施肥',s:'每次变异率 ×1.2，最多 3 次；肥料每天 10 份，集市可补',tg:()=>document.querySelector('.hudp .fertb'),done:()=>S.gf.ferted||S.plots.some(p=>p.mature)||S.gf.harvested},
  {t:'等它成熟，急就点速生剂',s:'速生剂 = 立即成熟，且本次变异概率 ×2',tg:()=>document.querySelector('.hudp .boostb'),done:()=>S.plots.some(p=>p.mature)||S.gf.harvested},
  {t:'成熟了！点它收获',s:'首次收获点亮植物志一格 = 所有作物生长时间 −1%',tg:()=>document.querySelector('.plot.mature'),done:()=>S.gf.harvested},
  {t:'打开谷仓，选品种和数量出售',s:'出售毛额计入丰收榜；丰收周末收获的已按 ×2 计价',tg:()=>document.querySelector('.entry[data-pop="barn"]'),done:()=>S.gf.sold},
@@ -1716,7 +1749,7 @@ const GUIDE=[
 function guideTick(){
  const C=$('#coach');if(!C)return;
  while(S.gstep<GUIDE.length&&GUIDE[S.gstep].done())S.gstep++;
- if(S.guideOff||S.gstep>=GUIDE.length||S.pop||S.ring!==null||(S.view!=='farm'&&S.gstep<7)){C.innerHTML='';return;}
+ if(S.guideOff||S.gstep>=GUIDE.length||S.pop||S.ring!==null||(S.view!=='farm'&&S.gstep<8)){C.innerHTML='';return;}
  const g=GUIDE[S.gstep],el=g.tg();
  if(!el){C.innerHTML='';return;}
  const p=stagePos(el), rw=p.w+30, rh=p.h+30, up=p.y>330;
@@ -1740,14 +1773,15 @@ const rul=arr=>'<div class="rul">'+arr.map((s,i)=>'<div class="it"><i>'+(i+1)+'<
 function ruleBody(i){
  if(i===0)return '<div class="fig">'+
    mini({cap:'① 点空地 + 选种子',sub:'环上选：有的直接种，没的买 1 颗就种',x:'<div class="plusb">+</div>'})+CHEV+
-   mini({crop:'c1_s1',cap:'② 点作物浇水',sub:'每轮 4 次 · 共省 25%',x:'<div class="hud" style="bottom:4px"><div class="wdrops"><i class="on"></i><i class="on"></i><i></i><i></i></div></div>'})+CHEV+
-   mini({crop:'c1_s2',cap:'③ 等成熟 / 速生剂立即熟',sub:'速生剂还让本次变异概率 ×2',x:'<div class="hud" style="bottom:4px"><div class="hrow"><div class="pill"><i class="pf" style="transform:scaleX(.62)"></i><i class="ck"></i><span class="t xs">1m20s</span></div><button class="boostb">'+IMG(ART+'boost.png')+'</button></div></div>'})+CHEV+
-   mini({crop:'c1_s3',cap:'④ 点它收获',sub:'进谷仓 + 农园经验 + 点亮植物志',x:'<div class="ripe"></div><div class="hud" style="bottom:4px"><div class="pill ok"><span class="t xs">收获 · 苔灰速苗</span></div></div>'})+CHEV+
-   '<div class="mini coinm">'+IMG(ART+'coin.png','width:110px')+'<div class="big">+120</div><div class="cap t xs">⑤ 出售谷仓换丰收币<small>丰收周末售价 ×2</small></div></div>'+
+   mini({crop:'c1_s1',cap:'② 缺水 → 浇水',sub:'不浇不长 · 每株 2 次',x:'<div class="hud" style="bottom:4px"><div class="pill need"><span class="t xs">💧 缺水</span></div></div>'})+CHEV+
+   mini({crop:'c1_s2',cap:'③ 施肥提变异',sub:'×1.2 / 次 · 最多 3 次',x:'<div class="hud" style="bottom:4px"><div class="hrow"><button class="fertb">'+IMG(ART+'fert.png')+'</button></div><div class="pdots"><span class="fd"><i class="on"></i><i class="on"></i><i></i></span></div></div>'})+CHEV+
+   mini({crop:'c1_s2',cap:'④ 等成熟 / 速生剂',sub:'速生剂 = 立即熟 + 变异 ×2',x:'<div class="hud" style="bottom:4px"><div class="hrow"><div class="pill"><i class="pf" style="transform:scaleX(.62)"></i><i class="ck"></i><span class="t xs">1m20s</span></div><button class="boostb">'+IMG(ART+'boost.png')+'</button></div></div>'})+CHEV+
+   mini({crop:'c1_s3',cap:'⑤ 收获 → 谷仓出售',sub:'经验 + 点亮植物志 + 丰收币',x:'<div class="ripe"></div><div class="hud" style="bottom:4px"><div class="pill ok"><span class="t xs">收获 · 苔灰速苗</span></div></div>'})+
   '</div>'+rul([
    '开局 <b>6 块田垄 + 苔灰速苗 ×4</b>；点空地 + 转出<b>环形选种</b>：手上有的直接种，已解锁没买的显示价格、点了买 1 颗就种；「种子袋」可囤货，高档种子按农园等级解锁；<b>田边的每日种子袋</b>每天免费领一次随机 2~3 颗（5% 出秘种）。',
    '15 种作物 5 档：<em>1h / 4h / 8h / 16h / 24h</em>，每次收获 <b>2~5 颗</b>，单株产值 120 → 4,000（单价 × 颗数），经验 10 → 360。',
-   '浇水每次省 6.25%，一轮 4 次共 25%；<b>速生剂</b>立即成熟且本次变异概率 ×2。',
+   '<b>浇水是必须的</b>：播种后缺水、生长过半再缺一次，缺水时计时停，每株浇 2 次（免费）。',
+   '<b>施肥是变异的主要来源</b>：生长中每施 1 次变异率 ×1.2，最多 3 次；肥料每日 10 份（自家 + 串门共用），集市 900 币 ×3。<b>速生剂</b>只是跳过等待（+ 变异 ×2）。',
    '收获进谷仓，一键全部出售；出售毛额计入<b>丰收榜</b>；丰收周末（每 3 天）售价 ×2。',
    '收获给农园经验 → 等级解锁田垄（3/5/7/10 级）与一键浇水 / 收获 / 播种（4/8/12 级）；首次收获还点亮植物志 → 种植速度 +1%/格。',
    '秘种（11~15 号）不卖，来自勋绩进度与秘种礼包，<b>收获必返 1 颗种子</b>。'])+
@@ -1864,7 +1898,7 @@ function ruleBody(i){
    '<p class="pd">按「节日农场·作物图鉴」策划案 <b>v3 口径</b>做的可玩 demo，用来体感核心循环，不是数值验证。'+
    '界面按 P2 小游戏的 B 型排布（盘面占满 + 四角挂件），chrome 引真实游戏切图，苗床 / 作物 / 场景是生成的美术。</p>'+
    '<div class="kv">'+
-   '<b>主环 5 步</b><span>播种 → 浇水（每轮 4 次共省 25%）→ 成熟瞬间判异变 → 收获 → 出售换丰收币</span>'+
+   '<b>主环</b><span>播种 → 浇水（缺水不长，每株 2 次）→ 施肥（变异 ×1.2，≤3 次）→ 成熟瞬间判异变 → 收获 → 出售</span>'+
    '<b>回环</b><span>丰收币 → 买种子 / 开垦田垄 / 升看园巨猿 / 集市兑换（农园道具 · 游戏与节日道具）</span>'+
    '<b>支线 ①</b><span>绿洲植物志：首次收获点亮一格，所有作物生长时间 −1%（15 格 −15%，点亮记录跨节日保留）；异变图录每种集齐领一份游戏道具</span>'+
    '<b>支线 ②</b><span>异变：彩变 ×1.5 · 晶变 ×3 · 巨变 ×5 · 猿变 ×20，相乘；普通≤2 词条，猿变可叠 3；猿变不可被偷</span>'+
@@ -1897,7 +1931,9 @@ function buildSpec(){
 `total = tier.h × 1h
       × (良田 ? 0.75 : 1)
       × (1 − 0.01 × 植物志已点亮格数)        // 播种时结算，之后点亮不追溯
-浇水：每株最多 4 次，每次 remain −= total × (0.0625 + 灵泉技能)   // 4 次合计 −25%
+播种后 dry=1（缺水，计时停）；浇水 → dry=0 开始计时；remain ≤ 50% 且 water<2 → 再次 dry=1；每株共 2 次浇水，免费
+灵泉技能：每次浇水额外 remain −= total × (3%~7%)
+施肥（自家 / 串门同一函数族）：生长中且不缺水、bless<3 → bless++，消耗每日肥料（10/日，集市 900 币 ×3 每日 3 次）；变异乘数 1.2^bless
 速生剂：remain = 0 立即成熟，并标记 forced（本次变异乘数 ×2）；来源：集市 6,000/颗 每日 5、礼包、勋绩、通行证
 阶段贴图：进度 < 42% 幼苗 / 42%~100% 生长 / 成熟`);
  sec('4 · 成熟瞬间：异变判定',['四类独立判定，命中的倍率相乘；普通最多 2 个词条，出了猿变可叠 3 个；猿变作物不可被偷。基础概率见作物表（按档）。'],
@@ -2027,6 +2063,7 @@ document.addEventListener('click',e=>{
   else if(d.a==='plant')openRing(i);
   else if(d.a==='boost')boostUse(i);
   else if(d.a==='water')water(i);
+  else if(d.a==='fert')fert(i);
   else if(d.a==='harvest')harvest(i);
   renderTop();renderEntries();return;}
  if(d.k!==undefined&&S.view==='npc'){if(d.a==='steal')steal(+d.k);else if(d.a==='bless')bless(+d.k);return;}
@@ -2048,7 +2085,8 @@ function tick(now){
   if(isWeekend())toast('丰收周末：本时段成熟的作物售价 ×2','gold');
   renderAll();}
  let dirty=false;
- S.plots.forEach(p=>{if(p.crop&&!p.mature){p.remain-=dt;
+ S.plots.forEach(p=>{if(p.crop&&!p.mature&&!p.dry){p.remain-=dt;
+  if(p.water<2&&p.remain<=p.total*0.5){p.dry=1;renderOps();}
   if(p.remain<=0){p.remain=0;mature(p);dirty=true;renderOps();}else dirty=true;}});
  S.npcFarms.forEach(f=>f.forEach(q=>{if(!q.mature){q.remain-=dt;
   if(q.remain<=0){q.mature=1;const t=TIER[crop(q.c).t],out=[];
@@ -2085,9 +2123,11 @@ function runTest(){
   const c0=S.coin;ringPick(2);ok('环上选没买过的种子 → 扣钱买 1 颗并播种',S.plots[0].crop===2&&S.coin===c0-TIER[2].seed&&S.ring===null&&!S.seeds[2]);
   S.plots[0].crop=null;S.plots[0].mature=0;S.lv=1;S.seeds={1:20};S.coin=1500;S.sel=1;closePop();}
  plant(0);ok('播种占用地块并扣种子',S.plots[0].crop===1&&S.seeds[1]===19);
- const t0=S.plots[0].remain;water(0);water(0);water(0);water(0);
- ok('浇水 4 次合计省 25%',Math.abs(S.plots[0].remain-(t0-S.plots[0].total*0.25))<1&&S.plots[0].water===4);
- water(0);ok('第 5 次浇水无效',S.plots[0].water===4);
+ ok('播种后缺水、计时停',S.plots[0].dry===1);water(0);ok('浇水后开始生长',S.plots[0].dry===0&&S.plots[0].water===1);
+ water(0);ok('不缺水时浇水无效',S.plots[0].water===1);
+ S.plots[0].remain=S.plots[0].total*0.49;{const d0=S.plots[0].dry;S.plots[0].remain-=1;if(S.plots[0].water<2&&S.plots[0].remain<=S.plots[0].total*0.5)S.plots[0].dry=1;ok('生长过半再次缺水',S.plots[0].dry===1);}
+ water(0);ok('第二次浇水 → 共 2 次',S.plots[0].water===2&&!S.plots[0].dry);
+ {const f0=S.blessLeft;fert(0);fert(0);fert(0);fert(0);ok('自家施肥最多 3 次、每次扣 1 份肥料',S.plots[0].bless===3&&S.blessLeft===f0-3);}
  S.plots[0].remain=0;mature(S.plots[0]);ok('到时成熟',S.plots[0].mature===1);
  renderField();ok('成熟地块渲染出收获提示',!!document.querySelector('.hudp .pill.ok'));
  const c0=S.coin;harvest(0);
@@ -2187,9 +2227,9 @@ if(QS.indexOf('test')>=0)runTest();
  if(q.get('state')==='mid'){S.lv=5;S.exp=40;S.coin=3260;S.boost=4;S.seeds={1:3,2:2};S.spent=4200;S.mileGot=1;
   S.plots[6].un=1;S.plots[10].un=1;S.sales=1860;S.forms={farmer:{lv:2},iron:{lv:3},night:{lv:1}};S.form='iron';
   const set=(i,id,pc,w,extra)=>{const p=S.plots[i],c=crop(id),total=TIER[c.t].h*HOUR;
-   Object.assign(p,{crop:id,total,remain:total*(1-pc),water:w,bless:0,forced:0,mature:0,mut:[],mul:1},extra||{});};
-  set(0,1,1,4,{mature:1,mut:['color'],mul:1.5});set(1,2,0.3,2);set(2,3,0.7,4,{bless:2});set(3,1,1,3,{mature:1});
-  set(4,2,0.1,0,{stolenLoss:0.3,stolenPending:1});set(6,1,0.5,1);set(10,3,0.55,2);
+   Object.assign(p,{crop:id,total,remain:total*(1-pc),water:w,dry:(w===0||(pc>=0.5&&w<2))?1:0,bless:0,forced:0,mature:0,mut:[],mul:1},extra||{});};
+  set(0,1,1,2,{mature:1,mut:['color'],mul:1.5});set(1,2,0.3,1);set(2,3,0.7,2,{bless:2});set(3,1,1,2,{mature:1});
+  set(4,2,0.1,0,{stolenLoss:0.3,stolenPending:1});set(6,1,0.55,1);set(10,3,0.55,2,{bless:3});
   S.store=[{c:1,mut:[],mul:1,price:30},{c:1,mut:[],mul:1,price:30},{c:1,mut:[],mul:1,price:30},{c:1,mut:['giant'],mul:5,price:150},{c:2,mut:['color'],mul:1.5,price:195}];S.codex={1:1,2:1,3:1,4:1,5:1};
   S.mutbook={'1_theme':1,'1_color':1,'1_mat':1,'1_giant':1,'2_color':1,'2_giant':1,'3_color':1};S.gstep=3;
   renderAll();}

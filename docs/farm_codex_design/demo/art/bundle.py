@@ -18,7 +18,7 @@ def uri(rel):
 # 只内嵌真正被引用到的文件：HTML 静态 + JS 字面量 + art(n) 可能拼出的作物/苗床/图标
 used=set(re.findall(r'assets/[^"\')\s]+\.(?:png|jpg)',s))
 used|={f"assets/art/{f}_s{k}.png" for f in ['c1','c2','c3','c4','c5','c6'] for k in (1,2,3)}
-used|={f"assets/art/{n}.png" for n in ['coin','boost','guard','seedbag','form_iron','form_trade','form_shaman','form_night','shop_speed','shop_food','shop_wood','shop_iron','shop_ticket','shop_emoji','shop_frame','shop_plate','shop_scarecrow','shop_book','sk_exp','sk_cap','sk_gain','sk_sell','sk_seedoff','sk_mut','sk_water','sk_loss']}
+used|={f"assets/art/{n}.png" for n in ['coin','boost','fert','guard','seedbag','form_iron','form_trade','form_shaman','form_night','shop_speed','shop_food','shop_wood','shop_iron','shop_ticket','shop_emoji','shop_frame','shop_plate','shop_scarecrow','shop_book','sk_exp','sk_cap','sk_gain','sk_sell','sk_seedoff','sk_mut','sk_water','sk_loss']}
 used=sorted(p for p in used if Path(p).exists())
 tbl='{'+','.join('"%s":"%s"'%(x,uri(x)) for x in used)+'}'
 anchor="const A='assets/', ART=A+'art/', P2=A+'p2/';"
