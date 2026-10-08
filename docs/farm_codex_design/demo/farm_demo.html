@@ -616,6 +616,32 @@ html,body{height:100%;background:#000;overflow:hidden;
 .hav img{width:54px;height:54px;object-fit:contain;flex:0 0 auto;border-radius:50%;border:2px solid var(--tc);background:rgba(0,0,0,.45);padding:3px}.hav.lock img{filter:grayscale(.85) brightness(.55)}
 .hav b{font-size:15px;color:#fff;display:block}.hav small{font-size:11px;color:var(--dim)}.hav .hstars{font-size:11px;letter-spacing:1px;margin:1px 0}
 .hav .hdot{position:absolute;right:8px;top:8px;width:10px;height:10px;border-radius:50%;background:var(--green);border:2px solid var(--ink)}
+.csel{display:grid;grid-template-columns:400px 1fr;gap:18px;height:470px;margin-top:12px}
+.cshow{position:relative;border-radius:16px;overflow:hidden;border:3px solid var(--tc);box-shadow:0 0 0 1px rgba(0,0,0,.5),0 0 24px var(--tcg),inset 0 0 40px rgba(0,0,0,.35);display:flex;align-items:flex-end;justify-content:center;
+ background:radial-gradient(ellipse at 50% 30%,#3c5a2a,#121a0d 72%)}
+.cshow.dark{background:radial-gradient(ellipse at 50% 30%,#2a2a2a,#0e0e0e 72%);box-shadow:0 0 0 1px rgba(0,0,0,.5);border-color:#4a3d46}
+.cshow .hglow{width:360px;height:360px;margin:-180px 0 0 -180px}.cshow .hring{width:310px;height:310px;margin:-155px 0 0 -155px}.cshow .hfloor{width:280px;margin-left:-140px;bottom:72px;height:56px}
+.cart{position:relative;height:300px;max-width:88%;object-fit:contain;margin-bottom:84px;filter:drop-shadow(0 14px 20px rgba(0,0,0,.6))}
+.cinfo{display:flex;flex-direction:column;gap:10px;min-width:0}
+.cstats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.cs{background:#1b1519;border:2px solid #362c34;border-radius:10px;padding:8px 10px;display:flex;flex-direction:column;gap:2px}
+.cs span{font-size:12px;color:var(--dim)}.cs b{font-size:22px;color:#fff;line-height:1.1}
+.cstate{background:#1b1519;border:2px solid #362c34;border-radius:10px;padding:8px 12px;display:flex;flex-direction:column;gap:2px}
+.cstate b{font-size:14px;color:#C8CDD4}.cstate.on{border-color:var(--green);background:#1f2a18}.cstate.on b{color:var(--green)}
+.cstate span{font-size:12px;color:var(--dim)}
+.cforms{background:#1b1519;border:2px solid #362c34;border-radius:12px;padding:10px 12px;margin-top:auto}
+.cfh{display:flex;align-items:center;gap:12px;margin-bottom:8px}.cfh b{font-size:15px;color:#fff}.cfh span{flex:1;font-size:12px;color:var(--dim);min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cfh .sbtn{width:150px;height:40px}.cfh .sbtn span{font-size:15px}
+.cfrow{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.cform{background:rgba(0,0,0,.35);border:2px solid #362c34;border-radius:10px;padding:6px 4px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;opacity:.5}
+.cform.on{opacity:1;border-color:var(--green);background:rgba(30,60,14,.35)}
+.cfi{height:74px;display:flex;align-items:flex-end;justify-content:center;overflow:visible}.cfi img{height:68px;transform-origin:bottom center}
+.cform small{font-size:11px;color:#8d8279;font-weight:800}.cform.on small{color:var(--green)}
+.cstrip{display:flex;gap:6px;margin-top:12px}
+.cav{flex:1;position:relative;min-width:0;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px 5px;border-radius:10px;background:#1b1519;border:2px solid #362c34;border-top:4px solid var(--tc);cursor:pointer;transition:transform .12s,box-shadow .12s}
+.cav:hover{transform:translateY(-2px);box-shadow:0 0 12px var(--tcg)}.cav.sel{border-color:var(--tc);background:#221c1a;box-shadow:0 0 14px var(--tcg)}
+.cav img{height:44px;max-width:60px;object-fit:contain}.cav b{font-size:11px;color:#fff;white-space:nowrap}.cav small{font-size:10px;color:var(--dim)}.cav.dim b{color:#8d8279}
+.cav .rd{position:absolute;right:4px;top:4px;width:12px;height:12px;border-radius:50%;background:#ff3b30;border:2px solid var(--ink)}
 .fcards{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
 .fcard{position:relative;background:#221b21;border:2px solid #362c34;border-radius:12px;padding:12px 10px 10px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
 .fcard.on{border-color:var(--green);background:#1f2a18}
@@ -777,7 +803,10 @@ const FORM_META={
  shaman:{title:'催芽巫医',lore:'羽冠下的咒语能让作物在夜里变异，被偷了也能保住几分。',tier:5}};
 // 品质五档：颜色 + 星数，贵的档高；同步到舞台框 / 名牌 / 头像框 / 价格
 const TIERS={1:{n:'普通',c:'#d6dde3',g:'rgba(214,221,227,.35)'},2:{n:'优秀',c:'#5fd877',g:'rgba(95,216,119,.4)'},3:{n:'稀有',c:'#55b3ff',g:'rgba(85,179,255,.45)'},4:{n:'史诗',c:'#c27bff',g:'rgba(194,123,255,.5)'},5:{n:'传说',c:'#ffa531',g:'rgba(255,165,49,.55)'}};
-const stars=n=>'★'.repeat(n)+'<i>'+'★'.repeat(5-n)+'</i>';   // 技能 l → l+1 的丰收币
+const stars=n=>'★'.repeat(n)+'<i>'+'★'.repeat(5-n)+'</i>';
+const CROP_LORE={1:'废墟石缝里最先冒头的灰苗，一小时就能收一把。',2:'穗子带着铁锈色，风一吹像在敲铁皮。',3:'外皮乌黑，掰开却是甜的，矿工们的零嘴。',4:'花瓣泛着铅灰的光，据说能把乌云种进土里。',5:'沙丘边缘唯一结果的树，一天只肯熟一次。',
+ 6:'夜里会微微发绿，吃不吃看胆子。',7:'穗粒排得像齿轮，老机械师拿它当零件数。',8:'果皮滑得像抹了油，摔不烂，很耐运。',9:'阴天靠近会被静电扎一下，别碰花蕊。',10:'树皮像镀了铬，太阳底下晃眼。',
+ 11:'传说种子是从天上掉下来的，收割时有星屑。',12:'果肉凝得像琥珀，能看见里面的光。',13:'只在极光夜授粉，花色每天不一样。',14:'根扎在一块陨铁上，长得慢，值钱。',15:'方舟带来的最后一粒种，绿洲的名字就是它给的。'};   // 技能 l → l+1 的丰收币
 const formOf=k=>FORMS.find(f=>f.k===k);
 const formLv=k=>(S.forms[k]||{lv:1}).lv;
 // 使用中形态的某条技能值；没有该技能返回 null
@@ -823,7 +852,7 @@ const S={lv:1,exp:0,coin:1500,boost:3,guard:1,equip:null,bp:0,title:0,
  spent:0,mileGot:0,blessGiven:0,taskDone:0,boostBought:0,stab:0,bDay:{},bAct:{},bag:{},bagDay:0,bagLast:[],ctab:0,sellQty:{},mutRw:{},
  stealLeft:60,blessLeft:10,blessRecv:0,
  sel:1,view:'farm',npc:0,day:1,dayT:0,speed:1,pop:null,logs:[],npcFarms:[],
- gf:{},gstep:0,guideOff:0,rtab:0,ktab:0,ended:0,sales:0,bestRank:999,rivals:[],form:'farmer',forms:{farmer:{lv:1}},ring:null,gsel:null};
+ gf:{},gstep:0,guideOff:0,rtab:0,ktab:0,ended:0,sales:0,bestRank:999,rivals:[],form:'farmer',forms:{farmer:{lv:1}},ring:null,gsel:null,csel:1};
 for(let i=0;i<12;i++){const c=PLOT_CFG[i];
  S.plots.push({i,un:!!c.free,gold:!!c.gold,crop:null,total:0,remain:0,water:0,bless:0,
                stolenB:0,forced:0,mature:0,mut:[],mul:1,stolenLoss:0,stolenPending:0});}
@@ -1444,7 +1473,7 @@ function renderEntries(){
 function renderAll(){renderTop();renderOps();renderMile();renderField();renderEntries();renderBag();if(S.pop)renderPop();guideTick();}
 
 /* ═══════ 弹窗 ═══════ */
-const POPT={barn:'谷仓 · 选品种与数量出售',bag:'每日种子袋 · 今日收获',seed:'种子袋 · 15 种作物五档',shop:'集市 · 农园道具 / 游戏与节日道具',codex:'图鉴 · 绿洲植物志 / 异变图录',
+const POPT={barn:'谷仓 · 选品种与数量出售',bag:'每日种子袋 · 今日收获',seed:'种子袋 · 15 种作物五档',shop:'集市 · 农园道具 / 游戏与节日道具',codex:'绿洲植物志 · 作物图鉴与异变图录',
  mile:'农会勋绩 · 活动任务',log:'农园日志',guard:'看园巨猿 · 守卫与形态',rule:'绿洲农园 · 玩法示意',end:'活动结束 · 回收结算',rank:'丰收榜 · 本服出售毛额'};
 let AUTO_RULE=false;
 function openPop(k){if(S.ring!==null){S.ring=null;renderRing();}if(k==='guard')S.gsel=S.form;S.pop=k;if(k==='seed')S.gf.seedOpened=1;if(k==='rule'&&!AUTO_RULE)S.gf.ruleOpened=1;
@@ -1490,31 +1519,25 @@ function renderPop(){
   h=tabs+'<div class="rbody">'+body+'</div>';
  }
  else if(k==='codex'){
-  const n=Object.keys(S.codex).length, mb=Object.keys(S.mutbook).length;
-  const tabs='<div class="rtabs"><div class="rtab'+(S.ctab===0?' on':'')+'" data-ctab="0"><i>志</i>植物志 '+n+'/15</div><div class="rtab'+(S.ctab===1?' on':'')+'" data-ctab="1"><i>变</i>异变图录 '+mb+'/60</div>'+
-   '<div style="margin-top:auto;font-size:12px;color:#C8CDD4;line-height:1.7;padding:0 4px">植物志每格 种植速度 +1%<br>15 格 = 生长时间 −15%<br>每种作物集齐 4 形态领游戏道具</div></div>';
-  let body='';
-  if(S.ctab===0){
-   body='<div class="cxhead"><div><div class="ph">绿洲植物志 · 已点亮 '+n+' / 15</div><p class="pd" style="margin:0">每种作物<b>首次收获</b>点亮一格，每格所有作物<b>生长时间 −1%</b>，15 格全亮 = −15%；点亮记录<b>跨节日保留</b>，下届农场开局就带着。</p></div>'+
-    '<div class="cxbuff"><b>+'+n+'%</b><span>种植速度 · 生长时间 −'+n+'%</span></div></div>'+
-    '<div class="cxbar"><i style="width:'+(n/15*100).toFixed(1)+'%"></i></div>'+
-    '<div class="ggrid">'+CROPS.map(c=>{const on=!!S.codex[c.id],t=TIER[c.t];
-     return '<div class="gcard'+(on?' on':' lock')+'" style="min-height:0"><span class="corner">T'+c.t+'</span>'+
-      '<img src="'+art(c.fam+'_s3')+'" style="filter:'+(on?(c.f||'none'):'none')+'" alt=""><b>'+c.n+'</b><em>'+c.src+' · '+t.h+'h · 单价 '+fmt(t.unit)+'</em>'+
-      '<div class="tags"><span class="w" style="color:'+(on?'#3EEE00':'#8d8279')+'">'+(on?'已点亮 · 种植速度 +1%':'首次收获点亮 → 种植速度 +1%')+'</span></div></div>';}).join('')+'</div>';
-  }else{
-   body='<div class="cxhead"><div><div class="ph">异变图录 · 已收集 '+mb+' / 60</div><p class="pd" style="margin:0">成熟一瞬间判定异变，命中几个就<b>倍率相乘</b>；普通最多 2 个词条，出了猿变可叠 3 个。<b>每种作物集齐 4 形态 → 领一份游戏道具奖励</b>（加速 / 招募券）。</p></div>'+
-    '<div class="cxbuff"><b>'+Object.keys(S.mutRw).length+'</b><span>已领奖 / 15</span></div></div>'+
-    '<div class="mutlegend">'+FORMKEYS.map(f=>'<span class="mchip '+FORM[f].c+'">'+FORM[f].n+' ×'+FORM[f].m+'</span>').join('')+
-     '<span style="margin-left:auto;font-size:12px;color:#C8CDD4">基础概率 T1→T5：彩 10→18% · 晶 4→8% · 巨 2→4% · 猿 0.3→0.8%；祝福 / 良田 / 速生剂加乘，上限 ×4</span></div>'+
-    '<div class="ggrid">'+CROPS.map(c=>{const got=FORMKEYS.filter(f=>S.mutbook[c.id+'_'+f]).length,full=got===4,done=!!S.mutRw[c.id];
-     return '<div class="gcard'+(done?' on':full?' gold':'')+'"><span class="corner">T'+c.t+'</span><span class="corner r">'+got+' / 4</span>'+
-      '<img src="'+art(c.fam+'_s3')+'" style="filter:'+(c.f||'none')+'" alt=""><b>'+c.n+'</b>'+
-      '<div class="mini4">'+FORMKEYS.map(f=>{const on=!!S.mutbook[c.id+'_'+f];return '<div class="'+(on?'on':'')+'"><img src="'+art(c.fam+'_s3')+'" style="filter:'+cropStyle(c.f,[f])+';transform:scale('+(f==='giant'?1.25:1)+')" alt=""><span class="mchip '+FORM[f].c+'">'+FORM[f].n+' ×'+FORM[f].m+'</span></div>';}).join('')+'</div>'+
-      '<em>集齐奖励：'+mutRwText(c.t)+'</em>'+
-      (done?sb('blue','已领取','',true):full?sb('gold','领取奖励','data-mutr="'+c.id+'"',false,true):sb('blue','还差 '+(4-got)+' 形态','',true))+'</div>';}).join('')+'</div>';
-  }
-  h=tabs+'<div class="rbody">'+body+'</div>';
+  const n=codexN(), mb=Object.keys(S.mutbook).length, id=crop(S.csel)?S.csel:1, c=crop(id), t=TIER[c.t], lit=!!S.codex[id], T=TIERS[c.t], tv='--tc:'+T.c+';--tcg:'+T.g;
+  const got=FORMKEYS.filter(f=>S.mutbook[id+'_'+f]).length, full=got===4, claimed=!!S.mutRw[id];
+  h='<div class="cxhead"><div><div class="ph">绿洲植物志 · 已点亮 '+n+' / 15</div><div class="cxbar" style="margin:6px 0 0;width:420px"><i style="width:'+(n/15*100).toFixed(1)+'%"></i></div></div>'+
+   '<div class="cxbuff"><b>+'+n+'%</b><span>种植速度 · 生长时间 −'+n+'%</span></div><div class="cxbuff" style="border-color:#4a3d46"><b style="color:#c27bff">'+mb+'<small style="font-size:14px;color:#C8CDD4"> / 60</small></b><span>异变图录</span></div></div>';
+  h+='<div class="csel">'+
+   '<div class="cshow'+(lit?'':' dark')+'" style="'+tv+'"><div class="hglow"></div><div class="hring"></div><div class="hfloor"></div>'+
+    '<img class="cart" src="'+art(c.fam+'_s3')+'" style="filter:'+(lit?(c.f||'none'):'grayscale(1) brightness(.35)')+'" alt="">'+
+    '<span class="hbadge'+(lit?' on':'')+'">'+(lit?'已点亮':'未点亮')+'</span><span class="hbadge tier">T'+c.t+' · '+T.n+'</span>'+
+    '<div class="hplate"><b>'+c.n+'</b><span>'+c.src+'</span><em class="hstars">'+stars(c.t)+'</em></div></div>'+
+   '<div class="cinfo">'+
+    '<div class="hname" style="'+tv+'">'+c.n+'<span class="tierchip">T'+c.t+' '+T.n+'</span><em class="hstars">'+stars(c.t)+'</em></div><p class="hlore">'+CROP_LORE[id]+'</p>'+
+    '<div class="cstats">'+[['生长时长',t.h+'h'],['单颗售价',fmt(t.unit)],['收获颗数',t.y[0]+'~'+t.y[1]],['农园经验',t.exp]].map(x=>'<div class="cs"><span>'+x[0]+'</span><b>'+x[1]+'</b></div>').join('')+'</div>'+
+    '<div class="cstate'+(lit?' on':'')+'"><b>'+(lit?'✓ 植物志已点亮 · 所有作物生长时间 −1%':'首次收获点亮 → 所有作物生长时间 −1%')+'</b><span>'+(c.id<=10?'种子袋 '+fmt(t.seed)+' 丰收币'+(c.lv>1?' · 农园 '+c.lv+' 级解锁':''):c.src==='秘种·进度'?'勋绩进度 / 每日种子袋 5% / 集市限购':'秘种礼包')+' · 秘种收获必返 1 颗</span></div>'+
+    '<div class="cforms"><div class="cfh"><b>异变图录 '+got+' / 4</b><span>集齐奖励：'+mutRwText(c.t)+'</span>'+
+     (claimed?sb('blue','已领取','',true):full?sb('gold','领取奖励','data-mutr="'+id+'"',false,true):'')+'</div>'+
+     '<div class="cfrow">'+FORMKEYS.map(f=>{const on=!!S.mutbook[id+'_'+f];return '<div class="cform'+(on?' on':'')+'"><div class="cfi"><img src="'+art(c.fam+'_s3')+'" style="filter:'+(on?cropStyle(c.f,[f]):'grayscale(1) brightness(.3)')+';transform:scale('+(f==='giant'?1.25:1)+')" alt=""></div><span class="mchip '+FORM[f].c+'">'+FORM[f].n+' ×'+FORM[f].m+'</span><small>'+(on?'✓ 已收集':'未收集')+'</small></div>';}).join('')+'</div></div>'+
+   '</div></div>';
+  h+='<div class="cstrip">'+CROPS.map(x=>{const l=!!S.codex[x.id],tt=TIERS[x.t],g2=FORMKEYS.filter(f=>S.mutbook[x.id+'_'+f]).length,can=g2===4&&!S.mutRw[x.id];
+   return '<div class="cav'+(x.id===id?' sel':'')+(l?'':' dim')+'" data-csel="'+x.id+'" style="--tc:'+tt.c+';--tcg:'+tt.g+'"><img src="'+art(x.fam+'_s3')+'" style="filter:'+(l?(x.f||'none'):'grayscale(1) brightness(.4)')+'" alt="">'+(can?'<i class="rd"></i>':'')+'<b>'+x.n+'</b><small>'+(l?g2+'/4':'未点亮')+'</small></div>';}).join('')+'</div>';
  }
  else if(k==='guard'){
   const sel=(S.gsel&&formOf(S.gsel))?S.gsel:S.form, f=formOf(sel), own=!!S.forms[sel], on=S.form===sel, lv=own?formLv(sel):1, u=f.unlock, meta=FORM_META[sel], T=TIERS[meta.tier], tv='--tc:'+T.c+';--tcg:'+T.g;
@@ -1905,7 +1928,7 @@ document.addEventListener('click',e=>{
  const rs=e.target.closest('[data-rs]');if(rs){ringPick(+rs.dataset.rs);return;}
  if(e.target.closest('[data-rclose]')){closeRing();return;}
  if(S.ring!==null)closeRing();
- const t=e.target.closest('[data-i],[data-k],[data-g],[data-n],[data-seed],[data-buy],[data-eq],[data-pay],[data-pop],[data-rtab],[data-ktab],[data-stab],[data-ctab],[data-hsel],[data-mutr],[data-sq],[data-sell],[data-shop],[data-fu],[data-fb],[data-fl]');
+ const t=e.target.closest('[data-i],[data-k],[data-g],[data-n],[data-seed],[data-buy],[data-eq],[data-pay],[data-pop],[data-rtab],[data-ktab],[data-stab],[data-ctab],[data-csel],[data-hsel],[data-mutr],[data-sq],[data-sell],[data-shop],[data-fu],[data-fb],[data-fl]');
  if(!t)return;
  const d=t.dataset;
  if(d.pop){openPop(d.pop);return;}
@@ -1913,6 +1936,7 @@ document.addEventListener('click',e=>{
  if(d.ktab!==undefined){S.ktab=+d.ktab;renderPop();return;}
  if(d.stab!==undefined){S.stab=+d.stab;renderPop();return;}
  if(d.ctab!==undefined){S.ctab=+d.ctab;renderPop();return;}
+ if(d.csel){S.csel=+d.csel;renderPop();return;}
  if(d.hsel){S.gsel=d.hsel;renderPop();return;}
  if(d.mutr){claimMut(+d.mutr);return;}
  if(d.sq){const [key,dv]=d.sq.split('|');const g=barnGroups().find(x=>x.key===key);if(!g)return;const cur=Math.min(S.sellQty[key]||g.n,g.n);
@@ -2051,7 +2075,8 @@ function runTest(){
   const g=gs.find(x=>x.n>=2)||gs[0];sellGroup(g.key,1);ok('谷仓可只卖 1 颗',S.store.length===n0-1&&S.coin>c0);
   openPop('barn');ok('谷仓卡片带数量选择器',document.querySelectorAll('.gcard .qsel').length===barnGroups().length);closePop();}
  openPop('seed');ok('种子袋 15 张卡片，每张四个标签',document.querySelectorAll('.gcard').length===15&&document.querySelectorAll('.gcard .tags span').length===60);closePop();
- S.ctab=0;openPop('codex');ok('植物志 15 张作物卡',document.querySelectorAll('.rbody .gcard').length===15);S.ctab=1;renderPop();ok('异变图录 15 张卡 × 4 形态格',document.querySelectorAll('.mini4 div').length===60);closePop();S.ctab=0;
+ S.csel=1;openPop('codex');ok('图鉴：作物展示 + 4 数据格 + 4 形态格 + 底部 15 头像',!!document.querySelector('.cshow')&&document.querySelectorAll('.cs').length===4&&document.querySelectorAll('.cform').length===4&&document.querySelectorAll('.cav').length===15);
+ S.csel=12;renderPop();ok('选未点亮作物：展示压灰 + 未点亮角标',!!document.querySelector('.cshow.dark')&&document.querySelector('.cshow .hbadge').textContent==='未点亮');closePop();S.csel=1;
  {FORMKEYS.forEach(f=>S.mutbook['1_'+f]=1);const g0=S.bag.speed8h||0;claimMut(1);ok('集齐 4 形态领游戏道具（8h 加速进背包）',(S.bag.speed8h||0)===g0+2&&S.mutRw[1]===1);
   claimMut(1);ok('图录奖励不能重复领',(S.bag.speed8h||0)===g0+2);
   S.codex={1:1,2:1,3:1,4:1,5:1};S.seeds[1]=5;const fp=S.plots.find(p=>p.un&&!p.crop&&!p.gold);S.sel=1;S.form='farmer';plant(fp.i);
@@ -2130,7 +2155,7 @@ if(QS.indexOf('test')>=0)runTest();
   sels.forEach(sel=>{let el=null;try{const [q0,ix]=sel.split('@@');el=ix!==undefined?document.querySelectorAll(q0)[+ix]:document.querySelector(q0);}catch(e){}if(!el){out[sel]=null;return;}const r=el.getBoundingClientRect();
    out[sel]=[Math.round((r.left-st.left)/sc),Math.round((r.top-st.top)/sc),Math.round(r.width/sc),Math.round(r.height/sc)];});
   const d=document.createElement('pre');d.id='testlog';d.style.display='none';d.textContent=JSON.stringify(out);document.body.appendChild(d);document.title='MEASURE OK';},600);}
- if(q.has('ctab')){S.ctab=+q.get('ctab')||0;openPop('codex');}
+ if(q.has('ctab')||q.has('csel')){if(q.get('csel'))S.csel=+q.get('csel');openPop('codex');}
 })();
 </script>
 </body>
