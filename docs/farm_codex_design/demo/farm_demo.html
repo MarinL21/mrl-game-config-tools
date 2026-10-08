@@ -570,17 +570,47 @@ html,body{height:100%;background:#000;overflow:hidden;
 .spec tr:nth-child(even) td{background:rgba(255,255,255,.02)}
 .spec pre{font:12px/1.65 Menlo,Consolas,monospace;color:#d9ecd0;background:#120f12;border:1px solid #362c34;border-radius:8px;padding:10px 12px;white-space:pre-wrap;margin:6px 0 10px}
 /* ── 巨猿形态卡 ── */
-.ghero{display:flex;align-items:center;gap:18px;padding:14px 18px;border-radius:14px;background:linear-gradient(90deg,#1f2a18,#182312);border:2px solid var(--green)}
-.ghero>img{width:120px;height:120px;object-fit:contain;flex:0 0 auto;filter:drop-shadow(0 4px 6px rgba(0,0,0,.5))}
-.gmain{flex:1;min-width:0}
-.gname{font-size:24px;font-weight:900;color:#fff;margin-bottom:10px}
-.gname span{font-size:12px;font-weight:800;color:#3A2A00;background:var(--green);border-radius:8px;padding:2px 8px;margin-left:10px;vertical-align:4px}
-.gtiles{display:flex;gap:10px}
-.gt{flex:1;min-width:0;background:rgba(0,0,0,.35);border:1px solid #2c3e22;border-radius:10px;padding:8px 12px;display:flex;flex-direction:column;gap:2px}
-.gt span{font-size:12px;color:var(--dim)}.gt b{font-size:22px;color:#fff;line-height:1.1}.gt em{font-style:normal;font-size:11px;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.gt.big b{color:var(--gold);font-size:28px}
-.gbtns{display:flex;flex-direction:column;gap:8px;flex:0 0 auto}
-.gbtns .sbtn{width:200px;height:50px}
+.hsel{display:grid;grid-template-columns:500px 1fr;gap:18px;height:586px}
+.hshow{position:relative;border-radius:16px;overflow:hidden;border:2px solid #4a3d46;display:flex;align-items:flex-end;justify-content:center;
+ background:radial-gradient(ellipse at 50% 28%,var(--hc1),var(--hc2) 72%)}
+.hshow.farmer{--hc1:#5a8a34;--hc2:#14200e}.hshow.iron{--hc1:#4f6684;--hc2:#10161f}.hshow.night{--hc1:#3f3d86;--hc2:#0d0d20}.hshow.trade{--hc1:#9a4430;--hc2:#1e0e0a}.hshow.shaman{--hc1:#2f7466;--hc2:#0b1b18}
+.hglow{position:absolute;left:50%;top:50%;width:460px;height:460px;margin:-230px 0 0 -230px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.22),rgba(255,255,255,0) 62%)}
+.hring{position:absolute;left:50%;top:50%;width:400px;height:400px;margin:-200px 0 0 -200px;border-radius:50%;border:2px dashed rgba(255,230,160,.35);animation:hspin 48s linear infinite}
+@keyframes hspin{to{transform:rotate(360deg)}}
+.hfloor{position:absolute;left:50%;bottom:66px;width:380px;height:74px;margin-left:-190px;border-radius:50%;background:radial-gradient(ellipse,rgba(0,0,0,.5),transparent 70%)}
+.hart{position:relative;height:500px;max-width:92%;object-fit:contain;margin-bottom:62px;filter:drop-shadow(0 18px 26px rgba(0,0,0,.6))}
+.hplate{position:absolute;left:0;right:0;bottom:0;padding:26px 16px 14px;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.78));text-align:center}
+.hplate b{display:block;font-size:30px;color:#fff;-webkit-text-stroke:3px var(--ink);paint-order:stroke fill;font-weight:900;line-height:1.1}
+.hplate span{font-size:14px;color:var(--gold);font-weight:800;letter-spacing:3px}
+.hbadge{position:absolute;left:14px;top:14px;font-size:12px;font-weight:800;color:#fff;background:rgba(0,0,0,.55);border:2px solid #4a3d46;border-radius:9px;padding:3px 10px}
+.hbadge.on{background:var(--green);color:#1A1A1A;border-color:var(--ink)}
+.hbadge.pay{left:auto;right:14px;background:linear-gradient(90deg,#8a6a22,#c99a2b);border-color:#8a6a22}
+.hinfo{display:flex;flex-direction:column;gap:12px;min-width:0}
+.hname{font-size:30px;font-weight:900;color:#fff;line-height:1.1}
+.hname em{font-style:normal;font-size:14px;color:var(--gold);margin-left:14px;letter-spacing:3px;vertical-align:6px}
+.hlore{margin:0;font-size:14px;color:#ded2bd;line-height:1.7;border-left:3px solid var(--gold);padding-left:12px}
+.hstats{display:grid;grid-template-columns:1.35fr 1fr 1fr;gap:10px}
+.hs{background:#1b1519;border:2px solid #362c34;border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.hs span{font-size:12px;color:var(--dim)}.hs b{font-size:24px;color:#fff;line-height:1.1}.hs.cap b{color:var(--gold);font-size:28px}
+.hs i{display:block;height:6px;border-radius:3px;background:linear-gradient(90deg,#ffd34d,#e09a12);margin-top:2px}
+.hs small{font-size:11px;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hs .sbtn{width:100%;height:36px;margin-top:4px}.hs .sbtn span{font-size:14px}
+.hskills{display:flex;flex-direction:column;gap:8px;flex:1}
+.hsk{display:flex;align-items:center;gap:12px;background:#1b1519;border:2px solid #362c34;border-radius:12px;padding:8px 12px}
+.hico{width:58px;height:58px;border-radius:50%;flex:0 0 auto;background:radial-gradient(circle at 50% 35%,#3a3127,#1a1612 75%);border:3px solid #a8842c;
+ display:flex;align-items:center;justify-content:center;box-shadow:0 0 12px rgba(255,198,0,.28),inset 0 1px 0 rgba(255,255,255,.15)}
+.hico img{width:44px;height:44px;object-fit:contain;filter:drop-shadow(0 2px 2px rgba(0,0,0,.6))}
+.hico b{font-size:22px;color:var(--gold)}
+.hsk.empty{border-style:dashed;opacity:.5}.hsk.empty .hico{border-color:#4a3d46;box-shadow:none}.hsk.empty .hico b{color:#6d6459}.hsk.empty .hst b{color:#8d8279}
+.hst{flex:1;min-width:0}.hst b{display:block;font-size:17px;color:#fff}.hst span{display:block;font-size:13px;color:#ded2bd}.hst em{display:block;font-style:normal;font-size:12px;color:var(--cyan);margin-top:2px}
+.hlv{text-align:right;font-size:12px;color:var(--dim);flex:0 0 auto}.hlv i{display:flex;gap:3px;margin-top:5px;justify-content:flex-end}.hlv i b{width:14px;height:6px;border-radius:3px;background:#3a2f16;border:1px solid #1A1A1A;display:block}.hlv i b.on{background:var(--gold)}
+.hact{display:flex;gap:12px;margin-top:auto}.hact .sbtn{height:54px;flex:1;width:auto}.hact .sbtn span{font-size:19px}
+.hstrip{display:flex;gap:10px;margin-top:14px}
+.hav{flex:1;position:relative;display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:12px;background:#1b1519;border:2px solid #362c34;cursor:pointer;min-width:0;transition:border-color .12s,transform .12s}
+.hav:hover{border-color:#8a7a64;transform:translateY(-2px)}.hav.sel{border-color:var(--gold);background:#2b2415}
+.hav img{width:54px;height:54px;object-fit:contain;flex:0 0 auto}.hav.lock img{filter:grayscale(.85) brightness(.55)}
+.hav b{font-size:15px;color:#fff;display:block}.hav small{font-size:11px;color:var(--dim)}
+.hav .hdot{position:absolute;right:8px;top:8px;width:10px;height:10px;border-radius:50%;background:var(--green);border:2px solid var(--ink)}
 .fcards{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
 .fcard{position:relative;background:#221b21;border:2px solid #362c34;border-radius:12px;padding:12px 10px 10px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
 .fcard.on{border-color:var(--green);background:#1f2a18}
@@ -685,6 +715,7 @@ const art=n=>ART+n+'.png';   // 动态拼的美术路径统一走这里（bundle
 const BTN={gold:P2+'按钮_金购买_390x146.png', blue:P2+'按钮_蓝通用_390x146.png', green:P2+'按钮_蓝通用_390x146.png'};
 const BTNF={gold:'',blue:'',green:'hue-rotate(-96deg) saturate(1.45) brightness(1.06)',dis:'grayscale(1) brightness(.74) contrast(1.15)'};
 const BED={};   // 启动时 makeBed() 填 data URL
+const SKI={exp:1,cap:1,gain:1,sell:1,seedoff:1,mut:1,water:1,loss:1};   // 技能图标文件齐全时为 1
 const CROPS=[
  {id:1 ,n:'苔灰速苗',t:1,fam:'c1',f:'',src:'商店·基础',lv:1},
  {id:2 ,n:'锈铁野穗',t:2,fam:'c2',f:'',src:'商店·基础',lv:2},
@@ -732,7 +763,13 @@ const FORMS=[
    {key:'mut',n:'催芽',s:l=>'变异 ×'+(1.2+0.06*l).toFixed(2),d:l=>'变异概率乘数 ×'+(1.2+0.06*l).toFixed(2)+'（计入 ×4 上限）',v:l=>1.2+0.06*l},
    {key:'water',n:'灵泉',s:l=>'浇水 +'+(1+0.5*l).toFixed(1)+'%',d:l=>'每次浇水额外省 '+(1+0.5*l).toFixed(1)+'%',v:l=>0.01+0.005*l},
    {key:'loss',n:'护灵',s:l=>'被偷 −'+(4+2*l)+'%',d:l=>'被偷损失 30% → '+(30-4-2*l)+'%',v:l=>0.04+0.02*l}]}];
-const SKILL_COST=[0,800,1600,2400,3200];   // 技能 l → l+1 的丰收币
+const SKILL_COST=[0,800,1600,2400,3200];
+const FORM_META={
+ farmer:{title:'田间好手',lore:'绿洲里第一个学会种地的猿。锄头比谁都勤快，收成比谁都早。'},
+ iron:{title:'废土铁壁',lore:'从旧世界的废铁堆里拼出一身甲。小偷来了先问盾，盾说不行。'},
+ night:{title:'月下行者',lore:'提灯只照自己的路。别人的菜园，是它的夜市。'},
+ trade:{title:'绿洲首富',lore:'算盘一响，卖价翻涨；买种子永远能砍下一刀。'},
+ shaman:{title:'催芽巫医',lore:'羽冠下的咒语能让作物在夜里变异，被偷了也能保住几分。'}};   // 技能 l → l+1 的丰收币
 const formOf=k=>FORMS.find(f=>f.k===k);
 const formLv=k=>(S.forms[k]||{lv:1}).lv;
 // 使用中形态的某条技能值；没有该技能返回 null
@@ -778,7 +815,7 @@ const S={lv:1,exp:0,coin:1500,boost:3,guard:1,equip:null,bp:0,title:0,
  spent:0,mileGot:0,blessGiven:0,taskDone:0,boostBought:0,stab:0,bDay:{},bAct:{},bag:{},bagDay:0,bagLast:[],ctab:0,sellQty:{},mutRw:{},
  stealLeft:60,blessLeft:10,blessRecv:0,
  sel:1,view:'farm',npc:0,day:1,dayT:0,speed:1,pop:null,logs:[],npcFarms:[],
- gf:{},gstep:0,guideOff:0,rtab:0,ktab:0,ended:0,sales:0,bestRank:999,rivals:[],form:'farmer',forms:{farmer:{lv:1}},ring:null};
+ gf:{},gstep:0,guideOff:0,rtab:0,ktab:0,ended:0,sales:0,bestRank:999,rivals:[],form:'farmer',forms:{farmer:{lv:1}},ring:null,gsel:null};
 for(let i=0;i<12;i++){const c=PLOT_CFG[i];
  S.plots.push({i,un:!!c.free,gold:!!c.gold,crop:null,total:0,remain:0,water:0,bless:0,
                stolenB:0,forced:0,mature:0,mut:[],mul:1,stolenLoss:0,stolenPending:0});}
@@ -1032,12 +1069,12 @@ function renderBag(){const el=$('#dailyBag');if(!el)return;
  $('#bagLbl').textContent=can?'每日种子袋 · 可领取':'明天再来 '+fmtClock(DAY_MS-S.dayT);}
 
 /* ═══════ 巨猿形态：解锁 / 切换 / 升技能 ═══════ */
-function unlockForm(k){if(S.forms[k])return;S.forms[k]={lv:1};S.form=k;const f=formOf(k);
+function unlockForm(k){if(S.forms[k])return;S.forms[k]={lv:1};S.form=k;S.gsel=k;const f=formOf(k);
  toast('解锁形态「'+f.n+'」，已切换','gold');log('看园巨猿解锁形态 <b>'+f.n+'</b>（'+f.skills.map(t=>t.n).join(' / ')+'）','gold');renderAll();}
 function formBuy(k){const f=formOf(k);if(S.forms[k])return;
  if(f.unlock.coin){if(S.coin<f.unlock.coin){toast('丰收币不足（需 '+fmt(f.unlock.coin)+'）','bad');return;}spend(f.unlock.coin);unlockForm(k);return;}
  const i=PAY.findIndex(x=>x.k==='form_'+k);if(i>=0){PAY[i].f();toast('已获取：'+PAY[i].n,'gold');log('★ 付费位：<b>'+PAY[i].n+'</b>（'+PAY[i].price+'）','gold');}}
-function formUse(k){if(!S.forms[k]||S.form===k)return;S.form=k;toast('看园巨猿变为「'+formOf(k).n+'」','good');log('看园巨猿切换形态 → <b>'+formOf(k).n+'</b>');renderAll();}
+function formUse(k){if(!S.forms[k]||S.form===k)return;S.form=k;S.gsel=k;toast('看园巨猿变为「'+formOf(k).n+'」','good');log('看园巨猿切换形态 → <b>'+formOf(k).n+'</b>');renderAll();}
 function formUp(k){const st=S.forms[k];if(!st||st.lv>=5)return;const c=SKILL_COST[st.lv];
  if(S.coin<c){toast('丰收币不足（需 '+fmt(c)+'）','bad');return;}spend(c);st.lv++;
  toast(formOf(k).n+' 技能升到 '+st.lv+' 级','good');log(formOf(k).n+' 技能升到 <b>'+st.lv+' 级</b>（'+formOf(k).skills.map(t=>t.n).join(' / ')+'）');renderAll();}
@@ -1402,7 +1439,7 @@ function renderAll(){renderTop();renderOps();renderMile();renderField();renderEn
 const POPT={barn:'谷仓 · 选品种与数量出售',bag:'每日种子袋 · 今日收获',seed:'种子袋 · 15 种作物五档',shop:'集市 · 农园道具 / 游戏与节日道具',codex:'图鉴 · 绿洲植物志 / 异变图录',
  mile:'农会勋绩 · 活动任务',log:'农园日志',guard:'看园巨猿 · 守卫与形态',rule:'绿洲农园 · 玩法示意',end:'活动结束 · 回收结算',rank:'丰收榜 · 本服出售毛额'};
 let AUTO_RULE=false;
-function openPop(k){if(S.ring!==null){S.ring=null;renderRing();}S.pop=k;if(k==='seed')S.gf.seedOpened=1;if(k==='rule'&&!AUTO_RULE)S.gf.ruleOpened=1;
+function openPop(k){if(S.ring!==null){S.ring=null;renderRing();}if(k==='guard')S.gsel=S.form;S.pop=k;if(k==='seed')S.gf.seedOpened=1;if(k==='rule'&&!AUTO_RULE)S.gf.ruleOpened=1;
  $('#popTitle').textContent=POPT[k]||'';$('#mask').classList.add('show');renderPop();guideTick();}
 function closePop(){S.pop=null;$('#mask').classList.remove('show');}
 function sb(kind,label,attr,dis,dark,wide){
@@ -1472,30 +1509,34 @@ function renderPop(){
   h=tabs+'<div class="rbody">'+body+'</div>';
  }
  else if(k==='guard'){
-  const cost=S.guard<10?GUARD_COST[S.guard]:0, cf=formOf(S.form), clv=formLv(S.form), capSk=sk('cap')||0;
-  const tile=(lab,val,sub,cls)=>'<div class="gt'+(cls?' '+cls:'')+'"><span>'+lab+'</span><b>'+val+'</b>'+(sub?'<em>'+sub+'</em>':'')+'</div>';
-  h='<div class="ghero"><img src="'+art(cf.ic)+'" alt="">'+
-   '<div class="gmain"><div class="gname">'+cf.n+'<span>使用中</span></div>'+
-    '<div class="gtiles">'+
-     tile('抓捕率',pct(capRate()),'形态 '+pct(cf.cap)+' · 守卫 +'+pct(GUARD_STEP*(S.guard-1))+(capSk?' · 技能 +'+pct(capSk):''),'big')+
-     tile('守卫',S.guard+' 级',S.guard<10?'升一级 +2%':'已满')+
-     tile('技能',clv+' 级',cf.skills.map(t=>t.n+' '+t.s(clv)).join(' · '))+
-    '</div></div>'+
-   '<div class="gbtns">'+(S.guard<10?sb('green','守卫升级 '+fmt(cost),'data-g="gup"',S.coin<cost,false,true):sb('green','守卫已满级','',true,false,true))+
-    (clv<5?sb('blue','技能升级 '+fmt(SKILL_COST[clv]),'data-fl="'+cf.k+'"',S.coin<SKILL_COST[clv],false,true):sb('blue','技能已满级','',true,false,true))+'</div></div>';
-  h+='<div class="ph" style="margin:18px 0 10px">形态 · 换一个就换技能</div>';
-  h+='<div class="fcards">'+FORMS.map(f=>{const own=!!S.forms[f.k],on=S.form===f.k,lv=formLv(f.k),u=f.unlock;
-   let act;
-   if(on)act=sb('green','使用中','',true);
-   else if(own)act=sb('blue','切换','data-fu="'+f.k+'"');
-   else if(u.coin)act=sb('gold','<img src="'+ART+'coin.png'+'" class="ci" alt="">'+fmt(u.coin),'data-fb="'+f.k+'"',S.coin<u.coin,true);
-   else act=sb('gold',u.usd,'data-fb="'+f.k+'"',false,true);
-   return '<div class="fcard'+(on?' on':'')+(own?'':' lock')+'">'+(u.usd?'<span class="corner p">付费</span>':u.coin?'<span class="corner r">丰收币</span>':'<span class="corner r">默认</span>')+
-    '<img src="'+art(f.ic)+'" alt=""><div class="fn">'+f.n+'</div>'+
-    '<div class="fcap">抓捕 <b>'+pct(f.cap)+'</b></div>'+
-    '<div class="fsk">'+f.skills.map(t=>'<span><b>'+t.n+'</b>'+t.s(own?lv:1)+'</span>').join('')+'</div>'+
-    '<div class="pips">'+[1,2,3,4,5].map(i=>'<i class="'+(own&&i<=lv?'on':'')+'"></i>').join('')+'<span>Lv.'+(own?lv:1)+'</span></div>'+
-    act+'</div>';}).join('')+'</div>';
+  const sel=(S.gsel&&formOf(S.gsel))?S.gsel:S.form, f=formOf(sel), own=!!S.forms[sel], on=S.form===sel, lv=own?formLv(sel):1, u=f.unlock, meta=FORM_META[sel];
+  const capT=f.skills.find(t=>t.key==='cap'), capSk=capT?capT.v(lv):0, capHere=f.cap+GUARD_STEP*(S.guard-1)+capSk, cost=S.guard<10?GUARD_COST[S.guard]:0;
+  let primary;
+  if(on)primary=sb('green','使用中','',true,false,true);
+  else if(own)primary=sb('green','换成这个形态','data-fu="'+sel+'"',false,false,true);
+  else if(u.coin)primary=sb('gold','<img src="'+ART+'coin.png'+'" class="ci" alt=""> 解锁 '+fmt(u.coin),'data-fb="'+sel+'"',S.coin<u.coin,true,true);
+  else primary=sb('gold','购买 '+u.usd,'data-fb="'+sel+'"',false,true,true);
+  const up=own?(lv<5?sb('blue','技能升级 '+fmt(SKILL_COST[lv]),'data-fl="'+sel+'"',S.coin<SKILL_COST[lv],false,true):sb('blue','技能已满级','',true,false,true)):'';
+  const pips=[1,2,3,4,5].map(i=>'<b class="'+(i<=lv?'on':'')+'"></b>').join('');
+  const ico=t=>SKI[t.key]?'<img src="'+art('sk_'+t.key)+'" alt="">':'<b>'+t.n[0]+'</b>';
+  h='<div class="hsel">'+
+   '<div class="hshow '+sel+'"><div class="hglow"></div><div class="hring"></div><div class="hfloor"></div>'+
+    '<img class="hart" src="'+art(f.ic)+'" alt="">'+
+    (on?'<span class="hbadge on">使用中</span>':own?'<span class="hbadge">已拥有</span>':'')+(u.usd?'<span class="hbadge pay">★ 付费形态</span>':'')+
+    '<div class="hplate"><b>'+f.n+'</b><span>'+meta.title+'</span></div></div>'+
+   '<div class="hinfo">'+
+    '<div class="hname">'+f.n+'<em>'+meta.title+'</em></div><p class="hlore">'+meta.lore+'</p>'+
+    '<div class="hstats">'+
+     '<div class="hs cap"><span>抓捕率</span><b>'+pct(capHere)+'</b><i style="width:'+Math.min(100,Math.round(capHere*220))+'%"></i><small>形态 '+pct(f.cap)+' · 守卫 +'+pct(GUARD_STEP*(S.guard-1))+(capSk?' · 铁壁 +'+pct(capSk):'')+'</small></div>'+
+     '<div class="hs"><span>守卫等级</span><b>Lv.'+S.guard+'</b><small>每级全形态抓捕 +2%</small>'+(S.guard<10?sb('green','升级 '+fmt(cost),'data-g="gup"',S.coin<cost):'<small style="color:#FFC600">已满级</small>')+'</div>'+
+     '<div class="hs"><span>获取</span><b>'+(u.free?'默认':u.coin?fmt(u.coin):u.usd)+'</b><small>'+(u.free?'开局自带':u.coin?'丰收币解锁':'付费购买')+' · '+(own?'已拥有':'未拥有')+'</small></div>'+
+    '</div>'+
+    '<div class="hskills">'+f.skills.map(t=>'<div class="hsk"><div class="hico">'+ico(t)+'</div><div class="hst"><b>'+t.n+'</b><span>'+t.d(lv)+'</span>'+(lv<5?'<em>下一级 → '+t.s(lv+1)+'</em>':'<em>已满级</em>')+'</div><div class="hlv">Lv.'+lv+'<i>'+pips+'</i></div></div>').join('')+
+     Array.from({length:3-f.skills.length},(_,i)=>'<div class="hsk empty"><div class="hico"><b>'+(f.skills.length+i+1)+'</b></div><div class="hst"><b>空技能槽</b><span>'+(u.usd?'':'付费形态附带 2~3 条技能')+'</span></div></div>').join('')+'</div>'+
+    '<div class="hact">'+primary+up+'</div>'+
+   '</div></div>'+
+   '<div class="hstrip">'+FORMS.map(x=>{const o=!!S.forms[x.k],a=S.form===x.k,uu=x.unlock;
+    return '<div class="hav'+(x.k===sel?' sel':'')+(o?'':' lock')+'" data-hsel="'+x.k+'"><img src="'+art(x.ic)+'" alt=""><div><b>'+x.n+'</b><small>'+(a?'使用中':o?'已拥有':uu.coin?fmt(uu.coin)+' 丰收币':uu.usd)+'</small></div>'+(a?'<i class="hdot"></i>':'')+'</div>';}).join('')+'</div>';
  }
  else if(k==='mile'){
   h='<div class="cxhead"><div><div class="ph">农会勋绩 · 按累计消耗丰收币 8 档</div><p class="pd" style="margin:0">开垦 / 买种 / 升守卫 / 形态技能 / 集市兑换花掉的丰收币都算；达标自动发放。</p></div>'+
@@ -1856,7 +1897,7 @@ document.addEventListener('click',e=>{
  const rs=e.target.closest('[data-rs]');if(rs){ringPick(+rs.dataset.rs);return;}
  if(e.target.closest('[data-rclose]')){closeRing();return;}
  if(S.ring!==null)closeRing();
- const t=e.target.closest('[data-i],[data-k],[data-g],[data-n],[data-seed],[data-buy],[data-eq],[data-pay],[data-pop],[data-rtab],[data-ktab],[data-stab],[data-ctab],[data-mutr],[data-sq],[data-sell],[data-shop],[data-fu],[data-fb],[data-fl]');
+ const t=e.target.closest('[data-i],[data-k],[data-g],[data-n],[data-seed],[data-buy],[data-eq],[data-pay],[data-pop],[data-rtab],[data-ktab],[data-stab],[data-ctab],[data-hsel],[data-mutr],[data-sq],[data-sell],[data-shop],[data-fu],[data-fb],[data-fl]');
  if(!t)return;
  const d=t.dataset;
  if(d.pop){openPop(d.pop);return;}
@@ -1864,6 +1905,7 @@ document.addEventListener('click',e=>{
  if(d.ktab!==undefined){S.ktab=+d.ktab;renderPop();return;}
  if(d.stab!==undefined){S.stab=+d.stab;renderPop();return;}
  if(d.ctab!==undefined){S.ctab=+d.ctab;renderPop();return;}
+ if(d.hsel){S.gsel=d.hsel;renderPop();return;}
  if(d.mutr){claimMut(+d.mutr);return;}
  if(d.sq){const [key,dv]=d.sq.split('|');const g=barnGroups().find(x=>x.key===key);if(!g)return;const cur=Math.min(S.sellQty[key]||g.n,g.n);
   S.sellQty[key]=dv==='max'?g.n:Math.max(1,Math.min(g.n,cur+(+dv)));renderPop();return;}
@@ -2012,7 +2054,8 @@ function runTest(){
  openPop('mile');ok('勋绩 8 档卡 + 任务卡',document.querySelectorAll('.gcard').length===9);closePop();
  ok('每个形态都有初始抓捕率且 ≤16%',FORMS.every(f=>typeof f.cap==='number'&&f.cap<=0.16&&f.cap>=0.05));
  {const gk=S.guard;S.form='farmer';S.guard=1;ok('农夫猿 1 级守卫抓捕率 = 10%',Math.abs(capRate()-0.10)<1e-9);S.guard=gk;}
- openPop('guard');ok('巨猿弹窗：当前形态 3 格数据 + 5 张形态卡',document.querySelectorAll('.fcard').length===5&&document.querySelectorAll('.ghero .gt').length===3&&!document.querySelector('#popBody p.pd'));closePop();S.form='farmer';
+ openPop('guard');ok('巨猿弹窗：展示舞台 + 称号描述 + 3 格数据 + 技能列表 + 底部 5 个头像',!!document.querySelector('.hshow')&&!!document.querySelector('.hlore')&&document.querySelectorAll('.hs').length===3&&document.querySelectorAll('.hsk').length>=1&&document.querySelectorAll('.hav').length===5);
+ S.gsel='shaman';renderPop();ok('点底部头像可预览未拥有形态（3 条技能 + 购买按钮）',document.querySelectorAll('.hsk').length===3&&!!document.querySelector('.hact [data-fb="shaman"]'));closePop();S.form='farmer';S.gsel=null;
  const f=S.npcFarms[0];f[0].mature=1;f[0].mut=[];f[0].mul=1;f[0].taken=0;
  const sl=S.stealLeft;S.npc=0;steal(0);
  ok('偷菜扣次数且同格只能来一次',S.stealLeft===sl-1&&f[0].taken===1);
