@@ -4,18 +4,21 @@
 
 ## 直接玩（浏览器打开即可）
 
-**发同事就发这两个**（htmlpreview 入口，不限流、不弹确认页）：
+**发同事就发这一个**（合集页：顶部两页签 = 玩法 demo ＋ 图文规则说明，单文件 9 MB，首开等几秒）：
 
-- 可玩 demo：https://htmlpreview.github.io/?https://github.com/MarinL21/mrl-game-config-tools/blob/cd368d2/docs/farm_codex_design/demo/oasis_farm.html
-- 给程序 / QA 的图文规则说明（17 屏真实截图 + 编号标注 + 数值全集）：https://htmlpreview.github.io/?https://github.com/MarinL21/mrl-game-config-tools/blob/cd368d2/docs/farm_codex_design/demo/oasis_farm_intro.html
+- https://htmlpreview.github.io/?https://github.com/MarinL21/mrl-game-config-tools/blob/492aff4/docs/farm_codex_design/demo/oasis_farm_all.html
+
+单独页（同一内容拆开）：
+
+- 可玩 demo：https://htmlpreview.github.io/?https://github.com/MarinL21/mrl-game-config-tools/blob/492aff4/docs/farm_codex_design/demo/oasis_farm.html
+- 图文规则说明（17 屏真实截图 + 编号标注 + 数值全集）：https://htmlpreview.github.io/?https://github.com/MarinL21/mrl-game-config-tools/blob/492aff4/docs/farm_codex_design/demo/oasis_farm_intro.html
 
 备用入口：
 
-- githack（同一 IP 短时间开太多次会 429 限流，过一会儿就好）：https://rawcdn.githack.com/MarinL21/mrl-game-config-tools/cd368d2/docs/farm_codex_design/demo/oasis_farm.html ｜ https://rawcdn.githack.com/MarinL21/mrl-game-config-tools/cd368d2/docs/farm_codex_design/demo/oasis_farm_intro.html
-  首次打开会先看到 rawgit.hack 的「One more step」提示页，点红色「Open the page」即可（只问一次）
-- GitHub Pages（仓库已开 Pages，构建完成后可用，跟 main 最新）：https://marinl21.github.io/mrl-game-config-tools/docs/farm_codex_design/demo/oasis_farm.html ｜ https://marinl21.github.io/mrl-game-config-tools/docs/farm_codex_design/demo/oasis_farm_intro.html
-- 本地：双击 `绿洲农园_玩法示意_单文件.html`（单文件，无需其他资源）
-- 直达参数直接拼在 demo 链接后，例如 `https://rawcdn.githack.com/MarinL21/mrl-game-config-tools/cd368d2/docs/farm_codex_design/demo/oasis_farm.html?state=mid`（htmlpreview 入口不透传参数）
+- githack（透传 `?参数`；同一 IP 短时间开太多次会 429，过一会儿就好；首次有「One more step」点一下）：https://rawcdn.githack.com/MarinL21/mrl-game-config-tools/492aff4/docs/farm_codex_design/demo/oasis_farm_all.html
+- GitHub Pages（仓库已开，构建完成后可用，跟 main 最新）：https://marinl21.github.io/mrl-game-config-tools/docs/farm_codex_design/demo/oasis_farm_all.html
+- 本地：双击 `farm_all.html` 或 `绿洲农园_玩法示意_单文件.html`
+- 直达参数拼在合集页链接后对 demo 页签生效，例如 `https://rawcdn.githack.com/MarinL21/mrl-game-config-tools/492aff4/docs/farm_codex_design/demo/oasis_farm_all.html?state=mid`；`?tab=intro` 直接开图文页签（htmlpreview 入口不透传参数）
 
 打开先弹「玩法示意」，点「开始种菜」进新手指引（8 步）。左下 ❗ 随时回看带图规则（9 页 + 第 10 页「程序规格」给开发 / QA 对照用）。
 
@@ -45,6 +48,7 @@
 ## 目录
 
 - `farm_demo.html` 源（引 `assets/`）
+- `oasis_farm_all.html` = `farm_all.html` 合集页（`build_all.py` 把下面两个单文件塞进 <template>，iframe srcdoc 装载）
 - `oasis_farm_intro.html` = `farm_intro.html` 图文规则说明（`build_intro.py` 从 demo 真实截图 + `?measure=` 量坐标生成）
 - `oasis_farm.html` = `绿洲农园_玩法示意_单文件.html` 单文件交付版（`art/bundle.py` 打出；ASCII 文件名只是为了分享链接干净，中文名在 githack 上也能开）
 - `assets/p2/` P2 真实切图 chrome；`assets/art/` 生成的作物 / 场景 / 巨猿形态 / 道具图标
