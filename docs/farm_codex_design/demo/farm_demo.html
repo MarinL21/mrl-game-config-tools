@@ -137,6 +137,30 @@ html,body{height:100%;background:#000;overflow:hidden;
 #field{left:0;top:0;width:1920px;height:1080px;z-index:6;pointer-events:none}
 /* 地块头顶信息独立一层压在整片田地之上：贴在各自地块的近端下沿，不会被前排地块盖住 */
 #hudLayer{left:0;top:0;width:1920px;height:1080px;z-index:8;pointer-events:none}
+/* ── 播种环形选种：点空地 + 后，围着这块地转出一圈种子 ── */
+#ringLayer{left:0;top:0;width:1920px;height:1080px;z-index:20;pointer-events:none}
+#ringLayer.on{pointer-events:auto}
+.rmask{position:absolute;inset:0;background:rgba(4,8,2,.28)}
+.ring{position:absolute;width:0;height:0}
+.rslot{position:absolute;left:0;top:0;width:76px;height:76px;margin:-38px 0 0 -38px;border-radius:50%;cursor:pointer;
+ background:radial-gradient(circle at 50% 38%,#2f3a24,#141a10 72%);border:3px solid #cfe598;box-shadow:0 4px 10px rgba(0,0,0,.5),inset 0 0 0 2px rgba(0,0,0,.5);
+ display:flex;align-items:center;justify-content:center;transform:translate(0,0) scale(.2);opacity:0;transition:transform .28s cubic-bezier(.2,.8,.3,1.2),opacity .2s}
+.ring.open .rslot{opacity:1}
+.rslot img{height:52px;max-width:60px;object-fit:contain;filter:drop-shadow(0 2px 2px rgba(0,0,0,.6))}
+.rslot:hover{border-color:var(--gold);background:radial-gradient(circle at 50% 38%,#4a5a30,#1b2414 72%)}
+.rslot.buy{border-color:#8a6a22;border-style:dashed}
+.rslot.buy img{filter:drop-shadow(0 2px 2px rgba(0,0,0,.6)) saturate(.6) brightness(.85)}
+.rslot.poor{opacity:.55!important;cursor:not-allowed}
+.rslot .rq{position:absolute;right:-8px;top:-8px;min-width:24px;height:22px;padding:0 6px;border-radius:11px;background:#fff;color:#1A1A1A;font-size:12px;font-weight:900;
+ display:flex;align-items:center;justify-content:center;border:2px solid var(--ink);line-height:1}
+.rslot.buy .rq{background:linear-gradient(180deg,#ffd34d,#e09a12);color:#3A2A00}
+.rslot .rq img{height:12px;width:12px;margin-right:2px;filter:none}
+.rslot .rn{position:absolute;left:50%;top:100%;transform:translateX(-50%);margin-top:4px;font-size:12px;white-space:nowrap}
+.rslot .rsub{position:absolute;left:50%;top:100%;transform:translateX(-50%);margin-top:20px;font-size:10px;white-space:nowrap;color:#C8CDD4;font-weight:700;-webkit-text-stroke:0}
+.rcenter{position:absolute;left:0;top:0;width:66px;height:66px;margin:-33px 0 0 -33px;border-radius:50%;background:rgba(10,12,8,.9);border:3px solid var(--gold);
+ display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;line-height:1;color:#fff}
+.rcenter b{font-size:22px;font-weight:900}.rcenter span{font-size:10px;color:#C8CDD4;margin-top:3px}
+.rcenter:hover{border-color:#fff}
 /* 田边的每日种子袋：可领时上下浮动 + 红点，领过后压灰写倒计时 */
 #dailyBag{left:196px;top:772px;width:128px;cursor:pointer;z-index:7;text-align:center;transition:transform .15s}
 #dailyBag:hover{transform:translateY(-3px)}
@@ -603,6 +627,7 @@ html,body{height:100%;background:#000;overflow:hidden;
     <div class="lyr" id="field"></div>
     <div class="lyr" id="dailyBag" title="每日种子袋"><img src="assets/art/seedbag.png" alt=""><div class="bl t xs" id="bagLbl">每日种子袋</div><i class="rd"></i></div>
     <div class="lyr" id="hudLayer"></div>
+    <div class="lyr" id="ringLayer"></div>
 
     <div class="lyr" id="guard" title="看园巨猿">
       <div id="guardTag" class="t xs">看园巨猿 <span class="t xs g">1 级</span></div>
@@ -734,7 +759,7 @@ const S={lv:1,exp:0,coin:1500,boost:3,guard:1,equip:null,bp:0,title:0,
  spent:0,mileGot:0,blessGiven:0,taskDone:0,boostBought:0,stab:0,bDay:{},bAct:{},bag:{},bagDay:0,bagLast:[],ctab:0,sellQty:{},mutRw:{},
  stealLeft:60,blessLeft:10,blessRecv:0,
  sel:1,view:'farm',npc:0,day:1,dayT:0,speed:1,pop:null,logs:[],npcFarms:[],
- gf:{},gstep:0,guideOff:0,rtab:0,ktab:0,ended:0,sales:0,bestRank:999,rivals:[],form:'farmer',forms:{farmer:{lv:1}}};
+ gf:{},gstep:0,guideOff:0,rtab:0,ktab:0,ended:0,sales:0,bestRank:999,rivals:[],form:'farmer',forms:{farmer:{lv:1}},ring:null};
 for(let i=0;i<12;i++){const c=PLOT_CFG[i];
  S.plots.push({i,un:!!c.free,gold:!!c.gold,crop:null,total:0,remain:0,water:0,bless:0,
                stolenB:0,forced:0,mature:0,mut:[],mul:1,stolenLoss:0,stolenPending:0});}
@@ -937,7 +962,7 @@ function keyHarvest(){let n=0;const got={};S.plots.forEach(p=>{if(p.un&&p.crop&&
  toast(n?('收获 '+n+' 块 '+tot+' 颗：'+Object.keys(got).map(k=>k+' ×'+got[k]).join('、')+' → 谷仓 '+S.store.length+' 颗'):'没有成熟的作物',n?'good':'bad');}
 function keyPlant(){let n=0;S.plots.forEach(p=>{if(p.un&&!p.crop&&S.seeds[S.sel]){plant(p.i);n++;}});
  toast(n?('一键播种 '+n+' 块'):(cntEmpty()?'手上没有「'+crop(S.sel).n+'」种子':'没有空地'),n?'good':'bad');
- if(!n&&cntEmpty()&&!S.seeds[S.sel])openPop('seed');}
+ if(!n&&cntEmpty()&&!S.seeds[S.sel]){const e0=S.plots.find(p=>p.un&&!p.crop);if(e0)openRing(e0.i);}}
 
 /* ═══════ 商店：两页签。农园道具 = 本活动专用（付费礼包 + 丰收币兑换）；游戏·节日道具 = 通用资源/加速 + 节日专属外观 ═══════ */
 const SHOP=[
@@ -997,6 +1022,36 @@ function formUse(k){if(!S.forms[k]||S.form===k)return;S.form=k;toast('看园巨�
 function formUp(k){const st=S.forms[k];if(!st||st.lv>=5)return;const c=SKILL_COST[st.lv];
  if(S.coin<c){toast('丰收币不足（需 '+fmt(c)+'）','bad');return;}spend(c);st.lv++;
  toast(formOf(k).n+' 技能升到 '+st.lv+' 级','good');log(formOf(k).n+' 技能升到 <b>'+st.lv+' 级</b>（'+formOf(k).skills.map(t=>t.n).join(' / ')+'）');renderAll();}
+
+/* ═══════ 播种环形选种：点空地 + → 围地块一圈种子；手上有的直接种，没有但已解锁的显示价格、点了买 1 颗就种 ═══════ */
+const RING_R=150;
+function ringItems(){const it=[];
+ CROPS.forEach(c=>{const own=S.seeds[c.id]||0;
+  if(c.id<=10){if(c.lv<=S.lv)it.push({c,own,buy:!own,cost:seedCost(TIER[c.t])});}
+  else if(own)it.push({c,own,buy:false});});
+ return it;}
+function openRing(i){const p=S.plots[i];if(!p||!p.un||p.crop)return;S.ring=i;S.gf.ringOpened=1;renderRing();guideTick();}
+function closeRing(){if(S.ring===null)return;S.ring=null;renderRing();guideTick();}
+function ringPick(id){const i=S.ring;if(i===null)return;const c=crop(id),t=TIER[c.t];
+ if(!S.seeds[id]){if(id>10||c.lv>S.lv)return;const cost=seedCost(t);
+  if(S.coin<cost){toast('丰收币不足（种子 '+fmt(cost)+'，现有 '+fmt(S.coin)+'）','bad');return;}
+  spend(cost);giveSeed(id,1);toast('买下 '+c.n+' ×1 并播种','good');}
+ S.sel=id;S.ring=null;renderRing();plant(i);}
+function renderRing(){const L=$('#ringLayer');if(!L)return;
+ if(S.ring===null||S.view!=='farm'){L.innerHTML='';L.classList.remove('on');return;}
+ const q=plotPos(S.ring,4),cx=q.x+ISO.W/2,cy=q.y+ISO.pad+ISO.h/2,items=ringItems();
+ const n=items.length,a0=-Math.PI/2;
+ const slots=items.map((x,k)=>{const ang=a0+k*2*Math.PI/Math.max(n,1);const dx=Math.cos(ang)*RING_R,dy=Math.sin(ang)*RING_R;
+  const poor=x.buy&&S.coin<x.cost;
+  return '<div class="rslot'+(x.buy?' buy':'')+(poor?' poor':'')+'" data-rs="'+x.c.id+'" style="--tx:'+dx.toFixed(1)+'px;--ty:'+dy.toFixed(1)+'px" title="'+x.c.n+'">'+
+   '<img src="'+art(x.c.fam+'_s3')+'" style="filter:'+(x.c.f?x.c.f+' ':'')+'drop-shadow(0 2px 2px rgba(0,0,0,.6))" alt="">'+
+   '<span class="rq">'+(x.buy?'<img src="'+ART+'coin.png'+'" alt="">'+fmt(x.cost):'×'+x.own)+'</span>'+
+   '<span class="rn t xs">'+x.c.n+'</span><span class="rsub">'+TIER[x.c.t].h+'h · 售 '+fmt(TIER[x.c.t].unit)+'/颗</span></div>';}).join('');
+ L.classList.add('on');
+ L.innerHTML='<div class="rmask" data-rclose="1"></div><div class="ring" style="left:'+cx.toFixed(1)+'px;top:'+cy.toFixed(1)+'px">'+slots+
+  '<div class="rcenter" data-rclose="1"><b>✕</b><span>'+(n?'选种子':'没有可种')+'</span></div></div>';
+ requestAnimationFrame(()=>requestAnimationFrame(()=>{const r=L.querySelector('.ring');if(!r)return;r.classList.add('open');
+  r.querySelectorAll('.rslot').forEach(el=>{el.style.transform='translate(var(--tx),var(--ty)) scale(1)';});}));}
 
 /* ═══════ 串门 ═══════ */
 function steal(k){const f=S.npcFarms[S.npc],q=f[k];
@@ -1275,8 +1330,8 @@ function renderField(force){
      '<div class="sign '+cls+'">'+txt+'</div></div>';}
    if(!p.crop)return '<div class="plot empty'+(p.gold?' gold':'')+'"'+plotStyle(p.i,4)+' data-i="'+p.i+'" data-a="plant">'+bedImg(p.gold?'gold':'soil')+
      (p.gold||p.stolenB?'<div class="ptag">'+(p.gold?'<span class="mchip m3">★ 良田</span>':'')+(p.stolenB?'<span class="mchip m1">下轮变异 ×1.2</span>':'')+'</div>':'')+
-     '<div class="plusb'+(has?'':' no')+'">+</div>'+
-     '<div class="hov t xs">'+(has?'播种 '+selC.n:'没有 '+selC.n+' 的种子')+'</div></div>';
+     '<div class="plusb">+</div>'+
+     '<div class="hov t xs">点 + 选种子</div></div>';
    HUD.push(hudWrap(p.i,4,null,plotHud(p)));
    return '<div class="plot'+(p.gold?' gold':'')+(p.mature?' mature':' grow')+'"'+plotStyle(p.i,4)+
      ' data-i="'+p.i+'" data-a="'+(p.mature?'harvest':'water')+'">'+bedImg(p.gold?'gold':'soil')+plotInner(p)+'</div>';};
@@ -1315,7 +1370,7 @@ function renderAll(){renderTop();renderOps();renderMile();renderField();renderEn
 const POPT={barn:'谷仓 · 选品种与数量出售',bag:'每日种子袋 · 今日收获',seed:'种子袋 · 15 种作物五档',shop:'集市 · 农园道具 / 游戏与节日道具',codex:'图鉴 · 绿洲植物志 / 异变图录',
  mile:'农会勋绩 · 活动任务',log:'农园日志',guard:'看园巨猿 · 守卫与形态',rule:'绿洲农园 · 玩法示意',end:'活动结束 · 回收结算',rank:'丰收榜 · 本服出售毛额'};
 let AUTO_RULE=false;
-function openPop(k){S.pop=k;if(k==='seed')S.gf.seedOpened=1;if(k==='rule'&&!AUTO_RULE)S.gf.ruleOpened=1;
+function openPop(k){if(S.ring!==null){S.ring=null;renderRing();}S.pop=k;if(k==='seed')S.gf.seedOpened=1;if(k==='rule'&&!AUTO_RULE)S.gf.ruleOpened=1;
  $('#popTitle').textContent=POPT[k]||'';$('#mask').classList.add('show');renderPop();guideTick();}
 function closePop(){S.pop=null;$('#mask').classList.remove('show');}
 function sb(kind,label,attr,dis,dark,wide){
@@ -1490,7 +1545,7 @@ function payModal(i){const x=PAY[i];S.pop='shop';$('#popTitle').textContent=POPT
 
 /* ═══════ 新手指引：光圈 + 气泡，按真实状态推进（不是走马灯） ═══════ */
 const GUIDE=[
- {t:'点空地播种',s:'手持 苔灰速苗 ×4；种子不够去左下「种子袋」买',tg:()=>document.querySelector('.plot.empty .plusb')||document.querySelector('.plot.empty'),done:()=>S.plots.some(p=>p.crop)||S.gf.harvested},
+ {t:'点空地的 +，转出一圈种子',s:'手上有的直接种；没有的显示价格，点了买 1 颗就种',tg:()=>document.querySelector('.plot.empty .plusb')||document.querySelector('.plot.empty'),done:()=>S.plots.some(p=>p.crop)||S.gf.harvested},
  {t:'点作物浇水',s:'每轮 4 次，每次省 6.25%，一共省 25% 生长时间',tg:()=>document.querySelector('.plot.grow'),done:()=>S.plots.some(p=>p.water>0||p.mature)||S.gf.harvested},
  {t:'等它成熟，急就点速生剂',s:'速生剂 = 立即成熟，且本次变异概率 ×2',tg:()=>document.querySelector('.hudp .boostb'),done:()=>S.plots.some(p=>p.mature)||S.gf.harvested},
  {t:'成熟了！点它收获',s:'首次收获点亮植物志一格 = 所有作物生长时间 −1%',tg:()=>document.querySelector('.plot.mature'),done:()=>S.gf.harvested},
@@ -1503,7 +1558,7 @@ const GUIDE=[
 function guideTick(){
  const C=$('#coach');if(!C)return;
  while(S.gstep<GUIDE.length&&GUIDE[S.gstep].done())S.gstep++;
- if(S.guideOff||S.gstep>=GUIDE.length||S.pop||(S.view!=='farm'&&S.gstep<7)){C.innerHTML='';return;}
+ if(S.guideOff||S.gstep>=GUIDE.length||S.pop||S.ring!==null||(S.view!=='farm'&&S.gstep<7)){C.innerHTML='';return;}
  const g=GUIDE[S.gstep],el=g.tg();
  if(!el){C.innerHTML='';return;}
  const p=stagePos(el), rw=p.w+30, rh=p.h+30, up=p.y>330;
@@ -1526,13 +1581,13 @@ function mini(o){return '<div class="mini" style="'+(o.st||'')+'">'+bedImg(o.bed
 const rul=arr=>'<div class="rul">'+arr.map((s,i)=>'<div class="it"><i>'+(i+1)+'</i><span>'+s+'</span></div>').join('')+'</div>';
 function ruleBody(i){
  if(i===0)return '<div class="fig">'+
-   mini({cap:'① 点空地播种',sub:'消耗 1 颗手持种子',x:'<div class="plusb">+</div>'})+CHEV+
+   mini({cap:'① 点空地 + 选种子',sub:'环上选：有的直接种，没的买 1 颗就种',x:'<div class="plusb">+</div>'})+CHEV+
    mini({crop:'c1_s1',cap:'② 点作物浇水',sub:'每轮 4 次 · 共省 25%',x:'<div class="hud" style="bottom:4px"><div class="wdrops"><i class="on"></i><i class="on"></i><i></i><i></i></div></div>'})+CHEV+
    mini({crop:'c1_s2',cap:'③ 等成熟 / 速生剂立即熟',sub:'速生剂还让本次变异概率 ×2',x:'<div class="hud" style="bottom:4px"><div class="hrow"><div class="pill"><i class="pf" style="transform:scaleX(.62)"></i><i class="ck"></i><span class="t xs">1m20s</span></div><button class="boostb">'+IMG(ART+'boost.png')+'</button></div></div>'})+CHEV+
    mini({crop:'c1_s3',cap:'④ 点它收获',sub:'进谷仓 + 农园经验 + 点亮植物志',x:'<div class="ripe"></div><div class="hud" style="bottom:4px"><div class="pill ok"><span class="t xs">收获 · 苔灰速苗</span></div></div>'})+CHEV+
    '<div class="mini coinm">'+IMG(ART+'coin.png','width:110px')+'<div class="big">+120</div><div class="cap t xs">⑤ 出售谷仓换丰收币<small>丰收周末售价 ×2</small></div></div>'+
   '</div>'+rul([
-   '开局 <b>6 块田垄 + 苔灰速苗 ×4</b>；种子在「种子袋」花丰收币买，高档种子按农园等级解锁；<b>田边的每日种子袋</b>每天免费领一次随机 2~3 颗（5% 出秘种）。',
+   '开局 <b>6 块田垄 + 苔灰速苗 ×4</b>；点空地 + 转出<b>环形选种</b>：手上有的直接种，已解锁没买的显示价格、点了买 1 颗就种；「种子袋」可囤货，高档种子按农园等级解锁；<b>田边的每日种子袋</b>每天免费领一次随机 2~3 颗（5% 出秘种）。',
    '15 种作物 5 档：<em>1h / 4h / 8h / 16h / 24h</em>，每次收获 <b>2~5 颗</b>，单株产值 120 → 4,000（单价 × 颗数），经验 10 → 360。',
    '浇水每次省 6.25%，一轮 4 次共 25%；<b>速生剂</b>立即成熟且本次变异概率 ×2。',
    '收获进谷仓，一键全部出售；出售毛额计入<b>丰收榜</b>；丰收周末（每 3 天）售价 ×2。',
@@ -1764,6 +1819,9 @@ function copySpec(){const md=specMarkdown();const done=()=>toast('已复制 Mark
 /* ═══════ 事件 ═══════ */
 document.addEventListener('click',e=>{
  if(e.target.id==='popClose'||e.target.id==='mask'){closePop();return;}
+ const rs=e.target.closest('[data-rs]');if(rs){ringPick(+rs.dataset.rs);return;}
+ if(e.target.closest('[data-rclose]')){closeRing();return;}
+ if(S.ring!==null)closeRing();
  const t=e.target.closest('[data-i],[data-k],[data-g],[data-n],[data-seed],[data-buy],[data-eq],[data-pay],[data-pop],[data-rtab],[data-ktab],[data-stab],[data-ctab],[data-mutr],[data-sq],[data-sell],[data-shop],[data-fu],[data-fb],[data-fl]');
  if(!t)return;
  const d=t.dataset;
@@ -1791,7 +1849,7 @@ document.addEventListener('click',e=>{
   else if(d.g==='harvest')keyHarvest();
   else if(d.g==='plant')keyPlant();
   else if(d.g==='sell')sellAll(t);
-  else if(d.g==='visit'){S.view='npc';S.gf.visited=1;renderAll();}
+  else if(d.g==='visit'){S.view='npc';S.gf.visited=1;S.ring=null;renderRing();renderAll();}
   else if(d.g==='guide'){S.gstep=0;S.guideOff=0;closePop();toast('新手指引重新开始','good');}
   else if(d.g==='bagok'){closePop();if(S.bagLast.length){S.sel=S.bagLast[0][0];}}
   else if(d.g==='close'){closePop();}
@@ -1806,7 +1864,7 @@ document.addEventListener('click',e=>{
   renderAll();return;}
  if(d.i!==undefined&&S.view==='farm'){const i=+d.i;
   if(d.a==='unlock')unlockPlot(i);
-  else if(d.a==='plant')plant(i);
+  else if(d.a==='plant')openRing(i);
   else if(d.a==='boost')boostUse(i);
   else if(d.a==='water')water(i);
   else if(d.a==='harvest')harvest(i);
@@ -1862,6 +1920,10 @@ function runTest(){
  S.rtab=9;renderPop();ok('程序规格页：≥13 张表 + 5 段伪代码 + 复制按钮',document.querySelectorAll('.spec table').length>=13&&document.querySelectorAll('.spec pre').length>=5&&!!document.querySelector('[data-g="copyspec"]'));
  ok('Markdown 导出含作物表 15 行',(specMarkdown().match(/\n\| \d+ \| /g)||[]).length>=15);S.rtab=0;closePop();
  S.sel=1;S.seeds[1]=20;
+ {S.lv=4;S.seeds={1:20,3:2};S.coin=5000;openRing(0);const slots=document.querySelectorAll('#ringLayer .rslot');
+  ok('点空地出环形选种：已解锁 1~3 号三格（有的显数量，没的显价格）',S.ring===0&&slots.length===3&&document.querySelectorAll('#ringLayer .rslot.buy').length===1);
+  const c0=S.coin;ringPick(2);ok('环上选没买过的种子 → 扣钱买 1 颗并播种',S.plots[0].crop===2&&S.coin===c0-TIER[2].seed&&S.ring===null&&!S.seeds[2]);
+  S.plots[0].crop=null;S.plots[0].mature=0;S.lv=1;S.seeds={1:20};S.coin=1500;S.sel=1;closePop();}
  plant(0);ok('播种占用地块并扣种子',S.plots[0].crop===1&&S.seeds[1]===19);
  const t0=S.plots[0].remain;water(0);water(0);water(0);water(0);
  ok('浇水 4 次合计省 25%',Math.abs(S.plots[0].remain-(t0-S.plots[0].total*0.25))<1&&S.plots[0].water===4);
@@ -1954,7 +2016,7 @@ if(location.search.indexOf('test')>=0)runTest();
 (function(){const q=new URLSearchParams(location.search);
  if(!location.search||q.has('intro')){S.rtab=0;AUTO_RULE=true;openPop('rule');AUTO_RULE=false;}
  if(q.has('noguide')){S.guideOff=1;guideTick();}
- if(q.get('state')==='mid'){S.lv=5;S.exp=40;S.coin=3260;S.boost=4;S.seeds={1:3,2:2,3:1};S.spent=4200;S.mileGot=1;
+ if(q.get('state')==='mid'){S.lv=5;S.exp=40;S.coin=3260;S.boost=4;S.seeds={1:3,2:2};S.spent=4200;S.mileGot=1;
   S.plots[6].un=1;S.plots[10].un=1;S.sales=1860;S.forms={farmer:{lv:2},iron:{lv:3},night:{lv:1}};S.form='iron';
   const set=(i,id,pc,w,extra)=>{const p=S.plots[i],c=crop(id),total=TIER[c.t].h*HOUR;
    Object.assign(p,{crop:id,total,remain:total*(1-pc),water:w,bless:0,forced:0,mature:0,mut:[],mul:1},extra||{});};
@@ -1970,6 +2032,14 @@ if(location.search.indexOf('test')>=0)runTest();
  if(q.has('pop')){openPop(q.get('pop'));}
  if(q.has('shop')){S.stab=+q.get('shop')||0;openPop('shop');}
  if(q.has('bag')){bagClaim();}
+ if(q.has('ring')){const e0=S.plots.find(p=>p.un&&!p.crop);openRing(q.get('ring')?+q.get('ring'):(e0?e0.i:0));}
+ /* 图文说明板用：?measure=sel1|sel2|...  渲染完把每个选择器首个元素在 1920×1080 舞台里的矩形写进 #testlog（JSON），?still 冻结动画 */
+ if(q.has('dumpspec')){setTimeout(()=>{const d=document.createElement('pre');d.id='testlog';d.style.display='none';d.textContent=JSON.stringify({html:specBody(),md:specMarkdown()});document.body.appendChild(d);document.title='SPEC OK';},300);}
+ if(q.has('still')){const st=document.createElement('style');st.textContent='*{animation:none!important;transition:none!important}';document.head.appendChild(st);}
+ if(q.has('measure')){setTimeout(()=>{const sels=q.get('measure').split('|').filter(Boolean),st=$('#stage').getBoundingClientRect(),sc=st.width/1920,out={};
+  sels.forEach(sel=>{let el=null;try{const [q0,ix]=sel.split('@@');el=ix!==undefined?document.querySelectorAll(q0)[+ix]:document.querySelector(q0);}catch(e){}if(!el){out[sel]=null;return;}const r=el.getBoundingClientRect();
+   out[sel]=[Math.round((r.left-st.left)/sc),Math.round((r.top-st.top)/sc),Math.round(r.width/sc),Math.round(r.height/sc)];});
+  const d=document.createElement('pre');d.id='testlog';d.style.display='none';d.textContent=JSON.stringify(out);document.body.appendChild(d);document.title='MEASURE OK';},600);}
  if(q.has('ctab')){S.ctab=+q.get('ctab')||0;openPop('codex');}
 })();
 </script>
