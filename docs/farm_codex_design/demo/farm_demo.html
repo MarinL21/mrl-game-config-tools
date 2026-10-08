@@ -140,6 +140,8 @@ html,body{height:100%;background:#000;overflow:hidden;
 /* ── 播种环形选种：点空地 + 后，围着这块地转出一圈种子 ── */
 #ringLayer{left:0;top:0;width:1920px;height:1080px;z-index:20;pointer-events:none}
 #ringLayer.on{pointer-events:auto}
+/* 开环时头顶信息与指引让位，避免和环上的名字叠在一起 */
+#hudLayer.dim,#coach.dim{opacity:.12;transition:opacity .2s}
 .rmask{position:absolute;inset:0;background:rgba(4,8,2,.28)}
 .ring{position:absolute;width:0;height:0}
 .rslot{position:absolute;left:0;top:0;width:76px;height:76px;margin:-38px 0 0 -38px;border-radius:50%;cursor:pointer;
@@ -1038,6 +1040,7 @@ function ringPick(id){const i=S.ring;if(i===null)return;const c=crop(id),t=TIER[
   spend(cost);giveSeed(id,1);toast('买下 '+c.n+' ×1 并播种','good');}
  S.sel=id;S.ring=null;renderRing();plant(i);}
 function renderRing(){const L=$('#ringLayer');if(!L)return;
+ $('#hudLayer').classList.toggle('dim',S.ring!==null&&S.view==='farm');
  if(S.ring===null||S.view!=='farm'){L.innerHTML='';L.classList.remove('on');return;}
  const q=plotPos(S.ring,4),cx=q.x+ISO.W/2,cy=q.y+ISO.pad+ISO.h/2,items=ringItems();
  const n=items.length,a0=-Math.PI/2;
