@@ -74,7 +74,7 @@ html,body{height:100%;background:#000;overflow:hidden;
 #expfill{width:100%;height:100%;background:linear-gradient(180deg,#9df060,#3EEE00);
  transform-origin:left center;transform:scaleX(0);transition:transform .35s ease}
 #exptxt{position:absolute;left:0;right:0;top:9px;text-align:center;font-size:20px}
-#nextTxt{position:absolute;left:78px;top:48px;font-size:13px;white-space:nowrap;opacity:.95}
+#nextTxt{position:absolute;left:78px;top:48px;font-size:14px;white-space:nowrap}
 #tip{left:28px;top:226px;width:600px;height:73px}
 #tip img{width:100%;height:100%}
 #tip span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:21px;padding:0 24px}
@@ -115,23 +115,23 @@ html,body{height:100%;background:#000;overflow:hidden;
  justify-content:center;line-height:1}
 
 /* ── 左：农会勋绩竖轨 ── */
-#mile{left:28px;top:372px;width:150px;height:600px}
-#mileTitle{position:absolute;left:0;top:-52px;width:170px;font-size:17px}
-#mileCur{position:absolute;left:0;top:-30px;width:240px;font-size:13px;white-space:nowrap}
-.mileTrack{position:absolute;left:6px;top:8px;width:26px;height:540px;border-radius:13px;
+#mile{left:28px;top:372px;width:170px;height:600px}
+#mileTitle{position:absolute;left:0;top:-54px;width:200px;font-size:17px}
+#mileCur{position:absolute;left:0;top:-31px;width:240px;font-size:12px;white-space:nowrap}
+.mileTrack{position:absolute;left:16px;top:8px;width:14px;height:540px;border-radius:7px;
  background:rgba(8,10,6,.72);border:3px solid var(--ink);overflow:hidden}
-.mileFill{position:absolute;left:0;bottom:0;width:100%;background:linear-gradient(180deg,#9df060,#2fae00);
- transition:height .4s ease}
-.mileNode{position:absolute;left:42px;width:110px;height:52px;display:flex;align-items:center;gap:6px;cursor:pointer}
-.mileNode .box{width:50px;height:50px;border-radius:11px;background:rgba(14,16,10,.85);position:relative;
- border:3px solid #5a5140;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
-.mileNode.reach .box{border-color:var(--green);background:rgba(30,60,14,.9)}
-.mileNode.got .box{border-color:var(--gold);background:rgba(70,52,8,.92)}
-.mileNode.got .box::after{content:"✓";position:absolute;right:-7px;bottom:-7px;width:20px;height:20px;border-radius:50%;
- background:var(--gold);color:#3A2A00;font-size:13px;font-weight:900;display:flex;align-items:center;justify-content:center;
- border:2px solid var(--ink)}
-.mileNode .box img{width:36px;height:36px;object-fit:contain}
-.mileNode .lb{font-size:12px}
+.mileFill{position:absolute;left:0;bottom:0;width:100%;background:linear-gradient(180deg,#9df060,#2fae00);transition:height .4s ease}
+.mileNode{position:absolute;left:0;width:170px;height:46px;display:flex;align-items:center;gap:7px;cursor:pointer}
+.mileNode .box{width:46px;height:46px;border-radius:50%;position:relative;flex:0 0 auto;
+ background:radial-gradient(circle at 50% 35%,#3a3127,#1a1612 75%);border:3px solid #6b5f4c;
+ box-shadow:0 2px 0 rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center}
+.mileNode:hover .box{border-color:#c9b27a}
+.mileNode.reach .box{border-color:var(--green);box-shadow:0 0 10px rgba(62,238,0,.55),0 2px 0 rgba(0,0,0,.45)}
+.mileNode.got .box{border-color:var(--gold);background:radial-gradient(circle at 50% 35%,#7a5a14,#3a2a08 75%)}
+.mileNode.got .box::after{content:"✓";position:absolute;right:-6px;bottom:-6px;width:19px;height:19px;border-radius:50%;
+ background:var(--gold);color:#3A2A00;font-size:12px;font-weight:900;display:flex;align-items:center;justify-content:center;border:2px solid var(--ink)}
+.mileNode .box img{width:30px;height:30px;object-fit:contain;filter:drop-shadow(0 1px 1px rgba(0,0,0,.6))}
+.mileNode .lb{font-size:12px;background:rgba(10,12,8,.8);border:2px solid var(--ink);border-radius:9px;padding:1px 7px;line-height:1.3}
 
 /* ── 田地 ── */
 #field{left:0;top:0;width:1920px;height:1080px;z-index:6;pointer-events:none}
@@ -243,12 +243,14 @@ html,body{height:100%;background:#000;overflow:hidden;
 .mchip{font-size:12px;font-weight:800;padding:2px 8px;border-radius:9px;color:#1A1A1A;border:2px solid #1A1A1A}
 .m1{background:#7fd0ff}.m2{background:#c9b4ff}.m3{background:#ffd76e}.m4{background:#ff9d6e}
 /* 空地：一个 + 圆钮，悬停出种子名 */
-.plusb{position:absolute;left:50%;bottom:calc(var(--cropBase) - 24px);width:48px;height:48px;margin-left:-24px;border-radius:50%;
- background:rgba(255,255,255,.22);border:3px dashed rgba(255,255,255,.85);z-index:5;display:flex;align-items:center;justify-content:center;
- font-size:34px;font-weight:800;color:#fff;line-height:1;padding-bottom:4px;text-shadow:0 2px 3px rgba(0,0,0,.45);
- transition:transform .15s ease,background .15s ease}
-.plot.empty:hover .plusb{transform:scale(1.1);background:rgba(62,238,0,.55);border-style:solid}
-.plusb.no{border-color:rgba(255,120,100,.9);color:#ffb3a6}
+.plusb{position:absolute;left:50%;bottom:calc(var(--cropBase) - 24px);width:50px;height:50px;margin-left:-25px;border-radius:50%;
+ background:radial-gradient(circle at 50% 38%,#ffe68a,#f2ab2e 72%);border:3px solid #7a4a00;z-index:5;display:flex;align-items:center;justify-content:center;
+ font-size:34px;font-weight:900;color:#3A2A00;line-height:1;padding-bottom:3px;
+ box-shadow:0 4px 0 #6a3d00,0 6px 10px rgba(0,0,0,.4),inset 0 2px 0 rgba(255,255,255,.6);transition:transform .15s ease,filter .15s ease}
+.plusb::after{content:"";position:absolute;inset:-5px;border-radius:50%;border:3px solid rgba(255,214,90,.9);animation:plusp 1.8s ease-out infinite}
+@keyframes plusp{0%{transform:scale(.9);opacity:.9}100%{transform:scale(1.55);opacity:0}}
+.plot.empty:hover .plusb{transform:scale(1.12);filter:brightness(1.08)}
+.plusb.no{filter:grayscale(.6) brightness(.8)}
 .hov{position:absolute;left:50%;bottom:calc(var(--cropBase) + 34px);transform:translateX(-50%);white-space:nowrap;font-size:13px;
  background:rgba(18,14,10,.82);border:2px solid var(--ink);border-radius:12px;padding:3px 10px;z-index:6;opacity:0;transition:opacity .15s}
 .plot.empty:hover .hov{opacity:1}
@@ -274,14 +276,14 @@ html,body{height:100%;background:#000;overflow:hidden;
 #guard img{width:100%;display:block;filter:drop-shadow(0 8px 14px rgba(0,0,0,.5));position:relative;z-index:2}
 #guard::after{content:"";position:absolute;left:18%;right:18%;bottom:6px;height:26px;border-radius:50%;
  background:radial-gradient(ellipse,rgba(0,0,0,.5),transparent 72%);z-index:1}
-#guardTag{position:absolute;left:50%;top:-16px;transform:translateX(-50%);white-space:nowrap;
- font-size:15px;background:rgba(10,12,8,.82);border:3px solid var(--ink);border-radius:16px;padding:3px 12px}
+#guardTag{position:absolute;left:50%;top:-24px;transform:translateX(-50%);white-space:nowrap;
+ font-size:15px;background:rgba(10,12,8,.92);border:3px solid var(--ink);border-radius:16px;padding:4px 14px;box-shadow:0 3px 8px rgba(0,0,0,.45)}
 #status{right:270px;bottom:20px;width:344px;padding:10px 14px 10px;border-radius:14px;z-index:8;
- background:rgba(10,12,8,.72);border:3px solid var(--ink)}
+ background:rgba(10,12,8,.84);border:3px solid var(--ink);box-shadow:0 3px 10px rgba(0,0,0,.4)}
 #status .r1{display:flex;align-items:baseline;justify-content:space-between;gap:10px;font-size:22px;line-height:1.1}
 #status .r1 small{font-size:13px;font-weight:700}
 #status .r2{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
-.sc{font-size:12px;font-weight:800;padding:2px 9px;border-radius:10px;border:2px solid rgba(0,0,0,.6);background:rgba(255,255,255,.12);color:#fff;
+.sc{font-size:13px;font-weight:800;padding:2px 9px;border-radius:10px;border:2px solid rgba(0,0,0,.6);background:rgba(255,255,255,.12);color:#fff;
  white-space:nowrap;display:flex;align-items:center;gap:4px}
 .sc.c{color:var(--cyan)} .sc.gold{background:linear-gradient(90deg,#8a6a22,#c99a2b);color:#fff}
 .sc img{width:16px;height:16px}
@@ -600,7 +602,7 @@ html,body{height:100%;background:#000;overflow:hidden;
       <div id="expwrap">
         <div id="expclip"><div id="expfill"></div></div>
         <div id="exptxt" class="t sm">0 / 30</div>
-        <div id="nextTxt" class="t xs c"></div></div>
+        <div id="nextTxt" class="t xs y"></div></div>
     </div>
 
     <div class="lyr" id="tip"><img src="assets/p2/条_黄提示_600x73.png" alt="">
@@ -666,7 +668,7 @@ const A='assets/', ART=A+'art/', P2=A+'p2/';
 const art=n=>ART+n+'.png';   // 动态拼的美术路径统一走这里（bundle.py 靠它换 data URI）
 // ⛔ 绿/灰/红母版自带烘死文字，只能用金购买+蓝通用两张空底板：绿=蓝底转色、灰=去色
 const BTN={gold:P2+'按钮_金购买_390x146.png', blue:P2+'按钮_蓝通用_390x146.png', green:P2+'按钮_蓝通用_390x146.png'};
-const BTNF={gold:'',blue:'',green:'hue-rotate(-96deg) saturate(1.45) brightness(1.06)',dis:'grayscale(1) brightness(.62)'};
+const BTNF={gold:'',blue:'',green:'hue-rotate(-96deg) saturate(1.45) brightness(1.06)',dis:'grayscale(1) brightness(.74) contrast(1.15)'};
 const BED={};   // 启动时 makeBed() 填 data URL
 const CROPS=[
  {id:1 ,n:'苔灰速苗',t:1,fam:'c1',f:'',src:'商店·基础',lv:1},
@@ -1158,7 +1160,7 @@ function renderMile(){
  $('#mileNodes').innerHTML=MILE.map((m,i)=>{
   const y=8+540-((i+1)/8)*540;
   const st=S.mileGot>i?'got':(S.spent>=m?'reach':'');
-  return '<div class="mileNode '+st+'" style="top:'+(y-10)+'px" data-pop="mile">'+
+  return '<div class="mileNode '+st+'" style="top:'+(y-23)+'px" data-pop="mile">'+
    '<div class="box"><img src="'+MILE_RW[i].ic+'" alt=""></div>'+
    '<span class="t xs lb">'+(m>=1000?(m/1000)+'k':m)+'</span></div>';}).join('');
  $('#mileCur').textContent='累计消耗 '+fmt(S.spent)+' · 已领 '+S.mileGot+'/8';}
@@ -1214,7 +1216,7 @@ function makeBed(kind){
  const gold=kind==='gold'||kind==='goldlock', wild=kind==='wild', lockIn=kind==='goldlock';
  const [p0,p1,p2,p3]=[pt(0,0),pt(1,0),pt(1,1),pt(0,1)];
  // 接地阴影
- soft(()=>{g.fillStyle='rgba(28,48,14,.30)';g.beginPath();g.ellipse(W/2,p2[1]+t-5,w*.44,8,0,0,7);g.fill();});
+ soft(()=>{g.fillStyle='rgba(28,48,14,.38)';g.beginPath();g.ellipse(W/2,p2[1]+t-4,w*.46,9,0,0,7);g.fill();});
  // 两个侧面（薄厚度）
  const side=(c1,c2,cr,cl)=>{g.fillStyle=cr;poly([p1,p2,[p2[0],p2[1]+t],[p1[0],p1[1]+t]]);g.fill();
   g.fillStyle=cl;poly([p3,p2,[p2[0],p2[1]+t],[p3[0],p3[1]+t]]);g.fill();
@@ -1226,7 +1228,7 @@ function makeBed(kind){
  const top=(fill,inset)=>{g.fillStyle=fill;g.strokeStyle=fill;g.lineWidth=5;g.lineJoin='round';face(inset,1-inset);g.fill();g.stroke();};
  const lin=(c0,c1)=>{const gr=g.createLinearGradient(p0[0],p0[1],p2[0],p2[1]);gr.addColorStop(0,c0);gr.addColorStop(1,c1);return gr;};
  if(wild){
-  top(lin('#cfe598','#b3d476'),0);
+  top(lin('#d6dc8c','#bcc66c'),0);
   g.strokeStyle='rgba(255,255,255,.38)';g.lineWidth=2;g.beginPath();g.moveTo(p3[0]+3,p3[1]-1);g.lineTo(p0[0],p0[1]+1);g.lineTo(p1[0]-3,p1[1]-1);g.stroke();
   g.save();face(.02,.98);g.clip();g.lineCap='round';g.strokeStyle='rgba(88,140,50,.9)';g.lineWidth=2;
   for(let i=0;i<10;i++){const q=pt(.12+rnd()*.76,.12+rnd()*.76);for(let k=-1;k<=1;k++){g.beginPath();g.moveTo(q[0],q[1]);g.quadraticCurveTo(q[0]+k*3,q[1]-5,q[0]+k*6,q[1]-9-rnd()*4);g.stroke();}}
@@ -1250,11 +1252,16 @@ function makeBed(kind){
  // 耕垄：沿右下边方向的四道沟 + 亮脊；土粒；石子
  const ins=gold?.14:0.02;
  g.save();face(ins,1-ins);g.clip();
+ // 远边 AO（两条远边向内 10% 渐暗）+ 近边高光，让土面有「凹进去一点」的体感
+ const ao=(q0,q1,pts)=>{const grd=g.createLinearGradient(q0[0],q0[1],q1[0],q1[1]);grd.addColorStop(0,'rgba(40,20,5,'+(gold?.42:.34)+')');grd.addColorStop(1,'rgba(40,20,5,0)');g.fillStyle=grd;poly(pts);g.fill();};
+ ao(pt(.5,ins),pt(.5,ins+.12),[pt(ins,ins),pt(1-ins,ins),pt(1-ins,ins+.12),pt(ins,ins+.12)]);
+ ao(pt(ins,.5),pt(ins+.12,.5),[pt(ins,ins),pt(ins,1-ins),pt(ins+.12,1-ins),pt(ins+.12,ins)]);
+ g.strokeStyle='rgba(255,240,210,.28)';g.lineWidth=1.5;g.beginPath();const n1=pt(ins,1-ins),n2=pt(1-ins,1-ins),n3=pt(1-ins,ins);g.moveTo(n1[0],n1[1]);g.lineTo(n2[0],n2[1]);g.lineTo(n3[0],n3[1]);g.stroke();
  [0.2,0.4,0.6,0.8].forEach(r=>{const d=gold?.022:.028;
   g.fillStyle=gold?'rgba(20,10,5,.5)':'rgba(105,62,36,.55)';strip(r-d,r+d,ins+.04,1-ins-.04);g.fill();
   g.fillStyle=gold?'rgba(255,215,160,.18)':'rgba(255,236,205,.32)';strip(r+d,r+d+.012,ins+.06,1-ins-.06);g.fill();});
- for(let i=0;i<60;i++){const q=pt(ins+.02+rnd()*(.96-2*ins),ins+.02+rnd()*(.96-2*ins));
-  g.fillStyle=gold?'rgba(20,10,5,.28)':'rgba(80,45,22,.22)';g.beginPath();g.arc(q[0],q[1],.7+rnd()*1.1,0,7);g.fill();}
+ for(let i=0;i<260;i++){const q=pt(ins+.02+rnd()*(.96-2*ins),ins+.02+rnd()*(.96-2*ins));const dark=rnd()<.7;
+  g.fillStyle=dark?(gold?'rgba(20,10,5,'+(.14+rnd()*.2)+')':'rgba(80,45,22,'+(.12+rnd()*.18)+')'):'rgba(255,235,205,'+(.12+rnd()*.14)+')';g.beginPath();g.arc(q[0],q[1],.45+rnd()*1.1,0,7);g.fill();}
  for(let i=0;i<4;i++){const q=pt(ins+.08+rnd()*(.84-2*ins),ins+.08+rnd()*(.84-2*ins));
   g.fillStyle='rgba(50,30,15,.35)';g.beginPath();g.ellipse(q[0]+1,q[1]+1.5,3.2,2,0,0,7);g.fill();
   g.fillStyle=gold?'rgba(230,200,150,.85)':'rgba(215,200,180,.9)';g.beginPath();g.ellipse(q[0],q[1],3,1.9,0,0,7);g.fill();}
@@ -1267,36 +1274,43 @@ function makeBed(kind){
 const GROUND={};
 function makeGround(rows,top){
  const key=rows+'_'+top;if(GROUND[key])return GROUND[key];
- const m=0.32,t2=12,cols=ISO.cols;
+ const m=0.32,t2=9,cols=ISO.cols;
  const G=(a,b)=>[ISO.cx+(a-b)*ISO.ux, top+(a+b)*ISO.uy];
  const c=[G(-m,-m),G(cols+m,-m),G(cols+m,rows+m),G(-m,rows+m)];   // 上/右/下/左 四角
- const minx=c[3][0]-30,maxx=c[1][0]+30,miny=c[0][1]-20,maxy=c[2][1]+t2+30;
+ const minx=c[3][0]-40,maxx=c[1][0]+40,miny=c[0][1]-30,maxy=c[2][1]+t2+40;
  const W=Math.ceil(maxx-minx),H=Math.ceil(maxy-miny);
  const cv=document.createElement('canvas');cv.width=W;cv.height=H;const g=cv.getContext('2d');g.translate(-minx,-miny);
  const poly=(pts,dy)=>{dy=dy||0;g.beginPath();pts.forEach((q,i)=>i?g.lineTo(q[0],q[1]+dy):g.moveTo(q[0],q[1]+dy));g.closePath();};
+ const soft=(px,fn)=>{try{g.filter='blur('+px+'px)';}catch(e){}fn();try{g.filter='none';}catch(e){}};
  let seed=99;const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
- // 接地阴影
- try{g.filter='blur(8px)';}catch(e){}
- g.fillStyle='rgba(20,40,10,.38)';poly(c,t2+6);g.fill();
- try{g.filter='none';}catch(e){}
- // 两个近侧面（薄厚度）
- g.fillStyle='#7f9f4c';poly([c[1],c[2],[c[2][0],c[2][1]+t2],[c[1][0],c[1][1]+t2]]);g.fill();
- g.fillStyle='#6a8a3f';poly([c[3],c[2],[c[2][0],c[2][1]+t2],[c[3][0],c[3][1]+t2]]);g.fill();
- g.fillStyle='rgba(0,0,0,.15)';poly([c[1],c[2],[c[2][0],c[2][1]+3],[c[1][0],c[1][1]+3]]);g.fill();poly([c[3],c[2],[c[2][0],c[2][1]+3],[c[3][0],c[3][1]+3]]);g.fill();
- // 台面：比草坪略亮的草色，带修剪条纹
- const gr=g.createLinearGradient(c[0][0],c[0][1],c[2][0],c[2][1]);gr.addColorStop(0,'#d3e9a6');gr.addColorStop(1,'#b7d67f');
+ // 接地阴影：更柔、略偏下
+ soft(12,()=>{g.fillStyle='rgba(30,45,12,.45)';poly(c,t2+10);g.fill();});
+ // 两个近侧面（薄厚度，颜色压暗）
+ g.fillStyle='#6c7f3a';poly([c[1],c[2],[c[2][0],c[2][1]+t2],[c[1][0],c[1][1]+t2]]);g.fill();
+ g.fillStyle='#596c2f';poly([c[3],c[2],[c[2][0],c[2][1]+t2],[c[3][0],c[3][1]+t2]]);g.fill();
+ g.fillStyle='rgba(0,0,0,.2)';poly([c[1],c[2],[c[2][0],c[2][1]+3],[c[1][0],c[1][1]+3]]);g.fill();poly([c[3],c[2],[c[2][0],c[2][1]+3],[c[3][0],c[3][1]+3]]);g.fill();
+ // 台面：场景草坪的同族暖黄绿，略亮一档
+ const gr=g.createLinearGradient(c[0][0],c[0][1],c[2][0],c[2][1]);gr.addColorStop(0,'#d0d884');gr.addColorStop(.55,'#c1cb70');gr.addColorStop(1,'#aab85e');
  g.fillStyle=gr;g.strokeStyle=gr;g.lineWidth=6;g.lineJoin='round';poly(c);g.fill();g.stroke();
  g.save();poly(c);g.clip();
- for(let k=0;k<12;k++){const b0=-m+(rows+2*m)*k/12,b1=b0+(rows+2*m)/24;
-  g.fillStyle='rgba(255,255,255,.07)';poly([G(-m,b0),G(cols+m,b0),G(cols+m,b1),G(-m,b1)]);g.fill();}
- // 边缘一圈略深的草 + 零星小花（只撒在地块外的边带）
- g.strokeStyle='rgba(70,115,40,.45)';g.lineWidth=3;poly(c);g.stroke();
- const cols3=['rgba(255,255,255,.85)','rgba(255,227,110,.8)','rgba(255,183,213,.75)','rgba(255,255,255,.85)'];
- for(let i=0;i<28;i++){let a,b;
+ // 修剪条纹（细、淡）
+ for(let k=0;k<18;k++){const b0=-m+(rows+2*m)*k/18,b1=b0+(rows+2*m)/36;
+  g.fillStyle='rgba(255,255,230,.06)';poly([G(-m,b0),G(cols+m,b0),G(cols+m,b1),G(-m,b1)]);g.fill();}
+ // 草纹噪点：深浅两组细点
+ for(let i=0;i<1400;i++){const q=G(-m+rnd()*(cols+2*m),-m+rnd()*(rows+2*m));
+  g.fillStyle=rnd()<.5?'rgba(70,100,30,.13)':'rgba(255,255,200,.10)';g.beginPath();g.arc(q[0],q[1],.6+rnd()*1.1,0,7);g.fill();}
+ // 边缘 AO：内圈压暗一圈，和外面的草接得住
+ soft(7,()=>{g.strokeStyle='rgba(50,75,20,.32)';g.lineWidth=18;poly(c);g.stroke();});
+ g.strokeStyle='rgba(60,95,30,.55)';g.lineWidth=2.5;poly(c);g.stroke();
+ // 边带：草撮 + 零星小花
+ const cols3=['rgba(255,255,255,.85)','rgba(255,227,110,.85)','rgba(255,183,213,.8)','rgba(255,255,255,.85)'];
+ g.lineCap='round';
+ for(let i=0;i<46;i++){let a,b;
   if(rnd()<.5){a=-m+rnd()*m*.9; if(rnd()<.5)a=cols+m-rnd()*m*.9; b=-m+rnd()*(rows+2*m);}
   else{b=-m+rnd()*m*.9; if(rnd()<.5)b=rows+m-rnd()*m*.9; a=-m+rnd()*(cols+2*m);}
-  const q=G(a,b);g.fillStyle=cols3[(rnd()*4)|0];g.beginPath();g.arc(q[0],q[1],1.4+rnd()*1.1,0,7);g.fill();
-  if(rnd()<.6){g.strokeStyle='rgba(80,130,45,.8)';g.lineWidth=1.5;g.beginPath();g.moveTo(q[0]+4,q[1]+2);g.lineTo(q[0]+6,q[1]-5);g.stroke();}}
+  const q=G(a,b);
+  if(rnd()<.55){g.strokeStyle='rgba(80,120,40,.9)';g.lineWidth=1.8;for(let k=-1;k<=1;k++){g.beginPath();g.moveTo(q[0],q[1]);g.quadraticCurveTo(q[0]+k*3,q[1]-5,q[0]+k*6,q[1]-9-rnd()*4);g.stroke();}}
+  else{g.fillStyle=cols3[(rnd()*4)|0];g.beginPath();g.arc(q[0],q[1],1.5+rnd()*1.1,0,7);g.fill();}}
  g.restore();
  return GROUND[key]={url:cv.toDataURL('image/png'),x:minx,y:miny};}
 function groundImg(rows,top){const gd=makeGround(rows,top);
