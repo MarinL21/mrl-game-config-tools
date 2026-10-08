@@ -616,32 +616,51 @@ html,body{height:100%;background:#000;overflow:hidden;
 .hav img{width:54px;height:54px;object-fit:contain;flex:0 0 auto;border-radius:50%;border:2px solid var(--tc);background:rgba(0,0,0,.45);padding:3px}.hav.lock img{filter:grayscale(.85) brightness(.55)}
 .hav b{font-size:15px;color:#fff;display:block}.hav small{font-size:11px;color:var(--dim)}.hav .hstars{font-size:11px;letter-spacing:1px;margin:1px 0}
 .hav .hdot{position:absolute;right:8px;top:8px;width:10px;height:10px;border-radius:50%;background:var(--green);border:2px solid var(--ink)}
-.csel{display:grid;grid-template-columns:400px 1fr;gap:18px;height:470px;margin-top:12px}
-.cshow{position:relative;border-radius:16px;overflow:hidden;border:3px solid var(--tc);box-shadow:0 0 0 1px rgba(0,0,0,.5),0 0 24px var(--tcg),inset 0 0 40px rgba(0,0,0,.35);display:flex;align-items:flex-end;justify-content:center;
- background:radial-gradient(ellipse at 50% 30%,#3c5a2a,#121a0d 72%)}
-.cshow.dark{background:radial-gradient(ellipse at 50% 30%,#2a2a2a,#0e0e0e 72%);box-shadow:0 0 0 1px rgba(0,0,0,.5);border-color:#4a3d46}
-.cshow .hglow{width:360px;height:360px;margin:-180px 0 0 -180px}.cshow .hring{width:310px;height:310px;margin:-155px 0 0 -155px}.cshow .hfloor{width:280px;margin-left:-140px;bottom:72px;height:56px}
-.cart{position:relative;height:300px;max-width:88%;object-fit:contain;margin-bottom:84px;filter:drop-shadow(0 14px 20px rgba(0,0,0,.6))}
-.cinfo{display:flex;flex-direction:column;gap:10px;min-width:0}
-.cstats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-.cs{background:#1b1519;border:2px solid #362c34;border-radius:10px;padding:8px 10px;display:flex;flex-direction:column;gap:2px}
-.cs span{font-size:12px;color:var(--dim)}.cs b{font-size:22px;color:#fff;line-height:1.1}
+.atlas{position:absolute;left:0;top:0;bottom:0;width:860px;display:flex;flex-direction:column;gap:8px}
+.ahead{display:flex;align-items:center;gap:14px;padding-bottom:6px;border-bottom:2px solid #2a2228}
+.aprog{display:flex;align-items:center;gap:10px;flex:1;min-width:0}.aprog b{font-size:16px;color:var(--gold);white-space:nowrap}
+.abuff{display:flex;flex-direction:column;align-items:center;line-height:1.05;padding:4px 12px;border-radius:10px;background:rgba(0,0,0,.35);border:1px solid #362c34}
+.abuff b{font-size:20px;color:var(--gold)}.abuff b small{font-size:12px;color:#C8CDD4}.abuff span{font-size:11px;color:var(--dim)}
+.arow{display:flex;gap:10px;align-items:stretch;flex:1}
+.arh{width:92px;flex:0 0 auto;display:flex;flex-direction:column;justify-content:center;gap:2px;padding:0 6px;border-right:2px dashed #362c34}
+.arh b{font-size:15px;color:#fff}.arh span{font-size:11px;color:var(--dim);line-height:1.3}.arh em{font-style:normal;font-size:12px;color:var(--gold);font-weight:800;margin-top:4px}
+.acells{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;flex:1}
+.acell{position:relative;border-radius:12px;background:#1b1519;border:2px dashed #3d3238;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:8px 6px 6px;cursor:pointer;transition:transform .12s,box-shadow .12s;overflow:hidden}
+.acell::before{content:"";position:absolute;left:0;right:0;top:0;height:5px;background:var(--tc);opacity:.35}
+.acell.lit{border-style:solid;border-color:var(--tc);background:radial-gradient(ellipse at 50% 30%,rgba(255,255,255,.07),transparent 70%),#1b1519}
+.acell.lit::before{opacity:1}
+.acell:hover{transform:translateY(-2px);box-shadow:0 0 12px var(--tcg)}.acell.sel{box-shadow:0 0 0 2px var(--tc),0 0 16px var(--tcg)}
+.acell .at{position:absolute;left:7px;top:9px;font-size:10px;font-weight:800;color:#1A1A1A;background:var(--tc);border-radius:6px;padding:1px 5px}
+.acell .astamp{position:absolute;right:7px;top:9px;width:18px;height:18px;border-radius:50%;background:var(--green);color:#1A1A1A;font-size:11px;font-weight:900;display:flex;align-items:center;justify-content:center;border:2px solid var(--ink)}
+.acell .aq{position:absolute;right:9px;top:8px;font-size:16px;font-weight:900;color:#5a4d55}
+.acell .rd{position:absolute;right:6px;top:6px;width:12px;height:12px;border-radius:50%;background:#ff3b30;border:2px solid var(--ink);z-index:2}
+.aimg{height:78px;display:flex;align-items:flex-end;justify-content:center;margin-top:12px}.aimg img{height:74px;max-width:120px;object-fit:contain}
+.acell b{font-size:13px;color:#fff;margin-top:4px;white-space:nowrap}.acell:not(.lit) b{color:#6d6459;letter-spacing:2px}
+.apips{display:flex;gap:4px;margin-top:4px}.apips i{width:16px;height:6px;border-radius:3px;background:#2b2229;border:1px solid #1A1A1A;display:block}
+.apips i.on.m1{background:#7fd0ff}.apips i.on.m2{background:#c9b4ff}.apips i.on.m3{background:#ffd76e}.apips i.on.m4{background:#ff9d6e}
+.alegend{display:flex;gap:14px;align-items:center;font-size:11px;color:var(--dim);padding-top:4px;border-top:2px solid #2a2228;white-space:nowrap}
+.alegend span{display:flex;align-items:center;gap:4px}.alegend i{width:14px;height:6px;border-radius:3px;display:block}.alegend i.m1{background:#7fd0ff}.alegend i.m2{background:#c9b4ff}.alegend i.m3{background:#ffd76e}.alegend i.m4{background:#ff9d6e}
 .cstate{background:#1b1519;border:2px solid #362c34;border-radius:10px;padding:8px 12px;display:flex;flex-direction:column;gap:2px}
 .cstate b{font-size:14px;color:#C8CDD4}.cstate.on{border-color:var(--green);background:#1f2a18}.cstate.on b{color:var(--green)}
 .cstate span{font-size:12px;color:var(--dim)}
-.cforms{background:#1b1519;border:2px solid #362c34;border-radius:12px;padding:10px 12px;margin-top:auto}
-.cfh{display:flex;align-items:center;gap:12px;margin-bottom:8px}.cfh b{font-size:15px;color:#fff}.cfh span{flex:1;font-size:12px;color:var(--dim);min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.cfh .sbtn{width:150px;height:40px}.cfh .sbtn span{font-size:15px}
-.cfrow{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-.cform{background:rgba(0,0,0,.35);border:2px solid #362c34;border-radius:10px;padding:6px 4px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;opacity:.5}
-.cform.on{opacity:1;border-color:var(--green);background:rgba(30,60,14,.35)}
-.cfi{height:74px;display:flex;align-items:flex-end;justify-content:center;overflow:visible}.cfi img{height:68px;transform-origin:bottom center}
-.cform small{font-size:11px;color:#8d8279;font-weight:800}.cform.on small{color:var(--green)}
-.cstrip{display:flex;gap:6px;margin-top:12px}
-.cav{flex:1;position:relative;min-width:0;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px 5px;border-radius:10px;background:#1b1519;border:2px solid #362c34;border-top:4px solid var(--tc);cursor:pointer;transition:transform .12s,box-shadow .12s}
-.cav:hover{transform:translateY(-2px);box-shadow:0 0 12px var(--tcg)}.cav.sel{border-color:var(--tc);background:#221c1a;box-shadow:0 0 14px var(--tcg)}
-.cav img{height:44px;max-width:60px;object-fit:contain}.cav b{font-size:11px;color:#fff;white-space:nowrap}.cav small{font-size:10px;color:var(--dim)}.cav.dim b{color:#8d8279}
-.cav .rd{position:absolute;right:4px;top:4px;width:12px;height:12px;border-radius:50%;background:#ff3b30;border:2px solid var(--ink)}
+.cfh{display:flex;align-items:center;gap:12px}.cfh b{font-size:15px;color:#fff;white-space:nowrap}.cfh span{flex:1;font-size:12px;color:var(--dim);min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.adet{position:absolute;left:878px;right:0;top:0;bottom:0;display:flex;flex-direction:column;gap:8px;min-width:0}
+.adshow{position:relative;height:250px;border-radius:14px;overflow:hidden;border:3px solid var(--tc);box-shadow:0 0 18px var(--tcg);display:flex;align-items:flex-end;justify-content:center;background:radial-gradient(ellipse at 50% 30%,#3c5a2a,#121a0d 72%)}
+.adshow.dark{background:radial-gradient(ellipse at 50% 30%,#2a2a2a,#0e0e0e 72%);box-shadow:none;border-color:#4a3d46}
+.adshow .hglow{width:240px;height:240px;margin:-120px 0 0 -120px}.adshow .hfloor{width:200px;margin-left:-100px;bottom:10px;height:36px}
+.adshow img{position:relative;height:200px;max-width:88%;object-fit:contain;margin-bottom:18px;filter:drop-shadow(0 10px 14px rgba(0,0,0,.6))}
+.adname{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}.adname b{font-size:24px;color:#fff}.adname .hstars{display:inline;margin:0;font-size:13px}.adname span{font-size:12px;color:var(--dim);margin-left:auto}
+.adet .hlore{font-size:13px;line-height:1.6}
+.adstats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.adstats div{background:#1b1519;border:2px solid #362c34;border-radius:9px;padding:6px 4px;display:flex;flex-direction:column;align-items:center;gap:1px}
+.adstats span{font-size:11px;color:var(--dim)}.adstats b{font-size:17px;color:#fff}
+.adet .cstate{padding:7px 10px}.adet .cstate b{font-size:13px}.adet .cstate span{font-size:11px}
+.adforms{background:#1b1519;border:2px solid #362c34;border-radius:12px;padding:8px 10px;margin-top:auto;display:flex;flex-direction:column;gap:8px}
+.adf img{height:60px}
+.adforms .cfh{margin:0}.adforms .cfh span{font-size:11px}
+.adfrow{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.adf{display:flex;flex-direction:column;align-items:center;gap:3px;opacity:.45;background:rgba(0,0,0,.35);border:2px solid #362c34;border-radius:9px;padding:4px 2px}
+.adf.on{opacity:1;border-color:var(--green)}.adf img{height:52px;transform-origin:bottom center}.adf .mchip{font-size:10px;padding:1px 6px}
+.adforms .sbtn{width:100%;height:44px}
 .fcards{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
 .fcard{position:relative;background:#221b21;border:2px solid #362c34;border-radius:12px;padding:12px 10px 10px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
 .fcard.on{border-color:var(--green);background:#1f2a18}
@@ -1521,23 +1540,32 @@ function renderPop(){
  else if(k==='codex'){
   const n=codexN(), mb=Object.keys(S.mutbook).length, id=crop(S.csel)?S.csel:1, c=crop(id), t=TIER[c.t], lit=!!S.codex[id], T=TIERS[c.t], tv='--tc:'+T.c+';--tcg:'+T.g;
   const got=FORMKEYS.filter(f=>S.mutbook[id+'_'+f]).length, full=got===4, claimed=!!S.mutRw[id];
-  h='<div class="cxhead"><div><div class="ph">绿洲植物志 · 已点亮 '+n+' / 15</div><div class="cxbar" style="margin:6px 0 0;width:420px"><i style="width:'+(n/15*100).toFixed(1)+'%"></i></div></div>'+
-   '<div class="cxbuff"><b>+'+n+'%</b><span>种植速度 · 生长时间 −'+n+'%</span></div><div class="cxbuff" style="border-color:#4a3d46"><b style="color:#c27bff">'+mb+'<small style="font-size:14px;color:#C8CDD4"> / 60</small></b><span>异变图录</span></div></div>';
-  h+='<div class="csel">'+
-   '<div class="cshow'+(lit?'':' dark')+'" style="'+tv+'"><div class="hglow"></div><div class="hring"></div><div class="hfloor"></div>'+
-    '<img class="cart" src="'+art(c.fam+'_s3')+'" style="filter:'+(lit?(c.f||'none'):'grayscale(1) brightness(.35)')+'" alt="">'+
-    '<span class="hbadge'+(lit?' on':'')+'">'+(lit?'已点亮':'未点亮')+'</span><span class="hbadge tier">T'+c.t+' · '+T.n+'</span>'+
-    '<div class="hplate"><b>'+c.n+'</b><span>'+c.src+'</span><em class="hstars">'+stars(c.t)+'</em></div></div>'+
-   '<div class="cinfo">'+
-    '<div class="hname" style="'+tv+'">'+c.n+'<span class="tierchip">T'+c.t+' '+T.n+'</span><em class="hstars">'+stars(c.t)+'</em></div><p class="hlore">'+CROP_LORE[id]+'</p>'+
-    '<div class="cstats">'+[['生长时长',t.h+'h'],['单颗售价',fmt(t.unit)],['收获颗数',t.y[0]+'~'+t.y[1]],['农园经验',t.exp]].map(x=>'<div class="cs"><span>'+x[0]+'</span><b>'+x[1]+'</b></div>').join('')+'</div>'+
-    '<div class="cstate'+(lit?' on':'')+'"><b>'+(lit?'✓ 植物志已点亮 · 所有作物生长时间 −1%':'首次收获点亮 → 所有作物生长时间 −1%')+'</b><span>'+(c.id<=10?'种子袋 '+fmt(t.seed)+' 丰收币'+(c.lv>1?' · 农园 '+c.lv+' 级解锁':''):c.src==='秘种·进度'?'勋绩进度 / 每日种子袋 5% / 集市限购':'秘种礼包')+' · 秘种收获必返 1 颗</span></div>'+
-    '<div class="cforms"><div class="cfh"><b>异变图录 '+got+' / 4</b><span>集齐奖励：'+mutRwText(c.t)+'</span>'+
-     (claimed?sb('blue','已领取','',true):full?sb('gold','领取奖励','data-mutr="'+id+'"',false,true):'')+'</div>'+
-     '<div class="cfrow">'+FORMKEYS.map(f=>{const on=!!S.mutbook[id+'_'+f];return '<div class="cform'+(on?' on':'')+'"><div class="cfi"><img src="'+art(c.fam+'_s3')+'" style="filter:'+(on?cropStyle(c.f,[f]):'grayscale(1) brightness(.3)')+';transform:scale('+(f==='giant'?1.25:1)+')" alt=""></div><span class="mchip '+FORM[f].c+'">'+FORM[f].n+' ×'+FORM[f].m+'</span><small>'+(on?'✓ 已收集':'未收集')+'</small></div>';}).join('')+'</div></div>'+
-   '</div></div>';
-  h+='<div class="cstrip">'+CROPS.map(x=>{const l=!!S.codex[x.id],tt=TIERS[x.t],g2=FORMKEYS.filter(f=>S.mutbook[x.id+'_'+f]).length,can=g2===4&&!S.mutRw[x.id];
-   return '<div class="cav'+(x.id===id?' sel':'')+(l?'':' dim')+'" data-csel="'+x.id+'" style="--tc:'+tt.c+';--tcg:'+tt.g+'"><img src="'+art(x.fam+'_s3')+'" style="filter:'+(l?(x.f||'none'):'grayscale(1) brightness(.4)')+'" alt="">'+(can?'<i class="rd"></i>':'')+'<b>'+x.n+'</b><small>'+(l?g2+'/4':'未点亮')+'</small></div>';}).join('')+'</div>';
+  const ROWS=[['基础作物','种子袋直接买',[1,2,3,4,5]],['进阶作物','农园升级解锁',[6,7,8,9,10]],['秘种','勋绩 / 种子袋 / 礼包',[11,12,13,14,15]]];
+  // 左：整本图谱（3 行 × 5 格），一眼看全 15 格
+  const cell=x=>{const l=!!S.codex[x.id],tt=TIERS[x.t],g2=FORMKEYS.filter(f=>S.mutbook[x.id+'_'+f]).length,can=g2===4&&!S.mutRw[x.id];
+   return '<div class="acell'+(l?' lit':'')+(x.id===id?' sel':'')+'" data-csel="'+x.id+'" style="--tc:'+tt.c+';--tcg:'+tt.g+'">'+
+    '<span class="at">T'+x.t+'</span>'+(l?'<span class="astamp">✓</span>':'<span class="aq">?</span>')+(can?'<i class="rd"></i>':'')+
+    '<div class="aimg"><img src="'+art(x.fam+'_s3')+'" style="filter:'+(l?(x.f||'none'):'brightness(0) opacity(.45)')+'" alt=""></div>'+
+    '<b>'+(l?x.n:'？？？')+'</b>'+
+    '<div class="apips">'+FORMKEYS.map(f=>'<i class="'+(S.mutbook[x.id+'_'+f]?'on '+FORM[f].c:'')+'" title="'+FORM[f].n+'"></i>').join('')+'</div></div>';};
+  h='<div class="atlas"><div class="ahead"><div class="ph" style="margin:0">绿洲植物志</div>'+
+    '<div class="aprog"><div class="cxbar" style="margin:0;flex:1"><i style="width:'+(n/15*100).toFixed(1)+'%"></i></div><b>'+n+' / 15</b></div>'+
+    '<div class="abuff"><b>+'+n+'%</b><span>种植速度</span></div><div class="abuff"><b style="color:#c27bff">'+mb+'<small>/60</small></b><span>异变图录</span></div></div>'+
+   ROWS.map(([nm,sub,ids])=>{const l=ids.filter(i=>S.codex[i]).length;
+    return '<div class="arow"><div class="arh"><b>'+nm+'</b><span>'+sub+'</span><em>'+l+' / '+ids.length+'</em></div><div class="acells">'+ids.map(i=>cell(crop(i))).join('')+'</div></div>';}).join('')+
+   '<div class="alegend">'+FORMKEYS.map(f=>'<span><i class="'+FORM[f].c+'"></i>'+FORM[f].n+' ×'+FORM[f].m+'</span>').join('')+'<span style="margin-left:auto;color:#8d8279">每格点亮 → 所有作物生长时间 −1% · 点亮记录跨节日保留</span></div></div>';
+  // 右：选中作物详情
+  h+='<div class="adet" style="'+tv+'">'+
+   '<div class="adshow'+(lit?'':' dark')+'"><div class="hglow"></div><div class="hfloor"></div><img src="'+art(c.fam+'_s3')+'" style="filter:'+(lit?(c.f||'none'):'grayscale(1) brightness(.35)')+'" alt="">'+
+    '<span class="hbadge'+(lit?' on':'')+'">'+(lit?'已点亮':'未点亮')+'</span><span class="hbadge tier">T'+c.t+' · '+T.n+'</span></div>'+
+   '<div class="adname"><b>'+(lit?c.n:'？？？')+'</b><em class="hstars">'+stars(c.t)+'</em><span>'+c.src+'</span></div>'+
+   '<p class="hlore">'+(lit?CROP_LORE[id]:'首次收获后解锁图鉴描述。')+'</p>'+
+   '<div class="adstats">'+[['时长',t.h+'h'],['单价',fmt(t.unit)],['收获',t.y[0]+'~'+t.y[1]+' 颗'],['经验',t.exp]].map(x=>'<div><span>'+x[0]+'</span><b>'+x[1]+'</b></div>').join('')+'</div>'+
+   '<div class="cstate'+(lit?' on':'')+'"><b>'+(lit?'✓ 已点亮 · 生长时间 −1% 生效中':'首次收获点亮 → 生长时间 −1%')+'</b><span>'+(c.id<=10?'种子袋 '+fmt(t.seed)+' 丰收币'+(c.lv>1?' · 农园 '+c.lv+' 级':''):c.src==='秘种·进度'?'勋绩进度 / 每日种子袋 5% / 集市':'秘种礼包')+'</span></div>'+
+   '<div class="adforms"><div class="cfh"><b>异变 '+got+' / 4</b><span>'+mutRwText(c.t)+'</span></div>'+
+    '<div class="adfrow">'+FORMKEYS.map(f=>{const on=!!S.mutbook[id+'_'+f];return '<div class="adf'+(on?' on':'')+'"><img src="'+art(c.fam+'_s3')+'" style="filter:'+(on?cropStyle(c.f,[f]):'grayscale(1) brightness(.3)')+';transform:scale('+(f==='giant'?1.25:1)+')" alt=""><span class="mchip '+FORM[f].c+'">'+FORM[f].n+'</span></div>';}).join('')+'</div>'+
+    (claimed?sb('blue','奖励已领','',true,false,true):full?sb('gold','领取集齐奖励','data-mutr="'+id+'"',false,true,true):'')+'</div>'+
+   '</div>';
  }
  else if(k==='guard'){
   const sel=(S.gsel&&formOf(S.gsel))?S.gsel:S.form, f=formOf(sel), own=!!S.forms[sel], on=S.form===sel, lv=own?formLv(sel):1, u=f.unlock, meta=FORM_META[sel], T=TIERS[meta.tier], tv='--tc:'+T.c+';--tcg:'+T.g;
@@ -2075,8 +2103,9 @@ function runTest(){
   const g=gs.find(x=>x.n>=2)||gs[0];sellGroup(g.key,1);ok('谷仓可只卖 1 颗',S.store.length===n0-1&&S.coin>c0);
   openPop('barn');ok('谷仓卡片带数量选择器',document.querySelectorAll('.gcard .qsel').length===barnGroups().length);closePop();}
  openPop('seed');ok('种子袋 15 张卡片，每张四个标签',document.querySelectorAll('.gcard').length===15&&document.querySelectorAll('.gcard .tags span').length===60);closePop();
- S.csel=1;openPop('codex');ok('图鉴：作物展示 + 4 数据格 + 4 形态格 + 底部 15 头像',!!document.querySelector('.cshow')&&document.querySelectorAll('.cs').length===4&&document.querySelectorAll('.cform').length===4&&document.querySelectorAll('.cav').length===15);
- S.csel=12;renderPop();ok('选未点亮作物：展示压灰 + 未点亮角标',!!document.querySelector('.cshow.dark')&&document.querySelector('.cshow .hbadge').textContent==='未点亮');closePop();S.csel=1;
+ S.csel=1;openPop('codex');ok('图鉴：整本图谱 3 行 × 5 格 + 右侧详情（4 数据 + 4 形态）',document.querySelectorAll('.acell').length===15&&document.querySelectorAll('.arow').length===3&&!!document.querySelector('.adet')&&document.querySelectorAll('.adstats div').length===4&&document.querySelectorAll('.adf').length===4);
+ ok('已点亮格带 ✓ 戳、未点亮格显 ?',document.querySelectorAll('.acell.lit .astamp').length===codexN()&&document.querySelectorAll('.acell:not(.lit) .aq').length===15-codexN());
+ S.csel=12;renderPop();ok('选未点亮作物：详情压灰 + 名字打码',!!document.querySelector('.adshow.dark')&&document.querySelector('.adname b').textContent==='？？？');closePop();S.csel=1;
  {FORMKEYS.forEach(f=>S.mutbook['1_'+f]=1);const g0=S.bag.speed8h||0;claimMut(1);ok('集齐 4 形态领游戏道具（8h 加速进背包）',(S.bag.speed8h||0)===g0+2&&S.mutRw[1]===1);
   claimMut(1);ok('图录奖励不能重复领',(S.bag.speed8h||0)===g0+2);
   S.codex={1:1,2:1,3:1,4:1,5:1};S.seeds[1]=5;const fp=S.plots.find(p=>p.un&&!p.crop&&!p.gold);S.sel=1;S.form='farmer';plant(fp.i);
