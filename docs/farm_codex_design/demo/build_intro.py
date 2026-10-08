@@ -151,7 +151,10 @@ def build():
     for i,S in enumerate(SCREENS):
         png=os.path.join(SHOTS,S['id']+'.png'); mj=os.path.join(SHOTS,S['id']+'.json')
         if not NOSHOT or not os.path.exists(png):
-            chrome('shot',png,f"{base}?{S['q']}",2500)
+            for _ in range(3):   # 无头 Chrome 偶发不落盘：最多重截 3 次
+                chrome('shot',png,f"{base}?{S['q']}",2500)
+                if os.path.exists(png) and os.path.getsize(png)>0: break
+            if not os.path.exists(png): sys.exit(f'!! 截图失败 {S["id"]}')
             sels='|'.join(c[0] for c in S['c'])
             chrome('dom',os.path.join(SHOTS,S['id']+'.dom.html'),f"{base}?{S['q']}&measure={urllib.parse.quote(sels,safe='')}",2500)
             m=testlog(os.path.join(SHOTS,S['id']+'.dom.html')) or {}
