@@ -550,7 +550,7 @@ html,body{height:100%;background:#000;overflow:hidden;
 .spec pre{font:12px/1.65 Menlo,Consolas,monospace;color:#d9ecd0;background:#120f12;border:1px solid #362c34;border-radius:8px;padding:10px 12px;white-space:pre-wrap;margin:6px 0 10px}
 /* ── 巨猿形态卡 ── */
 .hsel{display:grid;grid-template-columns:500px 1fr;gap:18px;height:586px}
-.hshow{position:relative;border-radius:16px;overflow:hidden;border:2px solid #4a3d46;display:flex;align-items:flex-end;justify-content:center;
+.hshow{position:relative;border-radius:16px;overflow:hidden;border:3px solid var(--tc,#4a3d46);box-shadow:0 0 0 1px rgba(0,0,0,.5),0 0 26px var(--tcg,transparent),inset 0 0 40px rgba(0,0,0,.35);display:flex;align-items:flex-end;justify-content:center;
  background:radial-gradient(ellipse at 50% 28%,var(--hc1),var(--hc2) 72%)}
 .hshow.farmer{--hc1:#5a8a34;--hc2:#14200e}.hshow.iron{--hc1:#4f6684;--hc2:#10161f}.hshow.night{--hc1:#3f3d86;--hc2:#0d0d20}.hshow.trade{--hc1:#9a4430;--hc2:#1e0e0a}.hshow.shaman{--hc1:#2f7466;--hc2:#0b1b18}
 .hglow{position:absolute;left:50%;top:50%;width:460px;height:460px;margin:-230px 0 0 -230px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.22),rgba(255,255,255,0) 62%)}
@@ -560,7 +560,12 @@ html,body{height:100%;background:#000;overflow:hidden;
 .hart{position:relative;height:500px;max-width:92%;object-fit:contain;margin-bottom:62px;filter:drop-shadow(0 18px 26px rgba(0,0,0,.6))}
 .hplate{position:absolute;left:0;right:0;bottom:0;padding:26px 16px 14px;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.78));text-align:center}
 .hplate b{display:block;font-size:30px;color:#fff;-webkit-text-stroke:3px var(--ink);paint-order:stroke fill;font-weight:900;line-height:1.1}
-.hplate span{font-size:14px;color:var(--gold);font-weight:800;letter-spacing:3px}
+.hplate span{font-size:14px;color:var(--tc,var(--gold));font-weight:800;letter-spacing:3px}
+.hstars{display:block;font-style:normal;color:var(--tc,var(--gold));font-size:15px;letter-spacing:2px;-webkit-text-stroke:1px #1A1A1A;paint-order:stroke fill;margin-top:2px}
+.hstars i{font-style:normal;color:rgba(255,255,255,.18);-webkit-text-stroke:0}
+.hbadge.tier{left:auto;right:14px;background:var(--tc);color:#1A1A1A;border-color:var(--ink)}
+.tierchip{font-size:12px;font-weight:800;color:#1A1A1A;background:var(--tc);border-radius:7px;padding:2px 9px;margin-left:10px;vertical-align:6px}
+.hname .hstars{display:inline-block;margin-left:10px;vertical-align:6px;font-size:14px}
 .hbadge{position:absolute;left:14px;top:14px;font-size:12px;font-weight:800;color:#fff;background:rgba(0,0,0,.55);border:2px solid #4a3d46;border-radius:9px;padding:3px 10px}
 .hbadge.on{background:var(--green);color:#1A1A1A;border-color:var(--ink)}
 .hbadge.pay{left:auto;right:14px;background:linear-gradient(90deg,#8a6a22,#c99a2b);border-color:#8a6a22}
@@ -585,10 +590,10 @@ html,body{height:100%;background:#000;overflow:hidden;
 .hlv{text-align:right;font-size:12px;color:var(--dim);flex:0 0 auto}.hlv i{display:flex;gap:3px;margin-top:5px;justify-content:flex-end}.hlv i b{width:14px;height:6px;border-radius:3px;background:#3a2f16;border:1px solid #1A1A1A;display:block}.hlv i b.on{background:var(--gold)}
 .hact{display:flex;gap:12px;margin-top:auto}.hact .sbtn{height:54px;flex:1;width:auto}.hact .sbtn span{font-size:19px}
 .hstrip{display:flex;gap:10px;margin-top:14px}
-.hav{flex:1;position:relative;display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:12px;background:#1b1519;border:2px solid #362c34;cursor:pointer;min-width:0;transition:border-color .12s,transform .12s}
-.hav:hover{border-color:#8a7a64;transform:translateY(-2px)}.hav.sel{border-color:var(--gold);background:#2b2415}
-.hav img{width:54px;height:54px;object-fit:contain;flex:0 0 auto}.hav.lock img{filter:grayscale(.85) brightness(.55)}
-.hav b{font-size:15px;color:#fff;display:block}.hav small{font-size:11px;color:var(--dim)}
+.hav{flex:1;position:relative;display:flex;align-items:center;gap:10px;padding:8px 12px 8px 10px;border-radius:12px;background:#1b1519;border:2px solid #362c34;border-left:5px solid var(--tc);cursor:pointer;min-width:0;transition:border-color .12s,transform .12s}
+.hav:hover{transform:translateY(-2px);box-shadow:0 0 14px var(--tcg)}.hav.sel{border-color:var(--tc);background:#221c1a;box-shadow:0 0 16px var(--tcg)}
+.hav img{width:54px;height:54px;object-fit:contain;flex:0 0 auto;border-radius:50%;border:2px solid var(--tc);background:rgba(0,0,0,.45);padding:3px}.hav.lock img{filter:grayscale(.85) brightness(.55)}
+.hav b{font-size:15px;color:#fff;display:block}.hav small{font-size:11px;color:var(--dim)}.hav .hstars{font-size:11px;letter-spacing:1px;margin:1px 0}
 .hav .hdot{position:absolute;right:8px;top:8px;width:10px;height:10px;border-radius:50%;background:var(--green);border:2px solid var(--ink)}
 .fcards{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
 .fcard{position:relative;background:#221b21;border:2px solid #362c34;border-radius:12px;padding:12px 10px 10px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
@@ -746,11 +751,14 @@ const FORMS=[
    {key:'loss',n:'护灵',s:l=>'被偷 −'+(4+2*l)+'%',d:l=>'被偷损失 30% → '+(30-4-2*l)+'%',v:l=>0.04+0.02*l}]}];
 const SKILL_COST=[0,800,1600,2400,3200];
 const FORM_META={
- farmer:{title:'田间好手',lore:'绿洲里第一个学会种地的猿。锄头比谁都勤快，收成比谁都早。'},
- iron:{title:'废土铁壁',lore:'从旧世界的废铁堆里拼出一身甲。小偷来了先问盾，盾说不行。'},
- night:{title:'月下行者',lore:'提灯只照自己的路。别人的菜园，是它的夜市。'},
- trade:{title:'绿洲首富',lore:'算盘一响，卖价翻涨；买种子永远能砍下一刀。'},
- shaman:{title:'催芽巫医',lore:'羽冠下的咒语能让作物在夜里变异，被偷了也能保住几分。'}};   // 技能 l → l+1 的丰收币
+ farmer:{title:'田间好手',lore:'绿洲里第一个学会种地的猿。锄头比谁都勤快，收成比谁都早。',tier:1},
+ iron:{title:'废土铁壁',lore:'从旧世界的废铁堆里拼出一身甲。小偷来了先问盾，盾说不行。',tier:2},
+ night:{title:'月下行者',lore:'提灯只照自己的路。别人的菜园，是它的夜市。',tier:3},
+ trade:{title:'绿洲首富',lore:'算盘一响，卖价翻涨；买种子永远能砍下一刀。',tier:4},
+ shaman:{title:'催芽巫医',lore:'羽冠下的咒语能让作物在夜里变异，被偷了也能保住几分。',tier:5}};
+// 品质五档：颜色 + 星数，贵的档高；同步到舞台框 / 名牌 / 头像框 / 价格
+const TIERS={1:{n:'普通',c:'#d6dde3',g:'rgba(214,221,227,.35)'},2:{n:'优秀',c:'#5fd877',g:'rgba(95,216,119,.4)'},3:{n:'稀有',c:'#55b3ff',g:'rgba(85,179,255,.45)'},4:{n:'史诗',c:'#c27bff',g:'rgba(194,123,255,.5)'},5:{n:'传说',c:'#ffa531',g:'rgba(255,165,49,.55)'}};
+const stars=n=>'★'.repeat(n)+'<i>'+'★'.repeat(5-n)+'</i>';   // 技能 l → l+1 的丰收币
 const formOf=k=>FORMS.find(f=>f.k===k);
 const formLv=k=>(S.forms[k]||{lv:1}).lv;
 // 使用中形态的某条技能值；没有该技能返回 null
@@ -1490,7 +1498,7 @@ function renderPop(){
   h=tabs+'<div class="rbody">'+body+'</div>';
  }
  else if(k==='guard'){
-  const sel=(S.gsel&&formOf(S.gsel))?S.gsel:S.form, f=formOf(sel), own=!!S.forms[sel], on=S.form===sel, lv=own?formLv(sel):1, u=f.unlock, meta=FORM_META[sel];
+  const sel=(S.gsel&&formOf(S.gsel))?S.gsel:S.form, f=formOf(sel), own=!!S.forms[sel], on=S.form===sel, lv=own?formLv(sel):1, u=f.unlock, meta=FORM_META[sel], T=TIERS[meta.tier], tv='--tc:'+T.c+';--tcg:'+T.g;
   const capT=f.skills.find(t=>t.key==='cap'), capSk=capT?capT.v(lv):0, capHere=f.cap+GUARD_STEP*(S.guard-1)+capSk, cost=S.guard<10?GUARD_COST[S.guard]:0;
   let primary;
   if(on)primary=sb('green','使用中','',true,false,true);
@@ -1501,23 +1509,23 @@ function renderPop(){
   const pips=[1,2,3,4,5].map(i=>'<b class="'+(i<=lv?'on':'')+'"></b>').join('');
   const ico=t=>SKI[t.key]?'<img src="'+art('sk_'+t.key)+'" alt="">':'<b>'+t.n[0]+'</b>';
   h='<div class="hsel">'+
-   '<div class="hshow '+sel+'"><div class="hglow"></div><div class="hring"></div><div class="hfloor"></div>'+
+   '<div class="hshow '+sel+'" style="'+tv+'"><div class="hglow"></div><div class="hring"></div><div class="hfloor"></div>'+
     '<img class="hart" src="'+art(f.ic)+'" alt="">'+
-    (on?'<span class="hbadge on">使用中</span>':own?'<span class="hbadge">已拥有</span>':'')+(u.usd?'<span class="hbadge pay">★ 付费形态</span>':'')+
-    '<div class="hplate"><b>'+f.n+'</b><span>'+meta.title+'</span></div></div>'+
+    (on?'<span class="hbadge on">使用中</span>':own?'<span class="hbadge">已拥有</span>':'')+'<span class="hbadge tier">'+T.n+(u.usd?' · 付费':'')+'</span>'+
+    '<div class="hplate"><b>'+f.n+'</b><span>'+meta.title+'</span><em class="hstars">'+stars(meta.tier)+'</em></div></div>'+
    '<div class="hinfo">'+
-    '<div class="hname">'+f.n+'<em>'+meta.title+'</em></div><p class="hlore">'+meta.lore+'</p>'+
+    '<div class="hname" style="'+tv+'">'+f.n+'<em>'+meta.title+'</em><span class="tierchip">'+T.n+'</span><em class="hstars">'+stars(meta.tier)+'</em></div><p class="hlore">'+meta.lore+'</p>'+
     '<div class="hstats">'+
      '<div class="hs cap"><span>抓捕率</span><b>'+pct(capHere)+'</b><i style="width:'+Math.min(100,Math.round(capHere*220))+'%"></i><small>形态 '+pct(f.cap)+' · 守卫 +'+pct(GUARD_STEP*(S.guard-1))+(capSk?' · 铁壁 +'+pct(capSk):'')+'</small></div>'+
      '<div class="hs"><span>守卫等级</span><b>Lv.'+S.guard+'</b><small>每级全形态抓捕 +2%</small>'+(S.guard<10?sb('green','升级 '+fmt(cost),'data-g="gup"',S.coin<cost):'<small style="color:#FFC600">已满级</small>')+'</div>'+
-     '<div class="hs"><span>获取</span><b>'+(u.free?'默认':u.coin?fmt(u.coin):u.usd)+'</b><small>'+(u.free?'开局自带':u.coin?'丰收币解锁':'付费购买')+' · '+(own?'已拥有':'未拥有')+'</small></div>'+
+     '<div class="hs" style="'+tv+'"><span>获取 · '+T.n+'</span><b style="color:var(--tc)">'+(u.free?'默认':u.coin?fmt(u.coin):u.usd)+'</b><small>'+(u.free?'开局自带':u.coin?'丰收币解锁':'付费购买')+' · '+(own?'已拥有':'未拥有')+'</small></div>'+
     '</div>'+
     '<div class="hskills">'+f.skills.map(t=>'<div class="hsk"><div class="hico">'+ico(t)+'</div><div class="hst"><b>'+t.n+'</b><span>'+t.d(lv)+'</span>'+(lv<5?'<em>下一级 → '+t.s(lv+1)+'</em>':'<em>已满级</em>')+'</div><div class="hlv">Lv.'+lv+'<i>'+pips+'</i></div></div>').join('')+
      Array.from({length:3-f.skills.length},(_,i)=>'<div class="hsk empty"><div class="hico"><b>'+(f.skills.length+i+1)+'</b></div><div class="hst"><b>空技能槽</b><span>'+(u.usd?'':'付费形态附带 2~3 条技能')+'</span></div></div>').join('')+'</div>'+
     '<div class="hact">'+primary+up+'</div>'+
    '</div></div>'+
-   '<div class="hstrip">'+FORMS.map(x=>{const o=!!S.forms[x.k],a=S.form===x.k,uu=x.unlock;
-    return '<div class="hav'+(x.k===sel?' sel':'')+(o?'':' lock')+'" data-hsel="'+x.k+'"><img src="'+art(x.ic)+'" alt=""><div><b>'+x.n+'</b><small>'+(a?'使用中':o?'已拥有':uu.coin?fmt(uu.coin)+' 丰收币':uu.usd)+'</small></div>'+(a?'<i class="hdot"></i>':'')+'</div>';}).join('')+'</div>';
+   '<div class="hstrip">'+FORMS.map(x=>{const o=!!S.forms[x.k],a=S.form===x.k,uu=x.unlock,mt=FORM_META[x.k],tt=TIERS[mt.tier];
+    return '<div class="hav'+(x.k===sel?' sel':'')+(o?'':' lock')+'" data-hsel="'+x.k+'" style="--tc:'+tt.c+';--tcg:'+tt.g+'"><img src="'+art(x.ic)+'" alt=""><div><b>'+x.n+'</b><em class="hstars">'+stars(mt.tier)+'</em><small>'+(a?'使用中':o?'已拥有':uu.coin?fmt(uu.coin)+' 丰收币':uu.usd)+'</small></div>'+(a?'<i class="hdot"></i>':'')+'</div>';}).join('')+'</div>';
  }
  else if(k==='mile'){
   h='<div class="cxhead"><div><div class="ph">农会勋绩 · 按累计消耗丰收币 8 档</div><p class="pd" style="margin:0">开垦 / 买种 / 升守卫 / 形态技能 / 集市兑换花掉的丰收币都算；达标自动发放。</p></div>'+
@@ -2036,7 +2044,8 @@ function runTest(){
  ok('每个形态都有初始抓捕率且 ≤16%',FORMS.every(f=>typeof f.cap==='number'&&f.cap<=0.16&&f.cap>=0.05));
  {const gk=S.guard;S.form='farmer';S.guard=1;ok('农夫猿 1 级守卫抓捕率 = 10%',Math.abs(capRate()-0.10)<1e-9);S.guard=gk;}
  openPop('guard');ok('巨猿弹窗：展示舞台 + 称号描述 + 3 格数据 + 技能列表 + 底部 5 个头像',!!document.querySelector('.hshow')&&!!document.querySelector('.hlore')&&document.querySelectorAll('.hs').length===3&&document.querySelectorAll('.hsk').length>=1&&document.querySelectorAll('.hav').length===5);
- S.gsel='shaman';renderPop();ok('点底部头像可预览未拥有形态（3 条技能 + 购买按钮）',document.querySelectorAll('.hsk').length===3&&!!document.querySelector('.hact [data-fb="shaman"]'));closePop();S.form='farmer';S.gsel=null;
+ S.gsel='shaman';renderPop();ok('点底部头像可预览未拥有形态（3 条技能 + 购买按钮）',document.querySelectorAll('.hsk').length===3&&!!document.querySelector('.hact [data-fb="shaman"]'));
+ ok('品质五档各异且价越高档越高',new Set(FORMS.map(f=>FORM_META[f.k].tier)).size===5&&FORM_META.farmer.tier<FORM_META.iron.tier&&FORM_META.iron.tier<FORM_META.night.tier&&FORM_META.night.tier<FORM_META.trade.tier&&FORM_META.trade.tier<FORM_META.shaman.tier&&document.querySelectorAll('.hav .hstars').length===5);closePop();S.form='farmer';S.gsel=null;
  const f=S.npcFarms[0];f[0].mature=1;f[0].mut=[];f[0].mul=1;f[0].taken=0;
  const sl=S.stealLeft;S.npc=0;steal(0);
  ok('偷菜扣次数且同格只能来一次',S.stealLeft===sl-1&&f[0].taken===1);
@@ -2091,7 +2100,7 @@ if(QS.indexOf('test')>=0)runTest();
  if(q.has('rule')){S.rtab=+q.get('rule')||0;openPop('rule');}
  if(q.has('end')){openPop('end');}
  if(q.has('rank')){S.ktab=+q.get('rank')||0;openPop('rank');}
- if(q.has('pop')){openPop(q.get('pop'));}
+ if(q.has('pop')){openPop(q.get('pop'));if(q.get('pop')==='guard'&&q.get('gsel')){S.gsel=q.get('gsel');renderPop();}}
  if(q.has('shop')){S.stab=+q.get('shop')||0;openPop('shop');}
  if(q.has('bag')){bagClaim();}
  if(q.has('ring')){const e0=S.plots.find(p=>p.un&&!p.crop);openRing(q.get('ring')?+q.get('ring'):(e0?e0.i:0));}
