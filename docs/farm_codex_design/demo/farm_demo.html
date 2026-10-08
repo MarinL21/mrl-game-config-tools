@@ -269,6 +269,10 @@ html,body{height:100%;background:#000;overflow:hidden;
  padding:6px 18px 6px 8px;border-radius:30px;background:rgba(10,12,8,.78);border:3px solid var(--gold);font-size:18px;white-space:nowrap}
 #owner.show{display:flex}
 #owner img{width:38px;height:38px;border-radius:50%}
+#owner{flex-wrap:wrap;max-width:760px;justify-content:center}
+.olg{flex-basis:100%;display:flex;gap:8px;justify-content:center;margin-top:6px}
+.olg span{font-size:13px;font-weight:700;color:#ded2bd;background:rgba(0,0,0,.45);border:1px solid #4a3d46;border-radius:9px;padding:3px 10px;-webkit-text-stroke:0}
+.olg span b{color:var(--gold);margin-right:6px}
 
 /* ── 右下：看园巨猿 + 活动倒计时/状态 ── */
 #guard{right:8px;bottom:92px;width:250px;cursor:pointer;z-index:9;transition:transform .15s}
@@ -1199,13 +1203,14 @@ function steal(k){const f=S.npcFarms[S.npc],q=f[k];
  renderAll();}
 function bless(k){const f=S.npcFarms[S.npc],q=f[k];
  if(q.mature||q.blessed)return;
- if(S.blessLeft<=0){toast('今日祝福次数已用完（10 次/日）','bad');return;}
+ if(S.blessLeft<=0){toast('今日施肥次数已用完（10 次/日）','bad');return;}
  S.blessLeft--;q.blessed=1;S.blessGiven++;
  const el=document.querySelector('.plot[data-k="'+k+'"]');
- if(el)floatTxt(el,'祝福 ×1.2','#FFC600');
+ if(el)floatTxt(el,'施肥！对方变异率 ×1.2','#FFC600');
+ toast('已施肥：这株成熟时变异概率 ×1.2（累计 '+Math.min(3,(q.bless||0)+1)+'/3）','good');
  if(S.blessGiven>=30&&!S.taskDone){S.taskDone=1;S.boost+=3;giveSeed(11,1);
-  toast('活动任务完成：累计祝福 30 次 → 速生剂 ×3 + 秘种 ×1','gold');
-  log('活动任务完成：<b>累计祝福 30 次</b>，领速生剂 ×3 + 星尘野穗 ×1','gold');}
+  toast('活动任务完成：累计施肥 30 次 → 速生剂 ×3 + 秘种 ×1','gold');
+  log('活动任务完成：<b>累计施肥 30 次</b>，领速生剂 ×3 + 星尘野穗 ×1','gold');}
  renderAll();}
 function npcRaid(){
  const cand=S.plots.filter(p=>p.un&&p.crop&&p.mature&&!p.gold&&!p.mut.includes('theme')&&!p.stolenPending);
@@ -1224,7 +1229,10 @@ function npcRaid(){
  renderAll();}
 function npcBless(){const cand=S.plots.filter(p=>p.un&&p.crop&&!p.mature&&p.bless<3);
  if(!cand.length||S.blessRecv>=30)return;
- const p=cand[(Math.random()*cand.length)|0];p.bless++;S.blessRecv++;renderField();}
+ const p=cand[(Math.random()*cand.length)|0];p.bless++;S.blessRecv++;
+ const who=NPCS[(Math.random()*NPCS.length)|0],el=document.querySelector('.plot[data-i="'+p.i+'"]');
+ if(el)floatTxt(el,'收到施肥 ✨ 变异率 ×1.2','#FFC600');
+ log(who.n+' 给你的 '+crop(p.crop).n+' 施了肥（变异率 ×1.2，累计 '+p.bless+'/3）');renderField();}
 
 /* ═══════ 渲染 ═══════ */
 function btn(kind,label,sub,attr,dis,cnt){
@@ -1240,7 +1248,7 @@ function renderOps(){
    btn('blue','一键浇水',S.lv<4?'🔒 4 级解锁':(w?'可浇 '+w+' 块':'暂无可浇'),'data-g="water"',S.lv<4||!w,S.lv>=4?w:0)+
    btn('green','一键收获',S.lv<8?'🔒 8 级解锁':(h?'可收 '+h+' 块':'暂无成熟'),'data-g="harvest"',S.lv<8||!h,S.lv>=8?h:0)+
    btn('blue','一键播种',S.lv<12?'🔒 12 级解锁':(e?'空地 '+e+' 块 · '+crop(S.sel).n:'没有空地'),'data-g="plant"',S.lv<12||!e,0)+
-   btn('gold','去串门','偷菜 30% / 送祝福','data-g="visit"',false,0);
+   btn('gold','去串门','偷菜 30% · 施肥提变异','data-g="visit"',false,0);
  }else{
   $('#ops').innerHTML=NPCS.map((x,i)=>
    '<button class="op" data-n="'+i+'" style="width:150px"><img src="'+BTN[i===S.npc?'gold':'blue']+'" alt="">'+
@@ -1261,7 +1269,7 @@ function renderTop(){
  $('#statChips').innerHTML=
   (isWeekend()?'<span class="sc gold">丰收周末 售价 ×2</span>':'')+
   '<span class="sc c">植物志 '+n+'/15 · 种植速度 +'+n+'%</span>'+
-  '<span class="sc">偷菜 '+S.stealLeft+'/60</span><span class="sc">祝福 '+S.blessLeft+'/10</span>';
+  '<span class="sc">偷菜 '+S.stealLeft+'/60</span><span class="sc" title="给别人生长中的作物施肥，对方变异率 ×1.2">施肥 '+S.blessLeft+'/10</span>';
  if(S.view==='farm'){
   $('#guardTag').innerHTML=formOf(S.form).n+' <span class="t xs g">'+S.guard+' 级</span><span class="t xs y"> 抓捕 '+Math.round(capRate()*100)+'%</span>';
   const gi=$('#guard img'),gs=art(formOf(S.form).ic);if(gi.getAttribute('src')!==gs)gi.setAttribute('src',gs);
@@ -1270,9 +1278,10 @@ function renderTop(){
  }else{const x=NPCS[S.npc];
   $('#guardTag').innerHTML=x.n+'的巨猿 <span class="t xs g">'+x.guard+' 级</span><span class="t xs r"> 抓捕 '+pct(npcRate(x.guard))+'</span>';
   const gi2=$('#guard img');if(gi2.getAttribute('src')!==art('guard'))gi2.setAttribute('src',art('guard'));
-  $('#tipTxt').textContent='成熟的可偷 30%，生长中的可祝福（猿变不可偷）';
+  $('#tipTxt').textContent='成熟的 → 偷 30%　生长中的 → 施肥（对方变异率 ×1.2）';
   const o=$('#owner');o.classList.add('show');
-  o.innerHTML='<img src="'+P2+'排行_头像圆框_99x100.png'+'" alt="">串门中 · <span class="t sm y">'+x.n+'</span>的农园　抓捕率 '+pct(npcRate(x.guard))+'';}
+  o.innerHTML='<img src="'+P2+'排行_头像圆框_99x100.png'+'" alt="">串门中 · <span class="t sm y">'+x.n+'</span>的农园　抓捕率 '+pct(npcRate(x.guard))+
+   '<div class="olg"><span><b>偷菜</b>点成熟的 · 拿 30% · 可能被抓 · 剩 '+S.stealLeft+'</span><span><b>施肥</b>点生长中的 · 对方变异率 ×1.2（≤3 次）· 剩 '+S.blessLeft+'</span></div>';}
  $('#rankNo').textContent='第 '+myRank()+' 名 / '+(S.rivals.length+1);}
 function renderMile(){
  const pct=Math.min(1,S.spent/MILE[7]);
@@ -1304,7 +1313,7 @@ function plotHud(p){
   ? '<div class="pill ok"><span class="t xs">收获 · '+c.n+(p.mul>1?' ×'+p.mul.toFixed(1):'')+'</span></div>'
   : '<div class="pill'+(p.stolenLoss?' dry':'')+'"><i class="pf" style="transform:scaleX('+pct.toFixed(3)+')"></i><i class="ck"></i><span class="t xs tm">'+fmtClock(p.remain)+'</span></div>';
  const tags=[];
- if(p.bless)tags.push('<span class="bl">祝 ×'+p.bless+'</span>');
+ if(p.bless)tags.push('<span class="bl" title="收到施肥，成熟时变异率 ×1.2^'+p.bless+'">施肥 ×'+p.bless+'</span>');
  if(p.stolenLoss)tags.push('<span class="st">被偷 −'+Math.round(p.stolenLoss*100)+'%</span>');
  const boost=p.mature?'':'<button class="boostb" data-i="'+p.i+'" data-a="boost" title="速生剂：立即成熟 + 本次变异 ×2"><img src="'+ART+'boost.png'+'" alt=""></button>';
  const drops=p.mature?'':'<div class="wdrops">'+[0,1,2,3].map(k=>'<i class="'+(k<p.water?'on':'')+'"></i>').join('')+'</div>';
@@ -1490,7 +1499,7 @@ function renderField(force){
   F.innerHTML=groundImg(2,NPCF.top)+f.map(cell).join('');
   $('#hudLayer').innerHTML=f.map((q,k)=>{if(q.taken)return '';const c=crop(q.c),theme=q.mut.includes('theme');
    return hudWrap(k,4,NPCF,'<div class="pill '+(q.mature?(theme?'dry':'ok'):'')+'"><span class="t xs">'+c.n+(q.mul>1?' ×'+q.mul.toFixed(1):'')+' · '+
-    (q.mature?(theme?'猿变·不可偷':'偷 30%'):(q.blessed?'已祝福':'可祝福'))+'</span></div>','k');}).join('');
+    (q.mature?(theme?'猿变·不可偷':'偷 30%'):(q.blessed?'已施肥':'施肥 · 变异 ×1.2'))+'</span></div>','k');}).join('');
  }}
 function renderEntries(){
  const sc=crop(S.sel),own=S.seeds[S.sel]||0;
@@ -1618,7 +1627,7 @@ function renderPop(){
    '<div class="ggrid c4">'+MILE_RW.map((r,i)=>{const got=S.mileGot>i;
     return '<div class="gcard'+(got?' on':'')+'" style="min-height:0"><span class="corner">第 '+(i+1)+' 档</span><img src="'+r.ic+'" alt=""><b>'+r.t+'</b><em>累计消耗 '+fmt(MILE[i])+'</em>'+
      (got?sb('blue','已领取','',true):sb('blue','还差 '+fmt(Math.max(0,MILE[i]-S.spent)),'',true))+'</div>';}).join('')+
-   '<div class="gcard'+(S.taskDone?' on':'')+'" style="min-height:0"><span class="corner">活动任务</span><img src="'+art('c4_s2')+'" alt=""><b>累计祝福 30 次</b><em>进度 '+Math.min(S.blessGiven,30)+' / 30 · 奖励 速生剂 ×3 + 星尘野穗 ×1</em>'+sb('blue',S.taskDone?'已领取':'去串门祝福','',true)+'</div></div>'+
+   '<div class="gcard'+(S.taskDone?' on':'')+'" style="min-height:0"><span class="corner">活动任务</span><img src="'+art('c4_s2')+'" alt=""><b>累计施肥 30 次</b><em>进度 '+Math.min(S.blessGiven,30)+' / 30 · 奖励 速生剂 ×3 + 星尘野穗 ×1</em>'+sb('blue',S.taskDone?'已领取':'去串门施肥','',true)+'</div></div>'+
    '<p class="note">v3 只保留这一条活动任务；勋绩按「累计消耗」计，是为了让丰收币有去处、让免费玩家也走得动。</p>';
  }
  else if(k==='log'){
@@ -1701,7 +1710,7 @@ const GUIDE=[
  {t:'打开谷仓，选品种和数量出售',s:'出售毛额计入丰收榜；丰收周末收获的已按 ×2 计价',tg:()=>document.querySelector('.entry[data-pop="barn"]'),done:()=>S.gf.sold},
  {t:'丰收币去种子袋买更贵的种子',s:'高档作物售价更高、变异更多；丰收币还能开垦田垄、升级看园巨猿',tg:()=>document.querySelector('.entry[data-pop="seed"]'),done:()=>S.gf.seedOpened},
  {t:'田边的种子袋每天领一次',s:'随机 2~3 颗种子，小概率秘种；领完明天再来',tg:()=>$('#dailyBag'),done:()=>S.gf.bagClaimed||S.bagDay===S.day},
- {t:'去串门：偷菜 30% / 送祝福',s:'对方的看园巨猿会抓贼；祝福让对方变异概率 ×1.2',tg:()=>document.querySelector('.op[data-g="visit"]'),done:()=>S.gf.visited},
+ {t:'去串门：偷菜 30% / 施肥',s:'对方的看园巨猿会抓贼；施肥让对方变异概率 ×1.2',tg:()=>document.querySelector('.op[data-g="visit"]'),done:()=>S.gf.visited},
  {t:'更多规则看左下角 ❗',s:'带图讲清核心循环 / 异变 / 植物志 / 串门 / 付费四点',tg:()=>$('#ruleBtn'),done:()=>S.gf.ruleOpened},
 ];
 function guideTick(){
@@ -1752,13 +1761,13 @@ function ruleBody(i){
    '<span class="mchip m4" style="right:4px;top:150px">猿变 ×20<small>0.3% → 0.8% · 不可被偷</small></span>'+
    '<div class="t sm y" style="position:absolute;left:0;right:0;bottom:0;text-align:center;font-size:18px">成熟瞬间判定 · 倍率相乘</div></div>'+
   '<div class="stack"><div class="t xs" style="font-size:15px;margin-bottom:2px">概率乘数（叠在基础概率上）</div>'+
-   '<div class="sr"><b>×1.2</b>每收到 1 次祝福（每株最多 3 次）</div><div class="sr"><b>×1.2</b>这块地上一轮被偷过</div>'+
+   '<div class="sr"><b>×1.2</b>每收到 1 次施肥（每株最多 3 次）</div><div class="sr"><b>×1.2</b>这块地上一轮被偷过</div>'+
    '<div class="sr"><b>×2</b>★ 灌溉良田</div><div class="sr"><b>×2</b>速生剂催熟</div><div class="sr cap"><b>≤ ×4</b>乘数总上限（最敏感旋钮，评审可调 ×3）</div></div>'+
   '</div>'+rul([
    '成熟瞬间判定：先判<b>猿变</b>（主题级 ×20），再彩变 / 晶变 / 巨变各自独立判定，命中的<em>倍率相乘</em>。',
    '普通最多叠 <b>2</b> 个词条；出了猿变可叠 <b>3</b> 个。',
    '基础概率随档位升高：T1 彩 10% / 晶 4% / 巨 2% / 猿 0.3% → T5 18% / 8% / 4% / 0.8%。',
-   '概率乘数：祝福 ×1.2/次（≤3 次）· 被偷后下一轮 ×1.2 · 良田 ×2 · 速生剂 ×2，<em>总上限 ×4</em>。',
+   '概率乘数：施肥 ×1.2/次（≤3 次）· 被偷后下一轮 ×1.2 · 良田 ×2 · 速生剂 ×2，<em>总上限 ×4</em>。',
    '<b>猿变作物不可被偷</b>，是给欧皇的保底。',
    '每种作物 4 形态各收获过一次 → 异变图录集齐 → 领一份游戏道具（8h / 24h 加速 + 招募券，按档递增）。']);
  if(i===2){const lit=[1,1,1,1,1,1,0,0,0,0,0,0,0,0,0];
@@ -1783,16 +1792,16 @@ function ruleBody(i){
  if(i===3)return '<div class="fig">'+
   mini({crop:'c2_s3',cap:'成熟的 → 偷 30%',sub:'同一株只能偷一次',x:'<div class="ripe"></div><div class="hud" style="bottom:4px"><div class="pill ok"><span class="t xs">锈铁野穗 · 偷 30%</span></div></div>'})+CHEV+
   '<div class="mini coinm" style="width:150px">'+IMG(ART+'coin.png','width:84px')+'<div class="big" style="font-size:34px">+156</div><div class="cap t xs">丰收币直接到手<small>盗取法宝 +10%</small></div></div>'+VSEP+
-  mini({crop:'c4_s1',cap:'生长中的 → 送祝福',sub:'对方变异概率 ×1.2（≤3 次）',x:'<div class="hud" style="bottom:4px"><div class="pill"><span class="t xs">铅云灵株 · 可祝福</span></div></div>'})+VSEP+
+  mini({crop:'c4_s1',cap:'生长中的 → 施肥',sub:'对方变异概率 ×1.2（≤3 次）',x:'<div class="hud" style="bottom:4px"><div class="pill"><span class="t xs">铅云灵株 · 可施肥</span></div></div>'})+VSEP+
   '<div class="mini coinm" style="width:240px">'+IMG(ART+'guard.png','height:168px;filter:drop-shadow(0 6px 10px rgba(0,0,0,.5))')+
    '<span class="mchip" style="background:#a83f2c;color:#fff;position:absolute;right:0;top:118px;font-size:13px;padding:3px 9px">被逮住！空手回</span>'+
    '<div class="cap t xs">看园巨猿抓贼<small>形态初始 8~16% + 守卫每级 2% · 抓住还赔你 15%</small></div></div>'+
   '</div>'+rul([
-   '每日 <b>60 次偷菜、10 次祝福</b>，按日重置（正式版 08:00~24:00 可偷）。',
+   '每日 <b>60 次偷菜、10 次施肥</b>，按日重置（正式版 08:00~24:00 可偷）。',
    '偷成熟作物拿 <em>30%</em> 售价；同一株只能偷一次；<b>猿变 / 良田作物不可偷</b>。',
    '对方看园巨猿抓捕率 = 形态初始 + 守卫等级（演示对手 15%~24%）；被逮住空手而归，对方拿 15% 赔偿。',
    '被偷的一方：这株收成 −30%，但这块地<b>下一轮变异概率 ×1.2</b>。',
-   '祝福生长中的作物：对方变异概率 ×1.2（每株最多 3 次）；<b>累计祝福 30 次</b>完成活动任务。',
+   '施肥生长中的作物：对方变异概率 ×1.2（每株最多 3 次）；<b>累计施肥 30 次</b>完成活动任务。',
    '自家看园巨猿升级花丰收币（600 → 25,000）；形态技能「铁壁」加抓捕率、「潜行」加偷菜（见「看园巨猿」页）。']);
  if(i===5)return '<div class="fig top" style="flex-direction:column;align-items:stretch;gap:4px">'+
   '<div style="display:flex;align-items:center"><div class="lvb"><b>Lv</b><i>农园等级</i></div><div class="lvtrack"><div class="bar"></div>'+
@@ -1859,12 +1868,12 @@ function ruleBody(i){
    '<b>回环</b><span>丰收币 → 买种子 / 开垦田垄 / 升看园巨猿 / 集市兑换（农园道具 · 游戏与节日道具）</span>'+
    '<b>支线 ①</b><span>绿洲植物志：首次收获点亮一格，所有作物生长时间 −1%（15 格 −15%，点亮记录跨节日保留）；异变图录每种集齐领一份游戏道具</span>'+
    '<b>支线 ②</b><span>异变：彩变 ×1.5 · 晶变 ×3 · 巨变 ×5 · 猿变 ×20，相乘；普通≤2 词条，猿变可叠 3；猿变不可被偷</span>'+
-   '<b>支线 ③</b><span>串门：偷 30% / 祝福提变异；看园巨猿抓贼，抓捕率 = 形态初始 8~16% + 守卫每级 2%</span>'+
+   '<b>支线 ③</b><span>串门：偷 30% / 施肥提变异；看园巨猿抓贼，抓捕率 = 形态初始 8~16% + 守卫每级 2%</span>'+
    '<b>丰收榜</b><span>出售毛额实时排名，五档结束发奖；榜上对手是模拟玩家，随时间增长</span>'+
    '<b>★ 付费点</b><span>速生剂 · 灌溉良田 ×2 · 秘种礼包 · 农园手册通行证 · 巨猿形态 ×2</span></div>'+
    '<p class="pd" style="margin-top:14px;color:#FFC600">演示压缩口径（跟案子不同的只此三条）：</p>'+
    '<p class="pd">① 1 游戏小时 = 3 秒，T1 三秒熟、T5 七十二秒熟；② 1 演示日 = 120 秒，每 3 天一次丰收周末，'+
-   '偷菜 60 次 / 祝福 10 次按演示日重置；③ 等级经验曲线按 demo 压缩（真实 20 级曲线见数值结构页第三章）。</p>'+
+   '偷菜 60 次 / 施肥 10 次按演示日重置；③ 等级经验曲线按 demo 压缩（真实 20 级曲线见数值结构页第三章）。</p>'+
    '<p class="pd" style="color:#8d8279">v3 已砍掉、demo 里也不会出现：培育度囤货 · 三槽九件装备 · 双货币（金锄头）· 小摊 · 异常状态 · 暴击 · 神偷手 · 保护模式。</p>'+
    '<div style="display:flex;gap:14px;margin-top:18px">'+sb('blue','重看新手指引','data-g="guide"')+sb('blue','演示倍速 ×'+S.speed,'data-g="speed"')+sb('gold','模拟活动结束回收','data-g="end"',false,true,true)+'</div>';}
 
@@ -1893,7 +1902,7 @@ function buildSpec(){
 阶段贴图：进度 < 42% 幼苗 / 42%~100% 生长 / 成熟`);
  sec('4 · 成熟瞬间：异变判定',['四类独立判定，命中的倍率相乘；普通最多 2 个词条，出了猿变可叠 3 个；猿变作物不可被偷。基础概率见作物表（按档）。'],
   [{h:['形态','倍率','备注'],r:FORMKEYS.map(k=>[FORM[k].n,'×'+FORM[k].m,k==='theme'?'先判；命中后词条上限 3；不可被偷':'独立判定'])}],
-`pm = 1.2 ^ min(收到的祝福次数, 3)
+`pm = 1.2 ^ min(收到的施肥次数, 3)
    × (上一轮这块地被偷过 ? 1.2 : 1)
    × (良田 ? 2 : 1)
    × (速生剂催熟 ? 2 : 1)
@@ -1915,8 +1924,8 @@ if 被偷: n = max(1, round(n × (1 − loss)))      // loss = 30% − 护灵技
 收获后地块复位；若本轮曾被偷 → 下一轮 stolenB = 1（变异 ×1.2 一次）`);
  sec('6 · 农园等级',['经验只来自收获；20 级封顶。NEED[L] = round(30 × 1.28^(L−1)) 为 L → L+1 所需（demo 压缩曲线，正式曲线见数值页第三章）。'],
   [{h:['等级','升级所需经验','解锁'],r:Array.from({length:19},(_,i)=>{const L=i+1;const pl=PLOT_CFG.findIndex(c=>c.lv===L+1);return [L+'→'+(L+1),NEED[L],[UNLOCK_LV[L+1],pl>=0?'第 '+(pl+1)+' 块田垄可开垦':''].filter(Boolean).join('、')||'—'];})}]);
- sec('7 · 串门：偷菜 / 祝福 / 被偷',['每日 60 次偷菜、10 次祝福（正式版 08:00~24:00 可偷）。同一株只能偷一次；成熟且非猿变才可偷。',
-  '祝福只能给生长中的作物，每株最多累计 3 次计入乘数；每日最多收到 30 次；累计祝福 30 次完成活动任务。'],
+ sec('7 · 串门：偷菜 / 施肥 / 被偷',['每日 60 次偷菜、10 次施肥（正式版 08:00~24:00 可偷）。同一株只能偷一次；成熟且非猿变才可偷。',
+  '施肥只能给生长中的作物，每株最多累计 3 次计入乘数；每日最多收到 30 次；累计施肥 30 次完成活动任务。'],
   [{h:['NPC（demo）','守卫等级','抓捕率'],r:NPCS.map(x=>[x.n,x.guard,pct(npcRate(x.guard))])}],
 `对方抓捕率 npcRate = 12% + 3% × 守卫等级          // 正式版 = 对方形态初始 + 守卫等级 + 技能，同我方公式
 偷成功：gain = round(tier.price × mul × 30% × (1 + 潜行技能))，coin += gain；不计入丰收榜
@@ -2140,7 +2149,7 @@ function runTest(){
  f[1].mature=1;f[1].mut=['theme'];f[1].taken=0;const sl2=S.stealLeft;steal(1);
  ok('猿变作物不可被偷',f[1].taken===0&&S.stealLeft===sl2);
  f[2].mature=0;f[2].blessed=0;const b0=S.blessLeft;bless(2);
- ok('祝福扣次数并计活动任务',S.blessLeft===b0-1&&S.blessGiven>0);
+ ok('施肥扣次数并计活动任务',S.blessLeft===b0-1&&S.blessGiven>0);
  PAY[1].f();ok('★ 良田付费位解锁 2 块金地块',S.plots[10].un===1&&S.plots[11].un===1);
  S.seeds[1]=20;keyPlant();
  ok('一键播种填满空地',S.plots.filter(p=>p.un&&p.crop).length===S.plots.filter(p=>p.un).length);
