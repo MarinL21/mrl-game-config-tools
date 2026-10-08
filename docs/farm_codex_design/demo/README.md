@@ -4,9 +4,13 @@
 
 ## 直接玩（浏览器打开即可）
 
-**发同事就发这一个**（合集页：顶部两页签 = 玩法 demo ＋ 图文规则说明，单文件 9 MB，首开等几秒）：
+**固定链接，发同事只发这一个，以后不再换**（跟 main 最新，推送后 5 分钟内生效；合集页 = 顶部两页签 玩法 demo ＋ 图文规则说明，单文件 13 MB，首开等几秒）：
 
-- https://htmlpreview.github.io/?https://github.com/MarinL21/mrl-game-config-tools/blob/94c68c6/docs/farm_codex_design/demo/oasis_farm_all.html
+- https://htmlpreview.github.io/?https://github.com/MarinL21/mrl-game-config-tools/blob/main/docs/farm_codex_design/demo/oasis_farm_all.html
+
+按 commit 固定的快照链接（要指定某一版时用；hash 随每次推送更新）：
+
+- 合集页：https://htmlpreview.github.io/?https://github.com/MarinL21/mrl-game-config-tools/blob/7656c05/docs/farm_codex_design/demo/oasis_farm_all.html
 
 单独页（同一内容拆开）：
 
